@@ -377,6 +377,8 @@ struct EHATTSTestPart1View: View {
                         await reversalComplexAction()
                         await printReversalGain()
                         await reversalsCompleteLogging()
+                        await concatenateFinalArrays()
+                        await saveFinalStoredArrays()
                         await restartPresentation()
                         await newTestCycle()
                         print("End of Reversals")
