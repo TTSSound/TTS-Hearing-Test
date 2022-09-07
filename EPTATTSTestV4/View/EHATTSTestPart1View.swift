@@ -36,7 +36,6 @@ struct SaveFinalResults: Codable {  // This is a model
     var jsonSystemVoluem = Float()
     var jsonActualFrequency = Double()
     var jsonFrequency: [String]
-//    var jsonGain: [Float]
     var jsonPan: [Int]
     var jsonStoredIndex: [Int]
     var jsonStoredTestPan: [Int]
@@ -148,7 +147,7 @@ struct EHATTSTestPart1View: View {
     var body: some View {
         
         ZStack{
-            RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
+            RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
         VStack {
                 Spacer()
                 HStack {
@@ -257,7 +256,6 @@ struct EHATTSTestPart1View: View {
                 }
             })
         }
-       
         .onChange(of: testIsPlaying, perform: { testBoolValue in
             if testBoolValue == true && endTestSeries == false {
             //User is starting test for first time
@@ -279,7 +277,8 @@ struct EHATTSTestPart1View: View {
             } else {
                 print("Critical error in pause logic")
             }
-        }) // This is the lowest CPU approach from many, many tries
+        })
+        // This is the lowest CPU approach from many, many tries
         .onChange(of: localPlaying, perform: { playingValue in
             activeFrequency = envDataObjectModel_samples[envDataObjectModel_index]
             localHeard = 0
@@ -311,6 +310,9 @@ struct EHATTSTestPart1View: View {
                             await resetPlaying()
                             await resetHeard()
                             await resetNonResponseCount()
+                            await createReversalHeardArray()
+                            await createReversalGainArray()
+                            await checkHeardReversalArrays()
                             await reversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change event
                         }
                     }
@@ -323,6 +325,9 @@ struct EHATTSTestPart1View: View {
                             await resetPlaying()
                             await resetHeard()
                             await nonResponseCounting()
+                            await createReversalHeardArray()
+                            await createReversalGainArray()
+                            await checkHeardReversalArrays()
                             await reversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change event
                         }
                     } else {
@@ -340,18 +345,21 @@ struct EHATTSTestPart1View: View {
             if reversalValue == 1 {
                 DispatchQueue.global(qos: .background).async {
                     Task(priority: .userInitiated) {
-                        await createReversalHeardArray()
-                        await createReversalGainArray()
-                        await checkHeardReversalArrays()
+//                        await createReversalHeardArray()
+//                        await createReversalGainArray()
+//                        await checkHeardReversalArrays()
                         await reversalDirection()
                         await reversalComplexAction()
-                        await printReversalGain()
                         await reversalsCompleteLogging()
+//                        await printReversalGain()
+//                        await printData()
+//                        await printReversalData()
                         await concatenateFinalArrays()
+//                        await printConcatenatedArrays()
                         await saveFinalStoredArrays()
-                        await restartPresentation()
-                        await newTestCycle()
                         await endTestSeries()
+                        await newTestCycle()
+                        await restartPresentation()
                         print("End of Reversals")
                         print("Prepare to Start Next Presentation")
                     }
@@ -359,9 +367,7 @@ struct EHATTSTestPart1View: View {
             }
         }
     }
-    
  
-    
     
 //MARK: - AudioPlayer Methods
     
@@ -513,15 +519,15 @@ struct EHATTSTestPart1View: View {
         envDataObjectModel_testCount.append(idxTestCountUpdated)
     }
     
-    func arrayTesting() async {
-        let arraySet1 = Int(envDataObjectModel_testPan.count)
-        let arraySet2 = Int(envDataObjectModel_testTestGain.count) - Int(envDataObjectModel_frequency.count) + Int(envDataObjectModel_testCount.count) - Int(envDataObjectModel_heardArray.count)
-        if arraySet1 + arraySet2 == 0 {
-            print("All Event Logs Match")
-        } else {
-            print("Error Event Logs Length Error")
-        }
-    }
+//    func arrayTesting() async {
+//        let arraySet1 = Int(envDataObjectModel_testPan.count)
+//        let arraySet2 = Int(envDataObjectModel_testTestGain.count) - Int(envDataObjectModel_frequency.count) + Int(envDataObjectModel_testCount.count) - Int(envDataObjectModel_heardArray.count)
+//        if arraySet1 + arraySet2 == 0 {
+//            print("All Event Logs Match")
+//        } else {
+//            print("Error Event Logs Length Error")
+//        }
+//    }
     
     func printData () async {
         DispatchQueue.global(qos: .background).async {
@@ -774,7 +780,6 @@ extension EHATTSTestPart1View {
             self.secondGain = envDataObjectModel_reversalGain[secondHeardResponseIndex-1]
             print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
 
-
             let delta = firstGain - secondGain
             let avg = (firstGain + secondGain)/2
             
@@ -810,23 +815,30 @@ extension EHATTSTestPart1View {
     }
 
     func printReversalData() async {
-        print("Start printReversalData()")
-        DispatchQueue.global(qos: .background).async {
-            print("--------Reversal Values Logged-------------")
-            print("Test Pan: \(envDataObjectModel_testPan)")
-            print("New TestGain: \(envDataObjectModel_testGain)")
-            print("testCount: \(envDataObjectModel_testCount)")
-            print("reversalFrequency: \(activeFrequency)")
-            print("reversalHeard: \(envDataObjectModel_reversalHeard)")
-            print("FirstGain: \(firstGain)")
-            print("SecondGain: \(secondGain)")
-            print("AverageGain: \(envDataObjectModel_averageGain)")
-            print("------------------------------------------")
-        }
+        print("--------Reversal Values Logged-------------")
+        print("indexForTest: \(envDataObjectModel_indexForTest)")
+        print("Test Pan: \(envDataObjectModel_testPan)")
+        print("New TestGain: \(envDataObjectModel_testTestGain)")
+        print("reversalFrequency: \(activeFrequency)")
+        print("testCount: \(envDataObjectModel_testCount)")
+        print("heardArray: \(envDataObjectModel_heardArray)")
+        print("reversalHeard: \(envDataObjectModel_reversalHeard)")
+        print("FirstGain: \(firstGain)")
+        print("SecondGain: \(secondGain)")
+        print("AverageGain: \(envDataObjectModel_averageGain)")
+        print("------------------------------------------")
     }
         
     func restartPresentation() async {
-        localPlaying = 1
+        if endTestSeries == false {
+            localPlaying = 1
+            endTestSeries = false
+        } else if endTestSeries == true {
+            localPlaying = -1
+            endTestSeries = true
+            showTestCompletionSheet = true
+            playingStringColorIndex = 2
+        }
     }
     
     func wipeArrays() async {
@@ -856,15 +868,18 @@ extension EHATTSTestPart1View {
             envDataObjectModel_index = envDataObjectModel_index + 1
             envDataObjectModel_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
             endTestSeries = false
+//                Task(priority: .userInitiated) {
             await wipeArrays()
+//                }
         } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCount && endTestSeries == false {
                 endTestSeries = true
-                self.localPlaying = -1
+                localPlaying = -1
                 print("=============================")
                 print("!!!!! End of Test Series!!!!!!")
                 print("=============================")
         } else {
-            print("!!!Critical error in newTestCycleLogic")
+//                print("Reversal Limit Not Hit")
+
         }
     }
     
@@ -873,8 +888,8 @@ extension EHATTSTestPart1View {
             //Do Nothing and continue
             print("end Test Series = \(endTestSeries)")
         } else if endTestSeries == true {
-            await endTestSeriesStop()
             showTestCompletionSheet = true
+            await endTestSeriesStop()
         }
     }
     
@@ -914,32 +929,46 @@ extension EHATTSTestPart1View {
     }
     
     func concatenateFinalArrays() async {
-        DispatchQueue.global(qos: .background).async {
-            if localMarkNewTestCycle == 1 && localReversalEnd == 1 {
-                
-                envDataObjectModel_finalStoredIndex.append(contentsOf: [100000000] + envDataObjectModel_indexForTest)
-                envDataObjectModel_finalStoredTestPan.append(contentsOf: [100000000] + envDataObjectModel_testPan)
-                envDataObjectModel_finalStoredTestTestGain.append(contentsOf: [1000000.0] + envDataObjectModel_testTestGain)
-                envDataObjectModel_finalStoredFrequency.append(contentsOf: ["100000000"] + [String(activeFrequency)])
-                envDataObjectModel_finalStoredTestCount.append(contentsOf: [100000000] + envDataObjectModel_testCount)
-                envDataObjectModel_finalStoredHeardArray.append(contentsOf: [100000000] + envDataObjectModel_heardArray)
-                envDataObjectModel_finalStoredReversalHeard.append(contentsOf: [100000000] + envDataObjectModel_reversalHeard)
-                envDataObjectModel_finalStoredFirstGain.append(contentsOf: [1000000.0] + [firstGain])
-                envDataObjectModel_finalStoredSecondGain.append(contentsOf: [1000000.0] + [secondGain])
-                envDataObjectModel_finalStoredAverageGain.append(contentsOf: [1000000.0] + [envDataObjectModel_averageGain])
-            }
+        if localMarkNewTestCycle == 1 && localReversalEnd == 1 {
+            envDataObjectModel_finalStoredIndex.append(contentsOf: [100000000] + envDataObjectModel_indexForTest)
+            envDataObjectModel_finalStoredTestPan.append(contentsOf: [100000000] + envDataObjectModel_testPan)
+            envDataObjectModel_finalStoredTestTestGain.append(contentsOf: [1000000.0] + envDataObjectModel_testTestGain)
+            envDataObjectModel_finalStoredFrequency.append(contentsOf: ["100000000"] + [String(activeFrequency)])
+            envDataObjectModel_finalStoredTestCount.append(contentsOf: [100000000] + envDataObjectModel_testCount)
+            envDataObjectModel_finalStoredHeardArray.append(contentsOf: [100000000] + envDataObjectModel_heardArray)
+            envDataObjectModel_finalStoredReversalHeard.append(contentsOf: [100000000] + envDataObjectModel_reversalHeard)
+            envDataObjectModel_finalStoredFirstGain.append(contentsOf: [1000000.0] + [firstGain])
+            envDataObjectModel_finalStoredSecondGain.append(contentsOf: [1000000.0] + [secondGain])
+            envDataObjectModel_finalStoredAverageGain.append(contentsOf: [1000000.0] + [envDataObjectModel_averageGain])
         }
+    }
+    
+    func printConcatenatedArrays() async {
+        print("finalStoredIndex: \(envDataObjectModel_finalStoredIndex)")
+        print("finalStoredTestPan: \(envDataObjectModel_finalStoredTestPan)")
+        print("finalStoredTestTestGain: \(envDataObjectModel_finalStoredTestTestGain)")
+        print("finalStoredFrequency: \(envDataObjectModel_finalStoredFrequency)")
+        print("finalStoredTestCount: \(envDataObjectModel_finalStoredTestCount)")
+        print("finalStoredHeardArray: \(envDataObjectModel_finalStoredHeardArray)")
+        print("finalStoredReversalHeard: \(envDataObjectModel_finalStoredReversalHeard)")
+        print("finalStoredFirstGain: \(envDataObjectModel_finalStoredFirstGain)")
+        print("finalStoredSecondGain: \(envDataObjectModel_finalStoredSecondGain)")
+        print("finalStoredAverageGain: \(envDataObjectModel_finalStoredAverageGain)")
     }
         
     func saveFinalStoredArrays() async {
         if localMarkNewTestCycle == 1 && localReversalEnd == 1 {
-            await getEHAP1Data()
-            await saveEHA1ToJSON()
-            await writeEHA1DetailedResultsToCSV()
-            await writeEHA1SummarydResultsToCSV()
-            await writeEHA1InputDetailedResultsToCSV()
-            await writeEHA1InputDetailedResultsToCSV()
-//                await envDataObjectModel_uploadSummaryResultsTest()
+            DispatchQueue.global(qos: .userInitiated).async {
+                Task(priority: .userInitiated) {
+                    await writeEHA1DetailedResultsToCSV()
+                    await writeEHA1SummarydResultsToCSV()
+                    await writeEHA1InputDetailedResultsToCSV()
+                    await writeEHA1InputDetailedResultsToCSV()
+                    await getEHAP1Data()
+                    await saveEHA1ToJSON()
+        //                await envDataObjectModel_uploadSummaryResultsTest()
+                }
+            }
         }
     }
     
@@ -1029,168 +1058,153 @@ extension EHATTSTestPart1View {
     }
 
     func saveEHA1ToJSON() async {
-        DispatchQueue.global(qos: .background).async {
-            
         // !!!This saves to device directory, whish is likely what is desired
-            let ehaP1paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-            let ehaP1DocumentsDirectory = ehaP1paths[0]
-            print("ehaP1DocumentsDirectory: \(ehaP1DocumentsDirectory)")
-            let ehaP1FilePaths = ehaP1DocumentsDirectory.appendingPathComponent(fileEHAP1Name)
-            print(ehaP1FilePaths)
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-            do {
-                let jsonEHAP1Data = try encoder.encode(saveFinalResults)
-                print(jsonEHAP1Data)
-              
-                try jsonEHAP1Data.write(to: ehaP1FilePaths)
-            } catch {
-                print("Error writing EHAP1 to JSON file: \(error)")
-            }
+        let ehaP1paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let ehaP1DocumentsDirectory = ehaP1paths[0]
+        print("ehaP1DocumentsDirectory: \(ehaP1DocumentsDirectory)")
+        let ehaP1FilePaths = ehaP1DocumentsDirectory.appendingPathComponent(fileEHAP1Name)
+        print(ehaP1FilePaths)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        do {
+            let jsonEHAP1Data = try encoder.encode(saveFinalResults)
+            print(jsonEHAP1Data)
+          
+            try jsonEHAP1Data.write(to: ehaP1FilePaths)
+        } catch {
+            print("Error writing EHAP1 to JSON file: \(error)")
         }
     }
 
     func writeEHA1DetailedResultsToCSV() async {
-        DispatchQueue.global(qos: .background).async {
+        let stringFinalStoredIndex = "finalStoredIndex," + envDataObjectModel_finalStoredIndex.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredTestPan = "finalStoredTestPan," + envDataObjectModel_finalStoredTestPan.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredTestTestGain = "finalStoredTestTestGain," + envDataObjectModel_finalStoredTestTestGain.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredFrequency = "finalStoredFrequency," + [activeFrequency].map { String($0) }.joined(separator: ",")
+        let stringFinalStoredTestCount = "finalStoredTestCount," + envDataObjectModel_finalStoredTestCount.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredHeardArray = "finalStoredHeardArray," + envDataObjectModel_finalStoredHeardArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredReversalHeard = "finalStoredReversalHeard," + envDataObjectModel_finalStoredReversalHeard.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredPan = "finalStoredPan," + envDataObjectModel_testPan.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredFirstGain = "finalStoredFirstGain," + envDataObjectModel_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredSecondGain = "finalStoredSecondGain," + envDataObjectModel_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredAverageGain = "finalStoredAverageGain," + envDataObjectModel_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
+        
+        do {
+            let csvEHAP1DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvEHAP1DetailDocumentsDirectory = csvEHAP1DetailPath
+//                print("CSV DocumentsDirectory: \(csvEHAP1DetailDocumentsDirectory)")
+            let csvEHAP1DetailFilePath = csvEHAP1DetailDocumentsDirectory.appendingPathComponent(detailedEHAP1CSVName)
+            print(csvEHAP1DetailFilePath)
             
-           print("writeEHAP1DetailedResultsToCSV Start")
+            let writer = try CSVWriter(fileURL: csvEHAP1DetailFilePath, append: false)
             
-            let stringFinalStoredIndex = "finalStoredIndex," + envDataObjectModel_finalStoredIndex.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredTestPan = "finalStoredTestPan," + envDataObjectModel_finalStoredTestPan.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredTestTestGain = "finalStoredTestTestGain," + envDataObjectModel_finalStoredTestTestGain.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredFrequency = "finalStoredFrequency," + activeFrequency.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredTestCount = "finalStoredTestCount," + envDataObjectModel_finalStoredTestCount.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredHeardArray = "finalStoredHeardArray," + envDataObjectModel_finalStoredHeardArray.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredReversalHeard = "finalStoredReversalHeard," + envDataObjectModel_finalStoredReversalHeard.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredFirstGain = "finalStoredFirstGain," + envDataObjectModel_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredSecondGain = "finalStoredSecondGain," + envDataObjectModel_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredAverageGain = "finalStoredAverageGain," + envDataObjectModel_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
-            
-            do {
-                let csvEHAP1DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
-                let csvEHAP1DetailDocumentsDirectory = csvEHAP1DetailPath
-                print("CSV DocumentsDirectory: \(csvEHAP1DetailDocumentsDirectory)")
-                let csvEHAP1DetailFilePath = csvEHAP1DetailDocumentsDirectory.appendingPathComponent(detailedEHAP1CSVName)
-                print(csvEHAP1DetailFilePath)
-                
-                let writer = try CSVWriter(fileURL: csvEHAP1DetailFilePath, append: false)
-                
-                try writer.write(row: [stringFinalStoredIndex])
-                try writer.write(row: [stringFinalStoredTestPan])
-                try writer.write(row: [stringFinalStoredTestTestGain])
-                try writer.write(row: [stringFinalStoredFrequency])
-                try writer.write(row: [stringFinalStoredTestCount])
-                try writer.write(row: [stringFinalStoredHeardArray])
-                try writer.write(row: [stringFinalStoredReversalHeard])
-                try writer.write(row: [stringFinalStoredFirstGain])
-                try writer.write(row: [stringFinalStoredSecondGain])
-                try writer.write(row: [stringFinalStoredAverageGain])
-
-                print("CVS EHAP1 Detailed Writer Success")
-            } catch {
-                print("CVSWriter EHAP1 Detailed Error or Error Finding File for Detailed CSV \(error)")
-            }
+            try writer.write(row: [stringFinalStoredIndex])
+            try writer.write(row: [stringFinalStoredTestPan])
+            try writer.write(row: [stringFinalStoredTestTestGain])
+            try writer.write(row: [stringFinalStoredFrequency])
+            try writer.write(row: [stringFinalStoredTestCount])
+            try writer.write(row: [stringFinalStoredHeardArray])
+            try writer.write(row: [stringFinalStoredReversalHeard])
+            try writer.write(row: [stringFinalStoredPan])
+            try writer.write(row: [stringFinalStoredFirstGain])
+            try writer.write(row: [stringFinalStoredSecondGain])
+            try writer.write(row: [stringFinalStoredAverageGain])
+//
+//                print("CVS EHAP1 Detailed Writer Success")
+        } catch {
+            print("CVSWriter EHAP1 Detailed Error or Error Finding File for Detailed CSV \(error)")
         }
     }
 
     func writeEHA1SummarydResultsToCSV() async {
-        DispatchQueue.global(qos: .background).async {
-            
-            print("writeSummaryEHAP1ResultsToCSV Start")
-             let stringFinalStoredResultsFrequency = "finalStoredResultsFrequency," + activeFrequency.map { String($0) }.joined(separator: ",")
-             let stringFinalStoredTestPan = "finalStoredTestPan," + envDataObjectModel_finalStoredTestPan.map { String($0) }.joined(separator: ",")
-             let stringFinalStoredFirstGain = "finalStoredFirstGain," + envDataObjectModel_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
-             let stringFinalStoredSecondGain = "finalStoredSecondGain," + envDataObjectModel_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
-             let stringFinalStoredAverageGain = "finalStoredAverageGain," + envDataObjectModel_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
-            
-             do {
-                 let csvEHAP1SummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
-                 let csvEHAP1SummaryDocumentsDirectory = csvEHAP1SummaryPath
-                 print("CSV Summary EHA Part 1 DocumentsDirectory: \(csvEHAP1SummaryDocumentsDirectory)")
-                 let csvEHAP1SummaryFilePath = csvEHAP1SummaryDocumentsDirectory.appendingPathComponent(summaryEHAP1CSVName)
-                 print(csvEHAP1SummaryFilePath)
-                 let writer = try CSVWriter(fileURL: csvEHAP1SummaryFilePath, append: false)
-                 try writer.write(row: [stringFinalStoredResultsFrequency])
-                 try writer.write(row: [stringFinalStoredTestPan])
-                 try writer.write(row: [stringFinalStoredFirstGain])
-                 try writer.write(row: [stringFinalStoredSecondGain])
-                 try writer.write(row: [stringFinalStoredAverageGain])
-
-                 print("CVS Summary EHA Part 1 Data Writer Success")
-             } catch {
-                 print("CVSWriter Summary EHA Part 1 Data Error or Error Finding File for Detailed CSV \(error)")
-             }
-        }
+         let stringFinalStoredResultsFrequency = "finalStoredResultsFrequency," + [activeFrequency].map { String($0) }.joined(separator: ",")
+         let stringFinalStoredTestPan = "finalStoredTestPan," + envDataObjectModel_testPan.map { String($0) }.joined(separator: ",")
+         let stringFinalStoredFirstGain = "finalStoredFirstGain," + envDataObjectModel_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
+         let stringFinalStoredSecondGain = "finalStoredSecondGain," + envDataObjectModel_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
+         let stringFinalStoredAverageGain = "finalStoredAverageGain," + envDataObjectModel_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
+        
+         do {
+             let csvEHAP1SummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+             let csvEHAP1SummaryDocumentsDirectory = csvEHAP1SummaryPath
+//                 print("CSV Summary EHA Part 1 DocumentsDirectory: \(csvEHAP1SummaryDocumentsDirectory)")
+             let csvEHAP1SummaryFilePath = csvEHAP1SummaryDocumentsDirectory.appendingPathComponent(summaryEHAP1CSVName)
+             print(csvEHAP1SummaryFilePath)
+             let writer = try CSVWriter(fileURL: csvEHAP1SummaryFilePath, append: false)
+             try writer.write(row: [stringFinalStoredResultsFrequency])
+             try writer.write(row: [stringFinalStoredTestPan])
+             try writer.write(row: [stringFinalStoredFirstGain])
+             try writer.write(row: [stringFinalStoredSecondGain])
+             try writer.write(row: [stringFinalStoredAverageGain])
+//
+//                 print("CVS Summary EHA Part 1 Data Writer Success")
+         } catch {
+             print("CVSWriter Summary EHA Part 1 Data Error or Error Finding File for Detailed CSV \(error)")
+         }
     }
 
 
     func writeEHA1InputDetailedResultsToCSV() async {
-        DispatchQueue.global(qos: .background).async {
-            print("writeInputEHAP1DetailResultsToCSV Start")
+        let stringFinalStoredIndex = envDataObjectModel_finalStoredIndex.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredTestPan = envDataObjectModel_finalStoredTestPan.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredTestTestGain = envDataObjectModel_finalStoredTestTestGain.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredTestCount = envDataObjectModel_finalStoredTestCount.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredHeardArray = envDataObjectModel_finalStoredHeardArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredReversalHeard = envDataObjectModel_finalStoredReversalHeard.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredResultsFrequency = [activeFrequency].map { String($0) }.joined(separator: ",")
+        let stringFinalStoredPan = envDataObjectModel_testPan.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredFirstGain = envDataObjectModel_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredSecondGain = envDataObjectModel_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredAverageGain = envDataObjectModel_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
 
-            let stringFinalStoredIndex = envDataObjectModel_finalStoredIndex.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredTestPan = envDataObjectModel_finalStoredTestPan.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredTestTestGain = envDataObjectModel_finalStoredTestTestGain.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredFrequency = activeFrequency.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredTestCount = envDataObjectModel_finalStoredTestCount.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredHeardArray = envDataObjectModel_finalStoredHeardArray.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredReversalHeard = envDataObjectModel_finalStoredReversalHeard.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredFirstGain = envDataObjectModel_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredSecondGain = envDataObjectModel_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
-            let stringFinalStoredAverageGain = envDataObjectModel_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
-
-            do {
-                let csvInputEHAP1DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
-                let csvInputEHAP1DetailDocumentsDirectory = csvInputEHAP1DetailPath
-                print("CSV Input EHAP1 Detail DocumentsDirectory: \(csvInputEHAP1DetailDocumentsDirectory)")
-                let csvInputEHAP1DetailFilePath = csvInputEHAP1DetailDocumentsDirectory.appendingPathComponent(inputEHAP1DetailedCSVName)
-                print(csvInputEHAP1DetailFilePath)
-                let writer = try CSVWriter(fileURL: csvInputEHAP1DetailFilePath, append: false)
-                try writer.write(row: [stringFinalStoredIndex])
-                try writer.write(row: [stringFinalStoredTestPan])
-                try writer.write(row: [stringFinalStoredTestTestGain])
-                try writer.write(row: [stringFinalStoredFrequency])
-                try writer.write(row: [stringFinalStoredTestCount])
-                try writer.write(row: [stringFinalStoredHeardArray])
-                try writer.write(row: [stringFinalStoredReversalHeard])
-                try writer.write(row: [stringFinalStoredFirstGain])
-                try writer.write(row: [stringFinalStoredSecondGain])
-                try writer.write(row: [stringFinalStoredAverageGain])
-                
-                print("CVS Input EHA Part 1Detailed Writer Success")
-            } catch {
-                print("CVSWriter Input EHA Part 1 Detailed Error or Error Finding File for Input Detailed CSV \(error)")
-            }
+        do {
+            let csvInputEHAP1DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvInputEHAP1DetailDocumentsDirectory = csvInputEHAP1DetailPath
+//                print("CSV Input EHAP1 Detail DocumentsDirectory: \(csvInputEHAP1DetailDocumentsDirectory)")
+            let csvInputEHAP1DetailFilePath = csvInputEHAP1DetailDocumentsDirectory.appendingPathComponent(inputEHAP1DetailedCSVName)
+            print(csvInputEHAP1DetailFilePath)
+            let writer = try CSVWriter(fileURL: csvInputEHAP1DetailFilePath, append: false)
+            try writer.write(row: [stringFinalStoredIndex])
+            try writer.write(row: [stringFinalStoredTestPan])
+            try writer.write(row: [stringFinalStoredTestTestGain])
+            try writer.write(row: [stringFinalStoredTestCount])
+            try writer.write(row: [stringFinalStoredHeardArray])
+            try writer.write(row: [stringFinalStoredReversalHeard])
+            try writer.write(row: [stringFinalStoredResultsFrequency])
+            try writer.write(row: [stringFinalStoredPan])
+            try writer.write(row: [stringFinalStoredFirstGain])
+            try writer.write(row: [stringFinalStoredSecondGain])
+            try writer.write(row: [stringFinalStoredAverageGain])
+//
+//                print("CVS Input EHA Part 1Detailed Writer Success")
+        } catch {
+            print("CVSWriter Input EHA Part 1 Detailed Error or Error Finding File for Input Detailed CSV \(error)")
         }
     }
 
     func writeEHA1InputSummarydResultsToCSV() async {
-        DispatchQueue.global(qos: .background).async {
-            print("writeInputEHAP1SummaryResultsToCSV Start")
-             let stringFinalStoredResultsFrequency = activeFrequency.map { String($0) }.joined(separator: ",")
-             let stringFinalStoredTestPan = envDataObjectModel_finalStoredTestPan.map { String($0) }.joined(separator: ",")
-             let stringFinalStoredFirstGain = envDataObjectModel_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
-             let stringFinalStoredSecondGain = envDataObjectModel_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
-             let stringFinalStoredAverageGain = envDataObjectModel_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
-             
-             do {
-                 let csvEHAP1InputSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
-                 let csvEHAP1InputSummaryDocumentsDirectory = csvEHAP1InputSummaryPath
-                 print("CSV Input EHA Part 1 Summary DocumentsDirectory: \(csvEHAP1InputSummaryDocumentsDirectory)")
-                 let csvEHAP1InputSummaryFilePath = csvEHAP1InputSummaryDocumentsDirectory.appendingPathComponent(inputEHAP1SummaryCSVName)
-                 print(csvEHAP1InputSummaryFilePath)
-                 let writer = try CSVWriter(fileURL: csvEHAP1InputSummaryFilePath, append: false)
-                 try writer.write(row: [stringFinalStoredResultsFrequency])
-                 try writer.write(row: [stringFinalStoredTestPan])
-                 try writer.write(row: [stringFinalStoredFirstGain])
-                 try writer.write(row: [stringFinalStoredSecondGain])
-                 try writer.write(row: [stringFinalStoredAverageGain])
-                 
-                 print("CVS Input EHA Part 1 Summary Data Writer Success")
-             } catch {
-                 print("CVSWriter Input EHA Part 1 Summary Data Error or Error Finding File for Input Summary CSV \(error)")
-             }
-        }
+         let stringFinalStoredResultsFrequency = [activeFrequency].map { String($0) }.joined(separator: ",")
+         let stringFinalStoredTestPan = envDataObjectModel_finalStoredTestPan.map { String($0) }.joined(separator: ",")
+         let stringFinalStoredFirstGain = envDataObjectModel_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
+         let stringFinalStoredSecondGain = envDataObjectModel_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
+         let stringFinalStoredAverageGain = envDataObjectModel_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
+         
+         do {
+             let csvEHAP1InputSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+             let csvEHAP1InputSummaryDocumentsDirectory = csvEHAP1InputSummaryPath
+             print("CSV Input EHA Part 1 Summary DocumentsDirectory: \(csvEHAP1InputSummaryDocumentsDirectory)")
+             let csvEHAP1InputSummaryFilePath = csvEHAP1InputSummaryDocumentsDirectory.appendingPathComponent(inputEHAP1SummaryCSVName)
+             print(csvEHAP1InputSummaryFilePath)
+             let writer = try CSVWriter(fileURL: csvEHAP1InputSummaryFilePath, append: false)
+             try writer.write(row: [stringFinalStoredResultsFrequency])
+             try writer.write(row: [stringFinalStoredTestPan])
+             try writer.write(row: [stringFinalStoredFirstGain])
+             try writer.write(row: [stringFinalStoredSecondGain])
+             try writer.write(row: [stringFinalStoredAverageGain])
+//
+//                 print("CVS Input EHA Part 1 Summary Data Writer Success")
+         } catch {
+             print("CVSWriter Input EHA Part 1 Summary Data Error or Error Finding File for Input Summary CSV \(error)")
+         }
     }
 }
 
