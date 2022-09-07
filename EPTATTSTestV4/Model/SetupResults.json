@@ -1,0 +1,37 @@
+{
+  "id" : 11111,
+  "jsonUserUUID" : [
+    "E7F42F20-B626-474C-83B6-45DF81547CCF"
+  ],
+  "jsonUserAgreementAgreed" : [
+    1
+  ],
+  "jsonFinalLastName" : [
+    "kjashdfkjh"
+  ],
+  "jsonFinalEmail" : [
+    "kjjahsdfklah"
+  ],
+  "jsonFinalPassword" : [
+    "akjhdlfkha"
+  ],
+  "jsonFinalAge" : [
+    6
+  ],
+  "jsonFinalGender" : [
+    "Female or Cisgender Female"
+  ],
+  "jsonFinalSex" : [
+    0
+  ],
+  "jsonFinalGenderIndex" : [
+    0
+  ],
+  "jsonStringUserAgreementAgreedDate" : "15:44 Thu, 1 Sep 2022",
+  "jsonFinalFirstName" : [
+    ";lkjahds;"
+  ],
+  "jsonUserAgreementAgreedDate" : [
+    683761444.54520297
+  ]
+}

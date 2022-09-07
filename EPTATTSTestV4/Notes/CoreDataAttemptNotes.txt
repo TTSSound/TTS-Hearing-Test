@@ -1,0 +1,292 @@
+
+//
+//  CoreDataAttempt.swift
+//  EPTATTSTestV4
+//
+//  Created by Jeffrey Jaskunas on 8/16/22.
+//
+//
+/*
+import Foundation
+
+
+//
+//  SummaryResultsEntity+CoreDataProperties.swift
+//  EPTATTSTestV4
+//
+//  Created by Jeffrey Jaskunas on 8/16/22.
+//
+//
+
+import Foundation
+import CoreData
+
+// Do not modify this file
+// If you change classes in GUI, regenerate this file
+
+extension SummaryResultsEntity {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<SummaryResultsEntity> {
+        return NSFetchRequest<SummaryResultsEntity>(entityName: "SummaryResultsEntity")
+    }
+
+    @NSManaged public var summaryFrequency: [String]?
+    @NSManaged public var summaryGain: [Float]?
+    @NSManaged public var summaryPan: [Int]?
+
+}
+
+extension SummaryResultsEntity : Identifiable {
+
+}
+
+
+
+//______________________________________
+
+
+
+ //
+ //  SummaryResultsEntity+CoreDataClass.swift
+ //  EPTATTSTestV4
+ //
+ //  Created by Jeffrey Jaskunas on 8/16/22.
+ //
+ //
+ 
+ import Foundation
+ import CoreData
+
+
+ @objc(SummaryResultsEntity)
+ public class SummaryResultsEntity: NSManagedObject {
+
+     
+ //    @Published var finalHearingResults = [[Any]]()
+ //    @Published var savedSummaryResultsEntities: [SummaryResultsEntity] = []
+ //    @Published var finalEnvDataObjectModel = EnvDataObjectModel()
+
+     @Published var persistenceProvider = PersistenceProvider()
+
+ //    @Published var saveFinalResults: SaveFinalResults? = nil
+     
+ //    private var persistentContainer: NSPersistentContainer {
+ //        let container = NSPersistentContainer(name: "SummaryResultsContainer")  // Must setup this and add the data file with attributes for entity type and add entity name
+ //        container.loadPersistentStores { (description, error) in
+ //        if let error = error {
+ //            print("ERROR LOADING CORE DATA. \(error)")
+ //        } else {
+ //            print("Sucessfully loaded core data")
+ //            print(container)
+ //            return container
+ //            }
+ //        }
+ //    }
+
+     private lazy var persistentContainer: NSPersistentContainer = {
+         let container = NSPersistentContainer(name: "SummaryResultsEntity")
+         container.loadPersistentStores(completionHandler: { _, error in
+             if let error = error {
+                 fatalError("An error ocurred while instantiating persistentContainer: \(error.localizedDescription)")
+             }
+         })
+         print("Sucessfully loaded core data")
+ //        print(container)
+         return container
+     }()
+
+     
+     // Custom Code goes into here
+ //    init() {
+ //        persistentContainer = NSPersistentContainer(name: "SummaryResultsContainer")  // Must setup this and add the data file with attributes for entity type and add entity name
+ //        persistentContainer.loadPersistentStores { ( _, error) in
+ //            if let error = error {
+ //                print("ERROR LOADING CORE DATA. \(error)")
+ //            } else {
+ //                print("Sucessfully loaded core data")
+ //            }
+ //        }
+ //        fetchSummaryResults()
+ //    }
+     
+ //    func fetchSummaryResults() {
+ //        let request = NSFetchRequest<SummaryResultsEntity>(entityName: "SummaryResultsEntity")
+ //        do{
+ //            savedSummaryResultsEntities = try persistentContainer.viewContext.fetch(request)
+ //            print("Fetch Data Run")
+ //            print(savedSummaryResultsEntities)
+ //        } catch let error {
+ //            print("Error fetching. \(error)")
+ //        }
+ //    }
+ //
+ //    func addSummaryFrequency(text: [String]) {
+ //        let newSummaryResultsContainer = SummaryResultsEntity(context: persistentContainer.viewContext)
+ //        newSummaryResultsContainer.summaryFrequency = finalEnvDataObjectModel.finalStoredFrequency
+ //        print("AddSummaryFrequency Run")
+ //        saveData()
+ //    }
+ //
+ //    func updateSummaryFrequency(entity: SummaryResultsEntity) {
+ //        let currentFrequency = entity.summaryFrequency
+ //        let newFrequency = currentFrequency! + finalEnvDataObjectModel.finalStoredFrequency
+ //        entity.summaryFrequency = newFrequency
+ //        print("UpdateData Run")
+ //        saveData()
+ //    }
+ //
+ //
+ //    func deleteSummaryFrequency(indexSet: IndexSet) {
+ //        guard let index = indexSet.first else { return }
+ //        let entity = savedSummaryResultsEntities[index]
+ //        persistentContainer.viewContext.delete(entity)
+ //        saveData()
+ //    }
+ //
+ //    func saveData() {   // This is the function saving to coredata
+ //        do{
+ //            try persistentContainer.viewContext.save()
+ //            fetchSummaryResults()
+ //            print("DataSaved")
+ //        } catch let error {
+ //            print("Error saving: \(error)")
+ //        }
+ //    }
+     
+     
+
+ 
+
+
+ final class PersistenceProvider  {
+     
+     @Published var savedSummaryResultsEntities: [SummaryResultsEntity] = []
+     @Published var finalEnvDataObjectModel = EnvDataObjectModel()
+     @Published var saveFinalResults: SaveFinalResults? = nil
+     
+     
+     let persistentContainer: NSPersistentContainer
+     var context: NSManagedObjectContext { persistentContainer.viewContext }
+
+     static let `default`: Persist enceProvider = PersistenceProvider()
+     
+     init() {
+         persistentContainer = NSPersistentContainer(name: "SummaryResultsContainer")
+
+         persistentContainer.loadPersistentStores { (description, error) in
+             if let error = error {
+                 print("ERROR LOADING CORE DATA. \(error)")
+             } else {
+                 print("Sucessfully loaded core data")
+             }
+         }
+ //        var savedSummaryResultsEntities: SummaryResultsEntity = SummaryResultsEntity()
+ //        saveContext()
+ //        fetchSummaryResults()
+ //        addSummaryFrequency(text: [])
+ //        updateSummaryFrequency(entity: SummaryResultsEntity())
+ //        deleteSummaryFrequency(indexSet: IndexSet())
+ //        saveData()
+     }
+
+     func saveContext() {
+         let context:NSManagedObjectContext = persistentContainer.viewContext
+         if context.hasChanges {
+             do {
+                 try context.save()
+             } catch let error {
+                 print("Error in Cotext: \(error)")
+             }
+         }
+     }
+     
+     func fetchSummaryResults() {
+         let request = NSFetchRequest<SummaryResultsEntity>(entityName: "SummaryResultsEntity")
+         do{
+             savedSummaryResultsEntities = try persistentContainer.viewContext.fetch(request)
+             print("Fetch Data Run")
+             print(savedSummaryResultsEntities)
+         } catch let error {
+             print("Error fetching. \(error)")
+         }
+     }
+
+     func addSummaryFrequency(text: [String]) {
+         let newSummaryResultsContainer = SummaryResultsEntity(context: persistentContainer.viewContext)
+         newSummaryResultsContainer.summaryFrequency = finalEnvDataObjectModel.finalStoredFrequency
+         print("AddSummaryFrequency Run")
+         saveData()
+     }
+
+     func updateSummaryFrequency(entity: SummaryResultsEntity) {
+         let currentFrequency = entity.summaryFrequency
+         let newFrequency = currentFrequency! + finalEnvDataObjectModel.finalStoredFrequency
+         entity.summaryFrequency = newFrequency
+         print("UpdateData Run")
+         saveData()
+     }
+
+
+     func deleteSummaryFrequency(indexSet: IndexSet) {
+         guard let index = indexSet.first else { return }
+         let entity = savedSummaryResultsEntities[index]
+         persistentContainer.viewContext.delete(entity)
+         saveData()
+     }
+
+     func saveData() {   // This is the function saving to coredata
+         do{
+             try persistentContainer.viewContext.save()
+             fetchSummaryResults()
+             print("DataSaved")
+         } catch let error {
+             print("Error saving: \(error)")
+         }
+     }
+ }
+
+
+
+     //    private lazy var persistentContainer: NSPersistentContainer = {
+     //        let container = NSPersistentContainer(name: "SummaryResultsEntity")
+     //        container.loadPersistentStores(completionHandler: { _, error in
+     //            if let error = error {
+     //                fatalError("An error ocurred while instantiating persistentContainer: \(error.localizedDescription)")
+     //            }
+     //        })
+     //        return container
+     //    }()
+     //
+     //
+     //
+     //// https://dev.to/fmo91/persistence-with-core-data-and-swiftui-45g5
+     //final class PersistenceProvider {
+     //    let persistentContainer: NSPersistentContainer
+     //    var context: NSManagedObjectContext { persistentContainer.viewContext }
+     //
+     //    static let `default`: PersistenceProvider = PersistenceProvider()
+     //    init() {
+     //        persistentContainer = NSPersistentContainer(name: "SummaryResultsContainer")
+     //
+     //        persistentContainer.loadPersistentStores { (description, error) in
+     //            if let error = error {
+     //                print("ERROR LOADING CORE DATA. \(error)")
+     //            } else {
+     //                print("Sucessfully loaded core data")
+     //            }
+     //        }
+     //    }
+     //
+     //    func saveContext() {
+     //        let context:NSManagedObjectContext = persistentContainer.viewContext
+     //        if context.hasChanges {
+     //            do {
+     //                try context.save()
+     //            } catch let error {
+     //                print("Error in Cotext: \(error)")
+     //            }
+     //        }
+     //    }
+     //}
+*/
+

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21G72" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DetailResultsEntity" representedClassName="DetailResultsEntity" syncable="YES">
+        <attribute name="detail1kHzIntraEarDelta" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="detail1kHzLeftEarHL" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="detail1KhzRightEarHL" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="detailAge" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="detailAverageGain" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="detailEmail" optional="YES" attributeType="String"/>
+        <attribute name="detailFrequency" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="detailHeardArray" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="detailID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="detailIndexForTest" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="detailName" optional="YES" attributeType="String"/>
+        <attribute name="detailPhonCurve" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="detailReferenceHLCurve" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="detailReversalDirection" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="detailReversalFirstGain" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="detailReversalFrequency" optional="YES" attributeType="String"/>
+        <attribute name="detailReversalGain" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="detailReversalHeard" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="detailReversalResultsFrequency" optional="YES" attributeType="String"/>
+        <attribute name="detailReversalSecondGain" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="detailSample" optional="YES" attributeType="String"/>
+        <attribute name="detailSex" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="detailSystemVolume" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="detailTestCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="detailTestEndSeconds" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="detailTestPan" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="detailTestStartSeconds" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="detailTestTestGain" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="[Float]"/>
+        <attribute name="detailUserRespCMSeconds" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="SummaryResultsEntity" representedClassName="SummaryResultsEntity" syncable="YES">
+        <attribute name="summary1kHzIntraEarDeltaHL" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" preserveAfterDeletion="YES"/>
+        <attribute name="summary1kHzLeftEarHL" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" preserveAfterDeletion="YES"/>
+        <attribute name="summary1kHzRightEarHL" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" preserveAfterDeletion="YES"/>
+        <attribute name="summaryAge" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="summaryAverageGain" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="summaryEmail" attributeType="String"/>
+        <attribute name="summaryFirstGain" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="summaryFrequency" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="summaryID" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="summaryIndex" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="summaryName" attributeType="String"/>
+        <attribute name="summaryPan" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="summaryPhonCurve" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="summaryReferenceHLCurve" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="summarySample" attributeType="String"/>
+        <attribute name="summarySecondGain" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="summarySex" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="summarySystemVolume" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="summaryTestType" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="DetailResultsEntity" positionX="-63" positionY="126" width="128" height="464"/>
+        <element name="SummaryResultsEntity" positionX="-63" positionY="-18" width="128" height="314"/>
+    </elements>
+</model>

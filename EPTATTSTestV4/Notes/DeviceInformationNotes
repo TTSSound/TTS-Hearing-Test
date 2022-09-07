@@ -1,0 +1,56 @@
+
+
+DeviceInformationCommand.Command.Queries
+A query dictionary to get information about a device.
+https://developer.apple.com/documentation/devicemanagement/deviceinformationcommand/command/queries
+IsDoNotDisturbInEffect  -> string
+The key to determine if the device is in Do Not Disturb (DND) mode. This value requires the Device Information access right, and is available in iOS 7 and later.
+
+
+
+
+
+
+
+BluetoothMAC -> string
+The key to get the Bluetooth media access control (MAC) address. This value requires the Network Information access right.
+
+BuildVersion -> string
+The key to get the operating system version. This value requires the Device Information access right.
+
+DeviceName -> string
+The key to get the device name. This value requires the Device Information access right.
+
+HostName -> string
+The key to get the hostname. This value is available in macOS 10.11 and later.
+
+
+IsDoNotDisturbInEffect -> string
+The key to determine if the device is in Do Not Disturb (DND) mode. This value requires the Device Information access right, and is available in iOS 7 and later.
+
+
+LocalHostName -> string
+The key to get the local hostname from Bonjour. This value is available in macOS 10.11 and later.
+
+ModelName -> string
+The key to get the model name; for example, iPhone. This value requires the Device Information access right.
+
+ModemFirmwareVersion -> string
+The key to get the modem firmware version. This value requires the Device Information access right, and is available in iOS 4 and later.
+
+OSVersion -> string
+The key to get the operating system version. This value requires the Device Information access right.
+
+ProductName -> string
+The key to get the product name, such as iPad8,12. This value requires the Device Information access right.
+
+
+https://developer.apple.com/documentation/devicemanagement/globalpreferences
+
+https://developer.apple.com/documentation/devicemanagement/userpreferences
+
+
+
+https://developer.apple.com/documentation/devicemanagement/managedmenuextras
+Volume.menu -> boolean
+If true, enables the Volume menu extra.

@@ -1,0 +1,47 @@
+
+Conditional Navigation Ideas from Apple
+
+
+NavigationLink(destination:
+    deviceSelection == 0 ? AnyView(CalibrationSplashView())
+    : deviceSelection == 1 ? AnyView(ManualCalibrationView())
+    : deviceSelection == 2 ? AnyView(DisclaimerView())
+    : AnyView(ManualSetupView())
+){
+    Text("We're Now Ready To Contine!")
+}
+
+
+
+
+
+struct DeviceNextScreen: View {
+
+@State var deviceNextScreen = 1
+        
+    var body: some View {
+        NavigationView {
+
+            NavigationLink(
+                destination: {
+                    chooseDeviceDestination()
+                }, label: {
+                    VStack{
+                        Image(systemName: "globe")
+                        Text("We're Now Ready to Continue")
+                    }
+                })
+            }
+        }
+    
+    
+        @ViewBuilder
+        func chooseDeviceDestination() -> some View {
+            switch deviceNextScreen {
+            case 0: CalibrationSplashView()
+            case 1: ManualCalibrationView()
+            case 2: DisclaimerView()
+            default: ManualSetupView()
+        }
+    }
+}

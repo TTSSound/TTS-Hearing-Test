@@ -1,0 +1,325 @@
+
+/*
+ 
+ 
+ func saveToJSON3() async {
+//        // Function Save to JSON3 seems viable, but stores into a container bundle, not its
+//        // own JSON file like saveToJson(). Keep for retention, and use as it Stores to a 2nd location
+//        // which could be good for testing
+//        if let path3 = Bundle.main.path(forResource: "SummaryResultsProject", ofType: ".json"){
+//            let url3 = URL(fileURLWithPath: path3)
+//            print(url3)
+//            print(path3)
+//            let encoder = JSONEncoder()
+//            encoder.outputFormatting = .prettyPrinted
+//            do{
+//                let jsonData = try encoder.encode(saveFinalResults)
+//                print(jsonData)
+//                try jsonData.write(to: url3)
+//            } catch{
+//                print("Error writing to JSON file: \(error)")
+//            }
+//        // Stored Here:
+//        //Users/jeffreyjaskunas/Library/Developer/CoreSimulator/Devices/05B0F8D8-D5E9-4CF8-8E31-EB5EDC61373D/data/Containers/Bundle/Application/498C0365-86B4-43B2-A238-1C42E901E60B/EPTATTSTestV4.app/SummaryResultsProject.json
+//        }
+//    }
+ 
+ 
+ 
+ func createCSV() async {
+
+     // No need for string interpolation ("\("Time"),\("Force")\n"), just say what you want:
+ //    let heading = "Time, Force\n"
+     let heading = "Index\n"
+
+     // For every element in recArray, extract the values associated with 'T' and 'F' as a comma-separated string.
+     // Force-unwrap (the '!') to get a concrete value (or crash) rather than an optional
+ //    let rows = recArray.map { "\($0["T"]!),\($0["F"]!)" }
+     
+     let rows = finalStoredIndex.map { String($0) }.joined(separator: ",")
+ //    let row = finalStoredIndex.map { String($0) }.joined(separator: ",")
+
+     // Turn all of the rows into one big string
+     let csvString = heading + rows
+
+     do {
+
+         let path = try FileManager.default.url(for: .documentDirectory,
+                                                in: .allDomainsMask,
+                                                appropriateFor: nil,
+                                                create: false)
+
+         let fileURL = path.appendingPathComponent(detailedCSVName)
+         print("path: \(path)")
+         print("fileURL: \(fileURL)")
+         try csvString.write(to: fileURL, atomically: true , encoding: .utf8)
+         print("Success write to CSV Classic")
+     } catch {
+         print("error creating file")
+     }
+ }
+
+ //        if let filePathCSV = Bundle.main.path(forResource: "SummaryResultsCSV", ofType: ".csv"){
+ //        let fileURL = URL(fileURLWithPath: filePathCSV)
+ //            print("fileURL: \(fileURL)")
+ //            print("filePathCSV: \(filePathCSV)")
+ //            do{
+ //                let writer = try CSVWriter(fileURL: fileURL, append: false)
+ //                try writer.write(row: [stringFinalStoredIndex])
+ //                print("CVS Writer Success")
+ //            } catch {
+ //                print("CVSWriter Error \(error)")
+ //            }
+ //        }
+        
+        let inputCSV = [
+            [stringFinalStoredIndex],
+            [stringFinalStoredTestStartSeconds],
+            [stringFinalStoredTestEndSeconds],
+            [stringFinalStoredUserRespCMSeconds],
+            [stringFinalStoredTestTestGain],
+            [stringFinalStoredFrequency],
+            [stringFinalStoredTestCount],
+            [stringFinalStoredHeardArray],
+            [stringFinalStoredReversalGain],
+            [stringFinalStoredReversalFrequency],
+            [stringFinalStoredReversalHeard],
+            [stringFinalStoredFirstGain],
+            [stringFinalStoredSecondGain],
+            [stringFinalStoredAverageGain],
+            [stringFinalStoredResultsFrequency],
+            [stringFinalStoredResultsGains],
+            [stringFinalStoredTestPan]
+            ]
+        
+        if let filePathCSV = Bundle.main.path(forResource: "SummaryResultsCSV", ofType: ".CSV"){
+        let fileURL = URL(fileURLWithPath: filePathCSV)
+            print("fileURL: \(fileURL)")
+            print("filePathCSV: \(filePathCSV)")
+            
+            let writer = try? CSVWriter(fileURL: fileURL, append: false)
+            for try row in inputCSV {
+                try? writer!.write(fields: row)
+                print("CSV Success")
+            }
+            try? writer?.endEncoding()
+        }
+    }
+            
+//            for try row in inputCSV {
+//                let string = try? CSVWriter.encode(rows: [row], into: String.self)
+//            }
+//            for try row in inputCSV {
+//                let data = try? CSVWriter.encode(rows: inputCSV, into: Data.self)
+//            }
+
+//            let data  = try? CSVWriter.encode(rows: inputCSV, into: Data.self)
+//            let string = try? CSVWriter.encode(rows: inputCSV, into: String.self)
+//        let data = try CSVWriter.encode(rows: inputCSV, into: ("~/Desktop/Test.csv")!), append: false)
+    
+    
+    
+    
+    //            [finalStoredIndex],
+    //            [finalStoredTestStartSeconds],
+    //            [finalStoredTestEndSeconds],
+    //            [finalStoredUserRespCMSeconds],
+    //            [finalStoredTestTestGain],
+    //            [finalStoredFrequency],
+    //            [finalStoredTestCount],
+    //            [finalStoredHeardArray],
+    //            [finalStoredReversalGain],
+    //            [finalStoredReversalFrequency],
+    //            [finalStoredReversalHeard],
+    //            [finalStoredFirstGain],
+    //            [finalStoredSecondGain],
+    //            [finalStoredAverageGain],
+    //            [finalStoredResultsFrequency],
+    //            [finalStoredResultsGains],
+    //            [finalStoredTestPan]
+    //            ]
+            
+    //        let encoder = CSVEncoder()
+    //        let data = try? encoder.encode(inputCSV, into: Data.self)
+    //
+    //        let data2   = try? CSVWriter.encode(rows: inputCSV, into: Data.self)
+    //        let string = try? CSVWriter.encode(rows: inputCSV, into: String.self)
+*/
+//}
+
+// To Append to JSON File instead of overwritting it
+
+/*
+struct Item: Codable {
+    var name: String
+
+    enum CodingKeys: String, CodingKey {
+        case name
+    }
+}
+
+//at some point, you need to read the items back into the program (you only write data in this program).
+ // and i think you want to write all of the Items in the array, not just a single Item.
+ // (i.e., your writeJSON function appends an item to the array, but then writes out only the one item appended (not the entire array).
+
+// this code should work for you: it declares the array of Items with a code block that will be executed
+ // the first time you code references the array variable. that code block will load what's out there on disk already.
+
+var array: [Item] = {
+    do {
+        let fileURL = try FileManager.default.url(for: .desktopDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            .appendingPathComponent("deneme.json")
+
+        let data = try Data(contentsOf: fileURL)
+        let decoder = JSONDecoder()
+        let items = try decoder.decode([Item].self, from: data)
+        return items
+    } catch {
+        print(error.localizedDescription)
+        return []
+    }
+}()
+
+// i'd rewrite the writeJSON function to write out the whole array:
+
+func writeJSON(items: [Item]) {
+    do {
+        let fileURL = try FileManager.default.url(for: .desktopDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            .appendingPathComponent("deneme.json")
+
+        let encoder = JSONEncoder()
+        try encoder.encode(array).write(to: fileURL)
+    } catch {
+        print(error.localizedDescription)
+    }
+}
+ */
+
+// from there, here's some basic code that shows you what's happening
+
+// show what's out there already on disk
+/*
+print(array.map({ $0.name }))
+
+// append a few items and then write the array
+array.append(Item(name: "hello"))
+array.append(Item(name: "goodbye"))
+array.append(Item(name: "C U L8R"))
+writeJSON(items: array)
+
+// append a few more items, and print the names
+
+array.append(Item(name: "here is"))
+array.append(Item(name: "more data"))
+// show what's in the array
+print(array.map({ $0.name }))
+
+// save these last two as well.
+writeJSON(items: array)
+*/
+
+//the first time you run this code (and there is no existing file on your desktop), your output will look like this:
+//
+//    The file “deneme.json” couldn’t be opened because there is no such file.
+//
+//    []
+//
+//    ["hello", "goodbye", "C U L8R", "here is", "more data"]
+//
+//the second time you run, all the items from the first run will be there at the start, and you'll then add even more items, producing this output:
+//
+//    ["hello", "goodbye", "C U L8R", "here is", "more data"]
+//
+//    ["hello", "goodbye", "C U L8R", "here is", "more data", "hello", "goodbye", "C U L8R", "here is", "more data"]
+//
+//hope that helps, DMG
+    
+    
+    
+
+//final class PersistenceProvider {
+// https://dev.to/fmo91/persistence-with-core-data-and-swiftui-45g5 //
+//    let persistentContainer: NSPersistentContainer
+//    var context: NSManagedObjectContext { persistentContainer.viewContext }
+//
+//    static let `default`: PersistenceProvider = PersistenceProvider()
+//    init() {
+//        persistentContainer = NSPersistentContainer(name: "SummaryResultsContainer")
+//
+//        persistentContainer.loadPersistentStores { (description, error) in
+//            if let error = error {
+//                print("ERROR LOADING CORE DATA. \(error)")
+//            } else {
+//                print("Sucessfully loaded core data")
+//            }
+//        }
+//    }
+//
+//    func saveContext() {
+//        let context:NSManagedObjectContext = persistentContainer.viewContext
+//        if context.hasChanges {
+//            do {
+//                try context.save()
+//            } catch let error {
+//                print("Error in Cotext: \(error)")
+//            }
+//        }
+//    }
+    
+//    func fetchSummaryResults() {
+//        let request = NSFetchRequest<SummaryResultsEntity>(entityName: "SummaryResultsEntity")
+//        do{
+//            savedSummaryResultsEntities = try summaryResultsContainer.viewContext.fetch(request)
+//            print("Fetch Data Run")
+//        } catch let error {
+//            print("Error fetching. \(error)")
+//        }
+//    }
+//
+//    func addSummaryFrequency(text: [String]) {
+//        let newSummaryResultsContainer = SummaryResultsEntity(context: summaryResultsContainer.viewContext)
+//        newSummaryResultsContainer.summaryFrequency = finalStoredFrequency
+//        print("AddSummaryFrequency Run")
+//        saveData()
+//    }
+//
+//    func updateSummaryFrequency(entity: SummaryResultsEntity) {
+//        let currentFrequency = entity.summaryFrequency
+//        let newFrequency = currentFrequency! + finalStoredFrequency
+//        entity.summaryFrequency = newFrequency
+//        print("UpdateData Run")
+//        saveData()
+//    }
+//
+//
+//    func deleteSummaryFrequency(indexSet: IndexSet) {
+//        guard let index = indexSet.first else { return }
+//        let entity = savedSummaryResultsEntities[index]
+//        summaryResultsContainer.viewContext.delete(entity)
+//        saveData()
+//    }
+//
+//    func saveData() {   // This is the function saving to coredata
+//        do{
+//            try summaryResultsContainer.viewContext.save()
+//            fetchSummaryResults()
+//            print("DataSaved")
+//        } catch let error {
+//            print("Error saving: \(error)")
+//        }
+//    }
+
+
+//    private lazy var persistentContainer: NSPersistentContainer = {
+//        let container = NSPersistentContainer(name: "SummaryResultsEntity")
+//        container.loadPersistentStores(completionHandler: { _, error in
+//            if let error = error {
+//                fatalError("An error ocurred while instantiating persistentContainer: \(error.localizedDescription)")
+//            }
+//        })
+//        return container
+//    }()
+//
+//
+//
+
