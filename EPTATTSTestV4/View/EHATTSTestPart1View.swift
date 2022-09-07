@@ -62,13 +62,9 @@ struct EHATTSTestPart1View: View {
     }
     
     var audioSessionModel = AudioSessionModel()
-//    var tiffanyBlue: Color = Color(red: 0.06666666666666667, green: 0.6549019607843137, blue: 0.7333333333333333)
-//    var colorBackgroundTopDarkNeonGreen = RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300)
-    
-//    @State var heardArrayValue = [Int]()
+
     @State var localHeard = 0
     @State var localPlaying = Int()    // Playing = 1. Stopped = -1
-//    @State var localPanSelection = Int()
     @State var localReversal = Int()
     @State var localReversalEnd = Int()
     @State var localMarkNewTestCycle = Int()
@@ -76,116 +72,65 @@ struct EHATTSTestPart1View: View {
     
     @State var localTestCount = 0
     @State var localStartingNonHeardArraySet: Bool = false
-
     @State var localReversalHeardLast = Int()
-//    @State var localSeriesYesResponses = Int()
     @State var localSeriesNoResponses = Int()
-
-    
-//    @State var response1 = Int()
-//    @State var response2 = Int()
-//    @State var response3 = Int()
-    
     @State var firstHeardResponseIndex = Int()
     @State var firstHeardIsTrue: Bool = false
     @State var secondHeardResponseIndex = Int()
     @State var secondHeardIsTrue: Bool = false
-    
     @State var startTooHigh = 0
-//    @State var startTooLow = 0
-//    @State var first: Int?
-//    @State var first1 = Int()
-//    @State var second: Int?
-//    @State var second1 = Int()
-//    @State var firstG: Float?
-//    @State var secondG: Float?
     @State var firstGain = Float()
     @State var secondGain = Float()
-    
     @State var endTestSeries: Bool = false
     @State var showTestCompletionSheet: Bool = false
- 
     
     @State var envDataObjectModel_samples: [String] = ["Sample0", "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
     @State var envDataObjectModel_index: Int = 0
     @State var envDataObjectModel_testGain: Float = 0.2
     @State var envDataObjectModel_heardArray: [Int] = [Int]()
-//    @State var envDataObjectModel_sampleType: String = ".wav"
     @State var envDataObjectModel_indexForTest = [Int]()
     @State var envDataObjectModel_testCount: [Int] = [Int]()
     @State var envDataObjectModel_pan: Int = Int()
     @State var envDataObjectModel_testPan = [Int]()
     @State var envDataObjectModel_testTestGain = [Float]()
     @State var envDataObjectModel_frequency = [String]()
-//    @State var envDataObjectModel_testStartSeconds = [Float64]()
-//    @State var envDataObjectModel_testEndSeconds = [Float64]()
-//    @State var envDataObjectModel_userRespCMSeconds = [Float64]()
     @State var envDataObjectModel_reversalHeard = [Int]()
     @State var envDataObjectModel_reversalGain = [Float]()
     @State var envDataObjectModel_reversalFrequency = [String]()
-//    @State var envDataObjectModel_reveralArray = [Any]()
-//    @State var envDataObjectModel_reversalArrayIndex = Int()
     @State var envDataObjectModel_reversalDirection = Float()
     @State var envDataObjectModel_reversalDirectionArray = [Float]()
 
     @State var envDataObjectModel_averageGain = Float()
 
-//    @State var envDataObjectModel_reversalResultsFrequency = [String]()
-//    @State var envDataObjectModel_reversalResultsGains = [Float]()
-//    @State var envDataObjectModel_reversalFirstGain = [Float]()
-//    @State var envDataObjectModel_reversalSecondGain = [Float]()
-//    @State var envDataObjectModel_reversalAverageGain = [Float]()
-//    @State var envDataObjectModel_resultsFrequency  = [String]()
-//    @State var envDataObjectModel_resultsGains  = [Float]()
-//    @State var envDataObjectModel_reversalDualTrue = Int()
-
     @State var envDataObjectModel_eptaSamplesCount = 1 //17
 
     @State var envDataObjectModel_finalStoredIndex: [Int] = [Int]()
-//    @State var envDataObjectModel_finalStoredTestStartSeconds: [Float64] = [Float64]()
-//    @State var envDataObjectModel_finalStoredTestEndSeconds: [Float64] = [Float64]()
-//    @State var envDataObjectModel_finalStoredUserRespCMSeconds: [Float64] = [Float64]()
     @State var envDataObjectModel_finalStoredTestPan: [Int] = [Int]()
     @State var envDataObjectModel_finalStoredTestTestGain: [Float] = [Float]()
     @State var envDataObjectModel_finalStoredFrequency: [String] = [String]()
     @State var envDataObjectModel_finalStoredTestCount: [Int] = [Int]()
     @State var envDataObjectModel_finalStoredHeardArray: [Int] = [Int]()
-//    @State var envDataObjectModel_finalStoredReversalDirectionArray: [Float] = [Float]()
-//    @State var envDataObjectModel_finalStoredReversalGain: [Float] = [Float]()
-//    @State var envDataObjectModel_finalStoredReversalFrequency: [String] = [String]()
     @State var envDataObjectModel_finalStoredReversalHeard: [Int] = [Int]()
     @State var envDataObjectModel_finalStoredFirstGain: [Float] = [Float]()
     @State var envDataObjectModel_finalStoredSecondGain: [Float] = [Float]()
     @State var envDataObjectModel_finalStoredAverageGain: [Float] = [Float]()
-//    @State var envDataObjectModel_finalStoredResultsFrequency: [String] = [String]()
-//    @State var envDataObjectModel_finalStoredResultsGains: [Float] = [Float]()
-//    @State var envDataObjectModel_finalHearingResults = [[Any]]()
     
     @State var idxForTest = Int() // = envDataObjectModel_indexForTest.count
     @State var idxForTestNet1 = Int() // = envDataObjectModel_indexForTest.count - 1
     @State var idxTestCount = Int() // = envDataObjectModel_TestCount.count
-//    @State var idxTestCountNet1 = Int() // = envDataObjectModel_TestCount.count - 1
     @State var idxTestCountUpdated = Int() // = envDataObjectModel_TestCount.count + 1
     @State var activeFrequency = String()
     @State var idxHA = Int()    // idx = envDataObjectModel_heardArray.count
     @State var idxReversalHeardCount = Int()
     @State var idxHAZero = Int()    //  idxZero = idx - idx
     @State var idxHAFirst = Int()   // idxFirst = idx - idx + 1
-//    @State var rHIdxNet3: Int?
-//    @State var rHIdxNet2: Int?
-//    @State var rHIdxNet1: Int?
-//    @State var localSumReversalHeard = Int()
     @State var isCountSame = Int()
-    //envDataObjectModel_heardArray.index(after: envDataObjectModel_indexForTest.count-1)
     @State var heardArrayIdxAfnet1 = Int()
     @State var testIsPlaying: Bool = false
     @State var playingString: [String] = ["", "Start or Restart Test", "Great Job, You've Completed This Test Segment"]
     @State var playingStringColor: [Color] = [Color.clear, Color.yellow, Color.green]
     @State var playingStringColorIndex = 0
     @State var userPausedTest: Bool = false
-
-
-    
 
     let fileEHAP1Name = "SummaryEHAP1Results.json"
     let summaryEHAP1CSVName = "SummaryEHAP1ResultsCSV.csv"
@@ -195,13 +140,10 @@ struct EHATTSTestPart1View: View {
     
     @State var saveFinalResults: SaveFinalResults? = nil
 
-   
     let heardThread = DispatchQueue(label: "BackGroundThread", qos: .userInitiated)
     let arrayThread = DispatchQueue(label: "BackGroundPlayBack", qos: .background)
     let audioThread = DispatchQueue(label: "AudioThread", qos: .background)
     let preEventThread = DispatchQueue(label: "PreeventThread", qos: .userInitiated)
-    
-    
     
     var body: some View {
         
@@ -228,7 +170,6 @@ struct EHATTSTestPart1View: View {
                         print("Start Button Clicked. Playing = \(localPlaying)")
                     } label: {
                         Text(playingString[playingStringColorIndex])
-//                        Text("Resart Test Post Pause")
                             .foregroundColor(playingStringColor[playingStringColorIndex])
                     }
                     .padding(.top, 40)
@@ -433,10 +374,8 @@ struct EHATTSTestPart1View: View {
         localPlaying = 0
         envDataObjectModel_testCount.removeAll()
         envDataObjectModel_reversalHeard.removeAll()
-//        envDataObjectModel_reversalArrayIndex = Int()
         envDataObjectModel_averageGain = Float()
         envDataObjectModel_reversalDirection = Float()
-//        envDataObjectModel_reversalDualTrue = Int()
         localStartingNonHeardArraySet = false
         firstHeardResponseIndex = Int()
         firstHeardIsTrue = false
@@ -574,7 +513,6 @@ struct EHATTSTestPart1View: View {
         envDataObjectModel_testCount.append(idxTestCountUpdated)
     }
     
-
     func arrayTesting() async {
         let arraySet1 = Int(envDataObjectModel_testPan.count)
         let arraySet2 = Int(envDataObjectModel_testTestGain.count) - Int(envDataObjectModel_frequency.count) + Int(envDataObjectModel_testCount.count) - Int(envDataObjectModel_heardArray.count)
@@ -896,10 +834,8 @@ extension EHATTSTestPart1View {
             envDataObjectModel_heardArray.removeAll()
             envDataObjectModel_testCount.removeAll()
             envDataObjectModel_reversalHeard.removeAll()
-//            envDataObjectModel_reversalArrayIndex = Int()
             envDataObjectModel_averageGain = Float()
             envDataObjectModel_reversalDirection = Float()
-//            envDataObjectModel_reversalDualTrue = Int()
             localStartingNonHeardArraySet = false
             firstHeardResponseIndex = Int()
             firstHeardIsTrue = false
@@ -915,10 +851,8 @@ extension EHATTSTestPart1View {
     func newTestCycle() async {
         if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCount && endTestSeries == false {
             startTooHigh = 0
-//            startTooLow = 0
             localMarkNewTestCycle = 0
             localReversalEnd = 0
-            //!!!!!Need to fix / stop this index from climbing in next cycle without the cycle being completed!!
             envDataObjectModel_index = envDataObjectModel_index + 1
             envDataObjectModel_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
             endTestSeries = false
@@ -983,37 +917,6 @@ extension EHATTSTestPart1View {
         DispatchQueue.global(qos: .background).async {
             if localMarkNewTestCycle == 1 && localReversalEnd == 1 {
                 
-//                let ift = [100000000] + envDataObjectModel_indexForTest
-//                let tp = [100000000] + envDataObjectModel_testPan
-//                let ttg = [1000000.0] + envDataObjectModel_testTestGain
-//                let freq = ["100000000"] + [activeFrequency]
-//                let tc = [100000000] + envDataObjectModel_testCount
-//                let ha = [100000000] + envDataObjectModel_heardArray
-//                let rh = [100000000] + envDataObjectModel_reversalHeard
-//                let rfg = [1000000.0] + envDataObjectModel_reversalFirstGain
-//                let rsg = [1000000.0] + envDataObjectModel_reversalSecondGain
-//                let rag = [1000000.0] + envDataObjectModel_reversalAverageGain
-//
-                
-    //            let ift = envDataObjectModel.storedIndex + envDataObjectModel.indexForTest
-    //            let tss = envDataObjectModel.storedTestStartSeconds + envDataObjectModel.testStartSeconds
-    //            let tes = envDataObjectModel.storedTestEndSeconds + envDataObjectModel.testEndSeconds
-    //            let urcms = envDataObjectModel.storedUserRespCMSeconds + envDataObjectModel.userRespCMSeconds
-    //            let tp = envDataObjectModel.storedTestPan + envDataObjectModel.testPan
-    //            let ttg = envDataObjectModel.storedTestTestGain + envDataObjectModel.testTestGain
-    //            let freq = envDataObjectModel.storedFrequency + envDataObjectModel.frequency
-    //            let tc = envDataObjectModel.storedTestCount + envDataObjectModel.testCount
-    //            let ha = envDataObjectModel.storedHeardArray + envDataObjectModel.heardArray
-    //            let rda = envDataObjectModel.storedReversalDirection + envDataObjectModel.reversalDirectionArray
-    //            let rg = envDataObjectModel.storedReversalGain + envDataObjectModel.reversalGain
-    //            let rFreq = envDataObjectModel.storedReversalFrequency + envDataObjectModel.reversalFrequency
-    //            let rh = envDataObjectModel.storedReversalHeard + envDataObjectModel.reversalHeard
-    //            let rfg = envDataObjectModel.storedFirstGain + envDataObjectModel.reversalFirstGain
-    //            let rsg = envDataObjectModel.storedSecondGain + envDataObjectModel.reversalSecondGain
-    //            let rag = envDataObjectModel.storedAverageGain + envDataObjectModel.reversalAverageGain
-    //            let resFreq = envDataObjectModel.storedResultsFrequency + envDataObjectModel.resultsFrequency
-    //            let resGs = envDataObjectModel.storedResultsGains + envDataObjectModel.resultsGains
-                
                 envDataObjectModel_finalStoredIndex.append(contentsOf: [100000000] + envDataObjectModel_indexForTest)
                 envDataObjectModel_finalStoredTestPan.append(contentsOf: [100000000] + envDataObjectModel_testPan)
                 envDataObjectModel_finalStoredTestTestGain.append(contentsOf: [1000000.0] + envDataObjectModel_testTestGain)
@@ -1024,7 +927,6 @@ extension EHATTSTestPart1View {
                 envDataObjectModel_finalStoredFirstGain.append(contentsOf: [1000000.0] + [firstGain])
                 envDataObjectModel_finalStoredSecondGain.append(contentsOf: [1000000.0] + [secondGain])
                 envDataObjectModel_finalStoredAverageGain.append(contentsOf: [1000000.0] + [envDataObjectModel_averageGain])
-
             }
         }
     }
@@ -1038,28 +940,6 @@ extension EHATTSTestPart1View {
             await writeEHA1InputDetailedResultsToCSV()
             await writeEHA1InputDetailedResultsToCSV()
 //                await envDataObjectModel_uploadSummaryResultsTest()
-         
-//            print("---------End-Test-Cycle-Print-Stored-Array-Results---------")
-//            print("finalStoredIndex: \(envDataObjectModel_finalStoredIndex)")
-//            print("finalStoredTestStartSeconds: \(envDataObjectModel_finalStoredTestStartSeconds)")
-//            print("finalStoredTestEndSeconds: \(envDataObjectModel_finalStoredTestEndSeconds)")
-//            print("finalStoredUserRespCMSeconds: \(envDataObjectModel_finalStoredUserRespCMSeconds)")
-//            print("finalStoredTestPan: \(envDataObjectModel_finalStoredTestPan)")
-//            print("finalStoredTestTestGain: \(envDataObjectModel_finalStoredTestTestGain)")
-//            print("finalStoredFrequency: \(envDataObjectModel_finalStoredFrequency)")
-//            print("finalStoredTestCount: \(envDataObjectModel_finalStoredTestCount)")
-//            print("finalStoredHeardArray: \(envDataObjectModel_finalStoredHeardArray)")
-//            print("finalStoredReversalDirectionArray: \(envDataObjectModel_finalStoredReversalDirectionArray)")
-//            print("finalStoredReversalGain: \(envDataObjectModel_finalStoredReversalGain)")
-//            print("finalStoredReversalFrequency: \(envDataObjectModel_finalStoredReversalFrequency)")
-//            print("finalStoredReversalHeard: \(envDataObjectModel_finalStoredReversalHeard)")
-//            print("finalStoredFirstGain: \(envDataObjectModel_finalStoredFirstGain)")
-//            print("finalStoredSecondGain: \(envDataObjectModel_finalStoredSecondGain)")
-//            print("finalStoredAverageGain: \(envDataObjectModel_finalStoredAverageGain)")
-//            print("finalStoredResultsFrequency: \(envDataObjectModel_finalStoredResultsFrequency)")
-//            print("finalStoredResultsGains: \(envDataObjectModel_finalStoredResultsGains)")
-//            print("finalHearingResults: \(envDataObjectModel_finalHearingResults)")
-//            print("-------End-Test-Cycle-And-Printed-Stored-Array-Results-------")
         }
     }
     
@@ -1131,7 +1011,6 @@ extension EHATTSTestPart1View {
             jsonSystemVoluem: 100.00,
             jsonActualFrequency: 1.000,
             jsonFrequency: [activeFrequency],
-//            jsonGain: envDataObjectModel_finalStoredResultsGains,
             jsonPan: envDataObjectModel_finalStoredTestPan,
             jsonStoredIndex: envDataObjectModel_finalStoredIndex,
             jsonStoredTestPan: envDataObjectModel_finalStoredTestPan,
@@ -1186,27 +1065,6 @@ extension EHATTSTestPart1View {
             let stringFinalStoredFirstGain = "finalStoredFirstGain," + envDataObjectModel_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
             let stringFinalStoredSecondGain = "finalStoredSecondGain," + envDataObjectModel_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
             let stringFinalStoredAverageGain = "finalStoredAverageGain," + envDataObjectModel_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
-            
-
-    //        let stringFinalStoredIndex = "finalStoredIndex," + finalStoredIndex.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredTestStartSeconds = "finalStoredTestStartSeconds," + finalStoredTestStartSeconds.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredTestEndSeconds = "finalStoredTestEndSeconds." + finalStoredTestEndSeconds.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredUserRespCMSeconds = "finalStoredUserRespCMSeconds," + finalStoredUserRespCMSeconds.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredTestTestGain = "finalStoredTestTestGain," + finalStoredTestTestGain.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredFrequency = "finalStoredFrequency," + finalStoredFrequency.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredTestCount = "finalStoredTestCount," + finalStoredTestCount.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredHeardArray = "finalStoredHeardArray," + finalStoredHeardArray.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredReversalDirectionArray = "finalStoredReversalDirectionArray," + finalStoredReversalDirectionArray.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredReversalGain = "finalStoredReversalGain," + finalStoredReversalGain.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredReversalFrequency = "finalStoredReversalFrequency," + finalStoredReversalFrequency.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredReversalHeard = "finalStoredReversalHeard," + finalStoredReversalHeard.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredFirstGain = "finalStoredFirstGain," + finalStoredFirstGain.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredSecondGain = "finalStoredSecondGain," + finalStoredSecondGain.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredAverageGain = "finalStoredAverageGain," + finalStoredAverageGain.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredResultsFrequency = "finalStoredResultsFrequency," + finalStoredResultsFrequency.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredResultsGains = "finalStoredResultsGains," + finalStoredResultsGains.map { String($0) }.joined(separator: ",")
-    //        let stringFinalStoredTestPan = "finalStoredTestPan," + finalStoredTestPan.map { String($0) }.joined(separator: ",")
-            
             
             do {
                 let csvEHAP1DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
