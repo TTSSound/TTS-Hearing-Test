@@ -99,6 +99,9 @@ struct EHATTSTestPart1View: View {
     @State var secondG: Float?
     @State var firstGain = Float()
     @State var secondGain = Float()
+    
+    @State var endTestSeries: Bool = false
+    @State var showTestCompletionSheet: Bool = false
  
     
     @State var envDataObjectModel_samples: [String] = ["Sample0", "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
@@ -134,7 +137,7 @@ struct EHATTSTestPart1View: View {
     @State var envDataObjectModel_resultsGains  = [Float]()
     @State var envDataObjectModel_reversalDualTrue = Int()
 
-    @State var envDataObjectModel_eptaSamplesCount = 17
+    @State var envDataObjectModel_eptaSamplesCount = 2 //17
 
     @State var envDataObjectModel_finalStoredIndex: [Int] = [Int]()
     @State var envDataObjectModel_finalStoredTestStartSeconds: [Float64] = [Float64]()
@@ -174,8 +177,8 @@ struct EHATTSTestPart1View: View {
     //envDataObjectModel_heardArray.index(after: envDataObjectModel_indexForTest.count-1)
     @State var heardArrayIdxAfnet1 = Int()
     @State var testIsPlaying: Bool = false
-    @State var playingString: [String] = ["", "Start or Restart Test"]
-    @State var playingStringColor: [Color] = [Color.clear, Color.yellow]
+    @State var playingString: [String] = ["", "Start or Restart Test", "Great Job, You've Completed This Test Segment"]
+    @State var playingStringColor: [Color] = [Color.clear, Color.yellow, Color.green]
     @State var playingStringColorIndex = 0
     @State var userPausedTest: Bool = false
 
@@ -224,7 +227,8 @@ struct EHATTSTestPart1View: View {
                         playingStringColorIndex = 0
                         print("Start Button Clicked. Playing = \(localPlaying)")
                     } label: {
-                        Text("Resart Test Post Pause")
+                        Text(playingString[playingStringColorIndex])
+//                        Text("Resart Test Post Pause")
                             .foregroundColor(playingStringColor[playingStringColorIndex])
                     }
                     Spacer()
@@ -292,19 +296,42 @@ struct EHATTSTestPart1View: View {
                 }
             Spacer()
             }
+            .fullScreenCover(isPresented: $showTestCompletionSheet, content: {
+                VStack(alignment: .leading) {
+    
+                    Button(action: {
+                        showTestCompletionSheet.toggle()
+                    }, label: {
+                        Image(systemName: "xmark")
+                            .font(.headline)
+                            .padding(10)
+                            .foregroundColor(.red)
+                    })
+                    Spacer()
+                    Text("Take a moment for a break before exiting to continue with the next test segment")
+                        .foregroundColor(.blue)
+                        .font(.title)
+                        .padding()
+                }
+            })
         }
         .onChange(of: testIsPlaying, perform: { testBoolValue in
-            if testBoolValue == true {
+            if testBoolValue == true && endTestSeries == false {
             //User is starting test for first time
                 audioSessionModel.setAudioSession()
                 localPlaying = 1
                 playingStringColorIndex = 0
                 userPausedTest = false
-            } else if testBoolValue == false  {
+            } else if testBoolValue == false && endTestSeries == false {
             // User is pausing test for firts time
                 stop()
                 localPlaying = 0
                 playingStringColorIndex = 1
+                userPausedTest = true
+            } else if testBoolValue == true && endTestSeries == true {
+                stop()
+                localPlaying = -1
+                playingStringColorIndex = 2
                 userPausedTest = true
             } else {
                 print("Critical error in pause logic")
@@ -381,13 +408,24 @@ struct EHATTSTestPart1View: View {
                         await saveFinalStoredArrays()
                         await restartPresentation()
                         await newTestCycle()
+                        await endTestSeries()
                         print("End of Reversals")
                         print("Prepare to Start Next Presentation")
                     }
                 }
             }
         }
+        .onChange(of: showTestCompletionSheet) { showCompletionValue in
+            DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
+                if showCompletionValue == false {
+                    showTestCompletionSheet = false
+                } else if showCompletionValue == true {
+                    showTestCompletionSheet = true
+                }
+            }
+        }
     }
+    
  
     
     
@@ -895,7 +933,7 @@ extension EHATTSTestPart1View {
     }
     
     func newTestCycle() async {
-        if localMarkNewTestCycle == 1 && localReversalEnd == 1 {
+        if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCount && endTestSeries == false {
             startTooHigh = 0
             startTooLow = 0
             localMarkNewTestCycle = 0
@@ -903,14 +941,67 @@ extension EHATTSTestPart1View {
             //!!!!!Need to fix / stop this index from climbing in next cycle without the cycle being completed!!
             envDataObjectModel_index = envDataObjectModel_index + 1
             envDataObjectModel_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
+            endTestSeries = false
             await wipeArrays()
+        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCount && endTestSeries == false {
+                endTestSeries = true
+                self.localPlaying = -1
+                print("=============================")
+                print("!!!!! End of Test Series!!!!!!")
+                print("=============================")
+        } else {
+            print("!!!Critical error in newTestCycleLogic")
+        }
+    }
+    
+    func endTestSeries() async {
+        if endTestSeries == false {
+            //Do Nothing and continue
+            print("end Test Series = \(endTestSeries)")
+        } else if endTestSeries == true {
+            await endTestSeriesStop()
+            showTestCompletionSheet = true
+        }
+    }
+    
+    func endTestSeriesStop() async {
+        localPlaying = -1
+        stop()
+        userPausedTest = true
+        playingStringColorIndex = 2
+        
+        audioThread.async {
+            localPlaying = 0
+            stop()
+            userPausedTest = true
+            playingStringColorIndex = 2
+        }
+        
+        DispatchQueue.main.async {
+            localPlaying = 0
+            stop()
+            userPausedTest = true
+            playingStringColorIndex = 2
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, qos: .userInitiated) {
+            localPlaying = 0
+            stop()
+            userPausedTest = true
+            playingStringColorIndex = 2
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3, qos: .userInitiated) {
+            localPlaying = -1
+            stop()
+            userPausedTest = true
+            playingStringColorIndex = 2
         }
     }
     
     
    
     func concatenateFinalArrays() async {
-//        print("concatenateFinalArrays()")
         DispatchQueue.global(qos: .background).async {
             if localMarkNewTestCycle == 1 && localReversalEnd == 1 {
                 
