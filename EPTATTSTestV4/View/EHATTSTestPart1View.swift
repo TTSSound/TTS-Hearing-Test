@@ -288,7 +288,6 @@ struct EHATTSTestPart1View: View {
                 .cornerRadius(300)
                 .onTapGesture(count: 1) {
                     heardThread.async{ self.localHeard = 1
-//                        print("Heard Button Pressed; Heard: \(localHeard)")
                     }
                 }
             Spacer()
@@ -307,10 +306,6 @@ struct EHATTSTestPart1View: View {
                 localPlaying = 0
                 playingStringColorIndex = 1
                 userPausedTest = true
-//                envDataObjectModel_heardArray.removeAll()
-//                pauseRestartTestCycle()
-                    
-                
             } else {
                 print("Critical error in pause logic")
             }
@@ -335,9 +330,7 @@ struct EHATTSTestPart1View: View {
                 preEventThread.async {
                     preEventLogging()
                 }
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 3.7) {
                 DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3.6) {
-//                    Task(priority: .userInitiated) {
                         if self.localHeard == 1 {
                             localTestCount += 1
                             Task(priority: .userInitiated) {
@@ -345,8 +338,6 @@ struct EHATTSTestPart1View: View {
                                 await localResponseTracking()
                                 await count()
                                 await logNotPlaying()           //envDataObjectModel_playing = -1
-//                                await arrayTesting()
-//                                await printData()
                                 await resetPlaying()
                                 await resetHeard()
                                 await resetNonResponseCount()
@@ -359,19 +350,15 @@ struct EHATTSTestPart1View: View {
                                 await heardArrayNormalize()
                                 await count()
                                 await logNotPlaying()   //self.envDataObjectModel_playing = -1
-    //                                await arrayTesting()
-    //                                await printData()
                                 await resetPlaying()
                                 await resetHeard()
                                 await nonResponseCounting()
                                 await reversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change event
                             }
                         } else {
-                            localTestCount += 1
+                            localTestCount = 1
                             Task(priority: .background) {
-//                                await printData()
                             await resetPlaying()
-//                            await resetHeard()
                             print("Fatal Error: Stopped in Task else")
                             print("heardArray: \(envDataObjectModel_heardArray)")
                         }
@@ -381,9 +368,7 @@ struct EHATTSTestPart1View: View {
         })
         .onChange(of: localReversal) { reversalValue in
             if reversalValue == 1 {
-//                print("Pre Reversal Funcs _reversalHeard: \(envDataObjectModel_reversalHeard)")
                 DispatchQueue.global(qos: .background).async {
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     Task(priority: .userInitiated) {
                         await createReversalHeardArray()
                         await createReversalGainArray()
@@ -400,19 +385,6 @@ struct EHATTSTestPart1View: View {
                 }
             }
         }
-//        .onChange(of:  localReversalEnd) { lREValue in
-//            if lREValue == 0 {
-//                DispatchQueue.global(qos: .background).async(group: .none, qos: .background) {
-//                    Task(priority: .background) {
-//                        await printReversalData()
-//                    }
-//                    Task(priority: .background) {
-//                        await concatenateFinalArrays()
-//                        await saveFinalStoredArrays()
-//                    }
-//                }
-//            }
-//        }
     }
  
     
@@ -427,7 +399,6 @@ struct EHATTSTestPart1View: View {
         envDataObjectModel_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
         testIsPlaying = false
         localPlaying = 0
-//            envDataObjectModel_heardArray.removeAll()
         envDataObjectModel_testCount.removeAll()
         envDataObjectModel_reversalHeard.removeAll()
         envDataObjectModel_reversalArrayIndex = Int()
@@ -513,31 +484,23 @@ struct EHATTSTestPart1View: View {
 //MARK: -HeardArray Methods
     
     func responseHeardArray() async {
-//      DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier, execute: {
-          envDataObjectModel_heardArray.append(1)
-          self.idxHA = envDataObjectModel_heardArray.count
-          self.localStartingNonHeardArraySet = true
-//      })
+      envDataObjectModel_heardArray.append(1)
+      self.idxHA = envDataObjectModel_heardArray.count
+      self.localStartingNonHeardArraySet = true
     }
 
     func localResponseTracking() async {
-//        DispatchQueue.global(qos: .userInitiated).async {
-            if firstHeardIsTrue == false {
-    //            DispatchQueue.global(qos: .userInitiated).async {
-                firstHeardResponseIndex = localTestCount
-                firstHeardIsTrue = true
-    //            }
-            } else if firstHeardIsTrue == true {
-    //            DispatchQueue.global(qos: .userInitiated).async {
-                secondHeardResponseIndex = localTestCount
-                secondHeardIsTrue = true
-                print("Second Heard Is True Logged!")
-    //            }
-            } else {
-    //            DispatchQueue.global(qos: .background).async {
-                print("Error in localResponseTrackingLogic")
-            }
-//        }
+        if firstHeardIsTrue == false {
+            firstHeardResponseIndex = localTestCount
+            firstHeardIsTrue = true
+        } else if firstHeardIsTrue == true {
+            secondHeardResponseIndex = localTestCount
+            secondHeardIsTrue = true
+            print("Second Heard Is True Logged!")
+
+        } else {
+            print("Error in localResponseTrackingLogic")
+        }
     }
     
 //MARK: - THIS FUNCTION IS CAUSING ISSUES IN HEARD ARRAY. THE ISSUE IS THE DUAL IF STRUCTURE, NOT LINKED BY ELSE IF
@@ -549,7 +512,6 @@ struct EHATTSTestPart1View: View {
         heardArrayIdxAfnet1 = envDataObjectModel_heardArray.index(after: idxForTestNet1)
       
         if localStartingNonHeardArraySet == false {
-//            DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier, execute: {
             envDataObjectModel_heardArray.append(0)
             self.localStartingNonHeardArraySet = true
             idxHA = envDataObjectModel_heardArray.count
@@ -557,16 +519,8 @@ struct EHATTSTestPart1View: View {
             idxHAFirst = idxHAZero + 1
             isCountSame = idxHA - idxForTest
             heardArrayIdxAfnet1 = envDataObjectModel_heardArray.index(after: idxForTestNet1)
-//            })
         } else if localStartingNonHeardArraySet == true {
-      
-      //envDataObjectModel_indexForTest.count - envDataObjectModel_heardArray.count
-//            let isCountSame = idxHA - idxForTest
-      //envDataObjectModel_heardArray.index(after: envDataObjectModel_indexForTest.count-1)
-//            let heardArrayIdxAfnet1 = envDataObjectModel_heardArray.index(after: idxForTestNet1)
-
             if isCountSame != 0 && heardArrayIdxAfnet1 != 1 {
-//            DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier, execute: {
                 envDataObjectModel_heardArray.append(0)
                 idxHA = envDataObjectModel_heardArray.count
                 idxHAZero = idxHA - idxHA
@@ -577,9 +531,7 @@ struct EHATTSTestPart1View: View {
             } else {
                 print("Error in arrayNormalization else if isCountSame && heardAIAFnet1 if segment")
             }
-//            })
         } else {
-//            DispatchQueue.global(qos: .background).async {
             print("Critial Error in Heard Array Count and or Values")
         }
     }
@@ -587,15 +539,11 @@ struct EHATTSTestPart1View: View {
 // MARK: -Logging Methods
     func count() async {
         idxTestCountUpdated = envDataObjectModel_testCount.count + 1
-        
-//        DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier, execute: {
         envDataObjectModel_testCount.append(idxTestCountUpdated)
-//        })
     }
     
 
     func arrayTesting() async {
-//        DispatchQueue.global(qos: .background).async {
         let arraySet1 = Int(envDataObjectModel_testStartSeconds.count) - Int(envDataObjectModel_testEndSeconds.count) + Int(envDataObjectModel_userRespCMSeconds.count) - Int(envDataObjectModel_testPan.count)
         let arraySet2 = Int(envDataObjectModel_testTestGain.count) - Int(envDataObjectModel_frequency.count) + Int(envDataObjectModel_testCount.count) - Int(envDataObjectModel_heardArray.count)
         if arraySet1 + arraySet2 == 0 {
@@ -603,7 +551,6 @@ struct EHATTSTestPart1View: View {
         } else {
             print("Error Event Logs Length Error")
         }
-//        }
     }
     
     func printData () async {
@@ -646,20 +593,15 @@ extension EHATTSTestPart1View {
     }
 
     func createReversalHeardArray() async {
-//        DispatchQueue.main.async {
         envDataObjectModel_reversalHeard.append(envDataObjectModel_heardArray[idxHA-1])
         self.idxReversalHeardCount = envDataObjectModel_reversalHeard.count
-//        }
     }
         
     func createReversalGainArray() async {
-//        DispatchQueue.global(qos: .userInitiated).async {
-            envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
-//        }
+        envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
     }
     
     func checkHeardReversalArrays() async {
-//        DispatchQueue.main.async(group: .none, qos: .userInitiated) { //}, flags: .barrier) {
         if idxHA - idxReversalHeardCount == 0 {
             print("Success, Arrays match")
         } else if idxHA - idxReversalHeardCount < 0 && idxHA - idxReversalHeardCount > 0{
@@ -667,27 +609,19 @@ extension EHATTSTestPart1View {
         } else {
             fatalError("hit else in check reversal arrays")
         }
-//        }
     }
     
     
     func reversalDirection() async {
         localReversalHeardLast = envDataObjectModel_reversalHeard.last ?? -999
-        
         if localReversalHeardLast == 1 {
             envDataObjectModel_reversalDirection = -1.0
-//            DispatchQueue.global(qos: .userInitiated).async {
             envDataObjectModel_reversalDirectionArray.append(-1.0)
-//            }
         } else if localReversalHeardLast == 0 {
             envDataObjectModel_reversalDirection = 1.0
-//            DispatchQueue.global(qos: .userInitiated).async {
             envDataObjectModel_reversalDirectionArray.append(1.0)
-//            }
         } else {
-//            DispatchQueue.global(qos: .background).async {
             print("Error in Reversal Direction reversalHeardArray Count")
-//            }
         }
     }
     
@@ -788,19 +722,10 @@ extension EHATTSTestPart1View {
     }
     
     func reversalAction() async {
-//        DispatchQueue.global(qos: .userInitiated).async {
         if localReversalHeardLast == 1 {
-//            DispatchQueue.global(qos: .userInitiated).async {
-//                Task(priority: .userInitiated) {
             await reversalOfFive()
-//                }
-//            }
         } else if localReversalHeardLast == 0 {
-//            DispatchQueue.global(qos: .userInitiated).async {
-//                Task(priority: .userInitiated) {
             await reversalOfTwo()
-//                }
-//            }
         } else {
             print("!!!Critical error in Reversal Action")
         }
@@ -809,90 +734,30 @@ extension EHATTSTestPart1View {
     
 
     func reversalComplexAction() async {
-    //        print("Start reversalComplexAction()")
-    //        print("=============================")
-    //        print("reversal section")
-    //        print("idxRevHC: \(idxReversalHeardCount)")
-    //        print("idxHA: \(idxHA)")
-    //        print("PostCreate reversalHeard: \(envDataObjectModel_reversalHeard)")
-    //        print("PostCreate heardArray: \(envDataObjectModel_heardArray)")
-    //        print("PostCreate heardArray[idxHa-1]: \(envDataObjectModel_heardArray[idxHA-1])")
-    //        print("PostCreate idxReversalHeardCount: \(idxReversalHeardCount)")
-    //        print("secondHeardIsTrue: \(secondHeardIsTrue)")
-    //        print("firstHeardResponseIndex: \(firstHeardResponseIndex)")
-    //        print("SecondHeardResponseIndex: \(secondHeardResponseIndex)")
-    //        print("LocalSeriesNoResponses: \(localSeriesNoResponses)")
         if idxReversalHeardCount <= 1 && idxHA <= 1 {
-//            print("reversal section <= 1")
-//            DispatchQueue.global(qos: .userInitiated).async {
-//                    Task(priority: .userInitiated) {
             await reversalAction()
-//                    print("reversal section hCount <=1 = reversalAction")
-//                    }
-//            }
         }  else if idxReversalHeardCount == 2 {
-//            print("reversal section == 2")
             if idxReversalHeardCount == 2 && secondHeardIsTrue == true {
-//                DispatchQueue.global(qos: .userInitiated).async {
-//                        Task(priority: .userInitiated) {
                 await startTooHighCheck()
-//                        print("In reversal section == 2")
-//                        print("reversal section startTooHigh")
-    // Need to Add in Start Too Low Check
-//                        }
-//                }
             } else if idxReversalHeardCount == 2  && secondHeardIsTrue == false {
                 await reversalAction()
-//                print("In reversal section == 2")
-//                print("In reversal section 2 else if reversal action triggered")
             } else {
-//                DispatchQueue.global(qos: .userInitiated).async {
-//                        Task(priority: .background) {
                 print("In reversal section == 2")
                 print("Failed reversal section startTooHigh")
                 print("!!Fatal Error in reversalHeard and Heard Array Counts")
-//                        }
-//                }
             }
         } else if idxReversalHeardCount >= 3 {
             print("reversal section >= 3")
             if secondHeardResponseIndex - firstHeardResponseIndex == 1 {
-//                DispatchQueue.global(qos: .userInitiated).async {
-// Need Code To Ensure Exit This Cycle to New Cycle
-//                        Task(priority: .background) {
-                        // End Test Cycle
                 print("reversal section >= 3")
                 print("In first if section sHRI - fHRI == 1")
                 print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
-//                        }
-//                }
             } else if localSeriesNoResponses == 3 {
-//                DispatchQueue.global(qos: .userInitiated).async {
-//                        Task(priority: .userInitiated) {
                 await reversalOfTen()
-//                        print("reversal section >= 3")
-//                        print("In first else if section localSeriesNoResponses === 3")
-//                        print("Three Negative Series Reversals, Reversal of Ten")
-//                        }
-//                }
             } else if localSeriesNoResponses == 2 {
-//                DispatchQueue.global(qos: .userInitiated).async {
-//                        Task(priority: .userInitiated) {
                 await reversalOfFour()
-//                        print("reversal section >= 3")
-//                        print("In second else if section localSeriesNoResponses === 2")
-//                        print("Two Negative Series Reversals, Reversal of four")
-//                        }
-//                }
             } else {
-//                DispatchQueue.global(qos: .userInitiated).async {
-//                        Task(priority: .userInitiated) {
                 await reversalAction()
-//                        print("reversal section >= 3")
-//                        print("In else section for normal revert reversal action")
-//                        print("Normal Reversal Action with Count >= 3")
-//                        }
-//                }
             }
         } else {
             print("Fatal Error in complex reversal logic for if idxRHC >=3, hit else segment")
@@ -907,89 +772,46 @@ extension EHATTSTestPart1View {
     }
     
     func reversalHeardCount1() async {
-//        print("Start reversalHeardCount1()")
-//       DispatchQueue.global(qos: .userInitiated).async {
-//           Task(priority: .userInitiated) {
        await reversalAction()
-//               print("reversalHeardCount1 = reversalAction")
-//           }
-//       }
    }
             
     func check2PositiveSeriesReversals() async {
-//        print("Start check2PositiveSeriesReversals()")
         if envDataObjectModel_reversalHeard[idxHA-2] == 1 && envDataObjectModel_reversalHeard[idxHA-1] == 1 {
-//            DispatchQueue.global(qos: .userInitiated).async {
-//                Task(priority: .background) {
-//                     End Test Cycle
             print("reversal - check2PositiveSeriesReversals")
             print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
-//                }
-//            }
         }
     }
 
     func checkTwoNegativeSeriesReversals() async {
-//        print("Start checkTwoNegativeSeriesReversals()")
         if envDataObjectModel_reversalHeard.count >= 3 && envDataObjectModel_reversalHeard[idxHA-2] == 0 && envDataObjectModel_reversalHeard[idxHA-1] == 0 {
-//            DispatchQueue.global(qos: .userInitiated).async {
-//                Task(priority: .userInitiated) {
             await reversalOfFour()
-//                    print("reversal - check2NegaitveSeriesReversals if segment = reversal of Four")
-//                      print("Two Negative Series Reversal Registered, Reversal of Five")
-//                }
-//            }
         } else {
-//            DispatchQueue.global(qos: .userInitiated).async {
-//                Task(priority: .userInitiated) {
             await reversalAction()
-//                    print("reversal - check2NegaitveSeriesReversals else segment = reversal action")
-//                       print("Complex Action Triggers Not Met, continue standard Reversal Action")
-//                }
-//            }
         }
     }
     
     func startTooHighCheck() async {
-//        if startTooHigh == 0 && envDataObjectModel_reversalHeard[idxHAZero] == 1 && envDataObjectModel_reversalHeard[idxHAFirst] == 1 {
         if startTooHigh == 0 && firstHeardIsTrue == true && secondHeardIsTrue == true {
-//            DispatchQueue.global(qos: .userInitiated).async {
-//                Task(priority: .userInitiated) {
             startTooHigh = 1
             await reversalOfTen()
             await resetAfterTooHigh()
             print("Too High Found")
-//
-//                }
-//            }
         } else {
-//            DispatchQueue.global(qos: .userInitiated).async {
-//                Task(priority: .userInitiated) {
             await reversalAction()
-//                }
-//            }
         }
     }
     
     func resetAfterTooHigh() async {
-//        DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier, execute: {
-            firstHeardResponseIndex = Int()
-            firstHeardIsTrue = false
-            secondHeardResponseIndex = Int()
-            secondHeardIsTrue = false
-//        })
+        firstHeardResponseIndex = Int()
+        firstHeardIsTrue = false
+        secondHeardResponseIndex = Int()
+        secondHeardIsTrue = false
     }
 
     func reversalsCompleteLogging() async {
-//        DispatchQueue.global(qos: .userInitiated).async {
         if secondHeardIsTrue == true {
             self.localReversalEnd = 1
             self.localMarkNewTestCycle = 1
-//                print("envDataObjectModel_reversalGain: \(envDataObjectModel_reversalGain)")
-//                print("firstHeardResponseIndex: \(firstHeardResponseIndex)")
-//                print("secondHeardResponseIndex: \(secondHeardResponseIndex)")
-//                print("firstGain by index - 1 func: \(envDataObjectModel_reversalGain[firstHeardResponseIndex-1])")
-//                print("secondGain by index - 1 func: \(envDataObjectModel_reversalGain[secondHeardResponseIndex-1])")
             self.firstGain = envDataObjectModel_reversalGain[firstHeardResponseIndex-1]
             self.secondGain = envDataObjectModel_reversalGain[secondHeardResponseIndex-1]
             print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
@@ -1023,13 +845,9 @@ extension EHATTSTestPart1View {
                 print("average Gain: \(envDataObjectModel_averageGain)")
             }
         } else if secondHeardIsTrue == false {
-//            DispatchQueue.global(qos: .background).async {
                 print("Contine, second hear is true = false")
-//            }
         } else {
-//            DispatchQueue.global(qos: .background).async {
                 print("Critical error in reversalsCompletLogging Logic")
-//            }
         }
     }
 
@@ -1083,10 +901,7 @@ extension EHATTSTestPart1View {
             //!!!!!Need to fix / stop this index from climbing in next cycle without the cycle being completed!!
             envDataObjectModel_index = envDataObjectModel_index + 1
             envDataObjectModel_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
-
             await wipeArrays()
-
-//            await printData()
         }
     }
     
