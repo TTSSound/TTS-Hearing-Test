@@ -36,7 +36,7 @@ struct SaveFinalResults: Codable {  // This is a model
     var jsonSystemVoluem = Float()
     var jsonActualFrequency = Double()
     var jsonFrequency: [String]
-    var jsonGain: [Float]
+//    var jsonGain: [Float]
     var jsonPan: [Int]
     var jsonStoredIndex: [Int]
     var jsonStoredTestPan: [Int]
@@ -62,11 +62,13 @@ struct EHATTSTestPart1View: View {
     }
     
     var audioSessionModel = AudioSessionModel()
+//    var tiffanyBlue: Color = Color(red: 0.06666666666666667, green: 0.6549019607843137, blue: 0.7333333333333333)
+//    var colorBackgroundTopDarkNeonGreen = RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300)
     
-    @State var heardArrayValue = [Int]()
+//    @State var heardArrayValue = [Int]()
     @State var localHeard = 0
     @State var localPlaying = Int()    // Playing = 1. Stopped = -1
-    @State var localPanSelection = Int()
+//    @State var localPanSelection = Int()
     @State var localReversal = Int()
     @State var localReversalEnd = Int()
     @State var localMarkNewTestCycle = Int()
@@ -76,13 +78,13 @@ struct EHATTSTestPart1View: View {
     @State var localStartingNonHeardArraySet: Bool = false
 
     @State var localReversalHeardLast = Int()
-    @State var localSeriesYesResponses = Int()
+//    @State var localSeriesYesResponses = Int()
     @State var localSeriesNoResponses = Int()
 
     
-    @State var response1 = Int()
-    @State var response2 = Int()
-    @State var response3 = Int()
+//    @State var response1 = Int()
+//    @State var response2 = Int()
+//    @State var response3 = Int()
     
     @State var firstHeardResponseIndex = Int()
     @State var firstHeardIsTrue: Bool = false
@@ -90,13 +92,13 @@ struct EHATTSTestPart1View: View {
     @State var secondHeardIsTrue: Bool = false
     
     @State var startTooHigh = 0
-    @State var startTooLow = 0
-    @State var first: Int?
-    @State var first1 = Int()
-    @State var second: Int?
-    @State var second1 = Int()
-    @State var firstG: Float?
-    @State var secondG: Float?
+//    @State var startTooLow = 0
+//    @State var first: Int?
+//    @State var first1 = Int()
+//    @State var second: Int?
+//    @State var second1 = Int()
+//    @State var firstG: Float?
+//    @State var secondG: Float?
     @State var firstGain = Float()
     @State var secondGain = Float()
     
@@ -108,71 +110,71 @@ struct EHATTSTestPart1View: View {
     @State var envDataObjectModel_index: Int = 0
     @State var envDataObjectModel_testGain: Float = 0.2
     @State var envDataObjectModel_heardArray: [Int] = [Int]()
-    @State var envDataObjectModel_sampleType: String = ".wav"
+//    @State var envDataObjectModel_sampleType: String = ".wav"
     @State var envDataObjectModel_indexForTest = [Int]()
     @State var envDataObjectModel_testCount: [Int] = [Int]()
     @State var envDataObjectModel_pan: Int = Int()
     @State var envDataObjectModel_testPan = [Int]()
     @State var envDataObjectModel_testTestGain = [Float]()
     @State var envDataObjectModel_frequency = [String]()
-    @State var envDataObjectModel_testStartSeconds = [Float64]()
-    @State var envDataObjectModel_testEndSeconds = [Float64]()
-    @State var envDataObjectModel_userRespCMSeconds = [Float64]()
+//    @State var envDataObjectModel_testStartSeconds = [Float64]()
+//    @State var envDataObjectModel_testEndSeconds = [Float64]()
+//    @State var envDataObjectModel_userRespCMSeconds = [Float64]()
     @State var envDataObjectModel_reversalHeard = [Int]()
     @State var envDataObjectModel_reversalGain = [Float]()
     @State var envDataObjectModel_reversalFrequency = [String]()
-    @State var envDataObjectModel_reveralArray = [Any]()
-    @State var envDataObjectModel_reversalArrayIndex = Int()
+//    @State var envDataObjectModel_reveralArray = [Any]()
+//    @State var envDataObjectModel_reversalArrayIndex = Int()
     @State var envDataObjectModel_reversalDirection = Float()
     @State var envDataObjectModel_reversalDirectionArray = [Float]()
 
     @State var envDataObjectModel_averageGain = Float()
 
-    @State var envDataObjectModel_reversalResultsFrequency = [String]()
-    @State var envDataObjectModel_reversalResultsGains = [Float]()
-    @State var envDataObjectModel_reversalFirstGain = [Float]()
-    @State var envDataObjectModel_reversalSecondGain = [Float]()
-    @State var envDataObjectModel_reversalAverageGain = [Float]()
-    @State var envDataObjectModel_resultsFrequency  = [String]()
-    @State var envDataObjectModel_resultsGains  = [Float]()
-    @State var envDataObjectModel_reversalDualTrue = Int()
+//    @State var envDataObjectModel_reversalResultsFrequency = [String]()
+//    @State var envDataObjectModel_reversalResultsGains = [Float]()
+//    @State var envDataObjectModel_reversalFirstGain = [Float]()
+//    @State var envDataObjectModel_reversalSecondGain = [Float]()
+//    @State var envDataObjectModel_reversalAverageGain = [Float]()
+//    @State var envDataObjectModel_resultsFrequency  = [String]()
+//    @State var envDataObjectModel_resultsGains  = [Float]()
+//    @State var envDataObjectModel_reversalDualTrue = Int()
 
-    @State var envDataObjectModel_eptaSamplesCount = 2 //17
+    @State var envDataObjectModel_eptaSamplesCount = 1 //17
 
     @State var envDataObjectModel_finalStoredIndex: [Int] = [Int]()
-    @State var envDataObjectModel_finalStoredTestStartSeconds: [Float64] = [Float64]()
-    @State var envDataObjectModel_finalStoredTestEndSeconds: [Float64] = [Float64]()
-    @State var envDataObjectModel_finalStoredUserRespCMSeconds: [Float64] = [Float64]()
+//    @State var envDataObjectModel_finalStoredTestStartSeconds: [Float64] = [Float64]()
+//    @State var envDataObjectModel_finalStoredTestEndSeconds: [Float64] = [Float64]()
+//    @State var envDataObjectModel_finalStoredUserRespCMSeconds: [Float64] = [Float64]()
     @State var envDataObjectModel_finalStoredTestPan: [Int] = [Int]()
     @State var envDataObjectModel_finalStoredTestTestGain: [Float] = [Float]()
     @State var envDataObjectModel_finalStoredFrequency: [String] = [String]()
     @State var envDataObjectModel_finalStoredTestCount: [Int] = [Int]()
     @State var envDataObjectModel_finalStoredHeardArray: [Int] = [Int]()
-    @State var envDataObjectModel_finalStoredReversalDirectionArray: [Float] = [Float]()
-    @State var envDataObjectModel_finalStoredReversalGain: [Float] = [Float]()
-    @State var envDataObjectModel_finalStoredReversalFrequency: [String] = [String]()
+//    @State var envDataObjectModel_finalStoredReversalDirectionArray: [Float] = [Float]()
+//    @State var envDataObjectModel_finalStoredReversalGain: [Float] = [Float]()
+//    @State var envDataObjectModel_finalStoredReversalFrequency: [String] = [String]()
     @State var envDataObjectModel_finalStoredReversalHeard: [Int] = [Int]()
     @State var envDataObjectModel_finalStoredFirstGain: [Float] = [Float]()
     @State var envDataObjectModel_finalStoredSecondGain: [Float] = [Float]()
     @State var envDataObjectModel_finalStoredAverageGain: [Float] = [Float]()
-    @State var envDataObjectModel_finalStoredResultsFrequency: [String] = [String]()
-    @State var envDataObjectModel_finalStoredResultsGains: [Float] = [Float]()
-    @State var envDataObjectModel_finalHearingResults = [[Any]]()
+//    @State var envDataObjectModel_finalStoredResultsFrequency: [String] = [String]()
+//    @State var envDataObjectModel_finalStoredResultsGains: [Float] = [Float]()
+//    @State var envDataObjectModel_finalHearingResults = [[Any]]()
     
     @State var idxForTest = Int() // = envDataObjectModel_indexForTest.count
     @State var idxForTestNet1 = Int() // = envDataObjectModel_indexForTest.count - 1
     @State var idxTestCount = Int() // = envDataObjectModel_TestCount.count
-    @State var idxTestCountNet1 = Int() // = envDataObjectModel_TestCount.count - 1
+//    @State var idxTestCountNet1 = Int() // = envDataObjectModel_TestCount.count - 1
     @State var idxTestCountUpdated = Int() // = envDataObjectModel_TestCount.count + 1
     @State var activeFrequency = String()
     @State var idxHA = Int()    // idx = envDataObjectModel_heardArray.count
     @State var idxReversalHeardCount = Int()
     @State var idxHAZero = Int()    //  idxZero = idx - idx
     @State var idxHAFirst = Int()   // idxFirst = idx - idx + 1
-    @State var rHIdxNet3: Int?
-    @State var rHIdxNet2: Int?
-    @State var rHIdxNet1: Int?
-    @State var localSumReversalHeard = Int()
+//    @State var rHIdxNet3: Int?
+//    @State var rHIdxNet2: Int?
+//    @State var rHIdxNet1: Int?
+//    @State var localSumReversalHeard = Int()
     @State var isCountSame = Int()
     //envDataObjectModel_heardArray.index(after: envDataObjectModel_indexForTest.count-1)
     @State var heardArrayIdxAfnet1 = Int()
@@ -200,23 +202,21 @@ struct EHATTSTestPart1View: View {
     let preEventThread = DispatchQueue(label: "PreeventThread", qos: .userInitiated)
     
     
+    
     var body: some View {
         
         ZStack{
-            RadialGradient(
-                gradient: Gradient(colors: [Color.blue, Color.black]),
-                center: .center,
-                startRadius: -100,
-                endRadius: 300).ignoresSafeArea()
-            VStack{
+            RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
+        VStack {
                 Spacer()
-                
                 HStack {
                     Spacer()
                     Text(String(envDataObjectModel_testGain))
                         .fontWeight(.bold)
                         .padding()
                         .foregroundColor(.white)
+                        .padding(.top, 40)
+                        .padding(.bottom, 40)
                     Spacer()
                     Button {
                         envDataObjectModel_heardArray.removeAll()
@@ -231,10 +231,11 @@ struct EHATTSTestPart1View: View {
 //                        Text("Resart Test Post Pause")
                             .foregroundColor(playingStringColor[playingStringColorIndex])
                     }
+                    .padding(.top, 40)
+                    .padding(.bottom, 40)
                     Spacer()
                 }
                 Spacer()
-                
                 HStack{
                     Spacer()
                     Text("Click to Stat Test")
@@ -315,6 +316,7 @@ struct EHATTSTestPart1View: View {
                 }
             })
         }
+       
         .onChange(of: testIsPlaying, perform: { testBoolValue in
             if testBoolValue == true && endTestSeries == false {
             //User is starting test for first time
@@ -358,33 +360,33 @@ struct EHATTSTestPart1View: View {
                     preEventLogging()
                 }
                 DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3.6) {
-                        if self.localHeard == 1 {
-                            localTestCount += 1
-                            Task(priority: .userInitiated) {
-                                await responseHeardArray()      //envDataObjectModel_heardArray.append(1)
-                                await localResponseTracking()
-                                await count()
-                                await logNotPlaying()           //envDataObjectModel_playing = -1
-                                await resetPlaying()
-                                await resetHeard()
-                                await resetNonResponseCount()
-                                await reversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change event
-                            }
+                    if self.localHeard == 1 {
+                        localTestCount += 1
+                        Task(priority: .userInitiated) {
+                            await responseHeardArray()      //envDataObjectModel_heardArray.append(1)
+                            await localResponseTracking()
+                            await count()
+                            await logNotPlaying()           //envDataObjectModel_playing = -1
+                            await resetPlaying()
+                            await resetHeard()
+                            await resetNonResponseCount()
+                            await reversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change event
                         }
-                        else if envDataObjectModel_heardArray.last == nil || self.localHeard == -1 {
-                            localTestCount += 1
-                            Task(priority: .userInitiated) {
-                                await heardArrayNormalize()
-                                await count()
-                                await logNotPlaying()   //self.envDataObjectModel_playing = -1
-                                await resetPlaying()
-                                await resetHeard()
-                                await nonResponseCounting()
-                                await reversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change event
-                            }
-                        } else {
-                            localTestCount = 1
-                            Task(priority: .background) {
+                    }
+                    else if envDataObjectModel_heardArray.last == nil || self.localHeard == -1 {
+                        localTestCount += 1
+                        Task(priority: .userInitiated) {
+                            await heardArrayNormalize()
+                            await count()
+                            await logNotPlaying()   //self.envDataObjectModel_playing = -1
+                            await resetPlaying()
+                            await resetHeard()
+                            await nonResponseCounting()
+                            await reversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change event
+                        }
+                    } else {
+                        localTestCount = 1
+                        Task(priority: .background) {
                             await resetPlaying()
                             print("Fatal Error: Stopped in Task else")
                             print("heardArray: \(envDataObjectModel_heardArray)")
@@ -415,22 +417,12 @@ struct EHATTSTestPart1View: View {
                 }
             }
         }
-        .onChange(of: showTestCompletionSheet) { showCompletionValue in
-            DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
-                if showCompletionValue == false {
-                    showTestCompletionSheet = false
-                } else if showCompletionValue == true {
-                    showTestCompletionSheet = true
-                }
-            }
-        }
     }
     
  
     
     
 //MARK: - AudioPlayer Methods
-    
     
     func pauseRestartTestCycle() {
         localMarkNewTestCycle = 0
@@ -441,10 +433,10 @@ struct EHATTSTestPart1View: View {
         localPlaying = 0
         envDataObjectModel_testCount.removeAll()
         envDataObjectModel_reversalHeard.removeAll()
-        envDataObjectModel_reversalArrayIndex = Int()
+//        envDataObjectModel_reversalArrayIndex = Int()
         envDataObjectModel_averageGain = Float()
         envDataObjectModel_reversalDirection = Float()
-        envDataObjectModel_reversalDualTrue = Int()
+//        envDataObjectModel_reversalDualTrue = Int()
         localStartingNonHeardArraySet = false
         firstHeardResponseIndex = Int()
         firstHeardIsTrue = false
@@ -584,7 +576,7 @@ struct EHATTSTestPart1View: View {
     
 
     func arrayTesting() async {
-        let arraySet1 = Int(envDataObjectModel_testStartSeconds.count) - Int(envDataObjectModel_testEndSeconds.count) + Int(envDataObjectModel_userRespCMSeconds.count) - Int(envDataObjectModel_testPan.count)
+        let arraySet1 = Int(envDataObjectModel_testPan.count)
         let arraySet2 = Int(envDataObjectModel_testTestGain.count) - Int(envDataObjectModel_frequency.count) + Int(envDataObjectModel_testCount.count) - Int(envDataObjectModel_heardArray.count)
         if arraySet1 + arraySet2 == 0 {
             print("All Event Logs Match")
@@ -597,9 +589,6 @@ struct EHATTSTestPart1View: View {
         DispatchQueue.global(qos: .background).async {
             print("Start printData)(")
             print("--------Array Values Logged-------------")
-            print("testStartSeconds: \(envDataObjectModel_testStartSeconds)")
-            print("testEndSeconds: \(envDataObjectModel_testEndSeconds)")
-            print("userRespCMSeconds: \(envDataObjectModel_userRespCMSeconds)")
             print("testPan: \(envDataObjectModel_testPan)")
             print("testTestGain: \(envDataObjectModel_testTestGain)")
             print("frequency: \(envDataObjectModel_frequency)")
@@ -610,8 +599,6 @@ struct EHATTSTestPart1View: View {
     }
 }
 
-
-
 //MARK: - Preview View Struct
 
 //struct EHATTSTestPart1View_Previews: PreviewProvider {
@@ -619,10 +606,6 @@ struct EHATTSTestPart1View: View {
 //        EHATTSTestPart1View()
 //    }
 //}
-
-
-
-
 
 
 //MARK: - Reversal Extension
@@ -650,7 +633,6 @@ extension EHATTSTestPart1View {
             fatalError("hit else in check reversal arrays")
         }
     }
-    
     
     func reversalDirection() async {
         localReversalHeardLast = envDataObjectModel_reversalHeard.last ?? -999
@@ -771,8 +753,6 @@ extension EHATTSTestPart1View {
         }
     }
     
-    
-
     func reversalComplexAction() async {
         if idxReversalHeardCount <= 1 && idxHA <= 1 {
             await reversalAction()
@@ -916,10 +896,10 @@ extension EHATTSTestPart1View {
             envDataObjectModel_heardArray.removeAll()
             envDataObjectModel_testCount.removeAll()
             envDataObjectModel_reversalHeard.removeAll()
-            envDataObjectModel_reversalArrayIndex = Int()
+//            envDataObjectModel_reversalArrayIndex = Int()
             envDataObjectModel_averageGain = Float()
             envDataObjectModel_reversalDirection = Float()
-            envDataObjectModel_reversalDualTrue = Int()
+//            envDataObjectModel_reversalDualTrue = Int()
             localStartingNonHeardArraySet = false
             firstHeardResponseIndex = Int()
             firstHeardIsTrue = false
@@ -935,7 +915,7 @@ extension EHATTSTestPart1View {
     func newTestCycle() async {
         if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCount && endTestSeries == false {
             startTooHigh = 0
-            startTooLow = 0
+//            startTooLow = 0
             localMarkNewTestCycle = 0
             localReversalEnd = 0
             //!!!!!Need to fix / stop this index from climbing in next cycle without the cycle being completed!!
@@ -999,8 +979,6 @@ extension EHATTSTestPart1View {
         }
     }
     
-    
-   
     func concatenateFinalArrays() async {
         DispatchQueue.global(qos: .background).async {
             if localMarkNewTestCycle == 1 && localReversalEnd == 1 {
@@ -1039,20 +1017,19 @@ extension EHATTSTestPart1View {
                 envDataObjectModel_finalStoredIndex.append(contentsOf: [100000000] + envDataObjectModel_indexForTest)
                 envDataObjectModel_finalStoredTestPan.append(contentsOf: [100000000] + envDataObjectModel_testPan)
                 envDataObjectModel_finalStoredTestTestGain.append(contentsOf: [1000000.0] + envDataObjectModel_testTestGain)
-                envDataObjectModel_finalStoredFrequency.append(contentsOf: ["100000000"] + [activeFrequency])
+                envDataObjectModel_finalStoredFrequency.append(contentsOf: ["100000000"] + [String(activeFrequency)])
                 envDataObjectModel_finalStoredTestCount.append(contentsOf: [100000000] + envDataObjectModel_testCount)
                 envDataObjectModel_finalStoredHeardArray.append(contentsOf: [100000000] + envDataObjectModel_heardArray)
                 envDataObjectModel_finalStoredReversalHeard.append(contentsOf: [100000000] + envDataObjectModel_reversalHeard)
-                envDataObjectModel_finalStoredFirstGain.append(contentsOf: [1000000.0] + envDataObjectModel_reversalFirstGain)
-                envDataObjectModel_finalStoredSecondGain.append(contentsOf: [1000000.0] + envDataObjectModel_reversalSecondGain)
-                envDataObjectModel_finalStoredAverageGain.append(contentsOf: [1000000.0] + envDataObjectModel_reversalAverageGain)
+                envDataObjectModel_finalStoredFirstGain.append(contentsOf: [1000000.0] + [firstGain])
+                envDataObjectModel_finalStoredSecondGain.append(contentsOf: [1000000.0] + [secondGain])
+                envDataObjectModel_finalStoredAverageGain.append(contentsOf: [1000000.0] + [envDataObjectModel_averageGain])
 
             }
         }
     }
         
     func saveFinalStoredArrays() async {
-//        print("Start saveFinalStoredArrays()")
         if localMarkNewTestCycle == 1 && localReversalEnd == 1 {
             await getEHAP1Data()
             await saveEHA1ToJSON()
@@ -1125,7 +1102,6 @@ extension EHATTSTestPart1View {
 //extension EHATTSTestPart1View {
 //MARK: -JSON and CSV Writing
     
-
     func getEHAP1Data() async {
         guard let data = await getEHAP1JSONData() else { return }
         print("Json Data:")
@@ -1141,7 +1117,6 @@ extension EHATTSTestPart1View {
         }
     }
     
-
     func getEHAP1JSONData() async -> Data? {
         let saveFinalResults = SaveFinalResults(
             jsonName: "Jeff",
@@ -1156,7 +1131,7 @@ extension EHATTSTestPart1View {
             jsonSystemVoluem: 100.00,
             jsonActualFrequency: 1.000,
             jsonFrequency: [activeFrequency],
-            jsonGain: envDataObjectModel_finalStoredResultsGains,
+//            jsonGain: envDataObjectModel_finalStoredResultsGains,
             jsonPan: envDataObjectModel_finalStoredTestPan,
             jsonStoredIndex: envDataObjectModel_finalStoredIndex,
             jsonStoredTestPan: envDataObjectModel_finalStoredTestPan,
@@ -1173,7 +1148,6 @@ extension EHATTSTestPart1View {
         print("Json Encoded \(jsonData!)")
         return jsonData
     }
-
 
     func saveEHA1ToJSON() async {
         DispatchQueue.global(qos: .background).async {
@@ -1196,7 +1170,6 @@ extension EHATTSTestPart1View {
             }
         }
     }
-
 
     func writeEHA1DetailedResultsToCSV() async {
         DispatchQueue.global(qos: .background).async {
@@ -1261,7 +1234,6 @@ extension EHATTSTestPart1View {
             }
         }
     }
-
 
     func writeEHA1SummarydResultsToCSV() async {
         DispatchQueue.global(qos: .background).async {
@@ -1333,7 +1305,6 @@ extension EHATTSTestPart1View {
             }
         }
     }
-
 
     func writeEHA1InputSummarydResultsToCSV() async {
         DispatchQueue.global(qos: .background).async {
