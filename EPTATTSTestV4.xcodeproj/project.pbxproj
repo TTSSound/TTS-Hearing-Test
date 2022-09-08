@@ -112,6 +112,7 @@
 		7C901FCA28B9BAC9007E1336 /* SilentModeSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C901FC928B9BAC9007E1336 /* SilentModeSetupView.swift */; };
 		7C94955F28AD2D0200FDEFAD /* SummaryResultsProject.json in Resources */ = {isa = PBXBuildFile; fileRef = 7C94955E28AD2D0200FDEFAD /* SummaryResultsProject.json */; };
 		7C98187028B43FD8006FE75A /* userAgreementText.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7C98186F28B43FD8006FE75A /* userAgreementText.txt */; };
+		7C99A16E28C95DFA00E46C65 /* Bilateral1kHzTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C99A16D28C95DFA00E46C65 /* Bilateral1kHzTestView.swift */; };
 		7CA0EA3428C3B5DA00F465BA /* Sample0.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7CA0EA3128C3B5DA00F465BA /* Sample0.wav */; };
 		7CA0EA3528C3B5DA00F465BA /* Sample1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7CA0EA3228C3B5DA00F465BA /* Sample1.wav */; };
 		7CA0EA3628C3B5DA00F465BA /* Sample2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7CA0EA3328C3B5DA00F465BA /* Sample2.wav */; };
@@ -258,6 +259,8 @@
 		7C94955E28AD2D0200FDEFAD /* SummaryResultsProject.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = SummaryResultsProject.json; path = EPTATTSTestV4/Model/SummaryResultsProject.json; sourceTree = SOURCE_ROOT; };
 		7C98186F28B43FD8006FE75A /* userAgreementText.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = userAgreementText.txt; sourceTree = "<group>"; };
 		7C9863DF28A71ACB005AA5E1 /* ReversalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReversalViewModel.swift; sourceTree = "<group>"; };
+		7C99A16B28C95D0800E46C65 /* DONOTChangeReferenceEHATest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DONOTChangeReferenceEHATest.swift; sourceTree = "<group>"; };
+		7C99A16D28C95DFA00E46C65 /* Bilateral1kHzTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bilateral1kHzTestView.swift; sourceTree = "<group>"; };
 		7CA0EA3128C3B5DA00F465BA /* Sample0.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sample0.wav; sourceTree = "<group>"; };
 		7CA0EA3228C3B5DA00F465BA /* Sample1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sample1.wav; sourceTree = "<group>"; };
 		7CA0EA3328C3B5DA00F465BA /* Sample2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sample2.wav; sourceTree = "<group>"; };
@@ -480,6 +483,8 @@
 				7C76D5F328B18BA30044958B /* PurchaseView.swift */,
 				7C76D5F128B18AE50044958B /* ClosingView.swift */,
 				7C179FEC28B81B7500964AAC /* InAppPurchaseView.swift */,
+				7C99A16B28C95D0800E46C65 /* DONOTChangeReferenceEHATest.swift */,
+				7C99A16D28C95DFA00E46C65 /* Bilateral1kHzTestView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -773,6 +778,7 @@
 				7C76D5E428B184ED0044958B /* LandingView.swift in Sources */,
 				7CDB3E1328A20DB300CB4DB1 /* EPTATTSTESTV4List.swift in Sources */,
 				7C4D017A28C00A4A00361559 /* DeviceSelectionModel.swift in Sources */,
+				7C99A16E28C95DFA00E46C65 /* Bilateral1kHzTestView.swift in Sources */,
 				7C179FE528B805DB00964AAC /* SimpleTrialDescriptionView.swift in Sources */,
 				7C4D019128C262CD00361559 /* EHAP1DataObjectModel.swift in Sources */,
 				7C666DA028B676B1007707AC /* ExplanationView.swift in Sources */,
