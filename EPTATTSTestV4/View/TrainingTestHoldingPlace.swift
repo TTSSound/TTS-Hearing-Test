@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TrainingTest: View {
+struct TrainingTestHoldingPlace: View {
     
     @StateObject var colorModel: ColorModel = ColorModel()
     @ObservedObject var testSelectLinkModel: TestSelectLinkModel = TestSelectLinkModel()
@@ -48,7 +48,7 @@ struct TrainingTest: View {
                     returnedTrainTestSelected == 1 ? AnyView(EHATTSTestPart1View())
                     : returnedTrainTestSelected == 2 ? AnyView(EPTATTSTestV4List())
                     : returnedTrainTestSelected == 3 ? AnyView(SimpleTestView())
-                    : AnyView(TrainingTest())
+                    : AnyView(TrainingTestHoldingPlace())
                 ){
                     HStack{
                        Image(systemName: "arrowshape.bounce.right")

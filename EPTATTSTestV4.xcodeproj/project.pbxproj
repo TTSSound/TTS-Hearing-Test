@@ -82,7 +82,7 @@
 		7C76D5E128B183420044958B /* UserWrittenHearingAssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5E028B183420044958B /* UserWrittenHearingAssessmentView.swift */; };
 		7C76D5E428B184ED0044958B /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5E328B184ED0044958B /* LandingView.swift */; };
 		7C76D5EA28B189090044958B /* InstructionsForTakingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5E928B189090044958B /* InstructionsForTakingTest.swift */; };
-		7C76D5EC28B1895B0044958B /* TrainingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5EB28B1895B0044958B /* TrainingTest.swift */; };
+		7C76D5EC28B1895B0044958B /* TrainingTestHoldingPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5EB28B1895B0044958B /* TrainingTestHoldingPlace.swift */; };
 		7C76D5F028B18A9B0044958B /* SimpleResultsDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5EF28B18A9B0044958B /* SimpleResultsDisplayView.swift */; };
 		7C76D5F228B18AE50044958B /* ClosingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5F128B18AE50044958B /* ClosingView.swift */; };
 		7C76D5F428B18BA30044958B /* PurchaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5F328B18BA30044958B /* PurchaseView.swift */; };
@@ -123,6 +123,7 @@
 		7CB202BE28BD90C30058C752 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7CB202BD28BD90C30058C752 /* GoogleService-Info.plist */; };
 		7CD23A6E28ADAA9300AEBB02 /* DetailedResultsCSV.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7CD23A6D28ADAA9300AEBB02 /* DetailedResultsCSV.csv */; };
 		7CDB3E1328A20DB300CB4DB1 /* EPTATTSTESTV4List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDB3E1228A20DB300CB4DB1 /* EPTATTSTESTV4List.swift */; };
+		7CECF1EC28C9859900B5A99E /* TrainingTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CECF1EB28C9859900B5A99E /* TrainingTestView.swift */; };
 		7CEFF22628BD9E8B00F99FDA /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 7CEFF22528BD9E8B00F99FDA /* FirebaseAuth */; };
 		7CEFF22828BD9E8B00F99FDA /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 7CEFF22728BD9E8B00F99FDA /* FirebaseAuthCombine-Community */; };
 		7CEFF22A28BD9E8B00F99FDA /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 7CEFF22928BD9E8B00F99FDA /* FirebaseDatabase */; };
@@ -222,7 +223,7 @@
 		7C76D5E528B1878F0044958B /* DisclaimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerView.swift; sourceTree = "<group>"; };
 		7C76D5E728B187BD0044958B /* TestSelectionView1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSelectionView1.swift; sourceTree = "<group>"; };
 		7C76D5E928B189090044958B /* InstructionsForTakingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsForTakingTest.swift; sourceTree = "<group>"; };
-		7C76D5EB28B1895B0044958B /* TrainingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingTest.swift; sourceTree = "<group>"; };
+		7C76D5EB28B1895B0044958B /* TrainingTestHoldingPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingTestHoldingPlace.swift; sourceTree = "<group>"; };
 		7C76D5EF28B18A9B0044958B /* SimpleResultsDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleResultsDisplayView.swift; sourceTree = "<group>"; };
 		7C76D5F128B18AE50044958B /* ClosingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosingView.swift; sourceTree = "<group>"; };
 		7C76D5F328B18BA30044958B /* PurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseView.swift; sourceTree = "<group>"; };
@@ -282,6 +283,7 @@
 		7CD23A6D28ADAA9300AEBB02 /* DetailedResultsCSV.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = DetailedResultsCSV.csv; path = "../../../../Users/jeffreyjaskunas/Library/Mobile Documents/com~apple~CloudDocs/XCode_Swift_Coding/SwiftCodingProjects/EPTATTSTestV4/EPTATTSTestV4/Model/DetailedResultsCSV.csv"; sourceTree = DEVELOPER_DIR; };
 		7CD23A7028AE056000AEBB02 /* JSONandCoreDataFuncsNotes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = JSONandCoreDataFuncsNotes.txt; sourceTree = "<group>"; };
 		7CDB3E1228A20DB300CB4DB1 /* EPTATTSTESTV4List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPTATTSTESTV4List.swift; sourceTree = "<group>"; };
+		7CECF1EB28C9859900B5A99E /* TrainingTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingTestView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -466,7 +468,8 @@
 				7C76D5E028B183420044958B /* UserWrittenHearingAssessmentView.swift */,
 				7C24C1ED28BF01D8006E77DD /* SurveyErrorView.swift */,
 				7C3E16BB28BC2AE4003A0DA9 /* PreTestView.swift */,
-				7C76D5EB28B1895B0044958B /* TrainingTest.swift */,
+				7CECF1EB28C9859900B5A99E /* TrainingTestView.swift */,
+				7C76D5EB28B1895B0044958B /* TrainingTestHoldingPlace.swift */,
 				7C99A16D28C95DFA00E46C65 /* Bilateral1kHzTestView.swift */,
 				7C4D018928C1724100361559 /* EHATTSTestPart1View.swift */,
 				7C3D20AE289DADCB0039EDA6 /* EPTATTSTestV4List.swift */,
@@ -742,6 +745,7 @@
 				7C4D019A28C285AF00361559 /* SystemSettingsEndEPTASimpleModel.swift in Sources */,
 				7C7A94F428B6F43200DD8FAC /* CorrectiveFiltersExplanationView.swift in Sources */,
 				7C76D5F228B18AE50044958B /* ClosingView.swift in Sources */,
+				7CECF1EC28C9859900B5A99E /* TrainingTestView.swift in Sources */,
 				7C4D018028C1068800361559 /* ManualDeviceSelectionModel.swift in Sources */,
 				7C8CAE1528B035F800E9F2EF /* ManualSetupView.swift in Sources */,
 				7C901FC428B9AFF5007E1336 /* UserLoginView.swift in Sources */,
@@ -771,7 +775,7 @@
 				7CAC41CC28B5B60100AE72F6 /* EHAInterimPostEPTAView.swift in Sources */,
 				7C179FDD28B7DDBD00964AAC /* TestSelectionView.swift in Sources */,
 				7C4D018828C1528300361559 /* TestSelectLinkModel.swift in Sources */,
-				7C76D5EC28B1895B0044958B /* TrainingTest.swift in Sources */,
+				7C76D5EC28B1895B0044958B /* TrainingTestHoldingPlace.swift in Sources */,
 				7C76D5DF28B1328D0044958B /* SiriSetupView.swift in Sources */,
 				7C76E42528BBFB5A009BC082 /* SimpleVideoPlayer.swift in Sources */,
 				7C3D20AD289DADCB0039EDA6 /* EPTATTSTestV4App.swift in Sources */,
