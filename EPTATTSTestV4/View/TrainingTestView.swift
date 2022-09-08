@@ -84,7 +84,7 @@ struct TrainingTestView: View {
     @State var trainingendTestSeries: Bool = false
     @State var trainingshowTestCompletionSheet: Bool = false
     
-    @State var training_samples: [String] = ["Sample0", "Sample10 ", "Sample0", "Sample0"]
+    @State var training_samples: [String] = ["Sample0", "Sample1", "Sample0", "Sample1"]
     @State var training_index: Int = 0
     @State var training_testGain: Float = 0.2
     @State var training_heardArray: [Int] = [Int]()
@@ -151,6 +151,12 @@ struct TrainingTestView: View {
             RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
         VStack {
                 Spacer()
+            Text("Training Test")
+                .fontWeight(.bold)
+                .padding()
+                .foregroundColor(.white)
+                .padding(.top, 40)
+                .padding(.bottom, 40)
                 HStack {
                     Spacer()
                     Text(String(training_testGain))

@@ -84,7 +84,7 @@ struct Bilateral1kHzTestView: View {
     @State var onekHzendTestSeries: Bool = false
     @State var onekHzshowTestCompletionSheet: Bool = false
     
-    @State var onekHz_samples: [String] = ["Sample0", "Sample10 ", "Sample0", "Sample0"]
+    @State var onekHz_samples: [String] = ["Sample0", "Sample1", "Sample0", "Sample1"]
     @State var onekHz_index: Int = 0
     @State var onekHz_testGain: Float = 0.2
     @State var onekHz_heardArray: [Int] = [Int]()
@@ -151,6 +151,12 @@ struct Bilateral1kHzTestView: View {
             RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
         VStack {
                 Spacer()
+            Text("Bilateral 1kHz Test")
+                .fontWeight(.bold)
+                .padding()
+                .foregroundColor(.white)
+                .padding(.top, 40)
+                .padding(.bottom, 40)
                 HStack {
                     Spacer()
                     Text(String(onekHz_testGain))

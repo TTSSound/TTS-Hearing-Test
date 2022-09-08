@@ -150,6 +150,12 @@ struct EHATTSTestPart1View: View {
             RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
         VStack {
                 Spacer()
+            Text("EHA Part 1 / EPTA Test")
+                .fontWeight(.bold)
+                .padding()
+                .foregroundColor(.white)
+                .padding(.top, 40)
+                .padding(.bottom, 40)
                 HStack {
                     Spacer()
                     Text(String(envDataObjectModel_testGain))

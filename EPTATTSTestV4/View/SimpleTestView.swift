@@ -82,7 +82,7 @@ struct SimpleTestView: View {
     @State var simpleendTestSeries: Bool = false
     @State var simpleshowTestCompletionSheet: Bool = false
     
-    @State var simple_samples: [String] = ["Sample0", "Sample10 ", "Sample0", "Sample0"]
+    @State var simple_samples: [String] = ["Sample0", "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
     @State var simple_index: Int = 0
     @State var simple_testGain: Float = 0.2
     @State var simple_heardArray: [Int] = [Int]()
@@ -149,6 +149,12 @@ struct SimpleTestView: View {
             RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
         VStack {
                 Spacer()
+            Text("Simple Test")
+                .fontWeight(.bold)
+                .padding()
+                .foregroundColor(.white)
+                .padding(.top, 40)
+                .padding(.bottom, 40)
                 HStack {
                     Spacer()
                     Text(String(simple_testGain))
