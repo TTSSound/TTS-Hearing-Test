@@ -453,6 +453,7 @@ struct Bilateral1kHzTestView: View {
                         await onekHzreversalsCompleteLoggingLeft2()
                         await lowestAverageRightGain()
                         await lowestAverageLeftGain()
+               
 //                        await onekHzprintReversalGain()
 //                        await onekHzprintData()
 //                        await onekHzprintReversalData()
@@ -462,7 +463,7 @@ struct Bilateral1kHzTestView: View {
                         await mustRepeatTesting()
                         await onekHzendTestSeries()
                         await onekHznewTestCycle()
-                        await onekHzwipeArraysForRepeat()
+//                        await onekHzwipeArraysForRepeat()
                         await onekHzrestartPresentation()
                         print("End of Reversals")
                         print("Prepare to Start Next Presentation")
@@ -917,19 +918,21 @@ extension Bilateral1kHzTestView {
                 print("average Gain: \(onekHz_averageGain)")
             }
         } else if onekHzsecondHeardIsTrue == false {
-                print("Contine, second hear is true = false")
+                print("reversal complete logging Contine, second hear is true = false")
         } else {
                 print("Critical error in reversalsCompletLogging Logic")
         }
     }
     
     func onekHzreversalsCompleteLoggingRight1() async {
+        print("loggingRight1 start")
         if onekHzsecondHeardIsTrue == true && onekHz_pan == 1.0 && onekHz_averageGainRight2 <= 0.0 {
+            print("in logging right 1 if")
             //Logging Right Side
-            self.onekHzlocalReversalEnd = 1
-            self.onekHzlocalMarkNewTestCycle = 1
-            self.onekHzfirstGainRight1 = onekHz_reversalGain[onekHzfirstHeardResponseIndex-1]
-            self.onekHzsecondGainRight1 = onekHz_reversalGain[onekHzsecondHeardResponseIndex-1]
+            onekHzlocalReversalEnd = 1
+            onekHzlocalMarkNewTestCycle = 1
+            onekHzfirstGainRight1 = onekHz_reversalGain[onekHzfirstHeardResponseIndex-1]
+            onekHzsecondGainRight1 = onekHz_reversalGain[onekHzsecondHeardResponseIndex-1]
             print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
 
             let onekHzdeltaRight1 = onekHzfirstGainRight1 - onekHzsecondGainRight1
@@ -972,16 +975,18 @@ extension Bilateral1kHzTestView {
                 print("average Gain Right 1: \(onekHz_averageGainRight1)")
             }
         } else if onekHzsecondHeardIsTrue == false {
-                print("Contine, second hear is true = false")
+                print("reversal complete logging right 1 Contine, second hear is true = false")
         } else {
-                print("Critical error in reversalsCompletLogging Logic")
+                print("onekHzreversalsCompleteLoggingRight1() if not met")
         }
     }
     
 
     
     func onekHzreversalsCompleteLoggingRight2() async {
+        print("loggingRight2 start")
         if onekHzsecondHeardIsTrue == true && onekHz_pan == 1.0 && onekHz_averageGainRight1 > 0.0 {
+            print("in logging right 2 if")
             //Logging Right Side
             self.onekHzlocalReversalEnd = 1
             self.onekHzlocalMarkNewTestCycle = 1
@@ -1029,9 +1034,9 @@ extension Bilateral1kHzTestView {
                 print("average Gain Right 2: \(onekHz_averageGainRight2)")
             }
         } else if onekHzsecondHeardIsTrue == false {
-                print("Contine, second hear is true = false")
+                print("reversal complete logging right 2 Contine, second hear is true = false")
         } else {
-                print("Critical error in reversalsCompletLogging Logic")
+                print("onekHzreversalsCompleteLoggingRight2() if not met")
         }
     }
     
@@ -1055,7 +1060,9 @@ extension Bilateral1kHzTestView {
     }
     
     func onekHzreversalsCompleteLoggingLeft1() async {
-        if onekHzsecondHeardIsTrue == true && onekHz_pan == 1.0 && onekHz_averageGainLeft2 <= 0.0 {
+        print("loggingleft1 start")
+        if onekHzsecondHeardIsTrue == true && onekHz_pan == -1.0 && onekHz_averageGainLeft2 <= 0.0 {
+            print("in logging left 1 if")
             //Logging Left Side
             self.onekHzlocalReversalEnd = 1
             self.onekHzlocalMarkNewTestCycle = 1
@@ -1103,14 +1110,16 @@ extension Bilateral1kHzTestView {
                 print("average Gain Left 1: \(onekHz_averageGainLeft1)")
             }
         } else if onekHzsecondHeardIsTrue == false {
-                print("Contine, second hear is true = false")
+                print("reversal complete logging left 1 Contine, second hear is true = false")
         } else {
-                print("Critical error in reversalsCompletLogging Logic")
+                print("onekHzreversalsCompleteLoggingLeft1() if not met")
         }
     }
     
     func onekHzreversalsCompleteLoggingLeft2() async {
-        if onekHzsecondHeardIsTrue == true && onekHz_pan == 1.0 && onekHz_averageGainLeft1 > 0.0 {
+        print("loggingleft2 start")
+        if onekHzsecondHeardIsTrue == true && onekHz_pan == -1.0 && onekHz_averageGainLeft1 > 0.0 {
+            print("in logging left 2 if")
             //Logging Left Side
             self.onekHzlocalReversalEnd = 1
             self.onekHzlocalMarkNewTestCycle = 1
@@ -1158,9 +1167,9 @@ extension Bilateral1kHzTestView {
                 print("average Gain Left 2: \(onekHz_averageGainLeft2)")
             }
         } else if onekHzsecondHeardIsTrue == false {
-                print("Contine, second hear is true = false")
+                print("reversal complete logging left 2 Contine, second hear is true = false")
         } else {
-                print("Critical error in reversalsCompletLogging Logic")
+                print("onekHzreversalsCompleteLoggingLeft2() if not met")
         }
     }
     
@@ -1238,10 +1247,6 @@ extension Bilateral1kHzTestView {
             onekHzlocalReversalHeardLast = Int()
             onekHzstartTooHigh = 0
             onekHzlocalSeriesNoResponses = Int()
-          
-           
-            
-
         })
     }
     
@@ -1277,6 +1282,7 @@ extension Bilateral1kHzTestView {
             onekHzendTestSeries = false
 //                Task(priority: .userInitiated) {
             await onekHzwipeArrays()
+            await onekHzwipeArraysForRepeat()
 //                }
         } else if onekHzlocalMarkNewTestCycle == 1 && onekHzlocalReversalEnd == 1 && onekHz_index == onekHz_eptaSamplesCount && onekHzendTestSeries == false {
             onekHzendTestSeries = true
