@@ -467,6 +467,7 @@
 				7C24C1ED28BF01D8006E77DD /* SurveyErrorView.swift */,
 				7C3E16BB28BC2AE4003A0DA9 /* PreTestView.swift */,
 				7C76D5EB28B1895B0044958B /* TrainingTest.swift */,
+				7C99A16D28C95DFA00E46C65 /* Bilateral1kHzTestView.swift */,
 				7C4D018928C1724100361559 /* EHATTSTestPart1View.swift */,
 				7C3D20AE289DADCB0039EDA6 /* EPTATTSTestV4List.swift */,
 				7C4D018B28C1728D00361559 /* SimpleTestView.swift */,
@@ -484,7 +485,6 @@
 				7C76D5F128B18AE50044958B /* ClosingView.swift */,
 				7C179FEC28B81B7500964AAC /* InAppPurchaseView.swift */,
 				7C99A16B28C95D0800E46C65 /* DONOTChangeReferenceEHATest.swift */,
-				7C99A16D28C95DFA00E46C65 /* Bilateral1kHzTestView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

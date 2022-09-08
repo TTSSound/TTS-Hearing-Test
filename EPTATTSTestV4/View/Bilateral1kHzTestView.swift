@@ -84,7 +84,7 @@ struct Bilateral1kHzTestView: View {
     @State var onekHzendTestSeries: Bool = false
     @State var onekHzshowTestCompletionSheet: Bool = false
     
-    @State var onekHz_samples: [String] = ["Sample0", "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
+    @State var onekHz_samples: [String] = ["Sample0", "Sample10 ", "Sample0", "Sample0"]
     @State var onekHz_index: Int = 0
     @State var onekHz_testGain: Float = 0.2
     @State var onekHz_heardArray: [Int] = [Int]()

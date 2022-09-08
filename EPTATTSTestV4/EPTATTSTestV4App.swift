@@ -44,7 +44,8 @@ struct EPTATTSTestV4App: App {
 //            TestIDInputView()
 //            PreTestView()
 //            ClosingView()
-            EHATTSTestPart1View()
+//            EHATTSTestPart1View()
+            Bilateral1kHzTestView()
 
             
         }
