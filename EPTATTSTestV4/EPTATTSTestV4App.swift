@@ -45,10 +45,10 @@ struct EPTATTSTestV4App: App {
 //            PreTestView()
 //            ClosingView()
 //            TrainingTestView()
-//            Bilateral1kHzTestView()
+            Bilateral1kHzTestView()
 //            EHATTSTestPart1View()
 //            SimpleTestView()
-            EHATTSTestView()
+//            EHATTSTestView()
 
             
         }
