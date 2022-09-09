@@ -460,31 +460,16 @@ struct Bilateral1kHzTestView: View {
             if onekHzreversalValue == 1 {
                 DispatchQueue.global(qos: .background).async {
                     Task(priority: .userInitiated) {
-//                        await onekHzcreateReversalHeardArray()
-//                        await onekHzcreateReversalGainArray()
-//                        await onekHzcheckHeardReversalArrays()
                         await onekHzreversalDirection()
                         await onekHzreversalComplexAction()
-//                        await onekHzreversalsCompleteLogging()
                         await onekHzComplexLogging()
-//                        await runAverageGainCheck()
-//                        await onekHzreversalsCompleteLoggingRight1()
-//                        await onekHzreversalsCompleteLoggingLeft1()
-//                        await onekHzreversalsCompleteLoggingRight2()
-//                        await onekHzreversalsCompleteLoggingLeft2()
-//                        await lowestAverageRightGain()
-//                        await lowestAverageLeftGain()
-               
-                        await printAverageGainsRightLeft()
-//                        await onekHzprintData()
-//                        await onekHzprintReversalData()
-                        await onekHzconcatenateFinalArrays()
-//                        await onekHzprintConcatenatedArrays()
-                        await onekHzsaveFinalStoredArrays()
                         await mustRepeatTesting()
+                        await printOnekHzArrays()
+                        await printAverageGainsRightLeft()
+                        await assignFinalLRGains()
                         await onekHzendTestSeries()
                         await onekHznewTestCycle()
-//                        await onekHzwipeArraysForRepeat()
+                        await onekHzwipeArraysForRepeat()
                         await onekHzrestartPresentation()
                         print("End of Reversals")
                         print("Prepare to Start Next Presentation")
@@ -1256,23 +1241,25 @@ extension Bilateral1kHzTestView {
     }
     
     func onekHzComplexLogging() async {
-        if onekHzsecondHeardIsTrue == false {
-            //continue without action
-            print("Second Heard is Not True onekHzComplexLogging()")
-        } else if onekHzsecondHeardIsTrue == true && onekHz_pan == 1.0 {
-                await onekHzreversalsCompleteLoggingRight1()
-                await onekHzreversalsCompleteLoggingRight2()
-                await lowestAverageRightGain()
-        } else if onekHzsecondHeardIsTrue == true && onekHz_pan == -1.0 {
-                await onekHzreversalsCompleteLoggingLeft1()
-                await onekHzreversalsCompleteLoggingLeft2()
-                await lowestAverageLeftGain()
-        } else {
-            print("!!!Fatal Error in onekHzComplexLogging() hit main Else Segment")
-        }
+            if onekHzsecondHeardIsTrue == false {
+                //continue without action
+                print("Second Heard is Not True onekHzComplexLogging()")
+            } else if onekHzsecondHeardIsTrue == true && onekHz_pan == 1.0 {
+                    await onekHzreversalsCompleteLoggingRight1()
+                    await onekHzreversalsCompleteLoggingRight2()
+                    await lowestAverageRightGain()
+                    
+            } else if onekHzsecondHeardIsTrue == true && onekHz_pan == -1.0 {
+                    await onekHzreversalsCompleteLoggingLeft1()
+                    await onekHzreversalsCompleteLoggingLeft2()
+                    await lowestAverageLeftGain()
+                    
+            } else {
+                print("!!!Fatal Error in onekHzComplexLogging() hit main Else Segment")
+            }
     }
 
-    
+
     
     func printAverageGainsRightLeft() async {
         print("Right Average Gain: \(onekHz_averageLowestGainRightArray)")
@@ -1281,20 +1268,25 @@ extension Bilateral1kHzTestView {
     
     
     func assignFinalLRGains() async {
-//        let idxRA = onekHz_averageLowestGainRightArray.count
-//        let idxLA = onekHz_averageLowestGainLeftArray.count
-        onekHzRightSorted = onekHz_averageLowestGainRightArray.sorted()
-        onekHzLeftSorted  = onekHz_averageLowestGainLeftArray.sorted()
-       
-        RightEar1kHzdB = onekHzRightSorted[0]
-        LeftEar1kHzdB = onekHzLeftSorted[0]
-        onekHzFinalLRGains.append(RightEar1kHzdB)
-        onekHzFinalLRGains.append(LeftEar1kHzdB)
-        onekHzIntraEarDeltaHL = RightEar1kHzdB - LeftEar1kHzdB
+        if onekHzRightSorted.count > 0 && onekHzLeftSorted.count > 0 {
+    //        let idxRA = onekHz_averageLowestGainRightArray.count
+    //        let idxLA = onekHz_averageLowestGainLeftArray.count
+            onekHzRightSorted = onekHz_averageLowestGainRightArray.sorted()
+            onekHzLeftSorted  = onekHz_averageLowestGainLeftArray.sorted()
+           
+            RightEar1kHzdB = onekHzRightSorted[0]
+            LeftEar1kHzdB = onekHzLeftSorted[0]
+            onekHzFinalLRGains.append(RightEar1kHzdB)
+            onekHzFinalLRGains.append(LeftEar1kHzdB)
+            onekHzIntraEarDeltaHL = RightEar1kHzdB - LeftEar1kHzdB
+        } else {
+            print("RightSorted and LeftSorted Count < 0")
+        }
     }
     
     func mustRepeatTesting() async {
         if needToRepeatTesting == true {
+            needToRepeatTesting = true
             onekHz_eptaSamplesCount = 7
             print("test cycle end = 7")
         } else if needToRepeatTesting == false {
@@ -1348,16 +1340,29 @@ extension Bilateral1kHzTestView {
             onekHzlocalReversalHeardLast = Int()
             onekHzstartTooHigh = 0
             onekHzlocalSeriesNoResponses = Int()
+            Task(priority: .userInitiated) {
+                await onekHzwipeArraysForRepeat()
+            }
         })
     }
     
+//    if onekHzsecondHeardIsTrue == true && onekHz_pan == 1.0 && onekHz_averageGainRight2 <= 0.0 && oneRightEntered == false
+//    if onekHzsecondHeardIsTrue == true && onekHz_pan == 1.0 && onekHz_averageGainLeft1 > 0.0 {
+//        f onekHzsecondHeardIsTrue == true && onekHz_pan == -1.0 && onekHz_averageGainLeft2 <= 0.0 && oneLeftEntered == false{
+//            if onekHzsecondHeardIsTrue == true && onekHz_pan == -1.0 && onekHz_averageGainRight2 > 0.0 {
+//                if onekHzsecondHeardIsTrue == false {
+//                } else if onekHzsecondHeardIsTrue == true && onekHz_pan == 1.0 {
+//                } else if onekHzsecondHeardIsTrue == true && onekHz_pan == -1.0 {
+                    
+                    
     func onekHzwipeArraysForRepeat() async {
-        DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier, execute: {
             if needToRepeatTesting == true && onekHz_index == 4 {
-                
+                print("======Wipe Arrays for New Cycle")
                 onekHzsecondHeardIsTrue =  false
-                needToRepeatTesting = false
+                needToRepeatTesting = true
                 onekHz_averageGain = Float()
+                oneRightEntered = false
+                oneLeftEntered = false
                 
                 onekHz_averageGainRight1 = Float()
                 onekHz_averageGainRight2 = Float()
@@ -1369,11 +1374,10 @@ extension Bilateral1kHzTestView {
                 onekHzsecondGainRight1 = Float()
                 onekHzfirstGainRight2 = Float()
                 onekHzsecondGainRight2 = Float()
-                onekHz_averageGainRight2 = Float()
                 onekHz_averageGainRightArray.removeAll()
                 onekHz_averageGainRight = Float()
-//                onekHz_rightFirstSecondGainArray.removeAll()
-                
+                onekHz_rightFirstSecondGainArray.removeAll()
+
                 onekHz_averageGainLeft1 = Float()
                 onekHz_averageGainLeft2 = Float()
                 onekHz_averageGainLeftRight1 = Float()
@@ -1384,16 +1388,15 @@ extension Bilateral1kHzTestView {
                 onekHzsecondGainLeft1 = Float()
                 onekHzfirstGainLeft2 = Float()
                 onekHzsecondGainLeft2 = Float()
-                onekHz_averageGainLeft2 = Float()
                 onekHz_averageGainLeftArray.removeAll()
                 onekHz_averageGainLeft = Float()
-//                onekHz_leftFirstSecondGainArray.removeAll()
+                onekHz_leftFirstSecondGainArray.removeAll()
                 
                 
             } else {
                 print("wipe arrays for repeat not completed")
             }
-        })
+
     }
     
     func onekHznewTestCycle() async {
@@ -1463,6 +1466,29 @@ extension Bilateral1kHzTestView {
             onekHzuserPausedTest = true
             onekHzplayingStringColorIndex = 2
         }
+    }
+    
+    func printOnekHzArrays() async {
+        print("onekHz_index: \(onekHz_index)")
+        print("needToRepeatTesting: \(needToRepeatTesting)")
+        print("onekHz_rightFirstSecondGainArray: \(onekHz_rightFirstSecondGainArray)")
+        print("onekHz_leftFirstSecondGainArray: \(onekHz_leftFirstSecondGainArray)")
+        print("onekHz_averageGainRightArray: \(onekHz_averageGainRightArray)")
+        print("onekHz_averageLowestGainRightArray: \(onekHz_averageLowestGainRightArray)")
+        print("onekHz_averageGainLeftArray: \(onekHz_averageGainLeftArray)")
+        print("onekHz_averageLowestGainLeftArray: \(onekHz_averageLowestGainLeftArray)")
+        print("RightEar1kHzdB: \(RightEar1kHzdB)")
+        print("LeftEar1kHzdB: \(LeftEar1kHzdB)")
+        print("onekHzFinalLRGains: \(onekHzFinalLRGains)")
+        print("onekHzIntraEarDeltaHL: \(onekHzIntraEarDeltaHL)")
+        print("onekHz_testPan: \(onekHz_testPan)")
+        print("onekHz_indexForTest: \(onekHz_indexForTest)")
+        print("onekHz_testCount: \(onekHz_testCount)")
+        print("onekHz_reversalGain: \(onekHz_reversalGain)")
+        print("onekHz_reversalHeard: \(onekHz_reversalHeard)")
+        print("onekHzactiveFrequency: \(onekHzactiveFrequency)")
+        print("onekHz_testTestGain: \(onekHz_testTestGain)")
+        print("onekHz_frequency: \(onekHz_frequency)")
     }
     
     func onekHzconcatenateFinalArrays() async {
