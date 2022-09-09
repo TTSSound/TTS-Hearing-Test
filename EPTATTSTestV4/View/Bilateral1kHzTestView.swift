@@ -1386,7 +1386,6 @@ extension Bilateral1kHzTestView {
         if onekHzendTestSeries == false {
             onekHzlocalPlaying = 1
             onekHzendTestSeries = false
-            
         } else if onekHzendTestSeries == true {
             onekHzlocalPlaying = -1
             onekHzendTestSeries = true
