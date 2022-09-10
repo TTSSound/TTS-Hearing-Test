@@ -473,8 +473,9 @@ struct Bilateral1kHzTestView: View {
                         await onekHzreversalDirection()
                         await onekHzreversalComplexAction()
                         await onekHzComplexLogging()
-                        await assignInterimLRGains()
-                        await assignFinalLRGains()
+//                        await assignInterimLRGains()
+//                        await assignFinalLRGains()
+                        await assignFinalComplexGains()
                         await mustRepeatTesting()
                         await printOnekHzArrays()
                         await printAverageGainsRightLeft()
@@ -1676,50 +1677,96 @@ extension Bilateral1kHzTestView {
         }
     }
     
-    func assignFinalLRGains() async {
+    func assignFinalRightGains() async {
         if onekHz_HoldingLowestRightGainArray.count > 0 && onekHz_HoldingLowestLeftGainArray.count > 0 && onekHz_index == 3 && needToRepeatTesting == false {
             // one cycle calculation
             self.onekHzFinalLRGains1 = onekHzFinalLRGains1
-            self.onekHzFinalLRGains1 = onekHzFinalLRGains1
+//            self.onekHzFinalLRGains1 = onekHzFinalLRGains1
             self.onekHzIntraEarDeltaHL1 = onekHzIntraEarDeltaHL1
         } else if onekHz_HoldingLowestRightGainArray.count > 0 && onekHz_HoldingLowestLeftGainArray.count > 0 && onekHz_index == 7 && onekHzlocalReversalEnd == 1 {
-            let interimRight = RightEar1kHzdB1 - RightEar1kHzdB2
-            let interimLeft = LeftEar1kHzdB1 - LeftEar1kHzdB2
-            
-            if interimRight >= 0.0 && interimLeft >= 0.0 {
-                RightEar1kHzdBFinal = RightEar1kHzdB1
-                LeftEar1kHzdBFinal = LeftEar1kHzdB1
-                onekHzIntraEarDeltaHLFinal = RightEar1kHzdBFinal - LeftEar1kHzdBFinal
-                onekHzFinalComboLRGains.append(RightEar1kHzdBFinal)
-                onekHzFinalComboLRGains.append(LeftEar1kHzdBFinal)
-                onekHzFinalComboLRGains.append(onekHzIntraEarDeltaHLFinal)
-            } else if interimRight < 0.0 && interimLeft >= 0.0 {
+            if RightEar1kHzdB1 > RightEar1kHzdB2 {
                 RightEar1kHzdBFinal = RightEar1kHzdB2
-                LeftEar1kHzdBFinal = LeftEar1kHzdB1
-                onekHzIntraEarDeltaHLFinal = RightEar1kHzdBFinal - LeftEar1kHzdBFinal
                 onekHzFinalComboLRGains.append(RightEar1kHzdBFinal)
-                onekHzFinalComboLRGains.append(LeftEar1kHzdBFinal)
-                onekHzFinalComboLRGains.append(onekHzIntraEarDeltaHLFinal)
-            }  else if interimRight >= 0.0 && interimLeft < 0.0 {
+            } else if RightEar1kHzdB1 < RightEar1kHzdB2 {
                 RightEar1kHzdBFinal = RightEar1kHzdB1
-                LeftEar1kHzdBFinal = LeftEar1kHzdB2
-                onekHzIntraEarDeltaHLFinal = RightEar1kHzdBFinal - LeftEar1kHzdBFinal
                 onekHzFinalComboLRGains.append(RightEar1kHzdBFinal)
-                onekHzFinalComboLRGains.append(LeftEar1kHzdBFinal)
-                onekHzFinalComboLRGains.append(onekHzIntraEarDeltaHLFinal)
-            } else if interimRight < 0.0 && interimLeft < 0.0 {
-                RightEar1kHzdBFinal = RightEar1kHzdB2
-                LeftEar1kHzdBFinal = LeftEar1kHzdB2
-                onekHzIntraEarDeltaHLFinal = RightEar1kHzdBFinal - LeftEar1kHzdBFinal
-                onekHzFinalComboLRGains.append(RightEar1kHzdBFinal)
-                onekHzFinalComboLRGains.append(LeftEar1kHzdBFinal)
-                onekHzFinalComboLRGains.append(onekHzIntraEarDeltaHLFinal)
             } else {
-                print("!!!Critical Error in else if of if in assignFinalLRGains")
+                print("!!Critical Error in else if of assignFinalRightGains () ")
             }
         } else {
             print("!!!!Fatal Error in assignFinalLRGains hit master else")
         }
+    }
+            
+//            let interimRight = RightEar1kHzdB1 - RightEar1kHzdB2
+//
+//
+//            if interimRight >= 0.0 && interimLeft >= 0.0 {
+//                RightEar1kHzdBFinal = RightEar1kHzdB1
+//                LeftEar1kHzdBFinal = LeftEar1kHzdB1
+//                onekHzIntraEarDeltaHLFinal = RightEar1kHzdBFinal - LeftEar1kHzdBFinal
+//                onekHzFinalComboLRGains.append(RightEar1kHzdBFinal)
+//                onekHzFinalComboLRGains.append(LeftEar1kHzdBFinal)
+//                onekHzFinalComboLRGains.append(onekHzIntraEarDeltaHLFinal)
+//            } else if interimRight < 0.0 && interimLeft >= 0.0 {
+//                RightEar1kHzdBFinal = RightEar1kHzdB2
+//                LeftEar1kHzdBFinal = LeftEar1kHzdB1
+//                onekHzIntraEarDeltaHLFinal = RightEar1kHzdBFinal - LeftEar1kHzdBFinal
+//                onekHzFinalComboLRGains.append(RightEar1kHzdBFinal)
+//                onekHzFinalComboLRGains.append(LeftEar1kHzdBFinal)
+//                onekHzFinalComboLRGains.append(onekHzIntraEarDeltaHLFinal)
+//            }  else if interimRight >= 0.0 && interimLeft < 0.0 {
+//                RightEar1kHzdBFinal = RightEar1kHzdB1
+//                LeftEar1kHzdBFinal = LeftEar1kHzdB2
+//                onekHzIntraEarDeltaHLFinal = RightEar1kHzdBFinal - LeftEar1kHzdBFinal
+//                onekHzFinalComboLRGains.append(RightEar1kHzdBFinal)
+//                onekHzFinalComboLRGains.append(LeftEar1kHzdBFinal)
+//                onekHzFinalComboLRGains.append(onekHzIntraEarDeltaHLFinal)
+//            } else if interimRight < 0.0 && interimLeft < 0.0 {
+//                RightEar1kHzdBFinal = RightEar1kHzdB2
+//                LeftEar1kHzdBFinal = LeftEar1kHzdB2
+//                onekHzIntraEarDeltaHLFinal = RightEar1kHzdBFinal - LeftEar1kHzdBFinal
+//                onekHzFinalComboLRGains.append(RightEar1kHzdBFinal)
+//                onekHzFinalComboLRGains.append(LeftEar1kHzdBFinal)
+//                onekHzFinalComboLRGains.append(onekHzIntraEarDeltaHLFinal)
+//            } else {
+//                print("!!!Critical Error in else if of if in assignFinalLRGains")
+//            }
+//
+//    }
+    
+    func assignFinalLeftGains() async {
+        if onekHz_HoldingLowestRightGainArray.count > 0 && onekHz_HoldingLowestLeftGainArray.count > 0 && onekHz_index == 3 && needToRepeatTesting == false {
+            // one cycle calculation
+            self.onekHzFinalLRGains1 = onekHzFinalLRGains1
+//            self.onekHzFinalLRGains1 = onekHzFinalLRGains1
+            self.onekHzIntraEarDeltaHL1 = onekHzIntraEarDeltaHL1
+        } else if onekHz_HoldingLowestRightGainArray.count > 0 && onekHz_HoldingLowestLeftGainArray.count > 0 && onekHz_index == 7 && onekHzlocalReversalEnd == 1 {
+            if LeftEar1kHzdB1 > LeftEar1kHzdB2 {
+                LeftEar1kHzdBFinal = LeftEar1kHzdB2
+                onekHzFinalComboLRGains.append(LeftEar1kHzdBFinal)
+            } else if LeftEar1kHzdB1 < LeftEar1kHzdB2 {
+                LeftEar1kHzdBFinal = LeftEar1kHzdB1
+                onekHzFinalComboLRGains.append(LeftEar1kHzdBFinal)
+            } else {
+                print("!!Critical Error in else if of assignFinalRightGains () ")
+            }
+        } else {
+            print("!!!!Fatal Error in assignFinalLRGains hit master else")
+        }
+    }
+    
+    func assignFinalDeltaGain() async {
+        //TODO
+        onekHzIntraEarDeltaHLFinal = RightEar1kHzdBFinal - LeftEar1kHzdBFinal
+        onekHzFinalComboLRGains.append(onekHzIntraEarDeltaHLFinal)
+    }
+        
+    func assignFinalComplexGains() async {
+        
+        await assignFinalRightGains()
+        await assignFinalLeftGains()
+        await assignFinalDeltaGain()
     }
     
     func mustRepeatTesting() async {
