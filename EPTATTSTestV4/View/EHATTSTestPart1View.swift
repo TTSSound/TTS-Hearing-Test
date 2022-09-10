@@ -83,7 +83,17 @@ struct EHATTSTestPart1View: View {
     @State var endTestSeries: Bool = false
     @State var showTestCompletionSheet: Bool = false
     
-    @State var envDataObjectModel_samples: [String] = ["Sample0", "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
+    @State var envDataObjectModel_samples: [String] = ["Sample0", "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
+    @State var panArray: [Float] = [1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+    @State var totalCount = 32
+    
+    // Presentation Cycles
+    // Cycle 1: ["Sample0", "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7"]
+    // Cycle 2: ["Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15"]
+    // Cycle 3: ["Sample16", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8"]
+    // Cycle 4: ["Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
+    
+    
     @State var envDataObjectModel_index: Int = 0
     @State var envDataObjectModel_testGain: Float = 0.2
     @State var envDataObjectModel_heardArray: [Int] = [Int]()
@@ -101,8 +111,10 @@ struct EHATTSTestPart1View: View {
 
     @State var envDataObjectModel_averageGain = Float()
 
-    @State var envDataObjectModel_eptaSamplesCount = 1 //17
-
+    @State var envDataObjectModel_eptaSamplesCount = 0 //17
+    @State var envDataObjectModel_eptaSamplesCountArray = [8, 16, 24, 32]
+    @State var envDataObjectModel_eptaSamplesCountArrayIdx = 0  //[0, 1, 2, 3]
+    
     @State var envDataObjectModel_finalStoredIndex: [Int] = [Int]()
     @State var envDataObjectModel_finalStoredTestPan: [Int] = [Int]()
     @State var envDataObjectModel_finalStoredTestTestGain: [Float] = [Float]()
@@ -290,6 +302,9 @@ struct EHATTSTestPart1View: View {
             localHeard = 0
             localReversal = 0
             if playingValue == 1{
+                
+                setPan()
+                
                 audioThread.async {
                     loadAndTestPresentation(sample: activeFrequency, gain: envDataObjectModel_testGain)
                     while testPlayer!.isPlaying == true && self.localHeard == 0 { }
@@ -397,8 +412,13 @@ struct EHATTSTestPart1View: View {
         localReversalHeardLast = Int()
         startTooHigh = 0
     }
-      
-  func loadAndTestPresentation(sample: String, gain: Float) {
+    
+    func setPan() {
+        envDataObjectModel_pan = panArray[envDataObjectModel_index]
+        print("Pan: \(envDataObjectModel_pan)")
+    }
+
+    func loadAndTestPresentation(sample: String, pan: Float, gain: Float, pan: Float) {
           do{
               let urlSample = Bundle.main.path(forResource: activeFrequency, ofType: ".wav")
               guard let urlSample = urlSample else { return print(SampleErrors.notFound) }
@@ -406,6 +426,7 @@ struct EHATTSTestPart1View: View {
               guard let testPlayer = testPlayer else { return }
               testPlayer.prepareToPlay()    // Test Player Prepare to Play
               testPlayer.setVolume(envDataObjectModel_testGain, fadeDuration: 0)      // Set Gain for Playback
+              testPlayer.pan = envDataObjectModel_pan
               testPlayer.play()   // Start Playback
           } catch { print("Error in playerSessionSetUp Function Execution") }
   }
@@ -867,19 +888,20 @@ extension EHATTSTestPart1View {
     }
     
     func newTestCycle() async {
-        if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCount && endTestSeries == false {
+//        if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCount && endTestSeries == false {
+        if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_eptaSamplesCount] && endTestSeries == false {
             startTooHigh = 0
             localMarkNewTestCycle = 0
             localReversalEnd = 0
             envDataObjectModel_index = envDataObjectModel_index + 1
             envDataObjectModel_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
             endTestSeries = false
-//                Task(priority: .userInitiated) {
             await wipeArrays()
-//                }
-        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCount && endTestSeries == false {
+//        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCount && endTestSeries == false {
+        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_eptaSamplesCount] && endTestSeries == false {
                 endTestSeries = true
                 localPlaying = -1
+                envDataObjectModel_eptaSamplesCount += 1
                 print("=============================")
                 print("!!!!! End of Test Series!!!!!!")
                 print("=============================")
