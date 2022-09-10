@@ -29,7 +29,6 @@ struct onekHzSaveFinalResults: Codable {  // This is a model
     var jsonName = String()
     var jsonAge = Int()
     var jsonSex = Int()
-    var jsonUser = UUID()
     var jsononekHzactiveFrequency = String()
     var jsonRightEar1kHzdBFinal = Float()
     var jsonLeftEar1kHzdBFinal = Float()
@@ -1563,7 +1562,6 @@ extension Bilateral1kHzTestView {
             jsonName: "Jeff",
             jsonAge: 36,
             jsonSex: 1,
-            jsonUser: UUID(uuidString: "465464246546465465")!,
             jsononekHzactiveFrequency: onekHzactiveFrequency,
             jsonRightEar1kHzdBFinal: RightEar1kHzdBFinal,
             jsonLeftEar1kHzdBFinal: LeftEar1kHzdBFinal,
@@ -1634,7 +1632,6 @@ extension Bilateral1kHzTestView {
         let onekHzstringFinalStoredName = "Name"
         let onekHzstringFinalStoredAge = String(36)
         let onekHzstringFinalStoredSex = String(1)
-        let onekHzstringFinalStoredUser = String(465464246546465465)
         let onekHzstringFinalStoredFrequency = "finalStoredFrequency," + [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
         let onekHzstringFinalStoredRightEar1kHzdBFinal = "RightEar1kHzdBFinal," + [RightEar1kHzdBFinal].map { String($0) }.joined(separator: ",")
         let onekHzstringFinalStoredLeftEar1kHzdBFinal = "LeftEar1kHzdBFinal," + [LeftEar1kHzdBFinal].map { String($0) }.joined(separator: ",")
@@ -1664,7 +1661,6 @@ extension Bilateral1kHzTestView {
             try writer.write(row: [onekHzstringFinalStoredName])
             try writer.write(row: [onekHzstringFinalStoredAge])
             try writer.write(row: [onekHzstringFinalStoredSex])
-            try writer.write(row: [onekHzstringFinalStoredUser])
             try writer.write(row: [onekHzstringFinalStoredFrequency])
             try writer.write(row: [onekHzstringFinalStoredRightEar1kHzdBFinal])
             try writer.write(row: [onekHzstringFinalStoredLeftEar1kHzdBFinal])
@@ -1729,7 +1725,6 @@ extension Bilateral1kHzTestView {
         let onekHzstringFinalStoredName = "Name"
         let onekHzstringFinalStoredAge = String(36)
         let onekHzstringFinalStoredSex = String(1)
-        let onekHzstringFinalStoredUser = String(465464246546465465)
         let onekHzstringFinalStoredFrequency = [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
         let onekHzstringFinalStoredRightEar1kHzdBFinal = [RightEar1kHzdBFinal].map { String($0) }.joined(separator: ",")
         let onekHzstringFinalStoredLeftEar1kHzdBFinal = [LeftEar1kHzdBFinal].map { String($0) }.joined(separator: ",")
@@ -1757,7 +1752,6 @@ extension Bilateral1kHzTestView {
             try writer.write(row: [onekHzstringFinalStoredName])
             try writer.write(row: [onekHzstringFinalStoredAge])
             try writer.write(row: [onekHzstringFinalStoredSex])
-            try writer.write(row: [onekHzstringFinalStoredUser])
             try writer.write(row: [onekHzstringFinalStoredFrequency])
             try writer.write(row: [onekHzstringFinalStoredRightEar1kHzdBFinal])
             try writer.write(row: [onekHzstringFinalStoredLeftEar1kHzdBFinal])
