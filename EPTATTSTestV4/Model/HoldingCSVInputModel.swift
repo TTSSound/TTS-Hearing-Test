@@ -64,6 +64,16 @@ class HoldingCSVInputModel: ObservableObject {
     @State var inputPurchasedTestTolken = String()
     @State var inputTestPurchased = Int()
     
+    // 1kHz Bilateral Test Results
+    @State var inputOnekHzactiveFrequency = String()
+    @State var inputRightEar1kHzdBFinal = Float()
+    @State var inputLeftEar1kHzdBFinal = Float()
+    @State var inputonekHzIntraEarDeltaHLFinal = Float()
+    @State var inputOnekHzFinalComboLRGains = [String]()
+    @State var inputOnekHzFinalComboRightGains = Float()
+    @State var inputOnekHzFinalComboLeltGains = Float()
+    @State var inputOnekHzFinalComboDeltaGains = Float()
+    
     
     
     //URLS
@@ -80,7 +90,14 @@ class HoldingCSVInputModel: ObservableObject {
     @State var dataFileURL10 = URL(fileURLWithPath: "") // Interim Start EHA System Settings Model
     @State var dataFileURL11 = URL(fileURLWithPath: "") // End EHA Test System Settings
     @State var dataFileURL12 = URL(fileURLWithPath: "") // In-App Purchase
-    @State var dataFileURL13 = URL(fileURLWithPath: "")
+    @State var dataFileURL13 = URL(fileURLWithPath: "") // 1kHZ Bilateral test results
+    @State var dataFileURL14 = URL(fileURLWithPath: "")
+    @State var dataFileURL15 = URL(fileURLWithPath: "")
+    @State var dataFileURL16 = URL(fileURLWithPath: "")
+    @State var dataFileURL17 = URL(fileURLWithPath: "")
+    @State var dataFileURL18 = URL(fileURLWithPath: "")
+    @State var dataFileURL19 = URL(fileURLWithPath: "")
+    @State var dataFileURL20 = URL(fileURLWithPath: "")
     
     let inputSetupCSVName = "InputSetupResultsCSV.csv"
     let inputTestSelectionCSVName = "InputTestSelectionCSV.csv"
@@ -97,6 +114,9 @@ class HoldingCSVInputModel: ObservableObject {
     let inputSystemInterimStartingEHACSVName = "InputSystemSettingsInterimStartingEHACSV.csv"
     let inputSystemEndEHACSVName = "InputSystemSettingsEndEHACSV.csv"
     let inputTestPurchasedCSVName = "InputTestPurchaseCSV.csv"
+    
+    // Bilateral 1kHz test input results
+    let inputOnekHzSummaryCSVName = "InputSummaryOnekHzResultsCSV.csv"
     
     
     
@@ -503,7 +523,7 @@ class HoldingCSVInputModel: ObservableObject {
             if systemSettingsEndEHAFilePath.isFileURL  {
                 dataFileURL11 = systemSettingsEndEHAFilePath
                 print("systemSettingsEndEHAFilePath: \(systemSettingsEndEHAFilePath)")
-                print("systemSettingsEndEHAFileURL9: \(dataFileURL11)")
+                print("systemSettingsEndEHAFileURL11: \(dataFileURL11)")
                 print("System Setting End EHA Input File Exists")
             } else {
                 print("System Setting End EHA Data File Path Does Not Exist")
@@ -537,7 +557,7 @@ class HoldingCSVInputModel: ObservableObject {
             if inAppPurchaseFilePath.isFileURL  {
                 dataFileURL12 = inAppPurchaseFilePath
                 print("InAppPurchaseFilePath: \(inAppPurchaseFilePath)")
-                print("InAppPurchaseURL9: \(dataFileURL12)")
+                print("InAppPurchaseURL12: \(dataFileURL12)")
                 print("InAppPurchase Input File Exists")
             } else {
                 print("InAppPurchase Data File Path Does Not Exist")
@@ -572,7 +592,78 @@ class HoldingCSVInputModel: ObservableObject {
     }
     
     
+//Mark: -1kHZ Bilateral Test Input Results
+    //let inputOnekHzSummaryCSVName = "InputSummaryOnekHzResultsCSV.csv.csv"
     
+    func onekHzInputResultsCSVReader() async {
+        
+        let onekHzSummaryCSVName = [inputOnekHzSummaryCSVName]
+        
+        let fileOnekHzManager = FileManager.default
+        let onekHZPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: onekHzSummaryCSVName)
+        if fileOnekHzManager.fileExists(atPath: onekHZPath[0]) {
+            let onekHZFilePath = URL(fileURLWithPath: onekHZPath[0])
+            if onekHZFilePath.isFileURL  {
+                dataFileURL13 = onekHZFilePath
+                print("onekHZFilePath: \(onekHZFilePath)")
+                print("onekHZURL13: \(dataFileURL13)")
+                print("onekHZ Input File Exists")
+            } else {
+                print("onekHZ Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURL13)
+            print(results)
+            print("onekHZResults Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldOnekHzactiveFrequency: String = results[row:0, column: 0]
+            let fieldRightEar1kHzdBFinal: String = results[row:1, column: 0]
+            let fieldLeftEar1kHzdBFinal: String = results[row:2, column: 0]
+            let fieldonekHzIntraEarDeltaHLFinal: String = results[row:3, column: 0]
+            let fieldOnekHzFinalComboLRGains: String = results[row:3, column: 0]
+            let fieldOnekHzFinalComboRightGains: String = results[row:3, column: 0]
+            let fieldOnekHzFinalComboLeltGains: String = results[row:3, column: 1]
+            let fieldOnekHzFinalComboDeltaGains: String = results[row:3, column: 2]
+            
+            print("fieldOnekHzactiveFrequency: \(fieldOnekHzactiveFrequency)")
+            print("fieldRightEar1kHzdBFinal: \(fieldRightEar1kHzdBFinal)")
+            print("fieldLeftEar1kHzdBFinal: \(fieldLeftEar1kHzdBFinal)")
+            print("fieldonekHzIntraEarDeltaHLFinal: \(fieldonekHzIntraEarDeltaHLFinal)")
+            print("fieldOnekHzFinalComboLRGains: \(fieldOnekHzFinalComboLRGains)")
+            print("fieldOnekHzFinalComboRightGains: \(fieldOnekHzFinalComboRightGains)")
+            print("fieldOnekHzFinalComboLeltGains: \(fieldOnekHzFinalComboLeltGains)")
+            print("fieldOnekHzFinalComboDeltaGains: \(fieldOnekHzFinalComboDeltaGains)")
+            
+            
+            inputOnekHzactiveFrequency = fieldOnekHzactiveFrequency
+            let inputRightEar1kHzdBFnl = Float(fieldRightEar1kHzdBFinal)
+            inputRightEar1kHzdBFinal = inputRightEar1kHzdBFnl ?? -99.9
+            let inputLeftEar1kHzdBFnl = Float(fieldLeftEar1kHzdBFinal)
+            inputLeftEar1kHzdBFinal = inputLeftEar1kHzdBFnl ?? -99.9
+            let inputonekHzIntraEarDeltaHLFnl = Float(fieldonekHzIntraEarDeltaHLFinal)
+            inputonekHzIntraEarDeltaHLFinal = inputonekHzIntraEarDeltaHLFnl ?? -99.9
+            inputOnekHzFinalComboLRGains = [fieldOnekHzFinalComboLRGains]
+            let inputOnekHzFinalComboRightGns = Float(fieldOnekHzFinalComboRightGains)
+            inputOnekHzFinalComboRightGains = inputOnekHzFinalComboRightGns ?? -99.9
+            let inputOnekHzFinalComboLeltGns = Float(fieldOnekHzFinalComboLeltGains)
+            inputOnekHzFinalComboLeltGains = inputOnekHzFinalComboLeltGns ?? -99.9
+            let inputOnekHzFinalComboDeltaGns = Float(fieldOnekHzFinalComboDeltaGains)
+            inputOnekHzFinalComboDeltaGains = inputOnekHzFinalComboDeltaGns ?? -99.9
+
+            print("inputOnekHzactiveFrequency: \(inputOnekHzactiveFrequency)")
+            print("inputRightEar1kHzdBFinal: \(inputRightEar1kHzdBFinal)")
+            print("inputLeftEar1kHzdBFinal: \(inputLeftEar1kHzdBFinal)")
+            print("inputonekHzIntraEarDeltaHLFinal: \(inputonekHzIntraEarDeltaHLFinal)")
+            print("inputOnekHzFinalComboLRGains: \(inputOnekHzFinalComboLRGains)")
+            print("inputOnekHzFinalComboRightGains: \(inputOnekHzFinalComboRightGains)")
+            print("inputOnekHzFinalComboLeltGains: \(inputOnekHzFinalComboLeltGains)")
+            print("inputOnekHzFinalComboDeltaGains: \(inputOnekHzFinalComboDeltaGains)")
+        } catch {
+            print("Error in reading onekHZ results")
+        }
+    }
 }
 
 extension HoldingCSVInputModel {

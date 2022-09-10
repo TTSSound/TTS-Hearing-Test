@@ -139,6 +139,7 @@
 		7C0766B528AB43D8008CB169 /* MPVolumeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MPVolumeView.swift; sourceTree = "<group>"; };
 		7C0766B628AB43EA008CB169 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7C0766B928AB44B1008CB169 /* MPVolumeV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MPVolumeV2.swift; sourceTree = "<group>"; };
+		7C0AE96C28CCF55D00A4F652 /* DONOTChangeReferenceEPTATTSTestV4List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DONOTChangeReferenceEPTATTSTestV4List.swift; sourceTree = "<group>"; };
 		7C125E3228B2236E00109CE5 /* SetupDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupDataModel.swift; sourceTree = "<group>"; };
 		7C14A7F628ACA77900601602 /* SummaryResults.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = SummaryResults.json; path = "../../../../Users/jeffreyjaskunas/Library/Mobile Documents/com~apple~CloudDocs/XCode_Swift_Coding/SwiftCodingProjects/EPTATTSTestV4/EPTATTSTestV4/Model/SummaryResults.json"; sourceTree = DEVELOPER_DIR; };
 		7C179FDA28B70CB200964AAC /* TestSelectionView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TestSelectionView2.swift; path = ../TestSelectionView2.swift; sourceTree = "<group>"; };
@@ -488,6 +489,7 @@
 				7C76D5F128B18AE50044958B /* ClosingView.swift */,
 				7C179FEC28B81B7500964AAC /* InAppPurchaseView.swift */,
 				7C99A16B28C95D0800E46C65 /* DONOTChangeReferenceEHATest.swift */,
+				7C0AE96C28CCF55D00A4F652 /* DONOTChangeReferenceEPTATTSTestV4List.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
