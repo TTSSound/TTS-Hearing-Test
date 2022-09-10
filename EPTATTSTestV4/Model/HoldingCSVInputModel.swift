@@ -76,6 +76,14 @@ class HoldingCSVInputModel: ObservableObject {
     
     
     
+    //    let summaryEHAP1LRCSVName = "SummaryEHAP1LRResultsCSV.csv"
+    //    let summaryEHAP1RightCSVName = "SummaryEHAP1RightResultsCSV.csv"
+    //    let summaryEHAP1LeftCSVName = "SummaryEHAP1LeftResultsCSV.csv"
+    //    let inputEHAP1LRSummaryCSVName = "InputDetailedEHAP1LRResultsCSV.csv"
+    //    let inputEHAP1RightSummaryCSVName = "InputDetailedEHAP1RightResultsCSV.csv"
+    //    let inputEHAP1LeftSummaryCSVName = "InputDetailedEHAP1LeftResultsCSV.csv"
+    
+    
     //URLS
     @State var dataFileURL = URL(fileURLWithPath: "")   // General and Open
     @State var dataFileURL1 = URL(fileURLWithPath: "")  // Setup Model

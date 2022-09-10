@@ -83,15 +83,66 @@ struct EHATTSTestPart1View: View {
     @State var endTestSeries: Bool = false
     @State var showTestCompletionSheet: Bool = false
     
-    @State var envDataObjectModel_samples: [String] = ["Sample0", "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
-    @State var panArray: [Float] = [1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+//    @State var envDataObjectModel_samples: [String] = ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16", "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
+    
+    @State var envDataObjectModel_samples: [String] = ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8",
+                                                       "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8",
+                                                       "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16",
+                                                       "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
+                        @State var panArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                                                        -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
+                                                        1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                                                        -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
     @State var totalCount = 32
+    @State var localPan = Float()
     
     // Presentation Cycles
-    // Cycle 1: ["Sample0", "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7"]
-    // Cycle 2: ["Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15"]
-    // Cycle 3: ["Sample16", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8"]
-    // Cycle 4: ["Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
+    // Cycle 1 Right: ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8"]  // panArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+    // Cycle 2 Left: ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8"]   // panArray: [Float] = [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+    // Cycle 3 Right: ["Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]   // panArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+    // Cycle 4 Left: ["Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]    //panArray: [Float] = [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+    
+//    rightFinalGain"\(activeFrequency)"
+    @State var rightFinalGainSample1 = Float()
+    @State var rightFinalGainSample2 = Float()
+    @State var rightFinalGainSample3 = Float()
+    @State var rightFinalGainSample4 = Float()
+    @State var rightFinalGainSample5 = Float()
+    @State var rightFinalGainSample6 = Float()
+    @State var rightFinalGainSample7 = Float()
+    @State var rightFinalGainSample8 = Float()
+    @State var rightFinalGainSample9 = Float()
+    @State var rightFinalGainSample10 = Float()
+    @State var rightFinalGainSample11 = Float()
+    @State var rightFinalGainSample12 = Float()
+    @State var rightFinalGainSample13 = Float()
+    @State var rightFinalGainSample14 = Float()
+    @State var rightFinalGainSample15 = Float()
+    @State var rightFinalGainSample16 = Float()
+    
+    @State var leftFinalGainSample1 = Float()
+    @State var leftFinalGainSample2 = Float()
+    @State var leftFinalGainSample3 = Float()
+    @State var leftFinalGainSample4 = Float()
+    @State var leftFinalGainSample5 = Float()
+    @State var leftFinalGainSample6 = Float()
+    @State var leftFinalGainSample7 = Float()
+    @State var leftFinalGainSample8 = Float()
+    @State var leftFinalGainSample9 = Float()
+    @State var leftFinalGainSample10 = Float()
+    @State var leftFinalGainSample11 = Float()
+    @State var leftFinalGainSample12 = Float()
+    @State var leftFinalGainSample13 = Float()
+    @State var leftFinalGainSample14 = Float()
+    @State var leftFinalGainSample15 = Float()
+    @State var leftFinalGainSample16 = Float()
+    
+    @State var rightFinalGainsArray = [Float]()
+    @State var leftFinalGainsArray = [Float]()
+    @State var finalStoredRightFinalGainsArray = [Float]()
+    @State var finalStoredleftFinalGainsArray = [Float]()
+    
+    
     
     
     @State var envDataObjectModel_index: Int = 0
@@ -148,6 +199,13 @@ struct EHATTSTestPart1View: View {
     let detailedEHAP1CSVName = "DetailedEHAP1ResultsCSV.csv"
     let inputEHAP1SummaryCSVName = "InputSummaryEHAP1ResultsCSV.csv"
     let inputEHAP1DetailedCSVName = "InputDetailedEHAP1ResultsCSV.csv"
+    let summaryEHAP1LRCSVName = "SummaryEHAP1LRResultsCSV.csv"
+    let summaryEHAP1RightCSVName = "SummaryEHAP1RightResultsCSV.csv"
+    let summaryEHAP1LeftCSVName = "SummaryEHAP1LeftResultsCSV.csv"
+    let inputEHAP1LRSummaryCSVName = "InputDetailedEHAP1LRResultsCSV.csv"
+    let inputEHAP1RightSummaryCSVName = "InputDetailedEHAP1RightResultsCSV.csv"
+    let inputEHAP1LeftSummaryCSVName = "InputDetailedEHAP1LeftResultsCSV.csv"
+    
     
     @State var saveFinalResults: SaveFinalResults? = nil
 
@@ -306,7 +364,7 @@ struct EHATTSTestPart1View: View {
                 setPan()
                 
                 audioThread.async {
-                    loadAndTestPresentation(sample: activeFrequency, gain: envDataObjectModel_testGain)
+                    loadAndTestPresentation(sample: activeFrequency, gain: envDataObjectModel_testGain, pan: localPan)
                     while testPlayer!.isPlaying == true && self.localHeard == 0 { }
                     if localHeard == 1 {
                         testPlayer!.stop()
@@ -414,19 +472,19 @@ struct EHATTSTestPart1View: View {
     }
     
     func setPan() {
-        envDataObjectModel_pan = panArray[envDataObjectModel_index]
-        print("Pan: \(envDataObjectModel_pan)")
+        localPan = panArray[envDataObjectModel_index]
+        print("Pan: \(localPan)")
     }
 
-    func loadAndTestPresentation(sample: String, pan: Float, gain: Float, pan: Float) {
+    func loadAndTestPresentation(sample: String, gain: Float, pan: Float) {
           do{
               let urlSample = Bundle.main.path(forResource: activeFrequency, ofType: ".wav")
               guard let urlSample = urlSample else { return print(SampleErrors.notFound) }
               testPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: urlSample))
               guard let testPlayer = testPlayer else { return }
               testPlayer.prepareToPlay()    // Test Player Prepare to Play
-              testPlayer.setVolume(envDataObjectModel_testGain, fadeDuration: 0)      // Set Gain for Playback
-              testPlayer.pan = envDataObjectModel_pan
+              testPlayer.setVolume(envDataObjectModel_testGain, fadeDuration: 0.01)      // Set Gain for Playback
+              testPlayer.pan = localPan
               testPlayer.play()   // Start Playback
           } catch { print("Error in playerSessionSetUp Function Execution") }
   }
@@ -437,7 +495,9 @@ struct EHATTSTestPart1View: View {
           guard let urlSample = urlSample else { return print(SampleErrors.notFound) }
           testPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: urlSample))
           guard let testPlayer = testPlayer else { return }
+          testPlayer.setVolume(0, fadeDuration: 0.01)
           testPlayer.stop()
+          
       } catch { print("Error in Player Stop Function") }
   }
     
@@ -840,6 +900,159 @@ extension EHATTSTestPart1View {
                 print("Critical error in reversalsCompletLogging Logic")
         }
     }
+    
+//    activeFrequency
+//    envDataObjectModel_averageGain
+//    localPan
+//    envDataObjectModel_index
+    
+    func assignLRAverageSampleGains() async {
+        if localMarkNewTestCycle == 1 && localReversalEnd == 1 && localPan == 1.0 {
+            //go through each assignment based on index
+            if envDataObjectModel_index == 0 {
+                rightFinalGainSample1 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample1)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else if envDataObjectModel_index == 1 {
+                rightFinalGainSample2 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample2)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else if envDataObjectModel_index == 2 {
+                rightFinalGainSample3 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample3)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else if envDataObjectModel_index == 3 {
+                rightFinalGainSample4 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample4)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else if envDataObjectModel_index == 4 {
+                rightFinalGainSample5 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample5)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else if envDataObjectModel_index == 5 {
+                rightFinalGainSample6 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample6)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else if envDataObjectModel_index == 6 {
+                rightFinalGainSample7 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample7)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else if envDataObjectModel_index == 7 {
+                rightFinalGainSample8 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample8)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else if envDataObjectModel_index == 16 {
+                rightFinalGainSample9 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample9)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else if envDataObjectModel_index == 17 {
+                rightFinalGainSample10 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample10)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else if envDataObjectModel_index == 18 {
+                rightFinalGainSample11 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample11)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else if envDataObjectModel_index == 19 {
+                rightFinalGainSample12 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample12)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else if envDataObjectModel_index == 20 {
+                rightFinalGainSample13 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample13)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else if envDataObjectModel_index == 21 {
+                rightFinalGainSample14 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample14)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else if envDataObjectModel_index == 22 {
+                rightFinalGainSample15 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample15)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else if envDataObjectModel_index == 23 {
+                rightFinalGainSample16 = envDataObjectModel_averageGain
+                rightFinalGainsArray.append(rightFinalGainSample16)
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+            } else {
+                print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                fatalError("In right side assignLRAverageSampleGains")
+            }
+        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && localPan == -1.0 {
+            //Left Side. Go Through Each Assignment based on index for sample
+            if envDataObjectModel_index == 8 {
+                leftFinalGainSample1 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample1)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else if envDataObjectModel_index == 9 {
+                leftFinalGainSample2 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample2)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else if envDataObjectModel_index == 10 {
+                leftFinalGainSample3 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample3)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else if envDataObjectModel_index == 11 {
+                leftFinalGainSample4 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample4)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else if envDataObjectModel_index == 12 {
+                leftFinalGainSample5 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample5)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else if envDataObjectModel_index == 13 {
+                leftFinalGainSample6 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample6)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else if envDataObjectModel_index == 14 {
+                leftFinalGainSample7 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample7)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else if envDataObjectModel_index == 15 {
+                leftFinalGainSample8 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample8)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else if envDataObjectModel_index == 24 {
+                leftFinalGainSample9 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample9)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else if envDataObjectModel_index == 25 {
+                leftFinalGainSample10 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample10)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else if envDataObjectModel_index == 26 {
+                leftFinalGainSample11 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample11)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else if envDataObjectModel_index == 27 {
+                leftFinalGainSample12 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample12)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else if envDataObjectModel_index == 28 {
+                leftFinalGainSample13 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample13)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else if envDataObjectModel_index == 29 {
+                leftFinalGainSample14 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample14)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else if envDataObjectModel_index == 30 {
+                leftFinalGainSample15 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample15)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else if envDataObjectModel_index == 31 {
+                leftFinalGainSample16 = envDataObjectModel_averageGain
+                leftFinalGainsArray.append(leftFinalGainSample16)
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+            } else {
+                print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                fatalError("In left side assignLRAverageSampleGains")
+            }
+        } else {
+            // No ready to log yet
+            print("Coninue, not ready to log in assignLRAverageSampleGains")
+        }
+
+    }
 
     func printReversalData() async {
         print("--------Reversal Values Logged-------------")
@@ -968,6 +1181,10 @@ extension EHATTSTestPart1View {
             envDataObjectModel_finalStoredFirstGain.append(contentsOf: [1000000.0] + [firstGain])
             envDataObjectModel_finalStoredSecondGain.append(contentsOf: [1000000.0] + [secondGain])
             envDataObjectModel_finalStoredAverageGain.append(contentsOf: [1000000.0] + [envDataObjectModel_averageGain])
+            finalStoredRightFinalGainsArray.removeAll()
+            finalStoredleftFinalGainsArray.removeAll()
+            finalStoredRightFinalGainsArray.append(contentsOf: rightFinalGainsArray)
+            finalStoredleftFinalGainsArray.append(contentsOf: leftFinalGainsArray)
         }
     }
     
@@ -982,6 +1199,10 @@ extension EHATTSTestPart1View {
         print("finalStoredFirstGain: \(envDataObjectModel_finalStoredFirstGain)")
         print("finalStoredSecondGain: \(envDataObjectModel_finalStoredSecondGain)")
         print("finalStoredAverageGain: \(envDataObjectModel_finalStoredAverageGain)")
+        print("rightFinalGainsArray: \(rightFinalGainsArray)")
+        print("finalStoredRightFinalGainsArray: \(finalStoredRightFinalGainsArray)")
+        print("leftFinalGainsArray: \(leftFinalGainsArray)")
+        print("finalStoredleftFinalGainsArray: \(finalStoredleftFinalGainsArray)")
     }
         
     func saveFinalStoredArrays() async {
@@ -992,6 +1213,14 @@ extension EHATTSTestPart1View {
                     await writeEHA1SummarydResultsToCSV()
                     await writeEHA1InputDetailedResultsToCSV()
                     await writeEHA1InputDetailedResultsToCSV()
+                    
+                    await writeEHA1RightLeftResultsToCSV()
+                    await writeEHA1RightResultsToCSV()
+                    await writeEHA1LeftResultsToCSV()
+                    await writeEHA1InputRightLeftResultsToCSV()
+                    await writeEHA1InputRightResultsToCSV()
+                    await writeEHA1InputLeftResultsToCSV()
+                    
                     await getEHAP1Data()
                     await saveEHA1ToJSON()
         //                await envDataObjectModel_uploadSummaryResultsTest()
@@ -1116,6 +1345,13 @@ extension EHATTSTestPart1View {
         let stringFinalStoredFirstGain = "finalStoredFirstGain," + envDataObjectModel_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
         let stringFinalStoredSecondGain = "finalStoredSecondGain," + envDataObjectModel_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
         let stringFinalStoredAverageGain = "finalStoredAverageGain," + envDataObjectModel_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
+        let stringFinalrightFinalGainsArray = "rightFinalGainsArray," + rightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        
+//        finalStoredRightFinalGainsArray.append(contentsOf: rightFinalGainsArray)
+//        finalStoredleftFinalGainsArray.append(contentsOf: leftFinalGainsArray)
         
         do {
             let csvEHAP1DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -1137,6 +1373,10 @@ extension EHATTSTestPart1View {
             try writer.write(row: [stringFinalStoredFirstGain])
             try writer.write(row: [stringFinalStoredSecondGain])
             try writer.write(row: [stringFinalStoredAverageGain])
+            try writer.write(row: [stringFinalrightFinalGainsArray])
+            try writer.write(row: [stringFinalleftFinalGainsArray])
+            try writer.write(row: [stringFinalStoredRightFinalGainsArray])
+            try writer.write(row: [stringFinalStoredleftFinalGainsArray])
 //
 //                print("CVS EHAP1 Detailed Writer Success")
         } catch {
@@ -1145,11 +1385,15 @@ extension EHATTSTestPart1View {
     }
 
     func writeEHA1SummarydResultsToCSV() async {
-         let stringFinalStoredResultsFrequency = "finalStoredResultsFrequency," + [activeFrequency].map { String($0) }.joined(separator: ",")
-         let stringFinalStoredTestPan = "finalStoredTestPan," + envDataObjectModel_testPan.map { String($0) }.joined(separator: ",")
-         let stringFinalStoredFirstGain = "finalStoredFirstGain," + envDataObjectModel_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
-         let stringFinalStoredSecondGain = "finalStoredSecondGain," + envDataObjectModel_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
-         let stringFinalStoredAverageGain = "finalStoredAverageGain," + envDataObjectModel_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredResultsFrequency = "finalStoredResultsFrequency," + [activeFrequency].map { String($0) }.joined(separator: ",")
+        let stringFinalStoredTestPan = "finalStoredTestPan," + envDataObjectModel_testPan.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredFirstGain = "finalStoredFirstGain," + envDataObjectModel_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredSecondGain = "finalStoredSecondGain," + envDataObjectModel_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredAverageGain = "finalStoredAverageGain," + envDataObjectModel_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
+        let stringFinalrightFinalGainsArray = "rightFinalGainsArray," + rightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
         
          do {
              let csvEHAP1SummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -1163,6 +1407,10 @@ extension EHATTSTestPart1View {
              try writer.write(row: [stringFinalStoredFirstGain])
              try writer.write(row: [stringFinalStoredSecondGain])
              try writer.write(row: [stringFinalStoredAverageGain])
+             try writer.write(row: [stringFinalrightFinalGainsArray])
+             try writer.write(row: [stringFinalleftFinalGainsArray])
+             try writer.write(row: [stringFinalStoredRightFinalGainsArray])
+             try writer.write(row: [stringFinalStoredleftFinalGainsArray])
 //
 //                 print("CVS Summary EHA Part 1 Data Writer Success")
          } catch {
@@ -1183,6 +1431,11 @@ extension EHATTSTestPart1View {
         let stringFinalStoredFirstGain = envDataObjectModel_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
         let stringFinalStoredSecondGain = envDataObjectModel_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
         let stringFinalStoredAverageGain = envDataObjectModel_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
+        let stringFinalrightFinalGainsArray = rightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsArray = leftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsArray = finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsArray = finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        
 
         do {
             let csvInputEHAP1DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -1202,6 +1455,10 @@ extension EHATTSTestPart1View {
             try writer.write(row: [stringFinalStoredFirstGain])
             try writer.write(row: [stringFinalStoredSecondGain])
             try writer.write(row: [stringFinalStoredAverageGain])
+            try writer.write(row: [stringFinalrightFinalGainsArray])
+            try writer.write(row: [stringFinalleftFinalGainsArray])
+            try writer.write(row: [stringFinalStoredRightFinalGainsArray])
+            try writer.write(row: [stringFinalStoredleftFinalGainsArray])
 //
 //                print("CVS Input EHA Part 1Detailed Writer Success")
         } catch {
@@ -1210,11 +1467,15 @@ extension EHATTSTestPart1View {
     }
 
     func writeEHA1InputSummarydResultsToCSV() async {
-         let stringFinalStoredResultsFrequency = [activeFrequency].map { String($0) }.joined(separator: ",")
-         let stringFinalStoredTestPan = envDataObjectModel_finalStoredTestPan.map { String($0) }.joined(separator: ",")
-         let stringFinalStoredFirstGain = envDataObjectModel_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
-         let stringFinalStoredSecondGain = envDataObjectModel_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
-         let stringFinalStoredAverageGain = envDataObjectModel_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredResultsFrequency = [activeFrequency].map { String($0) }.joined(separator: ",")
+        let stringFinalStoredTestPan = envDataObjectModel_finalStoredTestPan.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredFirstGain = envDataObjectModel_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredSecondGain = envDataObjectModel_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredAverageGain = envDataObjectModel_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
+        let stringFinalrightFinalGainsArray = rightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsArray = leftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsArray = finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsArray = finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
          
          do {
              let csvEHAP1InputSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -1228,11 +1489,154 @@ extension EHATTSTestPart1View {
              try writer.write(row: [stringFinalStoredFirstGain])
              try writer.write(row: [stringFinalStoredSecondGain])
              try writer.write(row: [stringFinalStoredAverageGain])
+             try writer.write(row: [stringFinalrightFinalGainsArray])
+             try writer.write(row: [stringFinalleftFinalGainsArray])
+             try writer.write(row: [stringFinalStoredRightFinalGainsArray])
+             try writer.write(row: [stringFinalStoredleftFinalGainsArray])
 //
 //                 print("CVS Input EHA Part 1 Summary Data Writer Success")
          } catch {
              print("CVSWriter Input EHA Part 1 Summary Data Error or Error Finding File for Input Summary CSV \(error)")
          }
     }
+    
+    func writeEHA1RightLeftResultsToCSV() async {
+        
+        let stringFinalrightFinalGainsArray = "rightFinalGainsArray," + rightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        
+         do {
+             let csvEHAP1LRSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+             let csvEHAP1LRSummaryDocumentsDirectory = csvEHAP1LRSummaryPath
+//                 print("CSV Summary EHA Part 1 LR Summary DocumentsDirectory: \(csvEHAP1LRSummaryDocumentsDirectory)")
+             let csvEHAP1LRSummaryFilePath = csvEHAP1LRSummaryDocumentsDirectory.appendingPathComponent(summaryEHAP1LRCSVName)
+             print(csvEHAP1LRSummaryFilePath)
+             let writer = try CSVWriter(fileURL: csvEHAP1LRSummaryFilePath, append: false)
+ 
+             try writer.write(row: [stringFinalrightFinalGainsArray])
+             try writer.write(row: [stringFinalleftFinalGainsArray])
+             try writer.write(row: [stringFinalStoredRightFinalGainsArray])
+             try writer.write(row: [stringFinalStoredleftFinalGainsArray])
+//
+//                 print("CVS Summary EHA Part 1 LR Summary Data Writer Success")
+         } catch {
+             print("CVSWriter Summary EHA Part 1 LR Summary Data Error or Error Finding File for Detailed CSV \(error)")
+         }
+    }
+
+    func writeEHA1RightResultsToCSV() async {
+        let stringFinalrightFinalGainsArray = "rightFinalGainsArray," + rightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        
+         do {
+             let csvEHAP1RightSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+             let csvEHAP1RightSummaryDocumentsDirectory = csvEHAP1RightSummaryPath
+//                 print("CSV Summary EHA Part 1 Right Summary DocumentsDirectory: \(csvEHAP1RightSummaryDocumentsDirectory)")
+             let csvEHAP1RightSummaryFilePath = csvEHAP1RightSummaryDocumentsDirectory.appendingPathComponent(summaryEHAP1RightCSVName)
+             print(csvEHAP1RightSummaryFilePath)
+             let writer = try CSVWriter(fileURL: csvEHAP1RightSummaryFilePath, append: false)
+ 
+             try writer.write(row: [stringFinalrightFinalGainsArray])
+             try writer.write(row: [stringFinalStoredRightFinalGainsArray])
+//
+//                 print("CVS Summary EHA Part 1 Right Summary Data Writer Success")
+         } catch {
+             print("CVSWriter Summary EHA Part 1 Right Summary Data Error or Error Finding File for Detailed CSV \(error)")
+         }
+    }
+    
+    func writeEHA1LeftResultsToCSV() async {
+        
+        let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        
+         do {
+             let csvEHAP1LeftSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+             let csvEHAP1LeftSummaryDocumentsDirectory = csvEHAP1LeftSummaryPath
+//                 print("CSV Summary EHA Part 1 Left Summary DocumentsDirectory: \(csvEHAP1LeftSummaryDocumentsDirectory)")
+             let csvEHAP1LeftSummaryFilePath = csvEHAP1LeftSummaryDocumentsDirectory.appendingPathComponent(summaryEHAP1LeftCSVName)
+             print(csvEHAP1LeftSummaryFilePath)
+             let writer = try CSVWriter(fileURL: csvEHAP1LeftSummaryFilePath, append: false)
+ 
+             try writer.write(row: [stringFinalleftFinalGainsArray])
+             try writer.write(row: [stringFinalStoredleftFinalGainsArray])
+//                 print("CVS Summary EHA Part 1 Left Summary Data Writer Success")
+         } catch {
+             print("CVSWriter Summary EHA Part 1 Left Summary Data Error or Error Finding File for Detailed CSV \(error)")
+         }
+    }
+    
+    func writeEHA1InputRightLeftResultsToCSV() async {
+        
+        let stringFinalrightFinalGainsArray = "rightFinalGainsArray," + rightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        
+         do {
+             let csvEHAP1InputLRSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+             let csvEHAP1InputLRSummaryDocumentsDirectory = csvEHAP1InputLRSummaryPath
+//                 print("CSV Summary EHA Part 1 LR Summary DocumentsDirectory: \(csvEHAP1LRSummaryDocumentsDirectory)")
+             let csvEHAP1InputLRSummaryFilePath = csvEHAP1InputLRSummaryDocumentsDirectory.appendingPathComponent(inputEHAP1LRSummaryCSVName)
+             print(csvEHAP1InputLRSummaryFilePath)
+             let writer = try CSVWriter(fileURL: csvEHAP1InputLRSummaryFilePath, append: false)
+ 
+             try writer.write(row: [stringFinalrightFinalGainsArray])
+             try writer.write(row: [stringFinalleftFinalGainsArray])
+             try writer.write(row: [stringFinalStoredRightFinalGainsArray])
+             try writer.write(row: [stringFinalStoredleftFinalGainsArray])
+//
+//                 print("CVS Summary EHA Part 1 LR Input Data Writer Success")
+         } catch {
+             print("CVSWriter Summary EHA Part 1 LR Input Data Error or Error Finding File for Detailed CSV \(error)")
+         }
+    }
+    
+    
+    func writeEHA1InputRightResultsToCSV() async {
+        let stringFinalrightFinalGainsArray = "rightFinalGainsArray," + rightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        
+         do {
+             let csvEHAP1InputRightSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+             let csvEHAP1InputRightSummaryDocumentsDirectory = csvEHAP1InputRightSummaryPath
+//                 print("CSV Summary EHA Part 1 Right Input DocumentsDirectory: \(csvEHAP1InputRightSummaryDocumentsDirectory)")
+             let csvEHAP1InputRightSummaryFilePath = csvEHAP1InputRightSummaryDocumentsDirectory.appendingPathComponent(inputEHAP1RightSummaryCSVName)
+             print(csvEHAP1InputRightSummaryFilePath)
+             let writer = try CSVWriter(fileURL: csvEHAP1InputRightSummaryFilePath, append: false)
+ 
+             try writer.write(row: [stringFinalrightFinalGainsArray])
+             try writer.write(row: [stringFinalStoredRightFinalGainsArray])
+//
+//                 print("CVS Summary EHA Part 1 Right Input Data Writer Success")
+         } catch {
+             print("CVSWriter Summary EHA Part 1 Right Input Data Error or Error Finding File for Detailed CSV \(error)")
+         }
+    }
+    
+    func writeEHA1InputLeftResultsToCSV() async {
+        
+        let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        
+         do {
+             let csvEHAP1InputLeftSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+             let csvEHAP1InputLeftSummaryDocumentsDirectory = csvEHAP1InputLeftSummaryPath
+//                 print("CSV Summary EHA Part 1 Left Input DocumentsDirectory: \(csvEHAP1InputSummaryDocumentsDirectory)")
+             let csvEHAP1InputLeftSummaryFilePath = csvEHAP1InputLeftSummaryDocumentsDirectory.appendingPathComponent(inputEHAP1LeftSummaryCSVName)
+             print(csvEHAP1InputLeftSummaryFilePath)
+             let writer = try CSVWriter(fileURL: csvEHAP1InputLeftSummaryFilePath, append: false)
+ 
+             try writer.write(row: [stringFinalleftFinalGainsArray])
+             try writer.write(row: [stringFinalStoredleftFinalGainsArray])
+//                 print("CVS Summary EHA Part 1 Left Input Data Writer Success")
+         } catch {
+             print("CVSWriter Summary EHA Part 1 Left Input Data Error or Error Finding File for Detailed CSV \(error)")
+         }
+    }
+    
+    
 }
 
