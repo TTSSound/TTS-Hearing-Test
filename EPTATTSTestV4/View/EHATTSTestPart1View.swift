@@ -36,9 +36,9 @@ struct SaveFinalResults: Codable {  // This is a model
     var jsonSystemVoluem = Float()
     var jsonActualFrequency = Double()
     var jsonFrequency: [String]
-    var jsonPan: [Int]
+    var jsonPan: [Float]
     var jsonStoredIndex: [Int]
-    var jsonStoredTestPan: [Int]
+    var jsonStoredTestPan: [Float]
     var jsonStoredTestTestGain: [Float]
     var jsonStoredTestCount: [Int]
     var jsonStoredHeardArray: [Int]
@@ -46,6 +46,10 @@ struct SaveFinalResults: Codable {  // This is a model
     var jsonStoredFirstGain: [Float]
     var jsonStoredSecondGain: [Float]
     var jsonStoredAverageGain: [Float]
+    var jsonRightFinalGainsArray: [Float]
+    var jsonLeftFinalGainsArray: [Float]
+    var jsonFinalStoredRightFinalGainsArray: [Float]
+    var jsonFinalStoredleftFinalGainsArray: [Float]
 }
 
 
@@ -89,12 +93,10 @@ struct EHATTSTestPart1View: View {
                                                        "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8",
                                                        "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16",
                                                        "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
-                        @State var panArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                                                        -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
-                                                        1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                                                        -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+    @State var panArray: [Float] = [1.0, -1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
     @State var totalCount = 32
-    @State var localPan = Float()
+    @State var localPan: Float = Float()
+
     
     // Presentation Cycles
     // Cycle 1 Right: ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8"]  // panArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
@@ -150,8 +152,8 @@ struct EHATTSTestPart1View: View {
     @State var envDataObjectModel_heardArray: [Int] = [Int]()
     @State var envDataObjectModel_indexForTest = [Int]()
     @State var envDataObjectModel_testCount: [Int] = [Int]()
-    @State var envDataObjectModel_pan: Int = Int()
-    @State var envDataObjectModel_testPan = [Int]()
+    @State var envDataObjectModel_pan: Float = Float()
+    @State var envDataObjectModel_testPan = [Float]()
     @State var envDataObjectModel_testTestGain = [Float]()
     @State var envDataObjectModel_frequency = [String]()
     @State var envDataObjectModel_reversalHeard = [Int]()
@@ -162,12 +164,12 @@ struct EHATTSTestPart1View: View {
 
     @State var envDataObjectModel_averageGain = Float()
 
-    @State var envDataObjectModel_eptaSamplesCount = 0 //17
-    @State var envDataObjectModel_eptaSamplesCountArray = [8, 16, 24, 32]
+    @State var envDataObjectModel_eptaSamplesCount = 8 //17
+    @State var envDataObjectModel_eptaSamplesCountArray = [7, 7, 7, 7, 7, 7, 7, 7, 15, 15, 15, 15, 15, 15, 15, 15, 23, 23, 23, 23, 23, 23, 23, 23, 31, 31, 31, 31, 31, 31, 31, 31]
     @State var envDataObjectModel_eptaSamplesCountArrayIdx = 0  //[0, 1, 2, 3]
     
     @State var envDataObjectModel_finalStoredIndex: [Int] = [Int]()
-    @State var envDataObjectModel_finalStoredTestPan: [Int] = [Int]()
+    @State var envDataObjectModel_finalStoredTestPan: [Float] = [Float]()
     @State var envDataObjectModel_finalStoredTestTestGain: [Float] = [Float]()
     @State var envDataObjectModel_finalStoredFrequency: [String] = [String]()
     @State var envDataObjectModel_finalStoredTestCount: [Int] = [Int]()
@@ -228,7 +230,21 @@ struct EHATTSTestPart1View: View {
                 .padding(.bottom, 40)
                 HStack {
                     Spacer()
-                    Text(String(envDataObjectModel_testGain))
+//                    Text(String(envDataObjectModel_testGain))
+//                        .fontWeight(.bold)
+//                        .padding()
+//                        .foregroundColor(.white)
+//                        .padding(.top, 40)
+//                        .padding(.bottom, 40)
+//                    Spacer()
+                    Text(String(activeFrequency))
+                        .fontWeight(.bold)
+                        .padding()
+                        .foregroundColor(.white)
+                        .padding(.top, 40)
+                        .padding(.bottom, 40)
+                    Spacer()
+                    Text(String(localPan))
                         .fontWeight(.bold)
                         .padding()
                         .foregroundColor(.white)
@@ -242,6 +258,7 @@ struct EHATTSTestPart1View: View {
                         localPlaying = 1
                         userPausedTest = false
                         playingStringColorIndex = 0
+                        endTestSeries = false
                         print("Start Button Clicked. Playing = \(localPlaying)")
                     } label: {
                         Text(playingString[playingStringColorIndex])
@@ -262,9 +279,15 @@ struct EHATTSTestPart1View: View {
                             Task(priority: .userInitiated) {
                                 audioSessionModel.setAudioSession()
                                 localPlaying = 1
+                                endTestSeries = false
                                 print("Start Button Clicked. Playing = \(localPlaying)")
                             }
                         }
+                    Spacer()
+                    Text("Index: \(envDataObjectModel_index)")
+                        .fontWeight(.bold)
+                        .padding()
+                        .foregroundColor(.white)
                     Spacer()
                     Button {
                         localPlaying = 0
@@ -317,7 +340,16 @@ struct EHATTSTestPart1View: View {
                 VStack(alignment: .leading) {
     
                     Button(action: {
-                        showTestCompletionSheet.toggle()
+                     
+                            showTestCompletionSheet.toggle()
+                            endTestSeries = false
+                            testIsPlaying = true
+                            localPlaying = 1
+                            playingStringColorIndex = 2
+                            userPausedTest = false
+                            
+                            print("Start Button Clicked. Playing = \(localPlaying)")
+                        
                     }, label: {
                         Image(systemName: "xmark")
                             .font(.headline)
@@ -325,6 +357,27 @@ struct EHATTSTestPart1View: View {
                             .foregroundColor(.red)
                     })
                     Spacer()
+                    
+                    Text("Index: \(envDataObjectModel_index)")
+                    Spacer()
+                    Button(action: {
+                        DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
+                            Task(priority: .userInitiated) {
+    //                            showTestCompletionSheet.toggle()
+    //                            endTestSeries = false
+    //                            testIsPlaying = true
+    //                            localPlaying = 1
+    //                            playingStringColorIndex = 2
+    //                            userPausedTest = false
+                                pauseRestartTestCycle()
+                                await startNextTestCycle()
+                            }
+                        }
+                    }, label: {
+                        Text("Start The Next Cycle")
+                    })
+
+                    
                     Text("Take a moment for a break before exiting to continue with the next test segment")
                         .foregroundColor(.blue)
                         .font(.title)
@@ -357,11 +410,11 @@ struct EHATTSTestPart1View: View {
         // This is the lowest CPU approach from many, many tries
         .onChange(of: localPlaying, perform: { playingValue in
             activeFrequency = envDataObjectModel_samples[envDataObjectModel_index]
+            localPan = panArray[envDataObjectModel_index]
+            envDataObjectModel_pan = panArray[envDataObjectModel_index]
             localHeard = 0
             localReversal = 0
             if playingValue == 1{
-                
-                setPan()
                 
                 audioThread.async {
                     loadAndTestPresentation(sample: activeFrequency, gain: envDataObjectModel_testGain, pan: localPan)
@@ -430,6 +483,7 @@ struct EHATTSTestPart1View: View {
                         await reversalDirection()
                         await reversalComplexAction()
                         await reversalsCompleteLogging()
+//                        await assignLRAverageSampleGains()
 //                        await printReversalGain()
 //                        await printData()
 //                        await printReversalData()
@@ -474,8 +528,9 @@ struct EHATTSTestPart1View: View {
     func setPan() {
         localPan = panArray[envDataObjectModel_index]
         print("Pan: \(localPan)")
+        print("Pan Index \(envDataObjectModel_index)")
     }
-
+    
     func loadAndTestPresentation(sample: String, gain: Float, pan: Float) {
           do{
               let urlSample = Bundle.main.path(forResource: activeFrequency, ofType: ".wav")
@@ -483,8 +538,8 @@ struct EHATTSTestPart1View: View {
               testPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: urlSample))
               guard let testPlayer = testPlayer else { return }
               testPlayer.prepareToPlay()    // Test Player Prepare to Play
-              testPlayer.setVolume(envDataObjectModel_testGain, fadeDuration: 0.01)      // Set Gain for Playback
-              testPlayer.pan = localPan
+              testPlayer.setVolume(envDataObjectModel_testGain, fadeDuration: 0)      // Set Gain for Playback
+              testPlayer.pan = localPan // panArray[envDataObjectModel_index]
               testPlayer.play()   // Start Playback
           } catch { print("Error in playerSessionSetUp Function Execution") }
   }
@@ -495,7 +550,7 @@ struct EHATTSTestPart1View: View {
           guard let urlSample = urlSample else { return print(SampleErrors.notFound) }
           testPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: urlSample))
           guard let testPlayer = testPlayer else { return }
-          testPlayer.setVolume(0, fadeDuration: 0.01)
+//          testPlayer.setVolume(0, fadeDuration: 0.01)
           testPlayer.stop()
           
       } catch { print("Error in Player Stop Function") }
@@ -539,8 +594,9 @@ struct EHATTSTestPart1View: View {
             envDataObjectModel_testTestGain.append(envDataObjectModel_testGain)
         }
         DispatchQueue.global(qos: .background).async {
+            
             envDataObjectModel_frequency.append(activeFrequency)
-            envDataObjectModel_testPan.append(envDataObjectModel_pan)         // 0 = Left , 1 = Middle, 2 = Right
+            envDataObjectModel_testPan.append(localPan)         // 0 = Left , 1 = Middle, 2 = Right
         }
     }
     
@@ -1100,21 +1156,45 @@ extension EHATTSTestPart1View {
         })
     }
     
+    func startNextTestCycle() async {
+        await wipeArrays()
+        showTestCompletionSheet.toggle()
+        startTooHigh = 0
+        localMarkNewTestCycle = 0
+        localReversalEnd = 0
+        envDataObjectModel_index = envDataObjectModel_index + 1
+//        envDataObjectModel_eptaSamplesCountArrayIdx += 1
+        envDataObjectModel_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
+        endTestSeries = false
+        showTestCompletionSheet = false
+        testIsPlaying = true
+        userPausedTest = false
+        playingStringColorIndex = 2
+//        envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
+        print(envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index])
+        localPlaying = 1
+    }
+    
     func newTestCycle() async {
 //        if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCount && endTestSeries == false {
-        if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_eptaSamplesCount] && endTestSeries == false {
+        if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index] && endTestSeries == false {
             startTooHigh = 0
             localMarkNewTestCycle = 0
             localReversalEnd = 0
             envDataObjectModel_index = envDataObjectModel_index + 1
+           
             envDataObjectModel_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
             endTestSeries = false
             await wipeArrays()
 //        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCount && endTestSeries == false {
-        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_eptaSamplesCount] && endTestSeries == false {
+        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index] && endTestSeries == false {
                 endTestSeries = true
                 localPlaying = -1
-                envDataObjectModel_eptaSamplesCount += 1
+
+//                envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
+                envDataObjectModel_eptaSamplesCountArrayIdx += 1
+
+         
                 print("=============================")
                 print("!!!!! End of Test Series!!!!!!")
                 print("=============================")
@@ -1130,6 +1210,7 @@ extension EHATTSTestPart1View {
             print("end Test Series = \(endTestSeries)")
         } else if endTestSeries == true {
             showTestCompletionSheet = true
+            envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
             await endTestSeriesStop()
         }
     }
@@ -1172,7 +1253,7 @@ extension EHATTSTestPart1View {
     func concatenateFinalArrays() async {
         if localMarkNewTestCycle == 1 && localReversalEnd == 1 {
             envDataObjectModel_finalStoredIndex.append(contentsOf: [100000000] + envDataObjectModel_indexForTest)
-            envDataObjectModel_finalStoredTestPan.append(contentsOf: [100000000] + envDataObjectModel_testPan)
+            envDataObjectModel_finalStoredTestPan.append(contentsOf: [10000000.0] + envDataObjectModel_testPan)
             envDataObjectModel_finalStoredTestTestGain.append(contentsOf: [1000000.0] + envDataObjectModel_testTestGain)
             envDataObjectModel_finalStoredFrequency.append(contentsOf: ["100000000"] + [String(activeFrequency)])
             envDataObjectModel_finalStoredTestCount.append(contentsOf: [100000000] + envDataObjectModel_testCount)
@@ -1282,6 +1363,7 @@ extension EHATTSTestPart1View {
             print("error decoding \(error)")
         }
     }
+
     
     func getEHAP1JSONData() async -> Data? {
         let saveFinalResults = SaveFinalResults(
@@ -1306,7 +1388,11 @@ extension EHATTSTestPart1View {
             jsonStoredReversalHeard: envDataObjectModel_finalStoredReversalHeard,
             jsonStoredFirstGain: envDataObjectModel_finalStoredFirstGain,
             jsonStoredSecondGain: envDataObjectModel_finalStoredSecondGain,
-            jsonStoredAverageGain: envDataObjectModel_finalStoredAverageGain)
+            jsonStoredAverageGain: envDataObjectModel_finalStoredAverageGain,
+            jsonRightFinalGainsArray: rightFinalGainsArray,
+            jsonLeftFinalGainsArray: leftFinalGainsArray,
+            jsonFinalStoredRightFinalGainsArray: finalStoredRightFinalGainsArray,
+            jsonFinalStoredleftFinalGainsArray: finalStoredleftFinalGainsArray)
 
         let jsonData = try? JSONEncoder().encode(saveFinalResults)
         print("saveFinalResults: \(saveFinalResults)")
