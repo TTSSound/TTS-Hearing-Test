@@ -12,7 +12,7 @@ struct ManualDeviceEntryIssueSplashView: View {
     
     @StateObject var colorModel: ColorModel = ColorModel()
 //    @EnvironmentObject var deviceSelectionModel: DeviceSelectionModel
-    @EnvironmentObject var manualDeviceSelectionModel: ManualDeviceSelectionModel
+//    @EnvironmentObject var manualDeviceSelectionModel: ManualDeviceSelectionModel
     
     var body: some View {
         ZStack{

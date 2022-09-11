@@ -37,6 +37,7 @@
 		7C3E16BC28BC2AE4003A0DA9 /* PreTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3E16BB28BC2AE4003A0DA9 /* PreTestView.swift */; };
 		7C411BCF28AD6B76008C47C2 /* CodableCSV in Frameworks */ = {isa = PBXBuildFile; productRef = 7C411BCE28AD6B76008C47C2 /* CodableCSV */; };
 		7C411BD128AD7F40008C47C2 /* SummaryResultsCSV.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7C411BD028AD7F40008C47C2 /* SummaryResultsCSV.csv */; };
+		7C4CDB2F28CE6CED0051B9EE /* ManualDeviceEntryIssueSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C901FBE28B9A31D007E1336 /* ManualDeviceEntryIssueSplashView.swift */; };
 		7C4D017828C002F800361559 /* TestSelectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D017728C002F800361559 /* TestSelectionModel.swift */; };
 		7C4D017A28C00A4A00361559 /* DeviceSelectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D017928C00A4A00361559 /* DeviceSelectionModel.swift */; };
 		7C4D017C28C0182C00361559 /* SystemSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D017B28C0182C00361559 /* SystemSettingsModel.swift */; };
@@ -103,7 +104,6 @@
 		7C901FB928B97182007E1336 /* ManualDeviceDisclaimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C901FB828B97182007E1336 /* ManualDeviceDisclaimerView.swift */; };
 		7C901FBB28B9745D007E1336 /* uncalibratedAgreementText.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7C901FBA28B9745D007E1336 /* uncalibratedAgreementText.txt */; };
 		7C901FBD28B98517007E1336 /* ManualDeviceEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C901FBC28B98517007E1336 /* ManualDeviceEntryView.swift */; };
-		7C901FBF28B9A31D007E1336 /* ManualDeviceEntryIssueSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C901FBE28B9A31D007E1336 /* ManualDeviceEntryIssueSplashView.swift */; };
 		7C901FC028B9A359007E1336 /* SetupListActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8CAE1A28B0646300E9F2EF /* SetupListActionView.swift */; };
 		7C901FC228B9A8AA007E1336 /* UserDataEntrySplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C901FC128B9A8AA007E1336 /* UserDataEntrySplashView.swift */; };
 		7C901FC428B9AFF5007E1336 /* UserLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C901FC328B9AFF5007E1336 /* UserLoginView.swift */; };
@@ -724,7 +724,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C901FBF28B9A31D007E1336 /* ManualDeviceEntryIssueSplashView.swift in Sources */,
 				7CA0EA3828C3B85A00F465BA /* ManualSetupInstructionView.swift in Sources */,
 				7C666DAA28B69299007707AC /* EPTAResultsDisplayView.swift in Sources */,
 				7C4D019328C2631000361559 /* SimpleDataObjectModel.swift in Sources */,
@@ -744,6 +743,7 @@
 				7C76D5F428B18BA30044958B /* PurchaseView.swift in Sources */,
 				7C901FC028B9A359007E1336 /* SetupListActionView.swift in Sources */,
 				7C76D5EA28B189090044958B /* InstructionsForTakingTest.swift in Sources */,
+				7C4CDB2F28CE6CED0051B9EE /* ManualDeviceEntryIssueSplashView.swift in Sources */,
 				7C4D019A28C285AF00361559 /* SystemSettingsEndEPTASimpleModel.swift in Sources */,
 				7C7A94F428B6F43200DD8FAC /* CorrectiveFiltersExplanationView.swift in Sources */,
 				7C76D5F228B18AE50044958B /* ClosingView.swift in Sources */,

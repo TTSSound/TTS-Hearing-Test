@@ -191,7 +191,7 @@ struct EHATTSTestPart1View: View {
     @State var isCountSame = Int()
     @State var heardArrayIdxAfnet1 = Int()
     @State var testIsPlaying: Bool = false
-    @State var playingString: [String] = ["", "Start or Restart Test", "Great Job, You've Completed This Test Segment"]
+    @State var playingString: [String] = ["", "Restart Test", "Great Job, You've Completed This Test Segment"]
     @State var playingStringColor: [Color] = [Color.clear, Color.yellow, Color.green]
     @State var playingStringColorIndex = 0
     @State var userPausedTest: Bool = false
@@ -220,16 +220,16 @@ struct EHATTSTestPart1View: View {
         
         ZStack{
             RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
-        VStack {
-                Spacer()
-            Text("EHA Part 1 / EPTA Test")
-                .fontWeight(.bold)
-                .padding()
-                .foregroundColor(.white)
-                .padding(.top, 40)
-                .padding(.bottom, 40)
-                HStack {
-                    Spacer()
+            VStack {
+//                Spacer()
+                Text("EHA Part 1 / EPTA Test")
+                    .fontWeight(.bold)
+                    .padding()
+                    .foregroundColor(.white)
+                    .padding(.top, 40)
+                    .padding(.bottom, 40)
+//                HStack {
+//                    Spacer()
 //                    Text(String(envDataObjectModel_testGain))
 //                        .fontWeight(.bold)
 //                        .padding()
@@ -237,20 +237,45 @@ struct EHATTSTestPart1View: View {
 //                        .padding(.top, 40)
 //                        .padding(.bottom, 40)
 //                    Spacer()
-                    Text(String(activeFrequency))
-                        .fontWeight(.bold)
-                        .padding()
-                        .foregroundColor(.white)
-                        .padding(.top, 40)
-                        .padding(.bottom, 40)
-                    Spacer()
-                    Text(String(localPan))
-                        .fontWeight(.bold)
-                        .padding()
-                        .foregroundColor(.white)
-                        .padding(.top, 40)
-                        .padding(.bottom, 40)
-                    Spacer()
+//                    Text(String(activeFrequency))
+//                        .fontWeight(.bold)
+//                        .padding()
+//                        .foregroundColor(.white)
+//                        .padding(.top, 40)
+//                        .padding(.bottom, 40)
+//                    Spacer()
+//                    Text(String(localPan))
+//                        .fontWeight(.bold)
+//                        .padding()
+//                        .foregroundColor(.white)
+//                        .padding(.top, 40)
+//                        .padding(.bottom, 40)
+//                    Spacer()
+//                Spacer()
+//            HStack{
+//                Spacer()
+                Text("Click to Stat Test")
+                    .fontWeight(.bold)
+                    .font(.title)
+                    .padding()
+                    .foregroundColor(.green)
+                    .onTapGesture {
+                        Task(priority: .userInitiated) {
+                            audioSessionModel.setAudioSession()
+                            localPlaying = 1
+                            endTestSeries = false
+                            print("Start Button Clicked. Playing = \(localPlaying)")
+                        }
+                    }
+//                Spacer()
+
+//            }
+                    .padding(.top, 40)
+                    .padding(.bottom, 40)
+            
+//            Spacer()
+//                HStack {
+//                    Spacer()
                     Button {
                         envDataObjectModel_heardArray.removeAll()
                         pauseRestartTestCycle()
@@ -259,54 +284,44 @@ struct EHATTSTestPart1View: View {
                         userPausedTest = false
                         playingStringColorIndex = 0
                         endTestSeries = false
-                        print("Start Button Clicked. Playing = \(localPlaying)")
+                        print("Restart After Pause Button Clicked. Playing = \(localPlaying)")
                     } label: {
                         Text(playingString[playingStringColorIndex])
                             .foregroundColor(playingStringColor[playingStringColorIndex])
                     }
                     .padding(.top, 40)
-                    .padding(.bottom, 40)
-                    Spacer()
-                }
-                Spacer()
-                HStack{
-                    Spacer()
-                    Text("Click to Stat Test")
-                        .fontWeight(.bold)
-                        .padding()
-                        .foregroundColor(.blue)
-                        .onTapGesture {
-                            Task(priority: .userInitiated) {
-                                audioSessionModel.setAudioSession()
-                                localPlaying = 1
-                                endTestSeries = false
-                                print("Start Button Clicked. Playing = \(localPlaying)")
-                            }
-                        }
-                    Spacer()
-                    Text("Index: \(envDataObjectModel_index)")
-                        .fontWeight(.bold)
-                        .padding()
-                        .foregroundColor(.white)
-                    Spacer()
+                    .padding(.bottom, 20)
+//                Spacer()
                     Button {
                         localPlaying = 0
                         stop()
                         userPausedTest = true
                         playingStringColorIndex = 1
-                        audioThread.async {
+//                        audioThread.async {
+//                            localPlaying = 0
+//                            stop()
+//                            userPausedTest = true
+//                            playingStringColorIndex = 1
+//                        }
+//                        DispatchQueue.main.async {
+//                            localPlaying = 0
+//                            stop()
+//                            userPausedTest = true
+//                            playingStringColorIndex = 1
+//                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.2, qos: .userInitiated) {
                             localPlaying = 0
                             stop()
                             userPausedTest = true
                             playingStringColorIndex = 1
                         }
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.6, qos: .userInitiated) {
                             localPlaying = 0
                             stop()
                             userPausedTest = true
                             playingStringColorIndex = 1
                         }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, qos: .userInitiated) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.4, qos: .userInitiated) {
                             localPlaying = 0
                             stop()
                             userPausedTest = true
@@ -316,10 +331,11 @@ struct EHATTSTestPart1View: View {
                         Text("Pause Test")
                             .foregroundColor(.yellow)
                     }
-                    Spacer()
-                }
-                .padding(.top, 40)
-                .padding(.bottom, 40)
+                    .padding(.top, 20)
+                    .padding(.bottom, 120)
+//                    Spacer()
+//                }
+                
      
             
             Spacer()
@@ -334,48 +350,57 @@ struct EHATTSTestPart1View: View {
                     heardThread.async{ self.localHeard = 1
                     }
                 }
-            Spacer()
+                .padding(.top, 40)
+                .padding(.bottom, 40)
+//            Spacer()
             }
             .fullScreenCover(isPresented: $showTestCompletionSheet, content: {
-                VStack(alignment: .leading) {
-    
-                    Button(action: {
-                     
-                            showTestCompletionSheet.toggle()
-                            endTestSeries = false
-                            testIsPlaying = true
-                            localPlaying = 1
-                            playingStringColorIndex = 2
-                            userPausedTest = false
+                ZStack{
+                    RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300)
+                
+                    VStack(alignment: .leading) {
+        
+                        Button(action: {
+                         
+                                showTestCompletionSheet.toggle()
+                                endTestSeries = false
+                                testIsPlaying = true
+                                localPlaying = 1
+                                playingStringColorIndex = 2
+                                userPausedTest = false
+                                
+                                print("Start Button Clicked. Playing = \(localPlaying)")
                             
-                            print("Start Button Clicked. Playing = \(localPlaying)")
+                        }, label: {
+                            Image(systemName: "xmark")
+                                .font(.headline)
+                                .padding(10)
+                                .foregroundColor(.red)
+                        })
+                        Spacer()
+                        Text("Take a moment for a break before exiting to continue with the next test segment")
+                            .foregroundColor(.white)
+                            .font(.title3)
+                            .padding()
+                            
                         
-                    }, label: {
-                        Image(systemName: "xmark")
-                            .font(.headline)
-                            .padding(10)
-                            .foregroundColor(.red)
-                    })
-                    Spacer()
-                    
-                    Text("Index: \(envDataObjectModel_index)")
-                    Spacer()
-                    Button(action: {
-                        DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
-                            Task(priority: .userInitiated) {
-                                pauseRestartTestCycle()
-                                await startNextTestCycle()
+                        Spacer()
+                        Button(action: {
+                            DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
+                                Task(priority: .userInitiated) {
+    //                                pauseRestartTestCycle()
+    //                                await startNextTestCycle()
+                                    await combinedPauseRestartAndStartNexTestCycle()
+                                }
                             }
-                        }
-                    }, label: {
-                        Text("Start The Next Cycle")
-                    })
-
-                    
-                    Text("Take a moment for a break before exiting to continue with the next test segment")
-                        .foregroundColor(.blue)
-                        .font(.title)
-                        .padding()
+                        }, label: {
+                            Text("Start The Next Cycle")
+                                .foregroundColor(.green)
+                                .font(.title)
+                                .padding()
+                        })
+                        Spacer()
+                    }
                 }
             })
         }
@@ -408,18 +433,23 @@ struct EHATTSTestPart1View: View {
             envDataObjectModel_pan = panArray[envDataObjectModel_index]
             localHeard = 0
             localReversal = 0
+            
             if playingValue == 1{
-                
+                print("envDataObjectModel_testGain: \(envDataObjectModel_testGain)")
+                print("activeFrequency: \(activeFrequency)")
+                print("localPan: \(localPan)")
+                print("envDataObjectModel_index: \(envDataObjectModel_index)")
+         
                 audioThread.async {
                     loadAndTestPresentation(sample: activeFrequency, gain: envDataObjectModel_testGain, pan: localPan)
                     while testPlayer!.isPlaying == true && self.localHeard == 0 { }
                     if localHeard == 1 {
                         testPlayer!.stop()
-                        print("Stopped in while if: Returned Array \(localHeard)")
+//                        print("Stopped in while if: Returned Array \(localHeard)")
                     } else {
                     testPlayer!.stop()
                     self.localHeard = -1
-                    print("Stopped naturally: Returned Array \(localHeard)")
+//                    print("Stopped naturally: Returned Array \(localHeard)")
                     }
                 }
                 preEventThread.async {
@@ -460,8 +490,8 @@ struct EHATTSTestPart1View: View {
                         localTestCount = 1
                         Task(priority: .background) {
                             await resetPlaying()
-                            print("Fatal Error: Stopped in Task else")
-                            print("heardArray: \(envDataObjectModel_heardArray)")
+//                            print("Fatal Error: Stopped in Task else")
+//                            print("heardArray: \(envDataObjectModel_heardArray)")
                         }
                     }
                 }
@@ -487,8 +517,8 @@ struct EHATTSTestPart1View: View {
                         await endTestSeries()
                         await newTestCycle()
                         await restartPresentation()
-                        print("End of Reversals")
-                        print("Prepare to Start Next Presentation")
+//                        print("End of Reversals")
+//                        print("Prepare to Start Next Presentation")
                     }
                 }
             }
@@ -517,6 +547,36 @@ struct EHATTSTestPart1View: View {
         localTestCount = 0
         localReversalHeardLast = Int()
         startTooHigh = 0
+    }
+    
+    func combinedPauseRestartAndStartNexTestCycle() async {
+        envDataObjectModel_testCount.removeAll()
+        envDataObjectModel_reversalHeard.removeAll()
+        envDataObjectModel_heardArray.removeAll()
+        envDataObjectModel_averageGain = Float()
+        envDataObjectModel_reversalDirection = Float()
+        firstHeardResponseIndex = Int()
+        secondHeardResponseIndex = Int()
+        localReversalHeardLast = Int()
+        localSeriesNoResponses = Int()
+        localStartingNonHeardArraySet = false
+        firstHeardIsTrue = false
+        secondHeardIsTrue = false
+        endTestSeries = false
+        playingStringColorIndex = 0
+        startTooHigh = 0
+        localTestCount = 0
+        localMarkNewTestCycle = 0
+        localReversalEnd = 0
+        envDataObjectModel_testGain = 0.2
+        envDataObjectModel_index = envDataObjectModel_index + 1
+        print(envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index])
+        print("envDataObjectModel_index: \(envDataObjectModel_index)")
+        userPausedTest = false
+        testIsPlaying = true
+        localPlaying = 1
+//        showTestCompletionSheet = false
+        showTestCompletionSheet.toggle()
     }
     
     func setPan() {
@@ -581,16 +641,14 @@ struct EHATTSTestPart1View: View {
   
     func preEventLogging() {
         DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
-//        DispatchQueue.global(qos: .userInitiated).async {
             envDataObjectModel_indexForTest.append(envDataObjectModel_index)
         }
         DispatchQueue.global(qos: .default).async {
             envDataObjectModel_testTestGain.append(envDataObjectModel_testGain)
         }
         DispatchQueue.global(qos: .background).async {
-            
             envDataObjectModel_frequency.append(activeFrequency)
-            envDataObjectModel_testPan.append(localPan)         // 0 = Left , 1 = Middle, 2 = Right
+            envDataObjectModel_testPan.append(localPan)
         }
     }
     
@@ -610,14 +668,13 @@ struct EHATTSTestPart1View: View {
         } else if firstHeardIsTrue == true {
             secondHeardResponseIndex = localTestCount
             secondHeardIsTrue = true
-            print("Second Heard Is True Logged!")
+//            print("Second Heard Is True Logged!")
 
         } else {
             print("Error in localResponseTrackingLogic")
         }
     }
     
-//MARK: - THIS FUNCTION IS CAUSING ISSUES IN HEARD ARRAY. THE ISSUE IS THE DUAL IF STRUCTURE, NOT LINKED BY ELSE IF
     func heardArrayNormalize() async {
         idxHA = envDataObjectModel_heardArray.count
         idxForTest = envDataObjectModel_indexForTest.count
@@ -666,18 +723,18 @@ struct EHATTSTestPart1View: View {
 //        }
 //    }
     
-    func printData () async {
-        DispatchQueue.global(qos: .background).async {
-            print("Start printData)(")
-            print("--------Array Values Logged-------------")
-            print("testPan: \(envDataObjectModel_testPan)")
-            print("testTestGain: \(envDataObjectModel_testTestGain)")
-            print("frequency: \(envDataObjectModel_frequency)")
-            print("testCount: \(envDataObjectModel_testCount)")
-            print("heardArray: \(envDataObjectModel_heardArray)")
-            print("---------------------------------------")
-        }
-    }
+//    func printData () async {
+//        DispatchQueue.global(qos: .background).async {
+//            print("Start printData)(")
+//            print("--------Array Values Logged-------------")
+//            print("testPan: \(envDataObjectModel_testPan)")
+//            print("testTestGain: \(envDataObjectModel_testTestGain)")
+//            print("frequency: \(envDataObjectModel_frequency)")
+//            print("testCount: \(envDataObjectModel_testCount)")
+//            print("heardArray: \(envDataObjectModel_heardArray)")
+//            print("---------------------------------------")
+//        }
+//    }
 }
 
 //MARK: - Preview View Struct
@@ -707,7 +764,7 @@ extension EHATTSTestPart1View {
     
     func checkHeardReversalArrays() async {
         if idxHA - idxReversalHeardCount == 0 {
-            print("Success, Arrays match")
+//            print("Success, Arrays match")
         } else if idxHA - idxReversalHeardCount < 0 && idxHA - idxReversalHeardCount > 0{
             fatalError("Fatal Error in HeardArrayCount - ReversalHeardArrayCount")
         } else {
@@ -850,9 +907,9 @@ extension EHATTSTestPart1View {
         } else if idxReversalHeardCount >= 3 {
             print("reversal section >= 3")
             if secondHeardResponseIndex - firstHeardResponseIndex == 1 {
-                print("reversal section >= 3")
-                print("In first if section sHRI - fHRI == 1")
-                print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
+//                print("reversal section >= 3")
+//                print("In first if section sHRI - fHRI == 1")
+//                print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
             } else if localSeriesNoResponses == 3 {
                 await reversalOfTen()
             } else if localSeriesNoResponses == 2 {
@@ -865,12 +922,12 @@ extension EHATTSTestPart1View {
         }
     }
     
-    func printReversalGain() async {
-        DispatchQueue.global(qos: .background).async {
-            print("New Gain: \(envDataObjectModel_testGain)")
-            print("Reversal Direcction: \(envDataObjectModel_reversalDirection)")
-        }
-    }
+//    func printReversalGain() async {
+//        DispatchQueue.global(qos: .background).async {
+//            print("New Gain: \(envDataObjectModel_testGain)")
+//            print("Reversal Direcction: \(envDataObjectModel_reversalDirection)")
+//        }
+//    }
     
     func reversalHeardCount1() async {
        await reversalAction()
@@ -896,7 +953,7 @@ extension EHATTSTestPart1View {
             startTooHigh = 1
             await reversalOfTen()
             await resetAfterTooHigh()
-            print("Too High Found")
+//            print("Too High Found")
         } else {
             await reversalAction()
         }
@@ -922,40 +979,35 @@ extension EHATTSTestPart1View {
             
             if delta == 0 {
                 envDataObjectModel_averageGain = secondGain
-                print("average Gain: \(envDataObjectModel_averageGain)")
+//                print("average Gain: \(envDataObjectModel_averageGain)")
             } else if delta >= 0.05 {
                 envDataObjectModel_averageGain = secondGain
-                print("SecondGain: \(firstGain)")
-                print("SecondGain: \(secondGain)")
-                print("average Gain: \(envDataObjectModel_averageGain)")
+//                print("SecondGain: \(firstGain)")
+//                print("SecondGain: \(secondGain)")
+//                print("average Gain: \(envDataObjectModel_averageGain)")
             } else if delta <= -0.05 {
                 envDataObjectModel_averageGain = firstGain
-                print("SecondGain: \(firstGain)")
-                print("SecondGain: \(secondGain)")
-                print("average Gain: \(envDataObjectModel_averageGain)")
+//                print("SecondGain: \(firstGain)")
+//                print("SecondGain: \(secondGain)")
+//                print("average Gain: \(envDataObjectModel_averageGain)")
             } else if delta < 0.05 && delta > -0.05 {
                 envDataObjectModel_averageGain = avg
-                print("SecondGain: \(firstGain)")
-                print("SecondGain: \(secondGain)")
-                print("average Gain: \(envDataObjectModel_averageGain)")
+//                print("SecondGain: \(firstGain)")
+//                print("SecondGain: \(secondGain)")
+//                print("average Gain: \(envDataObjectModel_averageGain)")
             } else {
                 envDataObjectModel_averageGain = avg
-                print("SecondGain: \(firstGain)")
-                print("SecondGain: \(secondGain)")
-                print("average Gain: \(envDataObjectModel_averageGain)")
+//                print("SecondGain: \(firstGain)")
+//                print("SecondGain: \(secondGain)")
+//                print("average Gain: \(envDataObjectModel_averageGain)")
             }
         } else if secondHeardIsTrue == false {
-                print("Contine, second hear is true = false")
+//                print("Contine, second hear is true = false")
         } else {
                 print("Critical error in reversalsCompletLogging Logic")
         }
     }
-    
-//    activeFrequency
-//    envDataObjectModel_averageGain
-//    localPan
-//    envDataObjectModel_index
-    
+        
     func assignLRAverageSampleGains() async {
         if localMarkNewTestCycle == 1 && localReversalEnd == 1 && localPan == 1.0 {
             //go through each assignment based on index
@@ -1104,20 +1156,20 @@ extension EHATTSTestPart1View {
 
     }
 
-    func printReversalData() async {
-        print("--------Reversal Values Logged-------------")
-        print("indexForTest: \(envDataObjectModel_indexForTest)")
-        print("Test Pan: \(envDataObjectModel_testPan)")
-        print("New TestGain: \(envDataObjectModel_testTestGain)")
-        print("reversalFrequency: \(activeFrequency)")
-        print("testCount: \(envDataObjectModel_testCount)")
-        print("heardArray: \(envDataObjectModel_heardArray)")
-        print("reversalHeard: \(envDataObjectModel_reversalHeard)")
-        print("FirstGain: \(firstGain)")
-        print("SecondGain: \(secondGain)")
-        print("AverageGain: \(envDataObjectModel_averageGain)")
-        print("------------------------------------------")
-    }
+//    func printReversalData() async {
+//        print("--------Reversal Values Logged-------------")
+//        print("indexForTest: \(envDataObjectModel_indexForTest)")
+//        print("Test Pan: \(envDataObjectModel_testPan)")
+//        print("New TestGain: \(envDataObjectModel_testTestGain)")
+//        print("reversalFrequency: \(activeFrequency)")
+//        print("testCount: \(envDataObjectModel_testCount)")
+//        print("heardArray: \(envDataObjectModel_heardArray)")
+//        print("reversalHeard: \(envDataObjectModel_reversalHeard)")
+//        print("FirstGain: \(firstGain)")
+//        print("SecondGain: \(secondGain)")
+//        print("AverageGain: \(envDataObjectModel_averageGain)")
+//        print("------------------------------------------")
+//    }
         
     func restartPresentation() async {
         if endTestSeries == false {
@@ -1176,7 +1228,6 @@ extension EHATTSTestPart1View {
             localMarkNewTestCycle = 0
             localReversalEnd = 0
             envDataObjectModel_index = envDataObjectModel_index + 1
-           
             envDataObjectModel_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
             endTestSeries = false
             await wipeArrays()
@@ -1184,11 +1235,8 @@ extension EHATTSTestPart1View {
         } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index] && endTestSeries == false {
                 endTestSeries = true
                 localPlaying = -1
-
 //                envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
                 envDataObjectModel_eptaSamplesCountArrayIdx += 1
-
-         
                 print("=============================")
                 print("!!!!! End of Test Series!!!!!!")
                 print("=============================")
@@ -1201,7 +1249,7 @@ extension EHATTSTestPart1View {
     func endTestSeries() async {
         if endTestSeries == false {
             //Do Nothing and continue
-            print("end Test Series = \(endTestSeries)")
+//            print("end Test Series = \(endTestSeries)")
         } else if endTestSeries == true {
             showTestCompletionSheet = true
             envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
@@ -1215,33 +1263,30 @@ extension EHATTSTestPart1View {
         userPausedTest = true
         playingStringColorIndex = 2
         
-        audioThread.async {
-            localPlaying = 0
-            stop()
-            userPausedTest = true
-            playingStringColorIndex = 2
-        }
-        
-        DispatchQueue.main.async {
-            localPlaying = 0
-            stop()
-            userPausedTest = true
-            playingStringColorIndex = 2
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, qos: .userInitiated) {
-            localPlaying = 0
-            stop()
-            userPausedTest = true
-            playingStringColorIndex = 2
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3, qos: .userInitiated) {
-            localPlaying = -1
-            stop()
-            userPausedTest = true
-            playingStringColorIndex = 2
-        }
+//        audioThread.async {
+//            localPlaying = 0
+//            stop()
+//            userPausedTest = true
+//            playingStringColorIndex = 2
+//        }
+//        DispatchQueue.main.async {
+//            localPlaying = 0
+//            stop()
+//            userPausedTest = true
+//            playingStringColorIndex = 2
+//        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, qos: .userInitiated) {
+//            localPlaying = 0
+//            stop()
+//            userPausedTest = true
+//            playingStringColorIndex = 2
+//        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3, qos: .userInitiated) {
+//            localPlaying = -1
+//            stop()
+//            userPausedTest = true
+//            playingStringColorIndex = 2
+//        }
     }
     
     func concatenateFinalArrays() async {
@@ -1263,22 +1308,22 @@ extension EHATTSTestPart1View {
         }
     }
     
-    func printConcatenatedArrays() async {
-        print("finalStoredIndex: \(envDataObjectModel_finalStoredIndex)")
-        print("finalStoredTestPan: \(envDataObjectModel_finalStoredTestPan)")
-        print("finalStoredTestTestGain: \(envDataObjectModel_finalStoredTestTestGain)")
-        print("finalStoredFrequency: \(envDataObjectModel_finalStoredFrequency)")
-        print("finalStoredTestCount: \(envDataObjectModel_finalStoredTestCount)")
-        print("finalStoredHeardArray: \(envDataObjectModel_finalStoredHeardArray)")
-        print("finalStoredReversalHeard: \(envDataObjectModel_finalStoredReversalHeard)")
-        print("finalStoredFirstGain: \(envDataObjectModel_finalStoredFirstGain)")
-        print("finalStoredSecondGain: \(envDataObjectModel_finalStoredSecondGain)")
-        print("finalStoredAverageGain: \(envDataObjectModel_finalStoredAverageGain)")
-        print("rightFinalGainsArray: \(rightFinalGainsArray)")
-        print("finalStoredRightFinalGainsArray: \(finalStoredRightFinalGainsArray)")
-        print("leftFinalGainsArray: \(leftFinalGainsArray)")
-        print("finalStoredleftFinalGainsArray: \(finalStoredleftFinalGainsArray)")
-    }
+//    func printConcatenatedArrays() async {
+//        print("finalStoredIndex: \(envDataObjectModel_finalStoredIndex)")
+//        print("finalStoredTestPan: \(envDataObjectModel_finalStoredTestPan)")
+//        print("finalStoredTestTestGain: \(envDataObjectModel_finalStoredTestTestGain)")
+//        print("finalStoredFrequency: \(envDataObjectModel_finalStoredFrequency)")
+//        print("finalStoredTestCount: \(envDataObjectModel_finalStoredTestCount)")
+//        print("finalStoredHeardArray: \(envDataObjectModel_finalStoredHeardArray)")
+//        print("finalStoredReversalHeard: \(envDataObjectModel_finalStoredReversalHeard)")
+//        print("finalStoredFirstGain: \(envDataObjectModel_finalStoredFirstGain)")
+//        print("finalStoredSecondGain: \(envDataObjectModel_finalStoredSecondGain)")
+//        print("finalStoredAverageGain: \(envDataObjectModel_finalStoredAverageGain)")
+//        print("rightFinalGainsArray: \(rightFinalGainsArray)")
+//        print("finalStoredRightFinalGainsArray: \(finalStoredRightFinalGainsArray)")
+//        print("leftFinalGainsArray: \(leftFinalGainsArray)")
+//        print("finalStoredleftFinalGainsArray: \(finalStoredleftFinalGainsArray)")
+//    }
         
     func saveFinalStoredArrays() async {
         if localMarkNewTestCycle == 1 && localReversalEnd == 1 {
@@ -1288,7 +1333,7 @@ extension EHATTSTestPart1View {
                     await writeEHA1SummarydResultsToCSV()
                     await writeEHA1InputDetailedResultsToCSV()
                     await writeEHA1InputDetailedResultsToCSV()
-                    
+
                     await writeEHA1RightLeftResultsToCSV()
                     await writeEHA1RightResultsToCSV()
                     await writeEHA1LeftResultsToCSV()
@@ -1345,20 +1390,19 @@ extension EHATTSTestPart1View {
     
     func getEHAP1Data() async {
         guard let data = await getEHAP1JSONData() else { return }
-        print("Json Data:")
-        print(data)
+//        print("Json Data:")
+//        print(data)
         let jsonString = String(data: data, encoding: .utf8)
-        print(jsonString!)
+//        print(jsonString!)
         do {
         self.saveFinalResults = try JSONDecoder().decode(SaveFinalResults.self, from: data)
-            print("JSON GetData Run")
-            print("data: \(data)")
+//            print("JSON GetData Run")
+//            print("data: \(data)")
         } catch let error {
             print("error decoding \(error)")
         }
     }
 
-    
     func getEHAP1JSONData() async -> Data? {
         let saveFinalResults = SaveFinalResults(
             jsonName: "Jeff",
@@ -1389,8 +1433,8 @@ extension EHATTSTestPart1View {
             jsonFinalStoredleftFinalGainsArray: finalStoredleftFinalGainsArray)
 
         let jsonData = try? JSONEncoder().encode(saveFinalResults)
-        print("saveFinalResults: \(saveFinalResults)")
-        print("Json Encoded \(jsonData!)")
+//        print("saveFinalResults: \(saveFinalResults)")
+//        print("Json Encoded \(jsonData!)")
         return jsonData
     }
 
@@ -1398,15 +1442,14 @@ extension EHATTSTestPart1View {
         // !!!This saves to device directory, whish is likely what is desired
         let ehaP1paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let ehaP1DocumentsDirectory = ehaP1paths[0]
-        print("ehaP1DocumentsDirectory: \(ehaP1DocumentsDirectory)")
+//        print("ehaP1DocumentsDirectory: \(ehaP1DocumentsDirectory)")
         let ehaP1FilePaths = ehaP1DocumentsDirectory.appendingPathComponent(fileEHAP1Name)
-        print(ehaP1FilePaths)
+//        print(ehaP1FilePaths)
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         do {
             let jsonEHAP1Data = try encoder.encode(saveFinalResults)
-            print(jsonEHAP1Data)
-          
+//            print(jsonEHAP1Data)
             try jsonEHAP1Data.write(to: ehaP1FilePaths)
         } catch {
             print("Error writing EHAP1 to JSON file: \(error)")
@@ -1429,19 +1472,15 @@ extension EHATTSTestPart1View {
         let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
-        
 //        finalStoredRightFinalGainsArray.append(contentsOf: rightFinalGainsArray)
 //        finalStoredleftFinalGainsArray.append(contentsOf: leftFinalGainsArray)
-        
         do {
             let csvEHAP1DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvEHAP1DetailDocumentsDirectory = csvEHAP1DetailPath
 //                print("CSV DocumentsDirectory: \(csvEHAP1DetailDocumentsDirectory)")
             let csvEHAP1DetailFilePath = csvEHAP1DetailDocumentsDirectory.appendingPathComponent(detailedEHAP1CSVName)
-            print(csvEHAP1DetailFilePath)
-            
+//            print(csvEHAP1DetailFilePath)
             let writer = try CSVWriter(fileURL: csvEHAP1DetailFilePath, append: false)
-            
             try writer.write(row: [stringFinalStoredIndex])
             try writer.write(row: [stringFinalStoredTestPan])
             try writer.write(row: [stringFinalStoredTestTestGain])
@@ -1457,7 +1496,6 @@ extension EHATTSTestPart1View {
             try writer.write(row: [stringFinalleftFinalGainsArray])
             try writer.write(row: [stringFinalStoredRightFinalGainsArray])
             try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//
 //                print("CVS EHAP1 Detailed Writer Success")
         } catch {
             print("CVSWriter EHAP1 Detailed Error or Error Finding File for Detailed CSV \(error)")
@@ -1474,13 +1512,12 @@ extension EHATTSTestPart1View {
         let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
-        
          do {
              let csvEHAP1SummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1SummaryDocumentsDirectory = csvEHAP1SummaryPath
 //                 print("CSV Summary EHA Part 1 DocumentsDirectory: \(csvEHAP1SummaryDocumentsDirectory)")
              let csvEHAP1SummaryFilePath = csvEHAP1SummaryDocumentsDirectory.appendingPathComponent(summaryEHAP1CSVName)
-             print(csvEHAP1SummaryFilePath)
+//             print(csvEHAP1SummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1SummaryFilePath, append: false)
              try writer.write(row: [stringFinalStoredResultsFrequency])
              try writer.write(row: [stringFinalStoredTestPan])
@@ -1491,7 +1528,6 @@ extension EHATTSTestPart1View {
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//
 //                 print("CVS Summary EHA Part 1 Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 1 Data Error or Error Finding File for Detailed CSV \(error)")
@@ -1515,14 +1551,12 @@ extension EHATTSTestPart1View {
         let stringFinalleftFinalGainsArray = leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
-        
-
         do {
             let csvInputEHAP1DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvInputEHAP1DetailDocumentsDirectory = csvInputEHAP1DetailPath
 //                print("CSV Input EHAP1 Detail DocumentsDirectory: \(csvInputEHAP1DetailDocumentsDirectory)")
             let csvInputEHAP1DetailFilePath = csvInputEHAP1DetailDocumentsDirectory.appendingPathComponent(inputEHAP1DetailedCSVName)
-            print(csvInputEHAP1DetailFilePath)
+//            print(csvInputEHAP1DetailFilePath)
             let writer = try CSVWriter(fileURL: csvInputEHAP1DetailFilePath, append: false)
             try writer.write(row: [stringFinalStoredIndex])
             try writer.write(row: [stringFinalStoredTestPan])
@@ -1539,7 +1573,6 @@ extension EHATTSTestPart1View {
             try writer.write(row: [stringFinalleftFinalGainsArray])
             try writer.write(row: [stringFinalStoredRightFinalGainsArray])
             try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//
 //                print("CVS Input EHA Part 1Detailed Writer Success")
         } catch {
             print("CVSWriter Input EHA Part 1 Detailed Error or Error Finding File for Input Detailed CSV \(error)")
@@ -1556,13 +1589,12 @@ extension EHATTSTestPart1View {
         let stringFinalleftFinalGainsArray = leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
-         
          do {
              let csvEHAP1InputSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1InputSummaryDocumentsDirectory = csvEHAP1InputSummaryPath
-             print("CSV Input EHA Part 1 Summary DocumentsDirectory: \(csvEHAP1InputSummaryDocumentsDirectory)")
+//             print("CSV Input EHA Part 1 Summary DocumentsDirectory: \(csvEHAP1InputSummaryDocumentsDirectory)")
              let csvEHAP1InputSummaryFilePath = csvEHAP1InputSummaryDocumentsDirectory.appendingPathComponent(inputEHAP1SummaryCSVName)
-             print(csvEHAP1InputSummaryFilePath)
+//             print(csvEHAP1InputSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1InputSummaryFilePath, append: false)
              try writer.write(row: [stringFinalStoredResultsFrequency])
              try writer.write(row: [stringFinalStoredTestPan])
@@ -1573,7 +1605,6 @@ extension EHATTSTestPart1View {
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//
 //                 print("CVS Input EHA Part 1 Summary Data Writer Success")
          } catch {
              print("CVSWriter Input EHA Part 1 Summary Data Error or Error Finding File for Input Summary CSV \(error)")
@@ -1581,25 +1612,21 @@ extension EHATTSTestPart1View {
     }
     
     func writeEHA1RightLeftResultsToCSV() async {
-        
         let stringFinalrightFinalGainsArray = "rightFinalGainsArray," + rightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
-        
          do {
              let csvEHAP1LRSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1LRSummaryDocumentsDirectory = csvEHAP1LRSummaryPath
 //                 print("CSV Summary EHA Part 1 LR Summary DocumentsDirectory: \(csvEHAP1LRSummaryDocumentsDirectory)")
              let csvEHAP1LRSummaryFilePath = csvEHAP1LRSummaryDocumentsDirectory.appendingPathComponent(summaryEHAP1LRCSVName)
-             print(csvEHAP1LRSummaryFilePath)
+//             print(csvEHAP1LRSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1LRSummaryFilePath, append: false)
- 
              try writer.write(row: [stringFinalrightFinalGainsArray])
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//
 //                 print("CVS Summary EHA Part 1 LR Summary Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 1 LR Summary Data Error or Error Finding File for Detailed CSV \(error)")
@@ -1609,18 +1636,15 @@ extension EHATTSTestPart1View {
     func writeEHA1RightResultsToCSV() async {
         let stringFinalrightFinalGainsArray = "rightFinalGainsArray," + rightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
-        
          do {
              let csvEHAP1RightSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1RightSummaryDocumentsDirectory = csvEHAP1RightSummaryPath
 //                 print("CSV Summary EHA Part 1 Right Summary DocumentsDirectory: \(csvEHAP1RightSummaryDocumentsDirectory)")
              let csvEHAP1RightSummaryFilePath = csvEHAP1RightSummaryDocumentsDirectory.appendingPathComponent(summaryEHAP1RightCSVName)
-             print(csvEHAP1RightSummaryFilePath)
+//             print(csvEHAP1RightSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1RightSummaryFilePath, append: false)
- 
              try writer.write(row: [stringFinalrightFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
-//
 //                 print("CVS Summary EHA Part 1 Right Summary Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 1 Right Summary Data Error or Error Finding File for Detailed CSV \(error)")
@@ -1628,18 +1652,15 @@ extension EHATTSTestPart1View {
     }
     
     func writeEHA1LeftResultsToCSV() async {
-        
         let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
-        
          do {
              let csvEHAP1LeftSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1LeftSummaryDocumentsDirectory = csvEHAP1LeftSummaryPath
 //                 print("CSV Summary EHA Part 1 Left Summary DocumentsDirectory: \(csvEHAP1LeftSummaryDocumentsDirectory)")
              let csvEHAP1LeftSummaryFilePath = csvEHAP1LeftSummaryDocumentsDirectory.appendingPathComponent(summaryEHAP1LeftCSVName)
-             print(csvEHAP1LeftSummaryFilePath)
+//             print(csvEHAP1LeftSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1LeftSummaryFilePath, append: false)
- 
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
 //                 print("CVS Summary EHA Part 1 Left Summary Data Writer Success")
@@ -1649,25 +1670,21 @@ extension EHATTSTestPart1View {
     }
     
     func writeEHA1InputRightLeftResultsToCSV() async {
-        
         let stringFinalrightFinalGainsArray = "rightFinalGainsArray," + rightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
-        
          do {
              let csvEHAP1InputLRSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1InputLRSummaryDocumentsDirectory = csvEHAP1InputLRSummaryPath
 //                 print("CSV Summary EHA Part 1 LR Summary DocumentsDirectory: \(csvEHAP1LRSummaryDocumentsDirectory)")
              let csvEHAP1InputLRSummaryFilePath = csvEHAP1InputLRSummaryDocumentsDirectory.appendingPathComponent(inputEHAP1LRSummaryCSVName)
-             print(csvEHAP1InputLRSummaryFilePath)
+//             print(csvEHAP1InputLRSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1InputLRSummaryFilePath, append: false)
- 
              try writer.write(row: [stringFinalrightFinalGainsArray])
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//
 //                 print("CVS Summary EHA Part 1 LR Input Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 1 LR Input Data Error or Error Finding File for Detailed CSV \(error)")
@@ -1678,18 +1695,15 @@ extension EHATTSTestPart1View {
     func writeEHA1InputRightResultsToCSV() async {
         let stringFinalrightFinalGainsArray = "rightFinalGainsArray," + rightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
-        
          do {
              let csvEHAP1InputRightSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1InputRightSummaryDocumentsDirectory = csvEHAP1InputRightSummaryPath
 //                 print("CSV Summary EHA Part 1 Right Input DocumentsDirectory: \(csvEHAP1InputRightSummaryDocumentsDirectory)")
              let csvEHAP1InputRightSummaryFilePath = csvEHAP1InputRightSummaryDocumentsDirectory.appendingPathComponent(inputEHAP1RightSummaryCSVName)
-             print(csvEHAP1InputRightSummaryFilePath)
+//             print(csvEHAP1InputRightSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1InputRightSummaryFilePath, append: false)
- 
              try writer.write(row: [stringFinalrightFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
-//
 //                 print("CVS Summary EHA Part 1 Right Input Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 1 Right Input Data Error or Error Finding File for Detailed CSV \(error)")
@@ -1697,10 +1711,8 @@ extension EHATTSTestPart1View {
     }
     
     func writeEHA1InputLeftResultsToCSV() async {
-        
         let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
-        
          do {
              let csvEHAP1InputLeftSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1InputLeftSummaryDocumentsDirectory = csvEHAP1InputLeftSummaryPath
@@ -1708,7 +1720,6 @@ extension EHATTSTestPart1View {
              let csvEHAP1InputLeftSummaryFilePath = csvEHAP1InputLeftSummaryDocumentsDirectory.appendingPathComponent(inputEHAP1LeftSummaryCSVName)
              print(csvEHAP1InputLeftSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1InputLeftSummaryFilePath, append: false)
- 
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
 //                 print("CVS Summary EHA Part 1 Left Input Data Writer Success")
@@ -1716,7 +1727,6 @@ extension EHATTSTestPart1View {
              print("CVSWriter Summary EHA Part 1 Left Input Data Error or Error Finding File for Detailed CSV \(error)")
          }
     }
-    
     
 }
 

@@ -114,6 +114,7 @@ struct ManualDeviceEntryView: View {
                                     manualUserDataSubmitted == true ? AnyView(InstructionsForTakingTest())
                                     : manualUserDataSubmitted == false ? AnyView(ManualDeviceEntryIssueSplashView())
                                     : AnyView(ManualDeviceEntryIssueSplashView())
+
                     ){  VStack{
                         Text("Continue to\nDevice Setup")
                             .foregroundColor(manColors[manLinkColorIndex])
