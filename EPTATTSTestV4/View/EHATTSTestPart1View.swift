@@ -93,7 +93,7 @@ struct EHATTSTestPart1View: View {
                                                        "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8",
                                                        "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16",
                                                        "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
-    @State var panArray: [Float] = [1.0, -1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+    @State var panArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
     @State var totalCount = 32
     @State var localPan: Float = Float()
 
@@ -363,12 +363,6 @@ struct EHATTSTestPart1View: View {
                     Button(action: {
                         DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
                             Task(priority: .userInitiated) {
-    //                            showTestCompletionSheet.toggle()
-    //                            endTestSeries = false
-    //                            testIsPlaying = true
-    //                            localPlaying = 1
-    //                            playingStringColorIndex = 2
-    //                            userPausedTest = false
                                 pauseRestartTestCycle()
                                 await startNextTestCycle()
                             }
@@ -483,7 +477,7 @@ struct EHATTSTestPart1View: View {
                         await reversalDirection()
                         await reversalComplexAction()
                         await reversalsCompleteLogging()
-//                        await assignLRAverageSampleGains()
+                        await assignLRAverageSampleGains()
 //                        await printReversalGain()
 //                        await printData()
 //                        await printReversalData()
