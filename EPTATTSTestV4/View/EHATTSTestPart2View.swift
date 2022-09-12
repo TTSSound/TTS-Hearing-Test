@@ -82,7 +82,9 @@ struct EHATTSTestPart2View: View {
     @State var ehaP2endTestSeries: Bool = false
     @State var ehaP2showTestCompletionSheet: Bool = false
     
-    @State var ehaP2_samples: [String] = ["Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
+    @State var ehaP2_samples: [String] = [String]()
+    
+    @State var ehaP2_dualSamples: [String] = ["Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
                                           "Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
                                           "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34",
                                           "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34",
@@ -128,11 +130,19 @@ struct EHATTSTestPart2View: View {
                                              -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
     
     
-    @State var ehaP2totalCount = 86
+    @State var ehaP2totalCount = Int()
     @State var ehaP2MonoTotalCount = 43
+    @State var ehaP2DualTotalCount = 86
+    
     @State var ehaP2localPan: Float = Float()
+    @State var ehaP2localPanHoldingArray: [Float] = [Float]()
     
     @State var ehaP2MonoTest: Bool = false
+    @State var ehaP2MonoRightTest: Bool = false
+    @State var ehaP2MonoLeftTest: Bool = false
+    @State var ehaP2MonoBilateralTest: Bool = false
+    
+    @State var ehaP2VariableArraysSet: Bool = false
 
     
     // Presentation Cycles
@@ -262,7 +272,7 @@ struct EHATTSTestPart2View: View {
     @State var ehaP2_averageGain = Float()
 
     @State var ehaP2_eptaSamplesCount = 1 //17
-    @State var ehaP2_eptaSamplesCountArray = [7, 7, 7, 7, 7, 7, 7, 7, 15, 15, 15, 15, 15, 15, 15, 15, 23, 23, 23, 23, 23, 23, 23, 23, 31, 31, 31, 31, 31, 31, 31, 31]
+    @State var ehaP2_eptaSamplesCountArray = [8, 8, 8, 8, 8, 8, 8, 8, 8, 17, 17, 17, 17, 17, 17, 17, 17, 17, 26, 26, 26, 26, 26, 26, 26, 26, 26, 35, 35, 35, 35, 35, 35, 35, 35, 35, 44, 44, 44, 44, 44, 44, 44, 44, 44, 53, 53, 53, 53, 53, 53, 53, 53, 53, 62, 62, 62, 62, 62, 62, 62, 62, 62, 71, 71, 71, 71, 71, 71, 71, 71, 71, 78, 78, 78, 78, 78, 78, 78, 85, 85, 85, 85, 85, 85, 85]
     @State var ehaP2_eptaSamplesCountArrayIdx = 0  //[0, 1, 2, 3]
 
     @State var ehaP2_finalStoredIndex: [Int] = [Int]()
@@ -327,6 +337,108 @@ struct EHATTSTestPart2View: View {
                    .padding(.top, 40)
                    .padding(.bottom, 20)
                
+               HStack {
+                   Spacer()
+                   Toggle("MonoTest", isOn: $ehaP2MonoTest)
+                       .foregroundColor(.white)
+                       .font(.caption)
+                   Spacer()
+                   if ehaP2MonoTest == true {
+                       Toggle("Right", isOn: $ehaP2MonoRightTest)
+                           .foregroundColor(.white)
+                           .font(.caption)
+                       Spacer()
+                       Toggle("Left", isOn: $ehaP2MonoLeftTest)
+                           .foregroundColor(.white)
+                           .font(.caption)
+                       Spacer()
+                       Toggle("Bilat", isOn: $ehaP2MonoBilateralTest)
+                           .foregroundColor(.white)
+                           .font(.caption)
+                   }
+                   Spacer()
+               }
+               .padding(.top, 20)
+               .padding(.bottom, 20)
+               .onChange(of: ehaP2MonoRightTest, perform: { rightValue in
+                   if rightValue == true {
+                           // Set Pan to 1.0
+                           ehaP2localPanHoldingArray = ehaP2panRightArray
+                           ehaP2totalCount = ehaP2MonoTotalCount
+                           ehaP2_samples = ehaP2_monoSamples
+                           ehaP2MonoRightTest = true
+                           ehaP2MonoLeftTest = false
+                           ehaP2MonoBilateralTest = false
+                   } else {
+                       // Do Nothing
+                   }
+               })
+               .onChange(of: ehaP2MonoLeftTest, perform: { leftValue in
+                   if leftValue == true {
+                       //set pan to -1.0
+                       ehaP2localPanHoldingArray = ehaP2panLeftArray
+                       ehaP2totalCount = ehaP2MonoTotalCount
+                       ehaP2_samples = ehaP2_monoSamples
+                       ehaP2MonoRightTest = false
+                       ehaP2MonoLeftTest = true
+                       ehaP2MonoBilateralTest = false
+                   } else {
+                       //do nothing
+                   }
+               })
+               .onChange(of: ehaP2MonoBilateralTest, perform: { bilateralValue in
+                   if bilateralValue == true {
+                       ehaP2localPanHoldingArray = ehaP2panBilateralArray
+                       ehaP2totalCount = ehaP2MonoTotalCount
+                       ehaP2_samples = ehaP2_monoSamples
+                       ehaP2MonoRightTest = false
+                       ehaP2MonoLeftTest = false
+                       ehaP2MonoBilateralTest = true
+                   } else {
+                       //do nothing
+                   }
+               })
+//               .onChange(of: ehaP2MonoTest) { monoValue in
+//                   if monoValue == true {
+//                       if ehaP2MonoRightTest == true {
+//                           // Set Pan to 1.0
+//                           ehaP2localPanHoldingArray = ehaP2panRightArray
+//                           ehaP2totalCount = ehaP2MonoTotalCount
+//                           ehaP2_samples = ehaP2_monoSamples
+//                           ehaP2MonoRightTest = true
+//                           ehaP2MonoLeftTest = false
+//                           ehaP2MonoBilateralTest = false
+//                       } else if ehaP2MonoLeftTest == true {
+//                           //set pan to -1.0
+//                           ehaP2localPanHoldingArray = ehaP2panLeftArray
+//                           ehaP2totalCount = ehaP2MonoTotalCount
+//                           ehaP2_samples = ehaP2_monoSamples
+//                           ehaP2MonoRightTest = false
+//                           ehaP2MonoLeftTest = true
+//                           ehaP2MonoBilateralTest = false
+//                       } else if ehaP2MonoBilateralTest == true {
+//                           // Set pan to 0.0
+//                           ehaP2localPanHoldingArray = ehaP2panBilateralArray
+//                           ehaP2totalCount = ehaP2MonoTotalCount
+//                           ehaP2_samples = ehaP2_monoSamples
+//                           ehaP2MonoRightTest = false
+//                           ehaP2MonoLeftTest = false
+//                           ehaP2MonoBilateralTest = true
+//                       } else {
+//                           ehaP2localPanHoldingArray = ehaP2panArray
+//                           ehaP2totalCount = ehaP2DualTotalCount
+//                           ehaP2_samples = ehaP2_dualSamples
+//
+//                           print("!!!Critical error in ehaP2MonoTest setting logic")
+//                       }
+//                   } else {
+//                       // mono not set
+//                       ehaP2localPanHoldingArray = ehaP2panArray
+//                       ehaP2totalCount = ehaP2DualTotalCount
+//                       ehaP2_samples = ehaP2_dualSamples
+//                   }
+//               }
+               
                Text("Click to Stat Test")
                    .fontWeight(.bold)
                    .padding()
@@ -334,6 +446,7 @@ struct EHATTSTestPart2View: View {
                    .onTapGesture {
                        Task(priority: .userInitiated) {
                            audioSessionModel.setAudioSession()
+                           ehaP2setDualMonoVariables()
                            ehaP2localPlaying = 1
                            ehaP2endTestSeries = false
                            print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
@@ -350,13 +463,14 @@ struct EHATTSTestPart2View: View {
                    ehaP2userPausedTest = false
                    ehaP2playingStringColorIndex = 0
                    ehaP2endTestSeries = false
+                   ehaP2setDualMonoVariables()
                    print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
                } label: {
                    Text(ehaP2playingString[ehaP2playingStringColorIndex])
                        .foregroundColor(ehaP2playingStringColor[ehaP2playingStringColorIndex])
                }
-               .padding(.top, 20)
-               .padding(.bottom, 20)
+               .padding(.top, 10)
+               .padding(.bottom, 10)
                      
                Button {
                    ehaP2localPlaying = 0
@@ -386,7 +500,7 @@ struct EHATTSTestPart2View: View {
                        .foregroundColor(.yellow)
                }
                .padding(.top, 20)
-               .padding(.bottom, 80)
+               .padding(.bottom, 60)
         
                
                Text("Press if You Hear The Tone")
@@ -412,6 +526,7 @@ struct EHATTSTestPart2View: View {
                            Button(action: {
                                
                                ehaP2showTestCompletionSheet.toggle()
+                               ehaP2setDualMonoVariables()
                                ehaP2endTestSeries = false
                                ehaP2testIsPlaying = true
                                ehaP2localPlaying = 1
@@ -474,8 +589,16 @@ struct EHATTSTestPart2View: View {
            // This is the lowest CPU approach from many, many tries
            .onChange(of: ehaP2localPlaying, perform: { ehaP2playingValue in
                ehaP2activeFrequency = ehaP2_samples[ehaP2_index]
-               ehaP2localPan = ehaP2panArray[ehaP2_index]
-               ehaP2_pan = ehaP2panArray[ehaP2_index]
+               
+               
+               
+               ehaP2localPan = ehaP2localPanHoldingArray[ehaP2_index]
+               ehaP2_pan = ehaP2localPanHoldingArray[ehaP2_index]
+               print("ehaP2localPan: \(ehaP2localPan)")
+               print("ehaP2localPanHoldingArray: \(ehaP2localPanHoldingArray)")
+               
+//               ehaP2localPan = ehaP2panArray[ehaP2_index]
+//               ehaP2_pan = ehaP2panArray[ehaP2_index]
                ehaP2localHeard = 0
                ehaP2localReversal = 0
                
@@ -553,6 +676,7 @@ struct EHATTSTestPart2View: View {
                            await ehaP2reversalComplexAction()
                            await ehaP2reversalsCompleteLogging()
                            await ehaP2AssignLRAverageSampleGains()
+                           await ehaP2AssignMonoAverageSampleGains()
    //                        await ehaP2printReversalGain()
    //                        await ehaP2printData()
    //                        await ehaP2printReversalData()
@@ -624,9 +748,35 @@ struct EHATTSTestPart2View: View {
         ehaP2showTestCompletionSheet.toggle()
     }
     
+    func ehaP2setDualMonoVariables() {
+        if ehaP2MonoTest == false && ehaP2VariableArraysSet == false {
+            ehaP2localPanHoldingArray = ehaP2panArray
+            ehaP2totalCount = ehaP2DualTotalCount
+            ehaP2_samples = ehaP2_dualSamples
+            ehaP2VariableArraysSet = true
+            print("ehaP2localPanHoldingArray: \(ehaP2localPanHoldingArray)")
+            print("ehaP2totalCount: \(ehaP2totalCount)")
+            print("ehaP2_samples: \(ehaP2_samples)")
+            print("localPanArray: \(ehaP2localPan)")
+        } else if ehaP2MonoTest == true && ehaP2VariableArraysSet == false {
+            //use mono toggle functions
+            print("Mono test triggered")
+            ehaP2VariableArraysSet = true
+            print("ehaP2localPanHoldingArray: \(ehaP2localPanHoldingArray)")
+            print("ehaP2totalCount: \(ehaP2totalCount)")
+            print("ehaP2_samples: \(ehaP2_samples)")
+        } else {
+            print("!!!Critical Error in ehaP2setDualMonoVariables() ")
+//            ehaP2localPanHoldingArray = ehaP2panArray
+//            ehaP2totalCount = ehaP2DualTotalCount
+//            ehaP2_samples = ehaP2_dualSamples
+//            ehaP2VariableArraysSet = true
+        }
+    }
     
     func ehaP2setPan() {
-        ehaP2localPan = ehaP2panArray[ehaP2_index]
+        ehaP2localPan = ehaP2localPanHoldingArray[ehaP2_index]
+//        ehaP2localPan = ehaP2panArray[ehaP2_index]
         print("Pan: \(ehaP2localPan)")
         print("Pan Index \(ehaP2_index)")
     }

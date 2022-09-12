@@ -33,8 +33,6 @@ struct PostEHATestView: View {
                 Text("Give Us A Moment To Calculate and Format Your Results")
                     .foregroundColor(.white)
                 Spacer()
-                Text("MonoEarTestingPan: \(monoEarTestingPan)")
-                Spacer()
                 NavigationLink {
                     EHAResultsDisplayView()
                 } label: {
@@ -49,9 +47,9 @@ struct PostEHATestView: View {
                 audioSessionModel.setAudioSession()
                 await checkEHAPostTestVolume()
                 await savePostEHATestSystemSettings()
-                await checkMonoRightTestLink()
-                await checkMonoLeftTestLink()
-                await monoEarBetterExists()
+//                await checkMonoRightTestLink()
+//                await checkMonoLeftTestLink()
+//                await monoEarBetterExists()
                 
             }
         }

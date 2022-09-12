@@ -78,7 +78,7 @@ struct TrainingTestHoldingPlace: View {
                     Spacer()
                     HStack{
                         Spacer()
-                        NavigationLink("TrainingTest", destination: TrainingTestView()).foregroundColor(.green)
+                        NavigationLink("TrainingTest", destination: TrainingTestView()).foregroundColor(.blue)
                         Spacer()
                         NavigationLink("EHATTSTestPart1", destination: EHATTSTestPart1View()).foregroundColor(.green)
                         Spacer()
@@ -86,7 +86,7 @@ struct TrainingTestHoldingPlace: View {
                     Spacer()
                     HStack{
                         Spacer()
-                        NavigationLink("EPTATTSTestv4", destination: EPTATTSTestV4List()).foregroundColor(.orange)
+                        NavigationLink("EHATTSTestPart2View", destination: EHATTSTestPart2View()).foregroundColor(.orange)
                         Spacer()
                         NavigationLink("SimpleTest", destination: SimpleTestView()).foregroundColor(.red)
                         Spacer()
