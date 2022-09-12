@@ -1778,24 +1778,28 @@ extension EHATTSTestPart2View {
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample17)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample17)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 1 {
                 ehaP2LeftFinalGainSample18 = ehaP2_averageGain
                 ehaP2RightFinalGainSample18 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample18)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample18)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 2 {
                 ehaP2LeftFinalGainSample19 = ehaP2_averageGain
                 ehaP2RightFinalGainSample19 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample19)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample19)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 3 {
                 ehaP2LeftFinalGainSample20 = ehaP2_averageGain
                 ehaP2RightFinalGainSample20 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample20)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample20)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 4 {
                 ehaP2LeftFinalGainSample21 = ehaP2_averageGain
                 ehaP2RightFinalGainSample21 = ehaP2_averageGain
@@ -1808,24 +1812,28 @@ extension EHATTSTestPart2View {
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample22)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample22)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 6 {
                 ehaP2LeftFinalGainSample23 = ehaP2_averageGain
                 ehaP2RightFinalGainSample23 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample23)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample23)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 7 {
                 ehaP2LeftFinalGainSample24 = ehaP2_averageGain
                 ehaP2RightFinalGainSample24 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample24)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample24)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 8 {
                 ehaP2LeftFinalGainSample25 = ehaP2_averageGain
                 ehaP2RightFinalGainSample25 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample25)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample25)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             
             } else if ehaP2_index == 9 {
                 ehaP2LeftFinalGainSample26 = ehaP2_averageGain
@@ -1833,54 +1841,63 @@ extension EHATTSTestPart2View {
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample26)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample26)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 10 {
                 ehaP2LeftFinalGainSample27 = ehaP2_averageGain
                 ehaP2RightFinalGainSample27 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample27)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample27)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 11 {
                 ehaP2LeftFinalGainSample28 = ehaP2_averageGain
                 ehaP2RightFinalGainSample28 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample28)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample28)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 12 {
                 ehaP2LeftFinalGainSample29 = ehaP2_averageGain
                 ehaP2RightFinalGainSample29 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample29)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample29)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 13 {
                 ehaP2LeftFinalGainSample30 = ehaP2_averageGain
                 ehaP2RightFinalGainSample30 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample30)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample30)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 14 {
                 ehaP2LeftFinalGainSample31 = ehaP2_averageGain
                 ehaP2RightFinalGainSample31 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample31)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample31)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 15 {
                 ehaP2LeftFinalGainSample32 = ehaP2_averageGain
                 ehaP2RightFinalGainSample32 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample32)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample32)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 16 {
                 ehaP2LeftFinalGainSample33 = ehaP2_averageGain
                 ehaP2RightFinalGainSample33 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample33)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample33)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 17 {
                 ehaP2LeftFinalGainSample34 = ehaP2_averageGain
                 ehaP2RightFinalGainSample34 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample34)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample34)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             
             } else if ehaP2_index == 18 {
                 ehaP2LeftFinalGainSample35 = ehaP2_averageGain
@@ -1888,54 +1905,63 @@ extension EHATTSTestPart2View {
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample35)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample35)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 19 {
                 ehaP2LeftFinalGainSample36 = ehaP2_averageGain
                 ehaP2RightFinalGainSample36 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample36)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample36)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 20 {
                 ehaP2LeftFinalGainSample37 = ehaP2_averageGain
                 ehaP2RightFinalGainSample37 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample37)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample37)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 21 {
                 ehaP2LeftFinalGainSample38 = ehaP2_averageGain
                 ehaP2RightFinalGainSample38 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample38)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample38)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 22 {
                 ehaP2LeftFinalGainSample39 = ehaP2_averageGain
                 ehaP2RightFinalGainSample39 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample39)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample39)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 23 {
                 ehaP2LeftFinalGainSample40 = ehaP2_averageGain
                 ehaP2RightFinalGainSample40 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample40)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample40)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 24 {
                 ehaP2LeftFinalGainSample41 = ehaP2_averageGain
                 ehaP2RightFinalGainSample41 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample41)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample41)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 25 {
                 ehaP2LeftFinalGainSample42 = ehaP2_averageGain
                 ehaP2RightFinalGainSample42 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample42)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample42)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 26 {
                 ehaP2LeftFinalGainSample43 = ehaP2_averageGain
                 ehaP2RightFinalGainSample43 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample43)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample43)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             
             } else if ehaP2_index == 27 {
                 ehaP2LeftFinalGainSample44 = ehaP2_averageGain
@@ -1943,54 +1969,63 @@ extension EHATTSTestPart2View {
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample44)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample44)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 28 {
                 ehaP2LeftFinalGainSample45 = ehaP2_averageGain
                 ehaP2RightFinalGainSample45 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample45)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample45)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 29 {
                 ehaP2LeftFinalGainSample46 = ehaP2_averageGain
                 ehaP2RightFinalGainSample46 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample46)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample46)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 30 {
                 ehaP2LeftFinalGainSample47 = ehaP2_averageGain
                 ehaP2RightFinalGainSample47 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample47)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample47)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 31 {
                 ehaP2LeftFinalGainSample48 = ehaP2_averageGain
                 ehaP2RightFinalGainSample48 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample48)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample48)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 32 {
                 ehaP2LeftFinalGainSample49 = ehaP2_averageGain
                 ehaP2RightFinalGainSample49 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample49)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample49)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 33 {
                 ehaP2LeftFinalGainSample50 = ehaP2_averageGain
                 ehaP2RightFinalGainSample50 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample50)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample50)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 34 {
                 ehaP2LeftFinalGainSample51 = ehaP2_averageGain
                 ehaP2RightFinalGainSample51 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample51)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample51)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 35 {
                 ehaP2LeftFinalGainSample52 = ehaP2_averageGain
                 ehaP2RightFinalGainSample52 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample52)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample52)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             
             } else if ehaP2_index == 36 {
                 ehaP2LeftFinalGainSample53 = ehaP2_averageGain
@@ -1998,45 +2033,53 @@ extension EHATTSTestPart2View {
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample53)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample53)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 37 {
                 ehaP2LeftFinalGainSample54 = ehaP2_averageGain
                 ehaP2RightFinalGainSample54 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample54)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample54)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 38 {
                 ehaP2LeftFinalGainSample55 = ehaP2_averageGain
                 ehaP2RightFinalGainSample55 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample55)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample55)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 39 {
                 ehaP2LeftFinalGainSample56 = ehaP2_averageGain
                 ehaP2RightFinalGainSample56 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample56)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample56)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 40 {
                 ehaP2LeftFinalGainSample57 = ehaP2_averageGain
                 ehaP2RightFinalGainSample57 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample57)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample57)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 41 {
                 ehaP2LeftFinalGainSample58 = ehaP2_averageGain
                 ehaP2RightFinalGainSample58 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample58)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample58)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
             } else if ehaP2_index == 42 {
                 ehaP2LeftFinalGainSample59 = ehaP2_averageGain
                 ehaP2RightFinalGainSample59 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample59)
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample59)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
         
             } else {
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
+                print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
                 fatalError("In ehaP2left side assignLRAverageSampleGains")
             }
         } else {
