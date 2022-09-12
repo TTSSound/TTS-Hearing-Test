@@ -78,7 +78,7 @@
 		7C666DA028B676B1007707AC /* ExplanationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C666D9F28B676B1007707AC /* ExplanationView.swift */; };
 		7C666DA428B67841007707AC /* CalibrationSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5F728B18F2D0044958B /* CalibrationSplashView.swift */; };
 		7C666DAA28B69299007707AC /* EPTAResultsDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C666DA928B69299007707AC /* EPTAResultsDisplayView.swift */; };
-		7C666DAC28B6930E007707AC /* EHATTSTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C666DAB28B6930E007707AC /* EHATTSTestView.swift */; };
+		7C666DAC28B6930E007707AC /* EHATTSTestPart2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C666DAB28B6930E007707AC /* EHATTSTestPart2View.swift */; };
 		7C76D5DF28B1328D0044958B /* SiriSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5DE28B1328D0044958B /* SiriSetupView.swift */; };
 		7C76D5E128B183420044958B /* UserWrittenHearingAssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5E028B183420044958B /* UserWrittenHearingAssessmentView.swift */; };
 		7C76D5E428B184ED0044958B /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5E328B184ED0044958B /* LandingView.swift */; };
@@ -215,7 +215,7 @@
 		7C666DA528B67C84007707AC /* WhyWeAskForThisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhyWeAskForThisView.swift; sourceTree = "<group>"; };
 		7C666DA728B68EF7007707AC /* ManualDeviceEntry2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualDeviceEntry2View.swift; sourceTree = "<group>"; };
 		7C666DA928B69299007707AC /* EPTAResultsDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPTAResultsDisplayView.swift; sourceTree = "<group>"; };
-		7C666DAB28B6930E007707AC /* EHATTSTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EHATTSTestView.swift; sourceTree = "<group>"; };
+		7C666DAB28B6930E007707AC /* EHATTSTestPart2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EHATTSTestPart2View.swift; sourceTree = "<group>"; };
 		7C666DAD28B6A16C007707AC /* EHAPurchaseSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EHAPurchaseSheetView.swift; sourceTree = "<group>"; };
 		7C74CD2228AE9640003D184F /* ResultsContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ResultsContainer.xcdatamodel; sourceTree = "<group>"; };
 		7C76D5DE28B1328D0044958B /* SiriSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriSetupView.swift; sourceTree = "<group>"; };
@@ -469,8 +469,8 @@
 				7C76D5E028B183420044958B /* UserWrittenHearingAssessmentView.swift */,
 				7C24C1ED28BF01D8006E77DD /* SurveyErrorView.swift */,
 				7C3E16BB28BC2AE4003A0DA9 /* PreTestView.swift */,
-				7CECF1EB28C9859900B5A99E /* TrainingTestView.swift */,
 				7C76D5EB28B1895B0044958B /* TrainingTestHoldingPlace.swift */,
+				7CECF1EB28C9859900B5A99E /* TrainingTestView.swift */,
 				7C99A16D28C95DFA00E46C65 /* Bilateral1kHzTestView.swift */,
 				7C4D018928C1724100361559 /* EHATTSTestPart1View.swift */,
 				7C3D20AE289DADCB0039EDA6 /* EPTATTSTestV4List.swift */,
@@ -480,7 +480,7 @@
 				7C24C1E128BEC419006E77DD /* PostEPTATestView.swift */,
 				7C24C1E328BEC718006E77DD /* PostSimpleTestView.swift */,
 				7CAC41CB28B5B60100AE72F6 /* EHAInterimPostEPTAView.swift */,
-				7C666DAB28B6930E007707AC /* EHATTSTestView.swift */,
+				7C666DAB28B6930E007707AC /* EHATTSTestPart2View.swift */,
 				7C24C1E928BECCDD006E77DD /* PostEHATestView.swift */,
 				7C666DA928B69299007707AC /* EPTAResultsDisplayView.swift */,
 				7C76D5EF28B18A9B0044958B /* SimpleResultsDisplayView.swift */,
@@ -754,7 +754,7 @@
 				7C179FDF28B7DE2F00964AAC /* TestIDInputView.swift in Sources */,
 				7C3D20BD289DB1BA0039EDA6 /* AudioSessionModel.swift in Sources */,
 				7C4D018428C1311F00361559 /* JSONPaserCombineViewModel.swift in Sources */,
-				7C666DAC28B6930E007707AC /* EHATTSTestView.swift in Sources */,
+				7C666DAC28B6930E007707AC /* EHATTSTestPart2View.swift in Sources */,
 				7C4D019628C2635900361559 /* InAppPurchaseModel.swift in Sources */,
 				7C901FCA28B9BAC9007E1336 /* SilentModeSetupView.swift in Sources */,
 				7C179FE328B7F34100964AAC /* TestSelectionLandingView.swift in Sources */,

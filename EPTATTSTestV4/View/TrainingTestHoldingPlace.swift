@@ -22,67 +22,88 @@ struct TrainingTestHoldingPlace: View {
     var body: some View {
         
 
-        
-        ZStack{
-            colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
-            VStack{
-                Spacer()
-                Text("Hold Place for Training Test")
-                    .foregroundColor(.white)
-                Button {
-                    Task {
-                        await checkTrainEHATestLik()
-                        await checkTrainEPTATestLik()
-                        await checkTrainSimpleTestLik()
-                        await returnTrainTestSelected()
+        NavigationView{
+            ZStack{
+                colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+                VStack{
+                    NavigationLink {
+                        PostAllTestsSplashView()
+                    } label: {
+                        Text("Test Phase Now Complete, Proceed Here")
+                            .foregroundColor(.white)
                     }
-                } label: {
-                    Text("Check Test Selection")
-                        .foregroundColor(.blue)
-                }
-                Spacer()
-                Text("TestReturned: \(returnedTrainTestSelected)")
-                    .foregroundColor(.white)
-                
-                NavigationLink(destination:
-                    returnedTrainTestSelected == 1 ? AnyView(EHATTSTestPart1View())
-                    : returnedTrainTestSelected == 2 ? AnyView(EPTATTSTestV4List())
-                    : returnedTrainTestSelected == 3 ? AnyView(SimpleTestView())
-                    : AnyView(TrainingTestHoldingPlace())
-                ){
+                    .padding(.top, 40)
+                    .padding(.bottom, 20)
+                    Text("Hold Place for Training Test")
+                        .foregroundColor(.white)
+                        .padding(.top, 20)
+                        .padding(.bottom, 20)
+                    Button {
+                        Task {
+                            await checkTrainEHATestLik()
+                            await checkTrainEPTATestLik()
+                            await checkTrainSimpleTestLik()
+                            await returnTrainTestSelected()
+                        }
+                    } label: {
+                        Text("Check Test Selection")
+                            .foregroundColor(.blue)
+                    }
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
+                    
+                    Text("TestReturned: \(returnedTrainTestSelected)")
+                        .foregroundColor(.white)
+                        .padding(.top, 20)
+                        .padding(.bottom, 20)
+                    
+                    NavigationLink(destination:
+                        returnedTrainTestSelected == 1 ? AnyView(EHATTSTestPart1View())
+                        : returnedTrainTestSelected == 2 ? AnyView(EPTATTSTestV4List())
+                        : returnedTrainTestSelected == 3 ? AnyView(SimpleTestView())
+                        : AnyView(TrainingTestHoldingPlace())
+                    ){
+                        HStack{
+                           Image(systemName: "arrowshape.bounce.right")
+                                .foregroundColor(.green)
+                           Text("We are Now Ready To Start The Test.\nClick Continue to Get Started!")
+                                .foregroundColor(.green)
+                       }
+                    }
+                    .foregroundColor(.green)
+                    .foregroundColor(ttLinkColors[ttLinkColorIndex])
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
+                    
+                    Spacer()
                     HStack{
-                       Image(systemName: "arrowshape.bounce.right")
-                            .foregroundColor(.green)
-                       Text("We are Now Ready To Start The Test.\nClick Continue to Get Started!")
-                            .foregroundColor(.green)
-                   }
+                        Spacer()
+                        NavigationLink("TrainingTest", destination: TrainingTestView()).foregroundColor(.green)
+                        Spacer()
+                        NavigationLink("EHATTSTestPart1", destination: EHATTSTestPart1View()).foregroundColor(.green)
+                        Spacer()
+                    }
+                    Spacer()
+                    HStack{
+                        Spacer()
+                        NavigationLink("EPTATTSTestv4", destination: EPTATTSTestV4List()).foregroundColor(.orange)
+                        Spacer()
+                        NavigationLink("SimpleTest", destination: SimpleTestView()).foregroundColor(.red)
+                        Spacer()
+                    }
+                    Spacer()
+     
                 }
-                .foregroundColor(.green)
-                .foregroundColor(ttLinkColors[ttLinkColorIndex])
+                .onAppear(perform: {
+                    ttLinkColorIndex = 0
+                })
+                .padding(.leading)
+                .padding(.trailing)
 
-                Spacer()
-                HStack{
-                    Spacer()
-                    NavigationLink("EHATTSTestPart1", destination: EHATTSTestPart1View()).foregroundColor(.green)
-                    Spacer()
-                    NavigationLink("EPTATTSTestv4", destination: EPTATTSTestV4List()).foregroundColor(.orange)
-                    Spacer()
-                    NavigationLink("SimpleTest", destination: SimpleTestView()).foregroundColor(.red)
-                    Spacer()
-                }
-                Spacer()
+            // Present training tones before the test starts
+            // this then links to EPTATTSTestV4List
             }
-            .onAppear(perform: {
-                ttLinkColorIndex = 0
-            })
-            .padding(.leading)
-            .padding(.trailing)
-
-        // Present training tones before the test starts
-        // this then links to EPTATTSTestV4List
         }
-       
-            
     }
     
     func returnTrainTestSelected() async {

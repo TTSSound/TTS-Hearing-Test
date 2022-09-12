@@ -120,7 +120,7 @@ struct EHAInterimPostEPTAView: View {
 
                 }
                     NavigationLink {
-                        EHATTSTestView()
+                        EHATTSTestPart2View()
                     } label: {
                         Text("Continue To Start the extended phase of the hearing assessment")
                             .foregroundColor(.green)

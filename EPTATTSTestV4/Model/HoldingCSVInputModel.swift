@@ -74,14 +74,42 @@ class HoldingCSVInputModel: ObservableObject {
     @State var inputOnekHzFinalComboLeltGains = Float()
     @State var inputOnekHzFinalComboDeltaGains = Float()
     
+    // EHA Part 1 input Results
+    @State var inputRightFinalGainsArraySample1 = Float()
+    @State var inputRightFinalGainsArraySample2 = Float()
+    @State var inputRightFinalGainsArraySample3 = Float()
+    @State var inputRightFinalGainsArraySample4 = Float()
+    @State var inputRightFinalGainsArraySample5 = Float()
+    @State var inputRightFinalGainsArraySample6 = Float()
+    @State var inputRightFinalGainsArraySample7 = Float()
+    @State var inputRightFinalGainsArraySample8 = Float()
+    @State var inputRightFinalGainsArraySample9 = Float()
+    @State var inputRightFinalGainsArraySample10 = Float()
+    @State var inputRightFinalGainsArraySample11 = Float()
+    @State var inputRightFinalGainsArraySample12 = Float()
+    @State var inputRightFinalGainsArraySample13 = Float()
+    @State var inputRightFinalGainsArraySample14 = Float()
+    @State var inputRightFinalGainsArraySample15 = Float()
+    @State var inputRightFinalGainsArraySample16 = Float()
+    @State var inputRightFinalStoredRightFinalGainsArray = Float()
     
-    
-    //    let summaryEHAP1LRCSVName = "SummaryEHAP1LRResultsCSV.csv"
-    //    let summaryEHAP1RightCSVName = "SummaryEHAP1RightResultsCSV.csv"
-    //    let summaryEHAP1LeftCSVName = "SummaryEHAP1LeftResultsCSV.csv"
-    //    let inputEHAP1LRSummaryCSVName = "InputDetailedEHAP1LRResultsCSV.csv"
-    //    let inputEHAP1RightSummaryCSVName = "InputDetailedEHAP1RightResultsCSV.csv"
-    //    let inputEHAP1LeftSummaryCSVName = "InputDetailedEHAP1LeftResultsCSV.csv"
+    @State var inputLeftFinalGainsArraySample1 = Float()
+    @State var inputLeftFinalGainsArraySample2 = Float()
+    @State var inputLeftFinalGainsArraySample3 = Float()
+    @State var inputLeftFinalGainsArraySample4 = Float()
+    @State var inputLeftFinalGainsArraySample5 = Float()
+    @State var inputLeftFinalGainsArraySample6 = Float()
+    @State var inputLeftFinalGainsArraySample7 = Float()
+    @State var inputLeftFinalGainsArraySample8 = Float()
+    @State var inputLeftFinalGainsArraySample9 = Float()
+    @State var inputLeftFinalGainsArraySample10 = Float()
+    @State var inputLeftFinalGainsArraySample11 = Float()
+    @State var inputLeftFinalGainsArraySample12 = Float()
+    @State var inputLeftFinalGainsArraySample13 = Float()
+    @State var inputLeftFinalGainsArraySample14 = Float()
+    @State var inputLeftFinalGainsArraySample15 = Float()
+    @State var inputLeftFinalGainsArraySample16 = Float()
+    @State var inputLeftFinalStoredLeftFinalGainsArray = Float()
     
     
     //URLS
@@ -99,8 +127,8 @@ class HoldingCSVInputModel: ObservableObject {
     @State var dataFileURL11 = URL(fileURLWithPath: "") // End EHA Test System Settings
     @State var dataFileURL12 = URL(fileURLWithPath: "") // In-App Purchase
     @State var dataFileURL13 = URL(fileURLWithPath: "") // 1kHZ Bilateral test results
-    @State var dataFileURL14 = URL(fileURLWithPath: "")
-    @State var dataFileURL15 = URL(fileURLWithPath: "")
+    @State var dataFileURL14 = URL(fileURLWithPath: "") // right EHA Part 1 Results
+    @State var dataFileURL15 = URL(fileURLWithPath: "") // left EHA Part 1 results
     @State var dataFileURL16 = URL(fileURLWithPath: "")
     @State var dataFileURL17 = URL(fileURLWithPath: "")
     @State var dataFileURL18 = URL(fileURLWithPath: "")
@@ -127,6 +155,11 @@ class HoldingCSVInputModel: ObservableObject {
     let inputOnekHzSummaryCSVName = "InputSummaryOnekHzResultsCSV.csv"
     
     
+    // EHA Part 1 input Results
+//    let inputEHAP1SummaryCSVName = "InputSummaryEHAP1ResultsCSV.csv"
+//    let inputEHAP1LRSummaryCSVName = "InputDetailedEHAP1LRResultsCSV.csv"
+    let inputEHAP1RightSummaryCSVName = "InputDetailedEHAP1RightResultsCSV.csv"
+    let inputEHAP1LeftSummaryCSVName = "InputDetailedEHAP1LeftResultsCSV.csv"
     
     //ENVDataObjectModel
     let inputSummaryCSVName = "InputSummaryResultsCSV.csv"
@@ -672,6 +705,275 @@ class HoldingCSVInputModel: ObservableObject {
             print("Error in reading onekHZ results")
         }
     }
+    
+    func rightEHAP1InputResultsCSVReader() async {
+        
+        let rightEHAP1SummaryCSVName = [inputEHAP1RightSummaryCSVName]
+        
+        let fileRightEHAP1Manager = FileManager.default
+        let rightEHAP1Path = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: rightEHAP1SummaryCSVName)
+        if fileRightEHAP1Manager.fileExists(atPath: rightEHAP1Path[0]) {
+            let rightEHAP1FilePath = URL(fileURLWithPath: rightEHAP1Path[0])
+            if rightEHAP1FilePath.isFileURL  {
+                dataFileURL14 = rightEHAP1FilePath
+                print("rightEHAP1FilePath: \(rightEHAP1FilePath)")
+                print("rightEHAP1URL14: \(dataFileURL14)")
+                print("rightEHAP1 Input File Exists")
+            } else {
+                print("rightEHAP1 Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURL14)
+            print(results)
+            print("rightEHAP1Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldRightFinalGainsArraySample1: String = results[row:0, column: 0]
+            let fieldRightFinalGainsArraySample2: String = results[row:0, column: 1]
+            let fieldRightFinalGainsArraySample3: String = results[row:0, column: 2]
+            let fieldRightFinalGainsArraySample4: String = results[row:0, column: 3]
+            let fieldRightFinalGainsArraySample5: String = results[row:0, column: 4]
+            let fieldRightFinalGainsArraySample6: String = results[row:0, column: 5]
+            let fieldRightFinalGainsArraySample7: String = results[row:0, column: 6]
+            let fieldRightFinalGainsArraySample8: String = results[row:0, column: 7]
+            let fieldRightFinalGainsArraySample9: String = results[row:0, column: 8]
+            let fieldRightFinalGainsArraySample10: String = results[row:0, column: 9]
+            let fieldRightFinalGainsArraySample11: String = results[row:0, column: 10]
+            let fieldRightFinalGainsArraySample12: String = results[row:0, column: 11]
+            let fieldRightFinalGainsArraySample13: String = results[row:0, column: 12]
+            let fieldRightFinalGainsArraySample14: String = results[row:0, column: 13]
+            let fieldRightFinalGainsArraySample15: String = results[row:0, column: 14]
+            let fieldRightFinalGainsArraySample16: String = results[row:0, column: 15]
+            
+            let fieldRightFinalStoredRightFinalGainsArray: String = results[row:1, column: 0]
+
+            
+            print("fieldRightFinalGainsArraySample1: \(fieldRightFinalGainsArraySample1)")
+            print("fieldRightFinalGainsArraySample2: \(fieldRightFinalGainsArraySample2)")
+            print("fieldRightFinalGainsArraySample3: \(fieldRightFinalGainsArraySample3)")
+            print("fieldRightFinalGainsArraySample4: \(fieldRightFinalGainsArraySample4)")
+            print("fieldRightFinalGainsArraySample5: \(fieldRightFinalGainsArraySample5)")
+            print("fieldRightFinalGainsArraySample6: \(fieldRightFinalGainsArraySample6)")
+            print("fieldRightFinalGainsArraySample7: \(fieldRightFinalGainsArraySample7)")
+            print("fieldRightFinalGainsArraySample8: \(fieldRightFinalGainsArraySample8)")
+            print("fieldRightFinalGainsArraySample9: \(fieldRightFinalGainsArraySample9)")
+            print("fieldRightFinalGainsArraySample10: \(fieldRightFinalGainsArraySample10)")
+            print("fieldRightFinalGainsArraySample11: \(fieldRightFinalGainsArraySample11)")
+            print("fieldRightFinalGainsArraySample12: \(fieldRightFinalGainsArraySample12)")
+            print("fieldRightFinalGainsArraySample13: \(fieldRightFinalGainsArraySample13)")
+            print("fieldRightFinalGainsArraySample14: \(fieldRightFinalGainsArraySample14)")
+            print("fieldRightFinalGainsArraySample15: \(fieldRightFinalGainsArraySample15)")
+            print("fieldRightFinalGainsArraySample16: \(fieldRightFinalGainsArraySample16)")
+            print("fieldRightFinalStoredRightFinalGainsArray: \(fieldRightFinalStoredRightFinalGainsArray)")
+            
+            let inputRTFinalGainsArraySample1 = Float(fieldRightFinalGainsArraySample1)
+            inputRightFinalGainsArraySample1 = inputRTFinalGainsArraySample1 ?? -99.9
+
+            let inputRTFinalGainsArraySample2 = Float(fieldRightFinalGainsArraySample2)
+            inputRightFinalGainsArraySample2 = inputRTFinalGainsArraySample2 ?? -99.9
+            
+            let inputRTFinalGainsArraySample3 = Float(fieldRightFinalGainsArraySample2)
+            inputRightFinalGainsArraySample3 = inputRTFinalGainsArraySample3 ?? -99.9
+            
+            let inputRTFinalGainsArraySample4 = Float(fieldRightFinalGainsArraySample4)
+            inputRightFinalGainsArraySample4 = inputRTFinalGainsArraySample4 ?? -99.9
+            
+            let inputRTFinalGainsArraySample5 = Float(fieldRightFinalGainsArraySample5)
+            inputRightFinalGainsArraySample5 = inputRTFinalGainsArraySample5 ?? -99.9
+            
+            let inputRTFinalGainsArraySample6 = Float(fieldRightFinalGainsArraySample6)
+            inputRightFinalGainsArraySample6 = inputRTFinalGainsArraySample6 ?? -99.9
+            
+            let inputRTFinalGainsArraySample7 = Float(fieldRightFinalGainsArraySample7)
+            inputRightFinalGainsArraySample7 = inputRTFinalGainsArraySample7 ?? -99.9
+            
+            let inputRTFinalGainsArraySample8 = Float(fieldRightFinalGainsArraySample8)
+            inputRightFinalGainsArraySample8 = inputRTFinalGainsArraySample8 ?? -99.9
+            
+            let inputRTFinalGainsArraySample9 = Float(fieldRightFinalGainsArraySample9)
+            inputRightFinalGainsArraySample9 = inputRTFinalGainsArraySample9 ?? -99.9
+            
+            let inputRTFinalGainsArraySample10 = Float(fieldRightFinalGainsArraySample10)
+            inputRightFinalGainsArraySample10 = inputRTFinalGainsArraySample10 ?? -99.9
+            
+            let inputRTFinalGainsArraySample11 = Float(fieldRightFinalGainsArraySample11)
+            inputRightFinalGainsArraySample11 = inputRTFinalGainsArraySample11 ?? -99.9
+            
+            let inputRTFinalGainsArraySample12 = Float(fieldRightFinalGainsArraySample12)
+            inputRightFinalGainsArraySample12 = inputRTFinalGainsArraySample12 ?? -99.9
+            
+            let inputRTFinalGainsArraySample13 = Float(fieldRightFinalGainsArraySample13)
+            inputRightFinalGainsArraySample13 = inputRTFinalGainsArraySample13 ?? -99.9
+            
+            let inputRTFinalGainsArraySample14 = Float(fieldRightFinalGainsArraySample14)
+            inputRightFinalGainsArraySample14 = inputRTFinalGainsArraySample14 ?? -99.9
+            
+            let inputRTFinalGainsArraySample15 = Float(fieldRightFinalGainsArraySample15)
+            inputRightFinalGainsArraySample15 = inputRTFinalGainsArraySample15 ?? -99.9
+            
+            let inputRTFinalGainsArraySample16 = Float(fieldRightFinalGainsArraySample16)
+            inputRightFinalGainsArraySample16 = inputRTFinalGainsArraySample16 ?? -99.9
+            
+            let inputRTFinalStoredRightFinalGainsArray = Float(fieldRightFinalStoredRightFinalGainsArray)
+            inputRightFinalStoredRightFinalGainsArray = inputRTFinalStoredRightFinalGainsArray ?? -99.9
+            
+            print("inputRightFinalGainsArraySample1: \(inputRightFinalGainsArraySample1)")
+            print("inputRightFinalGainsArraySample2: \(inputRightFinalGainsArraySample2)")
+            print("inputRightFinalGainsArraySample3: \(inputRightFinalGainsArraySample3)")
+            print("inputRightFinalGainsArraySample4: \(inputRightFinalGainsArraySample4)")
+            print("inputRightFinalGainsArraySample5: \(inputRightFinalGainsArraySample5)")
+            print("inputRightFinalGainsArraySample6: \(inputRightFinalGainsArraySample6)")
+            print("inputRightFinalGainsArraySample7: \(inputRightFinalGainsArraySample7)")
+            print("inputRightFinalGainsArraySample8: \(inputRightFinalGainsArraySample8)")
+            print("inputRightFinalGainsArraySample9: \(inputRightFinalGainsArraySample9)")
+            print("inputRightFinalGainsArraySample10: \(inputRightFinalGainsArraySample10)")
+            print("inputRightFinalGainsArraySample11: \(inputRightFinalGainsArraySample11)")
+            print("inputRightFinalGainsArraySample12: \(inputRightFinalGainsArraySample12)")
+            print("inputRightFinalGainsArraySample13: \(inputRightFinalGainsArraySample13)")
+            print("inputRightFinalGainsArraySample14: \(inputRightFinalGainsArraySample14)")
+            print("inputRightFinalGainsArraySample15: \(inputRightFinalGainsArraySample15)")
+            print("inputRightFinalGainsArraySample16: \(inputRightFinalGainsArraySample16)")
+        } catch {
+            print("Error in reading onekHZ results")
+        }
+    }
+    
+    func leftEHAP1InputResultsCSVReader() async {
+      
+        let leftEHAP1SummaryCSVName = [inputEHAP1LeftSummaryCSVName]
+        
+        let fileLeftEHAP1Manager = FileManager.default
+        let leftEHAP1Path = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: leftEHAP1SummaryCSVName)
+        if fileLeftEHAP1Manager.fileExists(atPath: leftEHAP1Path[0]) {
+            let leftEHAP1FilePath = URL(fileURLWithPath: leftEHAP1Path[0])
+            if leftEHAP1FilePath.isFileURL  {
+                dataFileURL15 = leftEHAP1FilePath
+                print("LeftEHAP1FilePath: \(leftEHAP1FilePath)")
+                print("LeftEHAP1URL15: \(dataFileURL15)")
+                print("LeftEHAP1 Input File Exists")
+            } else {
+                print("LeftEHAP1 Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURL15)
+            print(results)
+            print("LeftEHAP1Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLeftFinalGainsArraySample1: String = results[row:0, column: 0]
+            let fieldLeftFinalGainsArraySample2: String = results[row:0, column: 1]
+            let fieldLeftFinalGainsArraySample3: String = results[row:0, column: 2]
+            let fieldLeftFinalGainsArraySample4: String = results[row:0, column: 3]
+            let fieldLeftFinalGainsArraySample5: String = results[row:0, column: 4]
+            let fieldLeftFinalGainsArraySample6: String = results[row:0, column: 5]
+            let fieldLeftFinalGainsArraySample7: String = results[row:0, column: 6]
+            let fieldLeftFinalGainsArraySample8: String = results[row:0, column: 7]
+            let fieldLeftFinalGainsArraySample9: String = results[row:0, column: 8]
+            let fieldLeftFinalGainsArraySample10: String = results[row:0, column: 9]
+            let fieldLeftFinalGainsArraySample11: String = results[row:0, column: 10]
+            let fieldLeftFinalGainsArraySample12: String = results[row:0, column: 11]
+            let fieldLeftFinalGainsArraySample13: String = results[row:0, column: 12]
+            let fieldLeftFinalGainsArraySample14: String = results[row:0, column: 13]
+            let fieldLeftFinalGainsArraySample15: String = results[row:0, column: 14]
+            let fieldLeftFinalGainsArraySample16: String = results[row:0, column: 15]
+            
+            let fieldLeftFinalStoredLeftFinalGainsArray: String = results[row:1, column: 0]
+
+            
+            print("fieldLeftFinalGainsArraySample1: \(fieldLeftFinalGainsArraySample1)")
+            print("fieldLeftFinalGainsArraySample2: \(fieldLeftFinalGainsArraySample2)")
+            print("fieldLeftFinalGainsArraySample3: \(fieldLeftFinalGainsArraySample3)")
+            print("fieldLeftFinalGainsArraySample4: \(fieldLeftFinalGainsArraySample4)")
+            print("fieldLeftFinalGainsArraySample5: \(fieldLeftFinalGainsArraySample5)")
+            print("fieldLeftFinalGainsArraySample6: \(fieldLeftFinalGainsArraySample6)")
+            print("fieldLeftFinalGainsArraySample7: \(fieldLeftFinalGainsArraySample7)")
+            print("fieldLeftFinalGainsArraySample8: \(fieldLeftFinalGainsArraySample8)")
+            print("fieldLeftFinalGainsArraySample9: \(fieldLeftFinalGainsArraySample9)")
+            print("fieldLeftFinalGainsArraySample10: \(fieldLeftFinalGainsArraySample10)")
+            print("fieldLeftFinalGainsArraySample11: \(fieldLeftFinalGainsArraySample11)")
+            print("fieldLeftFinalGainsArraySample12: \(fieldLeftFinalGainsArraySample12)")
+            print("fieldLeftFinalGainsArraySample13: \(fieldLeftFinalGainsArraySample13)")
+            print("fieldLeftFinalGainsArraySample14: \(fieldLeftFinalGainsArraySample14)")
+            print("fieldLeftFinalGainsArraySample15: \(fieldLeftFinalGainsArraySample15)")
+            print("fieldLeftFinalGainsArraySample16: \(fieldLeftFinalGainsArraySample16)")
+            print("fieldLeftFinalStoredLeftFinalGainsArray: \(fieldLeftFinalStoredLeftFinalGainsArray)")
+            
+            let inputRTFinalGainsArraySample1 = Float(fieldLeftFinalGainsArraySample1)
+            inputLeftFinalGainsArraySample1 = inputRTFinalGainsArraySample1 ?? -99.9
+
+            let inputRTFinalGainsArraySample2 = Float(fieldLeftFinalGainsArraySample2)
+            inputLeftFinalGainsArraySample2 = inputRTFinalGainsArraySample2 ?? -99.9
+            
+            let inputRTFinalGainsArraySample3 = Float(fieldLeftFinalGainsArraySample2)
+            inputLeftFinalGainsArraySample3 = inputRTFinalGainsArraySample3 ?? -99.9
+            
+            let inputRTFinalGainsArraySample4 = Float(fieldLeftFinalGainsArraySample4)
+            inputLeftFinalGainsArraySample4 = inputRTFinalGainsArraySample4 ?? -99.9
+            
+            let inputRTFinalGainsArraySample5 = Float(fieldLeftFinalGainsArraySample5)
+            inputLeftFinalGainsArraySample5 = inputRTFinalGainsArraySample5 ?? -99.9
+            
+            let inputRTFinalGainsArraySample6 = Float(fieldLeftFinalGainsArraySample6)
+            inputLeftFinalGainsArraySample6 = inputRTFinalGainsArraySample6 ?? -99.9
+            
+            let inputRTFinalGainsArraySample7 = Float(fieldLeftFinalGainsArraySample7)
+            inputLeftFinalGainsArraySample7 = inputRTFinalGainsArraySample7 ?? -99.9
+            
+            let inputRTFinalGainsArraySample8 = Float(fieldLeftFinalGainsArraySample8)
+            inputLeftFinalGainsArraySample8 = inputRTFinalGainsArraySample8 ?? -99.9
+            
+            let inputRTFinalGainsArraySample9 = Float(fieldLeftFinalGainsArraySample9)
+            inputLeftFinalGainsArraySample9 = inputRTFinalGainsArraySample9 ?? -99.9
+            
+            let inputRTFinalGainsArraySample10 = Float(fieldLeftFinalGainsArraySample10)
+            inputLeftFinalGainsArraySample10 = inputRTFinalGainsArraySample10 ?? -99.9
+            
+            let inputRTFinalGainsArraySample11 = Float(fieldLeftFinalGainsArraySample11)
+            inputLeftFinalGainsArraySample11 = inputRTFinalGainsArraySample11 ?? -99.9
+            
+            let inputRTFinalGainsArraySample12 = Float(fieldLeftFinalGainsArraySample12)
+            inputLeftFinalGainsArraySample12 = inputRTFinalGainsArraySample12 ?? -99.9
+            
+            let inputRTFinalGainsArraySample13 = Float(fieldLeftFinalGainsArraySample13)
+            inputLeftFinalGainsArraySample13 = inputRTFinalGainsArraySample13 ?? -99.9
+            
+            let inputRTFinalGainsArraySample14 = Float(fieldLeftFinalGainsArraySample14)
+            inputLeftFinalGainsArraySample14 = inputRTFinalGainsArraySample14 ?? -99.9
+            
+            let inputRTFinalGainsArraySample15 = Float(fieldLeftFinalGainsArraySample15)
+            inputLeftFinalGainsArraySample15 = inputRTFinalGainsArraySample15 ?? -99.9
+            
+            let inputRTFinalGainsArraySample16 = Float(fieldLeftFinalGainsArraySample16)
+            inputLeftFinalGainsArraySample16 = inputRTFinalGainsArraySample16 ?? -99.9
+            
+            let inputRTFinalStoredLeftFinalGainsArray = Float(fieldLeftFinalStoredLeftFinalGainsArray)
+            inputLeftFinalStoredLeftFinalGainsArray = inputRTFinalStoredLeftFinalGainsArray ?? -99.9
+            
+            print("inputLeftFinalGainsArraySample1: \(inputLeftFinalGainsArraySample1)")
+            print("inputLeftFinalGainsArraySample2: \(inputLeftFinalGainsArraySample2)")
+            print("inputLeftFinalGainsArraySample3: \(inputLeftFinalGainsArraySample3)")
+            print("inputLeftFinalGainsArraySample4: \(inputLeftFinalGainsArraySample4)")
+            print("inputLeftFinalGainsArraySample5: \(inputLeftFinalGainsArraySample5)")
+            print("inputLeftFinalGainsArraySample6: \(inputLeftFinalGainsArraySample6)")
+            print("inputLeftFinalGainsArraySample7: \(inputLeftFinalGainsArraySample7)")
+            print("inputLeftFinalGainsArraySample8: \(inputLeftFinalGainsArraySample8)")
+            print("inputLeftFinalGainsArraySample9: \(inputLeftFinalGainsArraySample9)")
+            print("inputLeftFinalGainsArraySample10: \(inputLeftFinalGainsArraySample10)")
+            print("inputLeftFinalGainsArraySample11: \(inputLeftFinalGainsArraySample11)")
+            print("inputLeftFinalGainsArraySample12: \(inputLeftFinalGainsArraySample12)")
+            print("inputLeftFinalGainsArraySample13: \(inputLeftFinalGainsArraySample13)")
+            print("inputLeftFinalGainsArraySample14: \(inputLeftFinalGainsArraySample14)")
+            print("inputLeftFinalGainsArraySample15: \(inputLeftFinalGainsArraySample15)")
+            print("inputLeftFinalGainsArraySample16: \(inputLeftFinalGainsArraySample16)")
+        } catch {
+            print("Error in reading onekHZ results")
+        }
+    }
+    
+
+    
 }
 
 extension HoldingCSVInputModel {

@@ -80,6 +80,17 @@ struct LandingView: View {
             }
             .tag(0)
             
+            TrainingTestHoldingPlace()
+            .tabItem {
+                Image(systemName: "ear.fill")
+                    .accentColor(colorModel.tiffanyBlue)
+                Text("Start")
+                    .foregroundColor(colorModel.proceedColor)
+                    .background(colorModel.proceedColor)
+                
+            }
+            .tag(1)
+            
             DisclaimerView(selectedTab: $selectedTab)
             .tabItem {
                 Image(systemName: "arrowshape.zigzag.right.fill")
@@ -88,7 +99,7 @@ struct LandingView: View {
                     .foregroundColor(colorModel.proceedColor)
                     .background(colorModel.proceedColor)
             }
-            .tag(1)
+            .tag(2)
         }
         .environmentObject(setupDataModel)
     }

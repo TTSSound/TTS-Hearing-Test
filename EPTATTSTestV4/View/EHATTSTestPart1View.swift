@@ -194,6 +194,7 @@ struct EHATTSTestPart1View: View {
     @State var playingString: [String] = ["", "Restart Test", "Great Job, You've Completed This Test Segment"]
     @State var playingStringColor: [Color] = [Color.clear, Color.yellow, Color.green]
     @State var playingStringColorIndex = 0
+    @State var playingStringColorIndex2 = 0
     @State var userPausedTest: Bool = false
 
     let fileEHAP1Name = "SummaryEHAP1Results.json"
@@ -219,41 +220,16 @@ struct EHATTSTestPart1View: View {
     var body: some View {
         
         ZStack{
-            RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
+            RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
             VStack {
-//                Spacer()
+
                 Text("EHA Part 1 / EPTA Test")
                     .fontWeight(.bold)
                     .padding()
                     .foregroundColor(.white)
                     .padding(.top, 40)
-                    .padding(.bottom, 40)
-//                HStack {
-//                    Spacer()
-//                    Text(String(envDataObjectModel_testGain))
-//                        .fontWeight(.bold)
-//                        .padding()
-//                        .foregroundColor(.white)
-//                        .padding(.top, 40)
-//                        .padding(.bottom, 40)
-//                    Spacer()
-//                    Text(String(activeFrequency))
-//                        .fontWeight(.bold)
-//                        .padding()
-//                        .foregroundColor(.white)
-//                        .padding(.top, 40)
-//                        .padding(.bottom, 40)
-//                    Spacer()
-//                    Text(String(localPan))
-//                        .fontWeight(.bold)
-//                        .padding()
-//                        .foregroundColor(.white)
-//                        .padding(.top, 40)
-//                        .padding(.bottom, 40)
-//                    Spacer()
-//                Spacer()
-//            HStack{
-//                Spacer()
+                    .padding(.bottom, 20)
+
                 Text("Click to Stat Test")
                     .fontWeight(.bold)
                     .font(.title)
@@ -267,15 +243,8 @@ struct EHATTSTestPart1View: View {
                             print("Start Button Clicked. Playing = \(localPlaying)")
                         }
                     }
-//                Spacer()
-
-//            }
-                    .padding(.top, 40)
-                    .padding(.bottom, 40)
-            
-//            Spacer()
-//                HStack {
-//                    Spacer()
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
                     Button {
                         envDataObjectModel_heardArray.removeAll()
                         pauseRestartTestCycle()
@@ -289,26 +258,13 @@ struct EHATTSTestPart1View: View {
                         Text(playingString[playingStringColorIndex])
                             .foregroundColor(playingStringColor[playingStringColorIndex])
                     }
-                    .padding(.top, 40)
+                    .padding(.top, 20)
                     .padding(.bottom, 20)
-//                Spacer()
                     Button {
                         localPlaying = 0
                         stop()
                         userPausedTest = true
                         playingStringColorIndex = 1
-//                        audioThread.async {
-//                            localPlaying = 0
-//                            stop()
-//                            userPausedTest = true
-//                            playingStringColorIndex = 1
-//                        }
-//                        DispatchQueue.main.async {
-//                            localPlaying = 0
-//                            stop()
-//                            userPausedTest = true
-//                            playingStringColorIndex = 1
-//                        }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2.2, qos: .userInitiated) {
                             localPlaying = 0
                             stop()
@@ -332,13 +288,8 @@ struct EHATTSTestPart1View: View {
                             .foregroundColor(.yellow)
                     }
                     .padding(.top, 20)
-                    .padding(.bottom, 120)
-//                    Spacer()
-//                }
-                
-     
-            
-            Spacer()
+                    .padding(.bottom, 80)
+    
             Text("Press if You Hear The Tone")
                 .fontWeight(.semibold)
                 .padding()
@@ -350,9 +301,9 @@ struct EHATTSTestPart1View: View {
                     heardThread.async{ self.localHeard = 1
                     }
                 }
-                .padding(.top, 40)
-                .padding(.bottom, 40)
-//            Spacer()
+                .padding(.top, 20)
+            
+            Spacer()
             }
             .fullScreenCover(isPresented: $showTestCompletionSheet, content: {
                 ZStack{
@@ -382,14 +333,10 @@ struct EHATTSTestPart1View: View {
                             .foregroundColor(.white)
                             .font(.title3)
                             .padding()
-                            
-                        
                         Spacer()
                         Button(action: {
                             DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
                                 Task(priority: .userInitiated) {
-    //                                pauseRestartTestCycle()
-    //                                await startNextTestCycle()
                                     await combinedPauseRestartAndStartNexTestCycle()
                                 }
                             }
@@ -712,7 +659,7 @@ struct EHATTSTestPart1View: View {
         idxTestCountUpdated = envDataObjectModel_testCount.count + 1
         envDataObjectModel_testCount.append(idxTestCountUpdated)
     }
-    
+}
 //    func arrayTesting() async {
 //        let arraySet1 = Int(envDataObjectModel_testPan.count)
 //        let arraySet2 = Int(envDataObjectModel_testTestGain.count) - Int(envDataObjectModel_frequency.count) + Int(envDataObjectModel_testCount.count) - Int(envDataObjectModel_heardArray.count)
@@ -735,7 +682,7 @@ struct EHATTSTestPart1View: View {
 //            print("---------------------------------------")
 //        }
 //    }
-}
+//}
 
 //MARK: - Preview View Struct
 
@@ -1153,7 +1100,6 @@ extension EHATTSTestPart1View {
             // No ready to log yet
             print("Coninue, not ready to log in assignLRAverageSampleGains")
         }
-
     }
 
 //    func printReversalData() async {
@@ -1262,6 +1208,11 @@ extension EHATTSTestPart1View {
         stop()
         userPausedTest = true
         playingStringColorIndex = 2
+        if envDataObjectModel_index == 31 {
+            playingStringColorIndex2 = 2
+        } else {
+            playingStringColorIndex2 = 1
+        }
         
 //        audioThread.async {
 //            localPlaying = 0
@@ -1393,7 +1344,7 @@ extension EHATTSTestPart1View {
 //        print("Json Data:")
 //        print(data)
         let jsonString = String(data: data, encoding: .utf8)
-//        print(jsonString!)
+        print(jsonString!)
         do {
         self.saveFinalResults = try JSONDecoder().decode(SaveFinalResults.self, from: data)
 //            print("JSON GetData Run")

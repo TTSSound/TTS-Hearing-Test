@@ -45,7 +45,8 @@ struct PreTestView: View {
                     .foregroundColor(.white)
                 
                 NavigationLink {
-                   TrainingTestHoldingPlace()
+                    LandingView()
+//                   TrainingTestHoldingPlace()
                 } label: {
                     Text("We are Now Ready To Start The Test.\nClick Continue to Get Started!")
                         .foregroundColor(.green)
