@@ -65,14 +65,27 @@ class HoldingCSVInputModel: ObservableObject {
     @State var inputTestPurchased = Int()
     
     // 1kHz Bilateral Test Results
-    @State var inputOnekHzactiveFrequency = String()
-    @State var inputRightEar1kHzdBFinal = Float()
-    @State var inputLeftEar1kHzdBFinal = Float()
-    @State var inputonekHzIntraEarDeltaHLFinal = Float()
-    @State var inputOnekHzFinalComboLRGains = [String]()
-    @State var inputOnekHzFinalComboRightGains = Float()
-    @State var inputOnekHzFinalComboLeltGains = Float()
-    @State var inputOnekHzFinalComboDeltaGains = Float()
+//    @State var inputOnekHzactiveFrequency = String()
+//    @State var inputRightEar1kHzdBFinal = Float()
+//    @State var inputLeftEar1kHzdBFinal = Float()
+//    @State var inputonekHzIntraEarDeltaHLFinal = Float()
+//    @State var inputOnekHzFinalComboLRGains = [String]()
+//    @State var inputOnekHzFinalComboRightGains = Float()
+//    @State var inputOnekHzFinalComboLeltGains = Float()
+//    @State var inputOnekHzFinalComboDeltaGains = Float()
+    
+    @State var inputOnekHz_averageGainRightArray1 = Float()
+    @State var inputOnekHz_averageGainRightArray2 = Float()
+    @State var inputOnekHz_averageGainRightArray3 = Float()
+    @State var inputOnekHz_averageGainRightArray4 = Float()
+    @State var inputOnekHz_averageGainLeftArray1 = Float()
+    @State var inputOnekHz_averageGainLeftArray2 = Float()
+    @State var inputOnekHz_averageGainLeftArray3 = Float()
+    @State var inputOnekHz_averageGainLeftArray4 = Float()
+    @State var inputOnekHz_averageLowestGainRightArray = Float()
+    @State var inputOnekHz_HoldingLowestRightGainArray = Float()
+    @State var inputOnekHz_averageLowestGainLeftArray = Float()
+    @State var inputOnekHz_HoldingLowestLeftGainArray = Float()
     
     // EHA Part 1 input Results
     @State var inputRightFinalGainsArraySample1 = Float()
@@ -636,6 +649,15 @@ class HoldingCSVInputModel: ObservableObject {
 //Mark: -1kHZ Bilateral Test Input Results
     //let inputOnekHzSummaryCSVName = "InputSummaryOnekHzResultsCSV.csv.csv"
     
+//onekHz_averageGainRightArray: [0.185, 0.025005, 0.345, 0.185]
+//onekHz_averageGainLeftArray: [0.025005, 0.345, 0.185, 0.205]
+//onekHz_averageLowestGainRightArray: [0.025005]
+//onekHz_HoldingLowestRightGainArray: [0.025005]
+//onekHz_averageLowestGainLeftArray: [0.025005]
+//onekHz_HoldingLowestLeftGainArray: [0.025005]
+//Users/jeffreyjaskunas/Library/Developer/CoreSimulator/Devices/05B0F8D8-D5E9-4CF8-8E31-EB5EDC61373D/data/Containers/Data/Application/546DACC7-B118-4E3D-94DC-CA9C5A252994/Documents/InputSummaryOnekHzResultsCSV.csv
+
+    
     func onekHzInputResultsCSVReader() async {
         
         let onekHzSummaryCSVName = [inputOnekHzSummaryCSVName]
@@ -659,48 +681,81 @@ class HoldingCSVInputModel: ObservableObject {
             print("onekHZResults Read")
             let rows = results.columns
             print("rows: \(rows)")
-            let fieldOnekHzactiveFrequency: String = results[row:0, column: 0]
-            let fieldRightEar1kHzdBFinal: String = results[row:1, column: 0]
-            let fieldLeftEar1kHzdBFinal: String = results[row:2, column: 0]
-            let fieldonekHzIntraEarDeltaHLFinal: String = results[row:3, column: 0]
-            let fieldOnekHzFinalComboLRGains: String = results[row:3, column: 0]
-            let fieldOnekHzFinalComboRightGains: String = results[row:3, column: 0]
-            let fieldOnekHzFinalComboLeltGains: String = results[row:3, column: 1]
-            let fieldOnekHzFinalComboDeltaGains: String = results[row:3, column: 2]
+            let fieldOnekHz_averageGainRightArray1: String = results[row:0, column: 0]
+            let fieldOnekHz_averageGainRightArray2: String = results[row:0, column: 1]
+            let fieldOnekHz_averageGainRightArray3: String = results[row:0, column: 2]
+            let fieldOnekHz_averageGainRightArray4: String = results[row:0, column: 3]
+            let fieldOnekHz_averageGainLeftArray1: String = results[row:1, column: 0]
+            let fieldOnekHz_averageGainLeftArray2: String = results[row:1, column: 1]
+            let fieldOnekHz_averageGainLeftArray3: String = results[row:1, column: 2]
+            let fieldOnekHz_averageGainLeftArray4: String = results[row:1, column: 3]
+            let fieldOnekHz_averageLowestGainRightArray: String = results[row:2, column: 0]
+            let fieldOnekHz_HoldingLowestRightGainArray: String = results[row:3, column: 0]
+            let fieldOnekHz_averageLowestGainLeftArray: String = results[row:4, column: 0]
+            let fieldOnekHz_HoldingLowestLeftGainArray: String = results[row:5, column: 0]
+         
+            print("fieldOnekHz_averageGainRightArray1: \(fieldOnekHz_averageGainRightArray1)")
+            print("fieldOnekHz_averageGainRightArray2: \(fieldOnekHz_averageGainRightArray2)")
+            print("fieldOnekHz_averageGainRightArray3: \(fieldOnekHz_averageGainRightArray3)")
+            print("fieldOnekHz_averageGainRightArray4: \(fieldOnekHz_averageGainRightArray4)")
+            print("fieldOnekHz_averageGainLeftArray1: \(fieldOnekHz_averageGainLeftArray1)")
+            print("fieldOnekHz_averageGainLeftArray2: \(fieldOnekHz_averageGainLeftArray2)")
+            print("fieldOnekHz_averageGainLeftArray3: \(fieldOnekHz_averageGainLeftArray3)")
+            print("fieldOnekHz_averageGainLeftArray4: \(fieldOnekHz_averageGainLeftArray4)")
+            print("fieldOnekHz_averageLowestGainRightArray: \(fieldOnekHz_averageLowestGainRightArray)")
+            print("fieldOnekHz_HoldingLowestRightGainArray: \(fieldOnekHz_HoldingLowestRightGainArray)")
+            print("fieldOnekHz_averageLowestGainLeftArray: \(fieldOnekHz_averageLowestGainLeftArray)")
+            print("fieldOnekHz_HoldingLowestLeftGainArray: \(fieldOnekHz_HoldingLowestLeftGainArray)")
             
-            print("fieldOnekHzactiveFrequency: \(fieldOnekHzactiveFrequency)")
-            print("fieldRightEar1kHzdBFinal: \(fieldRightEar1kHzdBFinal)")
-            print("fieldLeftEar1kHzdBFinal: \(fieldLeftEar1kHzdBFinal)")
-            print("fieldonekHzIntraEarDeltaHLFinal: \(fieldonekHzIntraEarDeltaHLFinal)")
-            print("fieldOnekHzFinalComboLRGains: \(fieldOnekHzFinalComboLRGains)")
-            print("fieldOnekHzFinalComboRightGains: \(fieldOnekHzFinalComboRightGains)")
-            print("fieldOnekHzFinalComboLeltGains: \(fieldOnekHzFinalComboLeltGains)")
-            print("fieldOnekHzFinalComboDeltaGains: \(fieldOnekHzFinalComboDeltaGains)")
+            let inputOnekHz_averageGainRightArry1 = Float(fieldOnekHz_averageGainRightArray1)
+            inputOnekHz_averageGainRightArray1 = inputOnekHz_averageGainRightArry1 ?? -99.9
             
+            let inputOnekHz_averageGainRightArry2 = Float(fieldOnekHz_averageGainRightArray2)
+            inputOnekHz_averageGainRightArray2 = inputOnekHz_averageGainRightArry2 ?? -99.9
             
-            inputOnekHzactiveFrequency = fieldOnekHzactiveFrequency
-            let inputRightEar1kHzdBFnl = Float(fieldRightEar1kHzdBFinal)
-            inputRightEar1kHzdBFinal = inputRightEar1kHzdBFnl ?? -99.9
-            let inputLeftEar1kHzdBFnl = Float(fieldLeftEar1kHzdBFinal)
-            inputLeftEar1kHzdBFinal = inputLeftEar1kHzdBFnl ?? -99.9
-            let inputonekHzIntraEarDeltaHLFnl = Float(fieldonekHzIntraEarDeltaHLFinal)
-            inputonekHzIntraEarDeltaHLFinal = inputonekHzIntraEarDeltaHLFnl ?? -99.9
-            inputOnekHzFinalComboLRGains = [fieldOnekHzFinalComboLRGains]
-            let inputOnekHzFinalComboRightGns = Float(fieldOnekHzFinalComboRightGains)
-            inputOnekHzFinalComboRightGains = inputOnekHzFinalComboRightGns ?? -99.9
-            let inputOnekHzFinalComboLeltGns = Float(fieldOnekHzFinalComboLeltGains)
-            inputOnekHzFinalComboLeltGains = inputOnekHzFinalComboLeltGns ?? -99.9
-            let inputOnekHzFinalComboDeltaGns = Float(fieldOnekHzFinalComboDeltaGains)
-            inputOnekHzFinalComboDeltaGains = inputOnekHzFinalComboDeltaGns ?? -99.9
+            let inputOnekHz_averageGainRightArry3 = Float(fieldOnekHz_averageGainRightArray3)
+            inputOnekHz_averageGainRightArray3 = inputOnekHz_averageGainRightArry3 ?? -99.9
+            
+            let inputOnekHz_averageGainRightArry4 = Float(fieldOnekHz_averageGainRightArray4)
+            inputOnekHz_averageGainRightArray4 = inputOnekHz_averageGainRightArry4 ?? -99.9
+            
+            let inputOnekHz_averageGainLeftArry1 = Float(fieldOnekHz_averageGainLeftArray1)
+            inputOnekHz_averageGainLeftArray1 = inputOnekHz_averageGainLeftArry1 ?? -99.9
+            
+            let inputOnekHz_averageGainLeftArry2 = Float(fieldOnekHz_averageGainLeftArray2)
+            inputOnekHz_averageGainLeftArray2 = inputOnekHz_averageGainLeftArry2 ?? -99.9
+            
+            let inputOnekHz_averageGainLeftArry3 = Float(fieldOnekHz_averageGainLeftArray3)
+            inputOnekHz_averageGainLeftArray3 = inputOnekHz_averageGainLeftArry3 ?? -99.9
+            
+            let inputOnekHz_averageGainLeftArry4 = Float(fieldOnekHz_averageGainLeftArray4)
+            inputOnekHz_averageGainLeftArray4 = inputOnekHz_averageGainLeftArry4 ?? -99.9
+            
+            let inputOnekHz_averageLowestGainRightArry = Float(fieldOnekHz_averageLowestGainRightArray)
+            inputOnekHz_averageLowestGainRightArray = inputOnekHz_averageLowestGainRightArry ?? -99.9
+            
+            let inputOnekHz_HoldingLowestRightGainArry = Float(fieldOnekHz_HoldingLowestRightGainArray)
+            inputOnekHz_HoldingLowestRightGainArray = inputOnekHz_HoldingLowestRightGainArry ?? -99.9
+            
+            let inputOnekHz_averageLowestGainLeftArry = Float(fieldOnekHz_averageLowestGainLeftArray)
+            inputOnekHz_averageLowestGainLeftArray = inputOnekHz_averageLowestGainLeftArry ?? -99.9
+            
+            let inputOnekHz_HoldingLowestLeftGainArry = Float(fieldOnekHz_HoldingLowestLeftGainArray)
+            inputOnekHz_HoldingLowestLeftGainArray = inputOnekHz_HoldingLowestLeftGainArry ?? -99.9
+            
 
-            print("inputOnekHzactiveFrequency: \(inputOnekHzactiveFrequency)")
-            print("inputRightEar1kHzdBFinal: \(inputRightEar1kHzdBFinal)")
-            print("inputLeftEar1kHzdBFinal: \(inputLeftEar1kHzdBFinal)")
-            print("inputonekHzIntraEarDeltaHLFinal: \(inputonekHzIntraEarDeltaHLFinal)")
-            print("inputOnekHzFinalComboLRGains: \(inputOnekHzFinalComboLRGains)")
-            print("inputOnekHzFinalComboRightGains: \(inputOnekHzFinalComboRightGains)")
-            print("inputOnekHzFinalComboLeltGains: \(inputOnekHzFinalComboLeltGains)")
-            print("inputOnekHzFinalComboDeltaGains: \(inputOnekHzFinalComboDeltaGains)")
+            print("inputOnekHz_averageGainRightArray1: \(inputOnekHz_averageGainRightArray1)")
+            print("inputOnekHz_averageGainRightArray2: \(inputOnekHz_averageGainRightArray2)")
+            print("inputOnekHz_averageGainRightArray3: \(inputOnekHz_averageGainRightArray3)")
+            print("inputOnekHz_averageGainRightArray4: \(inputOnekHz_averageGainRightArray4)")
+            print("inputOnekHz_averageGainLeftArray1: \(inputOnekHz_averageGainLeftArray1)")
+            print("inputOnekHz_averageGainLeftArray2: \(inputOnekHz_averageGainLeftArray2)")
+            print("inputOnekHz_averageGainLeftArray3: \(inputOnekHz_averageGainLeftArray3)")
+            print("inputOnekHz_averageGainLeftArray4: \(inputOnekHz_averageGainLeftArray4)")
+            print("inputOnekHz_averageLowestGainRightArray: \(inputOnekHz_averageLowestGainRightArray)")
+            print("inputOnekHz_HoldingLowestRightGainArray: \(inputOnekHz_HoldingLowestRightGainArray)")
+            print("inputOnekHz_averageLowestGainLeftArray: \(inputOnekHz_averageLowestGainLeftArray)")
+            print("inputOnekHz_HoldingLowestLeftGainArray: \(inputOnekHz_HoldingLowestLeftGainArray)")
         } catch {
             print("Error in reading onekHZ results")
         }

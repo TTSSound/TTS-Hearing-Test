@@ -966,19 +966,6 @@ extension Bilateral1kHzTestView {
         }
     }
     
-//    func lowestAverageLeftGain() async {
-//        let idxL = onekHz_averageGainLeftArray.count
-//        print("ixdL: \(idxL)")
-//        if idxL == 7 {
-//            let avgLeftSorted = onekHz_averageGainLeftArray.sorted()
-//                onekHz_averageLowestGainLeftArray.append(avgLeftSorted[0])
-//                onekHz_HoldingLowestLeftGainArray.append(avgLeftSorted[0])
-//        } else if idxL < 7 {
-//            print("idxLeft != 7 \(idxL)")
-//        } else {
-//            print("!!!Critical error in lowestAverageLeftRain Assign Gain Logic")
-//        }
-//    }
     
     func printGainArrays() async {
         print("onekHz_averageGainRightArray: \(onekHz_averageGainRightArray)")
@@ -1090,46 +1077,8 @@ extension Bilateral1kHzTestView {
         }
     }
     
-    
-//    func printOnekHzArrays() async {
-//        DispatchQueue.global(qos: .background).async {
-//            print("================================")
-//            print("***********printOnekHzArrays**********")
-//            print("needToRepeatTesting: \(needToRepeatTesting)")
-//            print("onekHz_HoldingLowestRightGainArray: \(onekHz_HoldingLowestRightGainArray)")
-//            print("onekHz_HoldingLowestLeftGainArray: \(onekHz_HoldingLowestLeftGainArray)")
-//            print("onekHz_averageGainRightArray: \(onekHz_averageGainRightArray)")
-//            print("onekHz_averageLowestGainRightArray: \(onekHz_averageLowestGainRightArray)")
-//            print("onekHz_averageGainLeftArray: \(onekHz_averageGainLeftArray)")
-//            print("onekHz_averageLowestGainLeftArray: \(onekHz_averageLowestGainLeftArray)")
-//            print("RightEar1kHzdB1: \(RightEar1kHzdB1)")
-//            print("LeftEar1kHzdB1: \(LeftEar1kHzdB1)")
-//            print("onekHzFinalLRGains1: \(onekHzFinalLRGains1)")
-//            print("RightEar1kHzdB2: \(RightEar1kHzdB2)")
-//            print("LeftEar1kHzdB2: \(LeftEar1kHzdB2)")
-//            print("onekHzFinalLRGains2: \(onekHzFinalLRGains2)")
-//            print("RightEar1kHzdBFinal: \(RightEar1kHzdBFinal)")
-//            print("LeftEar1kHzdBFinal: \(LeftEar1kHzdBFinal)")
-//            print("onekHzIntraEarDeltaHLFinal: \(onekHzIntraEarDeltaHLFinal)")
-//            print("onekHzFinalComboLRGains: \(onekHzFinalComboLRGains)")
-//            print("onekHz_testPan: \(onekHz_testPan)")
-//            print("onekHz_indexForTest: \(onekHz_indexForTest)")
-//            print("onekHz_reversalGain: \(onekHz_reversalGain)")
-//            print("heardArray: \(onekHz_heardArray)")
-//            print("onekHz_reversalHeard: \(onekHz_reversalHeard)")
-//            print("onekHzactiveFrequency: \(onekHzactiveFrequency)")
-//            print("onekHz_testTestGain: \(onekHz_testTestGain)")
-//            print("***********printOnekHzArrays**********")
-//            print("================================")
-//        }
-//    }
-    
     func onekHzconcatenateFinalArrays() async {
         if onekHzlocalMarkNewTestCycle == 1 && onekHzlocalReversalEnd == 1 {
-            
-            final_onekHz_Name.append(contentsOf: ["100000000"] + ["Jeff"])
-            final_onekHz_Age.append(contentsOf: [100000000] + [36])
-            final_onekHz_Sex.append(contentsOf: [100000000] + [1])
             final_onekHz_onekHzactiveFrequency.append(contentsOf: ["100000000"] + [String(onekHzactiveFrequency)])
             final_onekHz_onekHzfirstGain.append(contentsOf: [1000000.0] + [onekHzfirstGain])
             final_onekHz_onekHzsecondGain.append(contentsOf: [1000000.0] + [onekHzsecondGain])
@@ -1278,67 +1227,22 @@ extension Bilateral1kHzTestView {
         }
     }
     
-//    final_onekHz_Name.append(contentsOf: ["100000000"] + ["Jeff"])
-//    final_onekHz_Age.append(contentsOf: [100000000] + [36])
-//    final_onekHz_Sex.append(contentsOf: [100000000] + [1])
-//    final_onekHz_onekHzactiveFrequency.append(contentsOf: ["100000000"] + [String(onekHzactiveFrequency)])
-//    final_onekHz_onekHzfirstGain.append(contentsOf: [1000000.0] + [onekHzfirstGain])
-//    final_onekHz_onekHzsecondGain.append(contentsOf: [1000000.0] + [onekHzsecondGain])
-//    final_onekHz_heardArray.append(contentsOf: [10000000] + onekHz_heardArray)
-//    final_onekHz_reversalHeard.append(contentsOf: [10000000] + onekHz_reversalHeard)
-//    final_onekHz_reversalGain.append(contentsOf: [1000000.0] + onekHz_reversalGain)
-//    final_onekHz_testTestGain.append(contentsOf: [1000000.0] + onekHz_testTestGain)
-//    final_onekHz_averageGain.append(contentsOf: [1000000.0] + [onekHz_averageGain])
-//
-//    final_onekHz_averageGainRightArray.append(contentsOf: [1000000.0] + onekHz_averageGainRightArray)
-//    final_onekHz_averageGainLeftArray.append(contentsOf: [1000000.0] + onekHz_averageGainLeftArray)
-//    final_onekHz_averageLowestGainRightArray.append(contentsOf: [1000000.0] + onekHz_averageLowestGainRightArray)
-//    final_onekHz_HoldingLowestRightGainArray.append(contentsOf: [1000000.0] + onekHz_HoldingLowestRightGainArray)
-//    final_onekHz_averageLowestGainLeftArray.append(contentsOf: [1000000.0] + onekHz_averageLowestGainLeftArray)
-//    final_onekHz_HoldingLowestLeftGainArray.append(contentsOf: [10000000] + onekHz_HoldingLowestLeftGainArray)
-    
-//    final_onekHz_Name
-//    final_onekHz_Age
-//    final_onekHz_Sex
-//    final_onekHz_onekHzactiveFrequency
-//    final_onekHz_onekHzfirstGain
-//    final_onekHz_onekHzsecondGain
-//    final_onekHz_heardArray
-//    final_onekHz_reversalHeard
-//    final_onekHz_reversalGain
-//    final_onekHz_testTestGain
-//    final_onekHz_averageGain
-//    final_onekHz_averageGainRightArray
-//    final_onekHz_averageGainLeftArray
-//    final_onekHz_averageLowestGainRightArray
-//    final_onekHz_HoldingLowestRightGainArray
-//    final_onekHz_averageLowestGainLeftArray
-//    final_onekHz_HoldingLowestLeftGainArray
-
-    
-    
-    
     func onekHzWriteDetailedResultsToCSV() async {
-        let onekHzstringFinalStoredName = "Name"
-        let onekHzstringFinalStoredAge = String(36)
-        let onekHzstringFinalStoredSex = String(1)
-        let onekHzstringFinalStoredFrequency = "finalStoredFrequency," + [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredRightEar1kHzdBFinal = "RightEar1kHzdBFinal," + [RightEar1kHzdBFinal].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredLeftEar1kHzdBFinal = "LeftEar1kHzdBFinal," + [LeftEar1kHzdBFinal].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHzIntraEarDeltaHLFinal = "onekHzIntraEarDeltaHLFinal," + [onekHzIntraEarDeltaHLFinal].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHzFinalComboLRGains = "onekHzFinalComboLRGains," + onekHzFinalComboLRGains.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredRightEar1kHzdB1 = "RightEar1kHzdB1," + [RightEar1kHzdB1].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredLeftEar1kHzdB1 = "LeftEar1kHzdB1," + [LeftEar1kHzdB1].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHzFinalLRGains1 = "onekHzFinalLRGains1," + onekHzFinalLRGains1.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredRightEar1kHzdB2 = "RightEar1kHzdB2," + [RightEar1kHzdB2].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredLeftEar1kHzdB2 = "LeftEar1kHzdB2," + [LeftEar1kHzdB2].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHzFinalLRGains2 = "onekHzFinalLRGains2," + onekHzFinalLRGains2.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHz_testPan = "onekHz_testPan," + onekHz_testPan.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHz_indexForTest = "onekHz_indexForTest," + onekHz_indexForTest.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHz_reversalGain = "onekHz_reversalGain," + onekHz_reversalGain.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHz_testTestGain = "onekHz_testTestGain," + onekHz_testTestGain.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalOnekHzactiveFrequency = "finalStoredFrequency," + [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalOnekHzfirstGain = "firstGain," + [onekHzfirstGain].map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalOnekHzsecondGain = "secondGain," + [onekHzsecondGain].map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalHeardArray = "heardArray," + onekHz_heardArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalReversalHeard = "reversalHeard," + onekHz_reversalHeard.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalReversalGain = "reversalGain," + onekHz_reversalGain.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalTestTestGain = "testTestGain," + onekHz_testTestGain.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageGain = "averageGain," + [onekHz_averageGain].map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageGainRightArray = "averageGainRightArray," + onekHz_averageGainRightArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageGainLeftArray = "averageGainLeftArray," + onekHz_averageGainLeftArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageLowestGainRightArray = "averageLowestGainRightArray," + onekHz_averageLowestGainRightArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalHoldingLowestRightGainArray = "HoldingLowestRightGainArray," + onekHz_HoldingLowestRightGainArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageLowestGainLeftArray = "averageLowestGainLeftArray," + onekHz_averageLowestGainLeftArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalHoldingLowestLeftGainArray = "HoldingLowestLeftGainArray," + onekHz_HoldingLowestLeftGainArray.map { String($0) }.joined(separator: ",")
 
-        
         do {
             let csvonekHzDetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvonekHzDetailDocumentsDirectory = csvonekHzDetailPath
@@ -1347,25 +1251,20 @@ extension Bilateral1kHzTestView {
 //            print(csvonekHzDetailFilePath)
             
             let writer = try CSVWriter(fileURL: csvonekHzDetailFilePath, append: false)
-            
-            try writer.write(row: [onekHzstringFinalStoredName])
-            try writer.write(row: [onekHzstringFinalStoredAge])
-            try writer.write(row: [onekHzstringFinalStoredSex])
-            try writer.write(row: [onekHzstringFinalStoredFrequency])
-            try writer.write(row: [onekHzstringFinalStoredRightEar1kHzdBFinal])
-            try writer.write(row: [onekHzstringFinalStoredLeftEar1kHzdBFinal])
-            try writer.write(row: [onekHzstringFinalStoredonekHzIntraEarDeltaHLFinal])
-            try writer.write(row: [onekHzstringFinalStoredonekHzFinalComboLRGains])
-            try writer.write(row: [onekHzstringFinalStoredRightEar1kHzdB1])
-            try writer.write(row: [onekHzstringFinalStoredLeftEar1kHzdB1])
-            try writer.write(row: [onekHzstringFinalStoredonekHzFinalLRGains1])
-            try writer.write(row: [onekHzstringFinalStoredRightEar1kHzdB2])
-            try writer.write(row: [onekHzstringFinalStoredLeftEar1kHzdB2])
-            try writer.write(row: [onekHzstringFinalStoredonekHzFinalLRGains2])
-            try writer.write(row: [onekHzstringFinalStoredonekHz_testPan])
-            try writer.write(row: [onekHzstringFinalStoredonekHz_indexForTest])
-            try writer.write(row: [onekHzstringFinalStoredonekHz_reversalGain])
-            try writer.write(row: [onekHzstringFinalStoredonekHz_testTestGain])
+            try writer.write(row: [onekHzstringFinalOnekHzactiveFrequency])
+            try writer.write(row: [onekHzstringFinalOnekHzfirstGain])
+            try writer.write(row: [onekHzstringFinalOnekHzsecondGain])
+            try writer.write(row: [onekHzstringFinalHeardArray])
+            try writer.write(row: [onekHzstringFinalReversalHeard])
+            try writer.write(row: [onekHzstringFinalReversalGain])
+            try writer.write(row: [onekHzstringFinalTestTestGain])
+            try writer.write(row: [onekHzstringFinalAverageGain])
+            try writer.write(row: [onekHzstringFinalAverageGainRightArray])
+            try writer.write(row: [onekHzstringFinalAverageGainLeftArray])
+            try writer.write(row: [onekHzstringFinalAverageLowestGainRightArray])
+            try writer.write(row: [onekHzstringFinalHoldingLowestRightGainArray])
+            try writer.write(row: [onekHzstringFinalAverageLowestGainLeftArray])
+            try writer.write(row: [onekHzstringFinalHoldingLowestLeftGainArray])
 
 //            print("CVS EHAP1 Detailed Writer Success")
         } catch {
@@ -1374,16 +1273,15 @@ extension Bilateral1kHzTestView {
     }
 
     func onekHzwriteSummarydResultsToCSV() async {
-        let onekHzstringFinalStoredResultsFrequency = "finalStoredResultsFrequency," + [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsRightEar1kHzdBFinal = "finalStoredResultsRightEar1kHzdBFinal," + [RightEar1kHzdBFinal].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsLeftEar1kHzdBFinal = "finalStoredResultsLeftEar1kHzdBFinal," + [LeftEar1kHzdBFinal].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsonekHzIntraEarDeltaHLFinal = "finalStoredResultsonekHzIntraEarDeltaHLFinal," + [onekHzIntraEarDeltaHLFinal].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsonekHzFinalComboLRGains = "finalStoredResultsonekHzFinalComboLRGains," + onekHzFinalComboLRGains.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsonekHz_testPan = "finalStoredResultsonekHz_testPan," + onekHz_testPan.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsonekHz_indexForTest = "finalStoredResultsonekHz_indexForTest," + onekHz_indexForTest.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsonekHz_reversalGain = "finalStoredResultsonekHz_reversalGain," + onekHz_reversalGain.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsonekHz_testTestGain = "finalStoredResultsonekHz_testTestGain," + onekHz_testTestGain.map { String($0) }.joined(separator: ",")
-
+        let onekHzstringFinalOnekHzactiveFrequency = "finalStoredFrequency," + [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalReversalGain = "reversalGain," + onekHz_reversalGain.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalTestTestGain = "testTestGain," + onekHz_testTestGain.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageGainRightArray = "averageGainRightArray," + onekHz_averageGainRightArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageGainLeftArray = "averageGainLeftArray," + onekHz_averageGainLeftArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageLowestGainRightArray = "averageLowestGainRightArray," + onekHz_averageLowestGainRightArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalHoldingLowestRightGainArray = "HoldingLowestRightGainArray," + onekHz_HoldingLowestRightGainArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageLowestGainLeftArray = "averageLowestGainLeftArray," + onekHz_averageLowestGainLeftArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalHoldingLowestLeftGainArray = "HoldingLowestLeftGainArray," + onekHz_HoldingLowestLeftGainArray.map { String($0) }.joined(separator: ",")
         
          do {
              let csvonekHzSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -1392,16 +1290,15 @@ extension Bilateral1kHzTestView {
              let csvonekHzSummaryFilePath = csvonekHzSummaryDocumentsDirectory.appendingPathComponent(summaryOnekHzCSVName)
 //             print(csvonekHzSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvonekHzSummaryFilePath, append: false)
-             
-             try writer.write(row: [onekHzstringFinalStoredResultsFrequency])
-             try writer.write(row: [onekHzstringFinalStoredResultsRightEar1kHzdBFinal])
-             try writer.write(row: [onekHzstringFinalStoredResultsLeftEar1kHzdBFinal])
-             try writer.write(row: [onekHzstringFinalStoredResultsonekHzIntraEarDeltaHLFinal])
-             try writer.write(row: [onekHzstringFinalStoredResultsonekHzFinalComboLRGains])
-             try writer.write(row: [onekHzstringFinalStoredResultsonekHz_testPan])
-             try writer.write(row: [onekHzstringFinalStoredResultsonekHz_indexForTest])
-             try writer.write(row: [onekHzstringFinalStoredResultsonekHz_reversalGain])
-             try writer.write(row: [onekHzstringFinalStoredResultsonekHz_testTestGain])
+             try writer.write(row: [onekHzstringFinalOnekHzactiveFrequency])
+             try writer.write(row: [onekHzstringFinalReversalGain])
+             try writer.write(row: [onekHzstringFinalTestTestGain])
+             try writer.write(row: [onekHzstringFinalAverageGainRightArray])
+             try writer.write(row: [onekHzstringFinalAverageGainLeftArray])
+             try writer.write(row: [onekHzstringFinalAverageLowestGainRightArray])
+             try writer.write(row: [onekHzstringFinalHoldingLowestRightGainArray])
+             try writer.write(row: [onekHzstringFinalAverageLowestGainLeftArray])
+             try writer.write(row: [onekHzstringFinalHoldingLowestLeftGainArray])
             
 //             print("CVS Summary EHA Part 1 Data Writer Success")
          } catch {
@@ -1411,25 +1308,21 @@ extension Bilateral1kHzTestView {
 
 
     func onekHzWriteInputDetailedResultsToCSV() async {
-        
-        let onekHzstringFinalStoredName = "Name"
-        let onekHzstringFinalStoredAge = String(36)
-        let onekHzstringFinalStoredSex = String(1)
-        let onekHzstringFinalStoredFrequency = [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredRightEar1kHzdBFinal = [RightEar1kHzdBFinal].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredLeftEar1kHzdBFinal = [LeftEar1kHzdBFinal].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHzIntraEarDeltaHLFinal = [onekHzIntraEarDeltaHLFinal].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHzFinalComboLRGains = onekHzFinalComboLRGains.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredRightEar1kHzdB1 = [RightEar1kHzdB1].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredLeftEar1kHzdB1 = [LeftEar1kHzdB1].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHzFinalLRGains1 = onekHzFinalLRGains1.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredRightEar1kHzdB2 = [RightEar1kHzdB2].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredLeftEar1kHzdB2 = [LeftEar1kHzdB2].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHzFinalLRGains2 = onekHzFinalLRGains2.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHz_testPan = onekHz_testPan.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHz_indexForTest = onekHz_indexForTest.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHz_reversalGain = onekHz_reversalGain.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredonekHz_testTestGain = onekHz_testTestGain.map { String($0) }.joined(separator: ",")
+ 
+        let onekHzstringFinalOnekHzactiveFrequency = [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalOnekHzfirstGain = [onekHzfirstGain].map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalOnekHzsecondGain = [onekHzsecondGain].map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalHeardArray = onekHz_heardArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalReversalHeard = onekHz_reversalHeard.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalReversalGain = onekHz_reversalGain.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalTestTestGain = onekHz_testTestGain.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageGain = [onekHz_averageGain].map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageGainRightArray = onekHz_averageGainRightArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageGainLeftArray = onekHz_averageGainLeftArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageLowestGainRightArray = onekHz_averageLowestGainRightArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalHoldingLowestRightGainArray = onekHz_HoldingLowestRightGainArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageLowestGainLeftArray = onekHz_averageLowestGainLeftArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalHoldingLowestLeftGainArray = onekHz_HoldingLowestLeftGainArray.map { String($0) }.joined(separator: ",")
 
         do {
             let csvInputonekHzDetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -1438,25 +1331,20 @@ extension Bilateral1kHzTestView {
             let csvInputonekHzDetailFilePath = csvInputonekHzDetailDocumentsDirectory.appendingPathComponent(inputOnekHzDetailedCSVName)
 //            print(csvInputonekHzDetailFilePath)
             let writer = try CSVWriter(fileURL: csvInputonekHzDetailFilePath, append: false)
-            
-            try writer.write(row: [onekHzstringFinalStoredName])
-            try writer.write(row: [onekHzstringFinalStoredAge])
-            try writer.write(row: [onekHzstringFinalStoredSex])
-            try writer.write(row: [onekHzstringFinalStoredFrequency])
-            try writer.write(row: [onekHzstringFinalStoredRightEar1kHzdBFinal])
-            try writer.write(row: [onekHzstringFinalStoredLeftEar1kHzdBFinal])
-            try writer.write(row: [onekHzstringFinalStoredonekHzIntraEarDeltaHLFinal])
-            try writer.write(row: [onekHzstringFinalStoredonekHzFinalComboLRGains])
-            try writer.write(row: [onekHzstringFinalStoredRightEar1kHzdB1])
-            try writer.write(row: [onekHzstringFinalStoredLeftEar1kHzdB1])
-            try writer.write(row: [onekHzstringFinalStoredonekHzFinalLRGains1])
-            try writer.write(row: [onekHzstringFinalStoredRightEar1kHzdB2])
-            try writer.write(row: [onekHzstringFinalStoredLeftEar1kHzdB2])
-            try writer.write(row: [onekHzstringFinalStoredonekHzFinalLRGains2])
-            try writer.write(row: [onekHzstringFinalStoredonekHz_testPan])
-            try writer.write(row: [onekHzstringFinalStoredonekHz_indexForTest])
-            try writer.write(row: [onekHzstringFinalStoredonekHz_reversalGain])
-            try writer.write(row: [onekHzstringFinalStoredonekHz_testTestGain])
+            try writer.write(row: [onekHzstringFinalOnekHzactiveFrequency])
+            try writer.write(row: [onekHzstringFinalOnekHzfirstGain])
+            try writer.write(row: [onekHzstringFinalOnekHzsecondGain])
+            try writer.write(row: [onekHzstringFinalHeardArray])
+            try writer.write(row: [onekHzstringFinalReversalHeard])
+            try writer.write(row: [onekHzstringFinalReversalGain])
+            try writer.write(row: [onekHzstringFinalTestTestGain])
+            try writer.write(row: [onekHzstringFinalAverageGain])
+            try writer.write(row: [onekHzstringFinalAverageGainRightArray])
+            try writer.write(row: [onekHzstringFinalAverageGainLeftArray])
+            try writer.write(row: [onekHzstringFinalAverageLowestGainRightArray])
+            try writer.write(row: [onekHzstringFinalHoldingLowestRightGainArray])
+            try writer.write(row: [onekHzstringFinalAverageLowestGainLeftArray])
+            try writer.write(row: [onekHzstringFinalHoldingLowestLeftGainArray])
 
 //            print("CVS Input EHA Part 1Detailed Writer Success")
         } catch {
@@ -1465,15 +1353,13 @@ extension Bilateral1kHzTestView {
     }
 
     func onekHzwriteInputSummarydResultsToCSV() async {
-        let onekHzstringFinalStoredResultsFrequency = [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsRightEar1kHzdBFinal = [RightEar1kHzdBFinal].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsLeftEar1kHzdBFinal = [LeftEar1kHzdBFinal].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsonekHzIntraEarDeltaHLFinal = [onekHzIntraEarDeltaHLFinal].map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsonekHzFinalComboLRGains = onekHzFinalComboLRGains.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsonekHz_testPan = onekHz_testPan.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsonekHz_indexForTest = onekHz_indexForTest.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsonekHz_reversalGain = onekHz_reversalGain.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalStoredResultsonekHz_testTestGain = onekHz_testTestGain.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalOnekHzactiveFrequency = [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageGainRightArray = onekHz_averageGainRightArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageGainLeftArray = onekHz_averageGainLeftArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageLowestGainRightArray = onekHz_averageLowestGainRightArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalHoldingLowestRightGainArray = onekHz_HoldingLowestRightGainArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalAverageLowestGainLeftArray = onekHz_averageLowestGainLeftArray.map { String($0) }.joined(separator: ",")
+        let onekHzstringFinalHoldingLowestLeftGainArray = onekHz_HoldingLowestLeftGainArray.map { String($0) }.joined(separator: ",")
         
          do {
              let csvonekHzInputSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -1482,16 +1368,13 @@ extension Bilateral1kHzTestView {
              let csvonekHzInputSummaryFilePath = csvonekHzInputSummaryDocumentsDirectory.appendingPathComponent(inputOnekHzSummaryCSVName)
              print(csvonekHzInputSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvonekHzInputSummaryFilePath, append: false)
-             
-             try writer.write(row: [onekHzstringFinalStoredResultsFrequency])
-             try writer.write(row: [onekHzstringFinalStoredResultsRightEar1kHzdBFinal])
-             try writer.write(row: [onekHzstringFinalStoredResultsLeftEar1kHzdBFinal])
-             try writer.write(row: [onekHzstringFinalStoredResultsonekHzIntraEarDeltaHLFinal])
-             try writer.write(row: [onekHzstringFinalStoredResultsonekHzFinalComboLRGains])
-             try writer.write(row: [onekHzstringFinalStoredResultsonekHz_testPan])
-             try writer.write(row: [onekHzstringFinalStoredResultsonekHz_indexForTest])
-             try writer.write(row: [onekHzstringFinalStoredResultsonekHz_reversalGain])
-             try writer.write(row: [onekHzstringFinalStoredResultsonekHz_testTestGain])
+             try writer.write(row: [onekHzstringFinalOnekHzactiveFrequency])
+             try writer.write(row: [onekHzstringFinalAverageGainRightArray])
+             try writer.write(row: [onekHzstringFinalAverageGainLeftArray])
+             try writer.write(row: [onekHzstringFinalAverageLowestGainRightArray])
+             try writer.write(row: [onekHzstringFinalHoldingLowestRightGainArray])
+             try writer.write(row: [onekHzstringFinalAverageLowestGainLeftArray])
+             try writer.write(row: [onekHzstringFinalHoldingLowestLeftGainArray])
 
 //             print("CVS Input EHA Part 1 Summary Data Writer Success")
          } catch {
