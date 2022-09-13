@@ -25,25 +25,23 @@ import CodableCSV
 
 
 struct onekHzSaveFinalResults: Codable {  // This is a model
-//    var id = UUID()
-    var jsonName = String()
-    var jsonAge = Int()
-    var jsonSex = Int()
-    var jsononekHzactiveFrequency = String()
-    var jsonRightEar1kHzdBFinal = Float()
-    var jsonLeftEar1kHzdBFinal = Float()
-    var jsononekHzIntraEarDeltaHLFinal = Float()
-    var jsononekHzFinalComboLRGains = [Float]()
-    var jsonRightEar1kHzdB1 = Float()
-    var jsonLeftEar1kHzdB1 = Float()
-    var jsononekHzFinalLRGains1 = [Float]()
-    var jsonRightEar1kHzdB2 = Float()
-    var jsonLeftEar1kHzdB2 = Float()
-    var jsononekHzFinalLRGains2 = [Float]()
-    var jsononekHz_testPan = [Float]()
-    var jsononekHz_indexForTest = [Int]()
-    var jsononekHz_reversalGain = [Float]()
-    var jsononekHz_testTestGain = [Float]()
+    var json_onekHz_Name = String()
+    var json_onekHz_Age = Int()
+    var json_onekHz_Sex = Int()
+    var json_onekHz_onekHzactiveFrequency = String()
+    var json_onekHz_onekHzfirstGain = Float()
+    var json_onekHz_onekHzsecondGain = Float()
+    var json_onekHz_heardArray = [Int]()
+    var json_onekHz_reversalHeard = [Int]()
+    var json_onekHz_reversalGain = [Float]()
+    var json_onekHz_testTestGain = [Float]()
+    var json_onekHz_averageGain = Float()
+    var json_onekHz_averageGainRightArray = [Float]()
+    var json_onekHz_averageGainLeftArray = [Float]()
+    var json_onekHz_averageLowestGainRightArray = [Float]()
+    var json_onekHz_HoldingLowestRightGainArray = [Float]()
+    var json_onekHz_averageLowestGainLeftArray = [Float]()
+    var json_onekHz_HoldingLowestLeftGainArray = [Float]()
 }
 
 
@@ -177,24 +175,42 @@ struct Bilateral1kHzTestView: View {
     @State var onekHz_finalStoredFirstGain: [Float] = [Float]()
     @State var onekHz_finalStoredSecondGain: [Float] = [Float]()
     
-    @State var final_Name = [String]()
-    @State var final_Age = [Int]()
-    @State var final_Sex = [Int]()
-    @State var final_onekHzactiveFrequency = [String]()
-    @State var final_RightEar1kHzdBFinal = [Float]()
-    @State var final_LeftEar1kHzdBFinal = [Float]()
-    @State var final_onekHzIntraEarDeltaHLFinal = [Float]()
-    @State var final_onekHzFinalComboLRGains = [Float]()
-    @State var final_RightEar1kHzdB1 = [Float]()
-    @State var final_LeftEar1kHzdB1 = [Float]()
-    @State var final_onekHzFinalLRGains1 = [Float]()
-    @State var final_RightEar1kHzdB2 = [Float]()
-    @State var final_LeftEar1kHzdB2 = [Float]()
-    @State var final_onekHzFinalLRGains2 = [Float]()
-    @State var final_onekHz_testPan = [Float]()
-    @State var final_onekHz_indexForTest = [Int]()
+//    @State var final_Name = [String]()
+//    @State var final_Age = [Int]()
+//    @State var final_Sex = [Int]()
+//    @State var final_onekHzactiveFrequency = [String]()
+//    @State var final_RightEar1kHzdBFinal = [Float]()
+//    @State var final_LeftEar1kHzdBFinal = [Float]()
+//    @State var final_onekHzIntraEarDeltaHLFinal = [Float]()
+//    @State var final_onekHzFinalComboLRGains = [Float]()
+//    @State var final_RightEar1kHzdB1 = [Float]()
+//    @State var final_LeftEar1kHzdB1 = [Float]()
+//    @State var final_onekHzFinalLRGains1 = [Float]()
+//    @State var final_RightEar1kHzdB2 = [Float]()
+//    @State var final_LeftEar1kHzdB2 = [Float]()
+//    @State var final_onekHzFinalLRGains2 = [Float]()
+//    @State var final_onekHz_testPan = [Float]()
+//    @State var final_onekHz_indexForTest = [Int]()
+//    @State var final_onekHz_reversalGain = [Float]()
+//    @State var final_onekHz_testTestGain = [Float]()
+    
+    @State var final_onekHz_Name = [String]()
+    @State var final_onekHz_Age = [Int]()
+    @State var final_onekHz_Sex = [Int]()
+    @State var final_onekHz_onekHzactiveFrequency = [String]()
+    @State var final_onekHz_onekHzfirstGain = [Float]()
+    @State var final_onekHz_onekHzsecondGain = [Float]()
+    @State var final_onekHz_heardArray = [Int]()
+    @State var final_onekHz_reversalHeard = [Int]()
     @State var final_onekHz_reversalGain = [Float]()
     @State var final_onekHz_testTestGain = [Float]()
+    @State var final_onekHz_averageGain = [Float]()
+    @State var final_onekHz_averageGainRightArray = [Float]()
+    @State var final_onekHz_averageGainLeftArray = [Float]()
+    @State var final_onekHz_averageLowestGainRightArray = [Float]()
+    @State var final_onekHz_HoldingLowestRightGainArray = [Float]()
+    @State var final_onekHz_averageLowestGainLeftArray = [Float]()
+    @State var final_onekHz_HoldingLowestLeftGainArray = [Float]()
     
             //!!!Changes
             @State var onekHz_finalStoredAverageGain: [Float] = [Float]()
@@ -1111,26 +1127,25 @@ extension Bilateral1kHzTestView {
     func onekHzconcatenateFinalArrays() async {
         if onekHzlocalMarkNewTestCycle == 1 && onekHzlocalReversalEnd == 1 {
             
-            final_Name.append(contentsOf: ["100000000"] + ["Jeff"])
-            final_Age.append(contentsOf: [100000000] + [36])
-            final_Sex.append(contentsOf: [100000000] + [1])
-            final_onekHzactiveFrequency.append(contentsOf: ["100000000"] + [String(onekHzactiveFrequency)])
-            final_RightEar1kHzdBFinal.append(contentsOf: [1000000.0] + [RightEar1kHzdBFinal])
-            final_LeftEar1kHzdBFinal.append(contentsOf: [1000000.0] + [LeftEar1kHzdBFinal])
-            final_onekHzIntraEarDeltaHLFinal.append(contentsOf: [1000000.0] + [onekHzIntraEarDeltaHLFinal])
-            final_onekHzFinalComboLRGains.append(contentsOf: [1000000.0] + onekHzFinalComboLRGains)
-            final_RightEar1kHzdB1.append(contentsOf: [1000000.0] + [RightEar1kHzdB1])
-            final_LeftEar1kHzdB1.append(contentsOf: [1000000.0] + [LeftEar1kHzdB1])
-            final_onekHzFinalLRGains1.append(contentsOf: [1000000.0] + onekHzFinalLRGains1)
-            final_RightEar1kHzdB2.append(contentsOf: [1000000.0] + [RightEar1kHzdB2])
-            final_LeftEar1kHzdB2.append(contentsOf: [1000000.0] + [LeftEar1kHzdB2])
-            final_onekHzFinalLRGains2.append(contentsOf: [1000000.0] + onekHzFinalLRGains2)
-            final_onekHz_testPan.append(contentsOf: [1000000.0] + onekHz_testPan)
-            final_onekHz_indexForTest.append(contentsOf: [10000000] + onekHz_indexForTest)
+            final_onekHz_Name.append(contentsOf: ["100000000"] + ["Jeff"])
+            final_onekHz_Age.append(contentsOf: [100000000] + [36])
+            final_onekHz_Sex.append(contentsOf: [100000000] + [1])
+            final_onekHz_onekHzactiveFrequency.append(contentsOf: ["100000000"] + [String(onekHzactiveFrequency)])
+            final_onekHz_onekHzfirstGain.append(contentsOf: [1000000.0] + [onekHzfirstGain])
+            final_onekHz_onekHzsecondGain.append(contentsOf: [1000000.0] + [onekHzsecondGain])
+            final_onekHz_heardArray.append(contentsOf: [10000000] + onekHz_heardArray)
+            final_onekHz_reversalHeard.append(contentsOf: [10000000] + onekHz_reversalHeard)
             final_onekHz_reversalGain.append(contentsOf: [1000000.0] + onekHz_reversalGain)
             final_onekHz_testTestGain.append(contentsOf: [1000000.0] + onekHz_testTestGain)
+            final_onekHz_averageGain.append(contentsOf: [1000000.0] + [onekHz_averageGain])
             
-
+            final_onekHz_averageGainRightArray.append(contentsOf: [1000000.0] + onekHz_averageGainRightArray)
+            final_onekHz_averageGainLeftArray.append(contentsOf: [1000000.0] + onekHz_averageGainLeftArray)
+            final_onekHz_averageLowestGainRightArray.append(contentsOf: [1000000.0] + onekHz_averageLowestGainRightArray)
+            final_onekHz_HoldingLowestRightGainArray.append(contentsOf: [1000000.0] + onekHz_HoldingLowestRightGainArray)
+            final_onekHz_averageLowestGainLeftArray.append(contentsOf: [1000000.0] + onekHz_averageLowestGainLeftArray)
+            final_onekHz_HoldingLowestLeftGainArray.append(contentsOf: [10000000] + onekHz_HoldingLowestLeftGainArray)
+            
         }
     }
     
@@ -1221,26 +1236,22 @@ extension Bilateral1kHzTestView {
     
     func onekHzGetJSONData() async -> Data? {
         let onekHzsaveFinalResults = onekHzSaveFinalResults(
-            
-            jsonName: "Jeff",
-            jsonAge: 36,
-            jsonSex: 1,
-            jsononekHzactiveFrequency: onekHzactiveFrequency,
-            jsonRightEar1kHzdBFinal: RightEar1kHzdBFinal,
-            jsonLeftEar1kHzdBFinal: LeftEar1kHzdBFinal,
-            jsononekHzIntraEarDeltaHLFinal: onekHzIntraEarDeltaHLFinal,
-            jsononekHzFinalComboLRGains: onekHzFinalComboLRGains,
-            jsonRightEar1kHzdB1: RightEar1kHzdB1,
-            jsonLeftEar1kHzdB1: LeftEar1kHzdB1,
-            jsononekHzFinalLRGains1: onekHzFinalLRGains1,
-            jsonRightEar1kHzdB2: RightEar1kHzdB2,
-            jsonLeftEar1kHzdB2: LeftEar1kHzdB2,
-            jsononekHzFinalLRGains2: onekHzFinalLRGains2,
-            jsononekHz_testPan: onekHz_testPan,
-            jsononekHz_indexForTest: onekHz_indexForTest,
-            jsononekHz_reversalGain: onekHz_reversalGain,
-            jsononekHz_testTestGain: onekHz_testTestGain)
-            
+
+            json_onekHz_onekHzactiveFrequency: onekHzactiveFrequency,
+            json_onekHz_onekHzfirstGain: onekHzfirstGain,
+            json_onekHz_onekHzsecondGain: onekHzsecondGain,
+            json_onekHz_heardArray: onekHz_heardArray,
+            json_onekHz_reversalHeard: onekHz_reversalHeard,
+            json_onekHz_reversalGain: onekHz_reversalGain,
+            json_onekHz_testTestGain: onekHz_testTestGain,
+            json_onekHz_averageGain: onekHz_averageGain,
+            json_onekHz_averageGainRightArray: onekHz_averageGainRightArray,
+            json_onekHz_averageGainLeftArray: onekHz_averageGainLeftArray,
+            json_onekHz_averageLowestGainRightArray: onekHz_averageLowestGainRightArray,
+            json_onekHz_HoldingLowestRightGainArray: onekHz_HoldingLowestRightGainArray,
+            json_onekHz_averageLowestGainLeftArray: onekHz_averageLowestGainLeftArray,
+            json_onekHz_HoldingLowestLeftGainArray: onekHz_HoldingLowestLeftGainArray)
+
 
         let onekHzjsonData = try? JSONEncoder().encode(onekHzsaveFinalResults)
 //        print("saveFinalResults: \(onekHzsaveFinalResults)")
@@ -1267,27 +1278,43 @@ extension Bilateral1kHzTestView {
         }
     }
     
+//    final_onekHz_Name.append(contentsOf: ["100000000"] + ["Jeff"])
+//    final_onekHz_Age.append(contentsOf: [100000000] + [36])
+//    final_onekHz_Sex.append(contentsOf: [100000000] + [1])
+//    final_onekHz_onekHzactiveFrequency.append(contentsOf: ["100000000"] + [String(onekHzactiveFrequency)])
+//    final_onekHz_onekHzfirstGain.append(contentsOf: [1000000.0] + [onekHzfirstGain])
+//    final_onekHz_onekHzsecondGain.append(contentsOf: [1000000.0] + [onekHzsecondGain])
+//    final_onekHz_heardArray.append(contentsOf: [10000000] + onekHz_heardArray)
+//    final_onekHz_reversalHeard.append(contentsOf: [10000000] + onekHz_reversalHeard)
+//    final_onekHz_reversalGain.append(contentsOf: [1000000.0] + onekHz_reversalGain)
+//    final_onekHz_testTestGain.append(contentsOf: [1000000.0] + onekHz_testTestGain)
+//    final_onekHz_averageGain.append(contentsOf: [1000000.0] + [onekHz_averageGain])
+//
+//    final_onekHz_averageGainRightArray.append(contentsOf: [1000000.0] + onekHz_averageGainRightArray)
+//    final_onekHz_averageGainLeftArray.append(contentsOf: [1000000.0] + onekHz_averageGainLeftArray)
+//    final_onekHz_averageLowestGainRightArray.append(contentsOf: [1000000.0] + onekHz_averageLowestGainRightArray)
+//    final_onekHz_HoldingLowestRightGainArray.append(contentsOf: [1000000.0] + onekHz_HoldingLowestRightGainArray)
+//    final_onekHz_averageLowestGainLeftArray.append(contentsOf: [1000000.0] + onekHz_averageLowestGainLeftArray)
+//    final_onekHz_HoldingLowestLeftGainArray.append(contentsOf: [10000000] + onekHz_HoldingLowestLeftGainArray)
     
-//Name: String
-//Age: Int
-//Sex: Int
-//User: UUID
-//Test: UUID
-//onekHzactiveFrequency: String
-//RightEar1kHzdBFinal: Float
-//LeftEar1kHzdBFinal: Float
-//onekHzIntraEarDeltaHLFinal: Float
-//onekHzFinalComboLRGains: [Float]
-//RightEar1kHzdB1: Float
-//LeftEar1kHzdB1: Float
-//onekHzFinalLRGains1: [Float]
-//RightEar1kHzdB2: Float
-//LeftEar1kHzdB2: Float
-//onekHzFinalLRGains2: [Float]
-//onekHz_testPan: [Double]
-//onekHz_indexForTest: [Int]
-//onekHz_reversalGain: [Float]
-//onekHz_testTestGain: [Float]
+//    final_onekHz_Name
+//    final_onekHz_Age
+//    final_onekHz_Sex
+//    final_onekHz_onekHzactiveFrequency
+//    final_onekHz_onekHzfirstGain
+//    final_onekHz_onekHzsecondGain
+//    final_onekHz_heardArray
+//    final_onekHz_reversalHeard
+//    final_onekHz_reversalGain
+//    final_onekHz_testTestGain
+//    final_onekHz_averageGain
+//    final_onekHz_averageGainRightArray
+//    final_onekHz_averageGainLeftArray
+//    final_onekHz_averageLowestGainRightArray
+//    final_onekHz_HoldingLowestRightGainArray
+//    final_onekHz_averageLowestGainLeftArray
+//    final_onekHz_HoldingLowestLeftGainArray
+
     
     
     
