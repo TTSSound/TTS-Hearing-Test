@@ -196,6 +196,9 @@ struct EHATTSTestPart1View: View {
     @State var playingStringColorIndex = 0
     @State var playingStringColorIndex2 = 0
     @State var userPausedTest: Bool = false
+    
+    @State var jsonHoldingString: [String] = [String]()
+    
 
     let fileEHAP1Name = "SummaryEHAP1Results.json"
     let summaryEHAP1CSVName = "SummaryEHAP1ResultsCSV.csv"
@@ -386,6 +389,7 @@ struct EHATTSTestPart1View: View {
                 print("activeFrequency: \(activeFrequency)")
                 print("localPan: \(localPan)")
                 print("envDataObjectModel_index: \(envDataObjectModel_index)")
+                
          
                 audioThread.async {
                     loadAndTestPresentation(sample: activeFrequency, gain: envDataObjectModel_testGain, pan: localPan)
@@ -706,7 +710,8 @@ extension EHATTSTestPart1View {
     }
         
     func createReversalGainArray() async {
-        envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
+//        envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
+        envDataObjectModel_reversalGain.append(envDataObjectModel_testGain)
     }
     
     func checkHeardReversalArrays() async {
@@ -1134,6 +1139,7 @@ extension EHATTSTestPart1View {
             envDataObjectModel_heardArray.removeAll()
             envDataObjectModel_testCount.removeAll()
             envDataObjectModel_reversalHeard.removeAll()
+            envDataObjectModel_reversalGain.removeAll()
             envDataObjectModel_averageGain = Float()
             envDataObjectModel_reversalDirection = Float()
             localStartingNonHeardArraySet = false
@@ -1344,7 +1350,8 @@ extension EHATTSTestPart1View {
 //        print("Json Data:")
 //        print(data)
         let jsonString = String(data: data, encoding: .utf8)
-        print(jsonString!)
+        jsonHoldingString = [jsonString!]
+//        print(jsonString!)
         do {
         self.saveFinalResults = try JSONDecoder().decode(SaveFinalResults.self, from: data)
 //            print("JSON GetData Run")

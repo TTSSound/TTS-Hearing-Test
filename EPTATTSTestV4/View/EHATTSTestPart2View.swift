@@ -271,7 +271,7 @@ struct EHATTSTestPart2View: View {
 
     @State var ehaP2_averageGain = Float()
 
-    @State var ehaP2_eptaSamplesCount = 1 //17
+    @State var ehaP2_eptaSamplesCount = 8 //17
     @State var ehaP2_eptaSamplesCountArray = [8, 8, 8, 8, 8, 8, 8, 8, 8, 17, 17, 17, 17, 17, 17, 17, 17, 17, 26, 26, 26, 26, 26, 26, 26, 26, 26, 35, 35, 35, 35, 35, 35, 35, 35, 35, 44, 44, 44, 44, 44, 44, 44, 44, 44, 53, 53, 53, 53, 53, 53, 53, 53, 53, 62, 62, 62, 62, 62, 62, 62, 62, 62, 71, 71, 71, 71, 71, 71, 71, 71, 71, 78, 78, 78, 78, 78, 78, 78, 85, 85, 85, 85, 85, 85, 85]
     @State var ehaP2_eptaSamplesCountArrayIdx = 0  //[0, 1, 2, 3]
 
@@ -303,6 +303,9 @@ struct EHATTSTestPart2View: View {
     @State var ehaP2playingStringColorIndex = 0
     @State var ehaP2playingStringColorIndex2 = 0
     @State var ehaP2userPausedTest: Bool = false
+    
+    
+    @State var ehaP2jsonHoldingString: [String] = [String]()
 
     let fileehaP2Name = "SummaryehaP2Results.json"
     let summaryehaP2CSVName = "SummaryehaP2ResultsCSV.csv"
@@ -594,19 +597,20 @@ struct EHATTSTestPart2View: View {
                
                ehaP2localPan = ehaP2localPanHoldingArray[ehaP2_index]
                ehaP2_pan = ehaP2localPanHoldingArray[ehaP2_index]
-               print("ehaP2localPan: \(ehaP2localPan)")
-               print("ehaP2localPanHoldingArray: \(ehaP2localPanHoldingArray)")
-               
+//               print("ehaP2localPan: \(ehaP2localPan)")
+//               print("ehaP2localPanHoldingArray: \(ehaP2localPanHoldingArray)")
+//
 //               ehaP2localPan = ehaP2panArray[ehaP2_index]
 //               ehaP2_pan = ehaP2panArray[ehaP2_index]
                ehaP2localHeard = 0
                ehaP2localReversal = 0
                
                if ehaP2playingValue == 1{
-                   print("envDataObjectModel_testGain: \(ehaP2_testGain)")
-                   print("activeFrequency: \(ehaP2activeFrequency)")
-                   print("localPan: \(ehaP2localPan)")
-                   print("envDataObjectModel_index: \(ehaP2_index)")
+//                   print("envDataObjectModel_testGain: \(ehaP2_testGain)")
+//                   print("activeFrequency: \(ehaP2activeFrequency)")
+//                   print("localPan: \(ehaP2localPan)")
+//                   print("envDataObjectModel_index: \(ehaP2_index)")
+                   print("ehaP2localTestCount: \(ehaP2localTestCount)")
                    
                    ehaP2audioThread.async {
                        ehaP2loadAndTestPresentation(sample: ehaP2activeFrequency, gain: ehaP2_testGain, pan: ehaP2localPan)
@@ -929,7 +933,8 @@ extension EHATTSTestPart2View {
     }
         
     func ehaP2createReversalGainArray() async {
-        ehaP2_reversalGain.append(ehaP2_testTestGain[ehaP2idxHA-1])
+        ehaP2_reversalGain.append(ehaP2_testGain)
+//        ehaP2_reversalGain.append(ehaP2_testTestGain[ehaP2idxHA-1])
     }
     
     func ehaP2checkHeardReversalArrays() async {
@@ -1137,37 +1142,49 @@ extension EHATTSTestPart2View {
     }
 
     func ehaP2reversalsCompleteLogging() async {
+        print("in reversalcompletelogging")
         if ehaP2secondHeardIsTrue == true {
+            print("in reversal complete logging first if")
             self.ehaP2localReversalEnd = 1
             self.ehaP2localMarkNewTestCycle = 1
             self.ehaP2firstGain = ehaP2_reversalGain[ehaP2firstHeardResponseIndex-1]
             self.ehaP2secondGain = ehaP2_reversalGain[ehaP2secondHeardResponseIndex-1]
             print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
+            print("ehaP2_reversalGain: \(ehaP2_reversalGain)")
+            print("ehaP2firstHeardResponseIndex: \(ehaP2firstHeardResponseIndex)")
+            print("ehaP2secondHeardResponseIndex: \(ehaP2secondHeardResponseIndex)")
+            print("ehaP2firstGain: \(ehaP2firstGain)")
+            print("ehaP2secondGain: \(ehaP2secondGain)")
 
             let ehaP2delta = ehaP2firstGain - ehaP2secondGain
             let ehaP2avg = (ehaP2firstGain + ehaP2secondGain)/2
             
             if ehaP2delta == 0 {
+                print("in second if")
                 ehaP2_averageGain = ehaP2secondGain
                 print("average Gain: \(ehaP2_averageGain)")
             } else if ehaP2delta >= 0.05 {
+                print("in first else if")
                 ehaP2_averageGain = ehaP2secondGain
-                print("SecondGain: \(ehaP2firstGain)")
+                print("FirstGain: \(ehaP2firstGain)")
                 print("SecondGain: \(ehaP2secondGain)")
                 print("average Gain: \(ehaP2_averageGain)")
             } else if ehaP2delta <= -0.05 {
+                print("in second else if")
                 ehaP2_averageGain = ehaP2firstGain
-                print("SecondGain: \(ehaP2firstGain)")
+                print("FirstGain: \(ehaP2firstGain)")
                 print("SecondGain: \(ehaP2secondGain)")
                 print("average Gain: \(ehaP2_averageGain)")
             } else if ehaP2delta < 0.05 && ehaP2delta > -0.05 {
+                print("in third else if")
                 ehaP2_averageGain = ehaP2avg
-                print("SecondGain: \(ehaP2firstGain)")
+                print("FirstGain: \(ehaP2firstGain)")
                 print("SecondGain: \(ehaP2secondGain)")
                 print("average Gain: \(ehaP2_averageGain)")
             } else {
+                print("in final else of sub if")
                 ehaP2_averageGain = ehaP2avg
-                print("SecondGain: \(ehaP2firstGain)")
+                print("FirstGain: \(ehaP2firstGain)")
                 print("SecondGain: \(ehaP2secondGain)")
                 print("average Gain: \(ehaP2_averageGain)")
             }
@@ -1548,7 +1565,7 @@ extension EHATTSTestPart2View {
             }
         } else {
             // No ready to log yet
-            print("Coninue, not ready to log in assignLRAverageSampleGains")
+            print("in bilateral gain logging Coninue, not ready to log in assignLRAverageSampleGains")
         }
     }
 
@@ -2234,7 +2251,7 @@ extension EHATTSTestPart2View {
             }
         } else {
             // No ready to log yet
-            print("Coninue, not ready to log in assignLRAverageSampleGains")
+            print(" in mono gain logging Coninue, not ready to log in assignLRAverageSampleGains")
         }
     }
     
@@ -2259,7 +2276,12 @@ extension EHATTSTestPart2View {
             ehaP2_heardArray.removeAll()
             ehaP2_testCount.removeAll()
             ehaP2_reversalHeard.removeAll()
+            ehaP2_reversalGain.removeAll()
             ehaP2_averageGain = Float()
+            
+            ehaP2firstGain = Float()    //Added these in, difference from EHAP1
+            ehaP2secondGain = Float()   //Added these in, difference from EHAP1
+            
             ehaP2_reversalDirection = Float()
             ehaP2localStartingNonHeardArraySet = false
             ehaP2firstHeardResponseIndex = Int()
@@ -2270,6 +2292,7 @@ extension EHATTSTestPart2View {
             ehaP2localReversalHeardLast = Int()
             ehaP2startTooHigh = 0
             ehaP2localSeriesNoResponses = Int()
+        print("ehaP2_reversalGain: \(ehaP2_reversalGain)")
         })
     }
     
@@ -2297,6 +2320,8 @@ extension EHATTSTestPart2View {
     func ehaP2newTestCycle() async {
 //        if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index < ehaP2_eptaSamplesCount && ehaP2endTestSeries == false {
         if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index < ehaP2_eptaSamplesCountArray[ehaP2_index] && ehaP2endTestSeries == false {
+            print("New Test Cycle Triggered")
+            await ehaP2wipeArrays()
             ehaP2startTooHigh = 0
             ehaP2localMarkNewTestCycle = 0
             ehaP2localReversalEnd = 0
@@ -2304,7 +2329,7 @@ extension EHATTSTestPart2View {
             ehaP2_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
             ehaP2endTestSeries = false
 //                Task(priority: .userInitiated) {
-            await ehaP2wipeArrays()
+           
 //                }
 //        } else if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index == ehaP2_eptaSamplesCount && ehaP2endTestSeries == false {
         } else if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index == ehaP2_eptaSamplesCountArray[ehaP2_index] && ehaP2endTestSeries == false {
@@ -2315,7 +2340,7 @@ extension EHATTSTestPart2View {
                 print("!!!!! End of Test Series!!!!!!")
                 print("=============================")
         } else {
-//                print("Reversal Limit Not Hit")
+                print("Reversal Limit Not Hit")
 
         }
     }
@@ -2475,14 +2500,15 @@ extension EHATTSTestPart2View {
     
     func ehaP2getEHAP1Data() async {
         guard let ehaP2data = await ehaP2getEHAP1JSONData() else { return }
-        print("Json Data:")
-        print(ehaP2data)
+//        print("Json Data:")
+//        print(ehaP2data)
         let ehaP2jsonString = String(data: ehaP2data, encoding: .utf8)
-        print(ehaP2jsonString!)
+        ehaP2jsonHoldingString = [ehaP2jsonString!]
+//            print(ehaP2jsonString!)
         do {
         self.ehaP2saveFinalResults = try JSONDecoder().decode(ehaP2SaveFinalResults.self, from: ehaP2data)
-            print("JSON GetData Run")
-            print("data: \(ehaP2data)")
+//            print("JSON GetData Run")
+//            print("data: \(ehaP2data)")
         } catch let error {
             print("error decoding \(error)")
         }
@@ -2518,8 +2544,8 @@ extension EHATTSTestPart2View {
 //    jsonFinalStoredleftFinalGainsArray: finalStoredleftFinalGainsArray)
 
         let ehaP2jsonData = try? JSONEncoder().encode(ehaP2saveFinalResults)
-        print("saveFinalResults: \(ehaP2saveFinalResults)")
-        print("Json Encoded \(ehaP2jsonData!)")
+//        print("saveFinalResults: \(ehaP2saveFinalResults)")
+//        print("Json Encoded \(ehaP2jsonData!)")
         return ehaP2jsonData
     }
 
@@ -2527,14 +2553,14 @@ extension EHATTSTestPart2View {
         // !!!This saves to device directory, whish is likely what is desired
         let ehaP2paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let ehaP2DocumentsDirectory = ehaP2paths[0]
-        print("ehaP2DocumentsDirectory: \(ehaP2DocumentsDirectory)")
+//        print("ehaP2DocumentsDirectory: \(ehaP2DocumentsDirectory)")
         let ehaP2FilePaths = ehaP2DocumentsDirectory.appendingPathComponent(fileehaP2Name)
         print(ehaP2FilePaths)
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         do {
             let ehaP2jsonData = try encoder.encode(ehaP2saveFinalResults)
-            print(ehaP2jsonData)
+//            print(ehaP2jsonData)
           
             try ehaP2jsonData.write(to: ehaP2FilePaths)
         } catch {

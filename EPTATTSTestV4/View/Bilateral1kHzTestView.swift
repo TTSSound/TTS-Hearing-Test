@@ -180,8 +180,6 @@ struct Bilateral1kHzTestView: View {
     @State var final_Name = [String]()
     @State var final_Age = [Int]()
     @State var final_Sex = [Int]()
-    @State var final_User = [UUID]()
-    @State var final_Test = [UUID]()
     @State var final_onekHzactiveFrequency = [String]()
     @State var final_RightEar1kHzdBFinal = [Float]()
     @State var final_LeftEar1kHzdBFinal = [Float]()
@@ -226,6 +224,8 @@ struct Bilateral1kHzTestView: View {
     @State var RightEar1kHzdBFinal = Float()
     @State var LeftEar1kHzdBFinal = Float()
 
+    @State var onekHzjsonHoldingString: [String] = [String]()
+    
     let fileOnekHzName = "SummaryOnekHzResults.json"
     let summaryOnekHzCSVName = "SummaryOnekHzResultsCSV.csv"
     let detailedOnekHzCSVName = "DetailedOnekHzResultsCSV.csv"
@@ -464,8 +464,9 @@ struct Bilateral1kHzTestView: View {
                         await assignFinalLRGains()
                         await mustRepeatTesting()
                         await printOnekHzArrays()
-                        await onekHzprintConcatenatedArrays()
-                        await onekHzsaveFinalStoredArrays()
+                        await onekHzconcatenateFinalArrays()
+//                        await onekHzprintConcatenatedArrays()
+//                        await onekHzsaveFinalStoredArrays()
                         await onekHzendTestSeries()
                         await onekHznewTestCycle()
                         await onekHzwipeArraysForRepeat()
@@ -911,6 +912,30 @@ extension Bilateral1kHzTestView {
         onekHzfirstHeardIsTrue = false
         onekHzsecondHeardResponseIndex = Int()
         onekHzsecondHeardIsTrue = false
+        if onekHz_pan == 1.0 {
+            if onekHzsecondGainRight2 > 0.0 {
+                onekHzsecondGainRight2 = Float()
+                onekHzsecondGainRight1 = Float()
+            } else if onekHzsecondGainRight2 <= 0.0 && onekHzfirstGainRight2 > 0.0 {
+                onekHzfirstGainRight2 = Float()
+                onekHzfirstGainRight1 = Float()
+            } else {
+                print("!!!Fatal Error in rightgain resetaftertoohigh")
+            }
+        } else if onekHz_pan == -1.0 {
+            if onekHzsecondGainLeft2 > 0.0 {
+                onekHzsecondGainLeft2 = Float()
+                onekHzsecondGainLeft1 = Float()
+            } else if onekHzsecondGainLeft2 <= 0.0 && onekHzfirstGainLeft2 > 0.0 {
+                onekHzfirstGainLeft2 = Float()
+                onekHzfirstGainLeft1 = Float()
+            } else {
+                print("!!!Fatal Error in leftgain resetaftertoohigh")
+            }
+        } else {
+            print("!!! Fatal Error in master else of resetaftertoohigh")
+        }
+        
     }
    
     func onekHzreversalsCompleteLoggingRight1() async {
@@ -1149,14 +1174,31 @@ extension Bilateral1kHzTestView {
         print("idxR: \(idxR)")
         if idxR == 2 {
             let avgRightSorted = onekHz_averageGainRightArray.sorted()
+            let rightDelta = avgRightSorted[1] - avgRightSorted[0]
+            print("rightDelta: \(rightDelta)")
             print("avgRightSorted: \(avgRightSorted)")
             print("avgRightSorted[0]: \(avgRightSorted[0])")
-            onekHz_averageLowestGainRightArray.append(avgRightSorted[0])
-            onekHz_HoldingLowestRightGainArray.append(avgRightSorted[0])
-            print("onekHz_averageGainRightArraySorted: \(avgRightSorted)")
-            print("@@@ onekHz_averageGainRightArray: \(onekHz_averageGainRightArray)")
-            print("@@@onekHz_averageLowestGainRightArray: \(onekHz_averageLowestGainRightArray)")
-            print("onekHz_HoldingLowestRightGainArray: \(onekHz_HoldingLowestRightGainArray)")
+            if rightDelta > 0.05 || rightDelta < -0.05 {
+                print("in Right need to repeat section")
+                needToRepeatTesting = true
+                onekHz_averageLowestGainRightArray.append(avgRightSorted[0])
+                onekHz_HoldingLowestRightGainArray.append(avgRightSorted[0])
+                print("onekHz_averageGainRightArraySorted: \(avgRightSorted)")
+                print("@@@ onekHz_averageGainRightArray: \(onekHz_averageGainRightArray)")
+                print("@@@onekHz_averageLowestGainRightArray: \(onekHz_averageLowestGainRightArray)")
+                print("onekHz_HoldingLowestRightGainArray: \(onekHz_HoldingLowestRightGainArray)")
+                print("@@@ NeedToRepeatTesting: \(needToRepeatTesting)")
+            } else  if rightDelta < 0.05 || rightDelta > -0.05 {
+                print("In Right within 5 section")
+                onekHz_averageLowestGainRightArray.append(avgRightSorted[0])
+                onekHz_HoldingLowestRightGainArray.append(avgRightSorted[0])
+                print("onekHz_averageGainRightArraySorted: \(avgRightSorted)")
+                print("@@@ onekHz_averageGainRightArray: \(onekHz_averageGainRightArray)")
+                print("@@@onekHz_averageLowestGainRightArray: \(onekHz_averageLowestGainRightArray)")
+                print("onekHz_HoldingLowestRightGainArray: \(onekHz_HoldingLowestRightGainArray)")
+            } else {
+                print("!!!Fatal Error in lowestAverageRightGain")
+            }
         } else if idxR != 2 {
             print("idxRight != 2 \(idxR)")
         } else {
@@ -1169,14 +1211,31 @@ extension Bilateral1kHzTestView {
         print("ixdL: \(idxL)")
         if idxL == 2 {
             let avgLeftSorted = onekHz_averageGainLeftArray.sorted()
+            let leftDelta = avgLeftSorted[1] - avgLeftSorted[0]
+            print("leftDelta: \(leftDelta)")
             print("onekHz_averageGainLeftArray: \(avgLeftSorted)")
             print("avgLeftSorted[0]: \(avgLeftSorted[0])")
-            onekHz_averageLowestGainLeftArray.append(avgLeftSorted[0])
-            onekHz_HoldingLowestLeftGainArray.append(avgLeftSorted[0])
-            print("onekHz_averageGainLeftArraySorted: \(avgLeftSorted)")
-            print("@@@ onekHz_averageGainLeftArray: \(onekHz_averageGainLeftArray)")
-            print("@@@onekHz_averageLowestGainLeftArray: \(onekHz_averageLowestGainLeftArray)")
-            print("onekHz_HoldingLowestLeftGainArray: \(onekHz_HoldingLowestLeftGainArray)")
+            if leftDelta > 0.05 || leftDelta < -0.05 {
+                print("in Left need to repeat section")
+                needToRepeatTesting = true
+                onekHz_averageLowestGainLeftArray.append(avgLeftSorted[0])
+                onekHz_HoldingLowestLeftGainArray.append(avgLeftSorted[0])
+                print("onekHz_averageGainLeftArraySorted: \(avgLeftSorted)")
+                print("@@@ onekHz_averageGainLeftArray: \(onekHz_averageGainLeftArray)")
+                print("@@@onekHz_averageLowestGainLeftArray: \(onekHz_averageLowestGainLeftArray)")
+                print("onekHz_HoldingLowestLeftGainArray: \(onekHz_HoldingLowestLeftGainArray)")
+                print("@@@ NeedToRepeatTesting: \(needToRepeatTesting)")
+            } else if leftDelta < 0.05 || leftDelta > -0.05 {
+                print("In Left within 5 section")
+                onekHz_averageLowestGainLeftArray.append(avgLeftSorted[0])
+                onekHz_HoldingLowestLeftGainArray.append(avgLeftSorted[0])
+                print("onekHz_averageGainLeftArraySorted: \(avgLeftSorted)")
+                print("@@@ onekHz_averageGainLeftArray: \(onekHz_averageGainLeftArray)")
+                print("@@@onekHz_averageLowestGainLeftArray: \(onekHz_averageLowestGainLeftArray)")
+                print("onekHz_HoldingLowestLeftGainArray: \(onekHz_HoldingLowestLeftGainArray)")
+            } else {
+                print("!!!Fatal Error in lowestAverageRightGain")
+            }
         } else if idxL != 2{
             print("idxLeft != 2\(idxL)")
         } else {
@@ -1450,8 +1509,6 @@ extension Bilateral1kHzTestView {
             final_Name.append(contentsOf: ["100000000"] + ["Jeff"])
             final_Age.append(contentsOf: [100000000] + [36])
             final_Sex.append(contentsOf: [100000000] + [1])
-            final_User.append(contentsOf: [UUID(uuidString: "100000000")!] + [UUID(uuidString: "465464246546465465")!])
-            final_Test.append(contentsOf: [UUID(uuidString: "100000000")!] + [UUID(uuidString: "465464246546465465")!])
             final_onekHzactiveFrequency.append(contentsOf: ["100000000"] + [String(onekHzactiveFrequency)])
             final_RightEar1kHzdBFinal.append(contentsOf: [1000000.0] + [RightEar1kHzdBFinal])
             final_LeftEar1kHzdBFinal.append(contentsOf: [1000000.0] + [LeftEar1kHzdBFinal])
@@ -1472,18 +1529,18 @@ extension Bilateral1kHzTestView {
         }
     }
     
-    func onekHzprintConcatenatedArrays() async {
-        print("finalStoredIndex: \(onekHz_finalStoredIndex)")
-        print("finalStoredTestPan: \(onekHz_finalStoredTestPan)")
-        print("finalStoredTestTestGain: \(onekHz_finalStoredTestTestGain)")
-        print("finalStoredFrequency: \(onekHz_finalStoredFrequency)")
-        print("finalStoredTestCount: \(onekHz_finalStoredTestCount)")
-        print("finalStoredHeardArray: \(onekHz_finalStoredHeardArray)")
-        print("finalStoredReversalHeard: \(onekHz_finalStoredReversalHeard)")
-        print("finalStoredFirstGain: \(onekHz_finalStoredFirstGain)")
-        print("finalStoredSecondGain: \(onekHz_finalStoredSecondGain)")
-        print("finalStoredAverageGain: \(onekHz_finalStoredAverageGain)")
-    }
+//    func onekHzprintConcatenatedArrays() async {
+//        print("finalStoredIndex: \(onekHz_finalStoredIndex)")
+//        print("finalStoredTestPan: \(onekHz_finalStoredTestPan)")
+//        print("finalStoredTestTestGain: \(onekHz_finalStoredTestTestGain)")
+//        print("finalStoredFrequency: \(onekHz_finalStoredFrequency)")
+//        print("finalStoredTestCount: \(onekHz_finalStoredTestCount)")
+//        print("finalStoredHeardArray: \(onekHz_finalStoredHeardArray)")
+//        print("finalStoredReversalHeard: \(onekHz_finalStoredReversalHeard)")
+//        print("finalStoredFirstGain: \(onekHz_finalStoredFirstGain)")
+//        print("finalStoredSecondGain: \(onekHz_finalStoredSecondGain)")
+//        print("finalStoredAverageGain: \(onekHz_finalStoredAverageGain)")
+//    }
         
     func onekHzsaveFinalStoredArrays() async {
 //        if onekHzlocalMarkNewTestCycle == 1 && onekHzlocalReversalEnd == 1 {
@@ -1546,7 +1603,8 @@ extension Bilateral1kHzTestView {
         print("onekHz Json Data:")
         print(onekHzdata)
         let onekHzjsonString = String(data: onekHzdata, encoding: .utf8)
-        print(onekHzjsonString!)
+        onekHzjsonHoldingString = [onekHzjsonString!]
+//        print(onekHzjsonString!)
         do {
         self.onekHzsaveFinalResults = try JSONDecoder().decode(onekHzSaveFinalResults.self, from: onekHzdata)
             print("JSON GetData Run")

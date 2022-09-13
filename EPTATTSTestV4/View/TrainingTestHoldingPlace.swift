@@ -78,7 +78,7 @@ struct TrainingTestHoldingPlace: View {
                     Spacer()
                     HStack{
                         Spacer()
-                        NavigationLink("TrainingTest", destination: TrainingTestView()).foregroundColor(.blue)
+                        NavigationLink("Bilateral1kHzTestView", destination: Bilateral1kHzTestView()).foregroundColor(.blue)
                         Spacer()
                         NavigationLink("EHATTSTestPart1", destination: EHATTSTestPart1View()).foregroundColor(.green)
                         Spacer()
