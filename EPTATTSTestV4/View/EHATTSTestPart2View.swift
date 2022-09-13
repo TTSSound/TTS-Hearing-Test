@@ -117,17 +117,20 @@ struct EHATTSTestPart2View: View {
     @State var ehaP2panBilateralArray: [Float] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                                                   0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                                                   0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     
     @State var ehaP2panRightArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
                                               1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
                                               1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                                              1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+                                              1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                                              1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
     
     @State var ehaP2panLeftArray: [Float] = [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
-                                             -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
-                                             -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
-                                             -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+                                              -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
+                                              -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
+                                              -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
+                                              -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
     
     
     @State var ehaP2totalCount = Int()
@@ -271,8 +274,9 @@ struct EHATTSTestPart2View: View {
 
     @State var ehaP2_averageGain = Float()
 
-    @State var ehaP2_eptaSamplesCount = 8 //17
-    @State var ehaP2_eptaSamplesCountArray = [8, 8, 8, 8, 8, 8, 8, 8, 8, 17, 17, 17, 17, 17, 17, 17, 17, 17, 26, 26, 26, 26, 26, 26, 26, 26, 26, 35, 35, 35, 35, 35, 35, 35, 35, 35, 44, 44, 44, 44, 44, 44, 44, 44, 44, 53, 53, 53, 53, 53, 53, 53, 53, 53, 62, 62, 62, 62, 62, 62, 62, 62, 62, 71, 71, 71, 71, 71, 71, 71, 71, 71, 78, 78, 78, 78, 78, 78, 78, 85, 85, 85, 85, 85, 85, 85]
+    @State var ehaP2_eptaSamplesCount = 2 //8 //17
+    @State var ehaP2_eptaSamplesCountArray = [2, 2, 2]
+//    @State var ehaP2_eptaSamplesCountArray = [8, 8, 8, 8, 8, 8, 8, 8, 8, 17, 17, 17, 17, 17, 17, 17, 17, 17, 26, 26, 26, 26, 26, 26, 26, 26, 26, 35, 35, 35, 35, 35, 35, 35, 35, 35, 44, 44, 44, 44, 44, 44, 44, 44, 44, 53, 53, 53, 53, 53, 53, 53, 53, 53, 62, 62, 62, 62, 62, 62, 62, 62, 62, 71, 71, 71, 71, 71, 71, 71, 71, 71, 78, 78, 78, 78, 78, 78, 78, 85, 85, 85, 85, 85, 85, 85]
     @State var ehaP2_eptaSamplesCountArrayIdx = 0  //[0, 1, 2, 3]
 
     @State var ehaP2_finalStoredIndex: [Int] = [Int]()
@@ -303,6 +307,32 @@ struct EHATTSTestPart2View: View {
     @State var ehaP2playingStringColorIndex = 0
     @State var ehaP2playingStringColorIndex2 = 0
     @State var ehaP2userPausedTest: Bool = false
+    
+                @State var ehaP2fullTestCompleted: Bool = false
+    @State var ehaP2fullTestCompletedHoldingArray: [Bool] = [Bool]()
+    @State var ehaP2fullTestCompletedLR: [Bool] = [false, false, false, false, false, false, false, false, false,
+                                                          false, false, false, false, false, false, false, false, false,
+                                                          false, false, false, false, false, false, false, false, false,
+                                                          false, false, false, false, false, false, false, false, false,
+                                                          false, false, false, false, false, false, false, false, false,
+                                                          false, false, false, false, false, false, false, false, false,
+                                                          false, false, false, false, false, false, false, false, false,
+                                                          false, false, false, false, false, false, false, false, false,
+                                                          false, false, false, false, false, false, false,
+                                                          false, false, false, false, false, false, true]
+    
+    @State var ehaP2fullTestCompletedMono: [Bool] = [false, false, false, false, false, false, false, false, false,
+                                                     false, false, false, false, false, false, false, false, false,
+                                                     false, false, false, false, false, false, false, false, false,
+                                                     false, false, false, false, false, false, false, false, false,
+                                                     false, false, false, false, false, false, true]
+    
+    
+    @State var ehaP2fullTestCompletedTestingArray: [Bool] = [false, false, true]
+                                                     
+
+    
+    //ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
     
     
     @State var ehaP2jsonHoldingString: [String] = [String]()
@@ -366,12 +396,13 @@ struct EHATTSTestPart2View: View {
                .onChange(of: ehaP2MonoRightTest, perform: { rightValue in
                    if rightValue == true {
                            // Set Pan to 1.0
-                           ehaP2localPanHoldingArray = ehaP2panRightArray
-                           ehaP2totalCount = ehaP2MonoTotalCount
-                           ehaP2_samples = ehaP2_monoSamples
-                           ehaP2MonoRightTest = true
-                           ehaP2MonoLeftTest = false
-                           ehaP2MonoBilateralTest = false
+                       ehaP2localPanHoldingArray = ehaP2panRightArray
+                       ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedMono
+                       ehaP2totalCount = ehaP2MonoTotalCount
+                       ehaP2_samples = ehaP2_monoSamples
+                       ehaP2MonoRightTest = true
+                       ehaP2MonoLeftTest = false
+                       ehaP2MonoBilateralTest = false
                    } else {
                        // Do Nothing
                    }
@@ -380,6 +411,7 @@ struct EHATTSTestPart2View: View {
                    if leftValue == true {
                        //set pan to -1.0
                        ehaP2localPanHoldingArray = ehaP2panLeftArray
+                       ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedMono
                        ehaP2totalCount = ehaP2MonoTotalCount
                        ehaP2_samples = ehaP2_monoSamples
                        ehaP2MonoRightTest = false
@@ -392,6 +424,7 @@ struct EHATTSTestPart2View: View {
                .onChange(of: ehaP2MonoBilateralTest, perform: { bilateralValue in
                    if bilateralValue == true {
                        ehaP2localPanHoldingArray = ehaP2panBilateralArray
+                       ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedMono
                        ehaP2totalCount = ehaP2MonoTotalCount
                        ehaP2_samples = ehaP2_monoSamples
                        ehaP2MonoRightTest = false
@@ -527,16 +560,19 @@ struct EHATTSTestPart2View: View {
                        VStack(alignment: .leading) {
                            
                            Button(action: {
-                               
-                               ehaP2showTestCompletionSheet.toggle()
-                               ehaP2setDualMonoVariables()
-                               ehaP2endTestSeries = false
-                               ehaP2testIsPlaying = true
-                               ehaP2localPlaying = 1
-                               ehaP2playingStringColorIndex = 2
-                               ehaP2userPausedTest = false
-                               
-                               print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
+                               if ehaP2fullTestCompleted == true {
+                                   ehaP2showTestCompletionSheet.toggle()
+                               } else if ehaP2fullTestCompleted == false {
+                                   ehaP2showTestCompletionSheet.toggle()
+                                   ehaP2setDualMonoVariables()
+                                   ehaP2endTestSeries = false
+                                   ehaP2testIsPlaying = true
+                                   ehaP2localPlaying = 1
+                                   ehaP2playingStringColorIndex = 2
+                                   ehaP2userPausedTest = false
+                                   
+                                   print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
+                               }
                                
                            }, label: {
                                Image(systemName: "xmark")
@@ -551,9 +587,13 @@ struct EHATTSTestPart2View: View {
                                .padding()
                            Spacer()
                            Button(action: {
-                               DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
-                                   Task(priority: .userInitiated) {
-                                       await ehaP2combinedPauseRestartAndStartNexTestCycle()
+                               if ehaP2fullTestCompleted == true {
+                                   ehaP2showTestCompletionSheet.toggle()
+                               } else if ehaP2fullTestCompleted == false {
+                                   DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
+                                       Task(priority: .userInitiated) {
+                                           await ehaP2combinedPauseRestartAndStartNexTestCycle()
+                                       }
                                    }
                                }
                            }, label: {
@@ -743,7 +783,7 @@ struct EHATTSTestPart2View: View {
         ehaP2localReversalEnd = 0
         ehaP2_testGain = 0.2
         ehaP2_index = ehaP2_index + 1
-        print(ehaP2_eptaSamplesCountArray[ehaP2_index])
+//        print(ehaP2_eptaSamplesCountArray[ehaP2_index]) /// This is causing the issue
         print("ehaP2_index: \(ehaP2_index)")
         ehaP2userPausedTest = false
         ehaP2testIsPlaying = true
@@ -755,6 +795,8 @@ struct EHATTSTestPart2View: View {
     func ehaP2setDualMonoVariables() {
         if ehaP2MonoTest == false && ehaP2VariableArraysSet == false {
             ehaP2localPanHoldingArray = ehaP2panArray
+//            ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedLR
+            ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedTestingArray
             ehaP2totalCount = ehaP2DualTotalCount
             ehaP2_samples = ehaP2_dualSamples
             ehaP2VariableArraysSet = true
@@ -2333,12 +2375,32 @@ extension EHATTSTestPart2View {
 //                }
 //        } else if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index == ehaP2_eptaSamplesCount && ehaP2endTestSeries == false {
         } else if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index == ehaP2_eptaSamplesCountArray[ehaP2_index] && ehaP2endTestSeries == false {
+            print("=============================")
+            print("!!!!! End of Test Series!!!!!!")
+            print("=============================")
             ehaP2endTestSeries = true
             ehaP2localPlaying = -1
             ehaP2_eptaSamplesCountArrayIdx += 1
+            if ehaP2_index >= 2 {
+                ehaP2fullTestCompleted = true
+                ehaP2endTestSeries = true
+                ehaP2localPlaying = -1
+//                ehaP2_eptaSamplesCountArrayIdx += 1
+                print("*****************************")
                 print("=============================")
-                print("!!!!! End of Test Series!!!!!!")
+                print("^^^^^^End of Full Test Series^^^^^^")
                 print("=============================")
+                print("*****************************")
+            } else if ehaP2_index < 2 {
+                ehaP2fullTestCompleted = false
+                ehaP2endTestSeries = true
+                ehaP2localPlaying = -1
+                ehaP2_eptaSamplesCountArrayIdx += 1
+            } else {
+                print("!!!Critical error in fullTestCompleted Logic")
+            }
+           
+
         } else {
                 print("Reversal Limit Not Hit")
 
@@ -2351,7 +2413,8 @@ extension EHATTSTestPart2View {
             print("end Test Series = \(ehaP2endTestSeries)")
         } else if ehaP2endTestSeries == true {
             ehaP2showTestCompletionSheet = true
-            ehaP2_eptaSamplesCount = ehaP2_eptaSamplesCount + 8
+            ehaP2_eptaSamplesCount = ehaP2_eptaSamplesCountArray[ehaP2_index]
+//            ehaP2_eptaSamplesCount = ehaP2_eptaSamplesCount + 8
             await ehaP2endTestSeriesStop()
         }
     }
@@ -2440,6 +2503,10 @@ extension EHATTSTestPart2View {
             DispatchQueue.global(qos: .userInitiated).async {
                 Task(priority: .userInitiated) {
                     await writeEHAP2DetailedResultsToCSV()
+                    await writeEHAP2InputRightResultsToCSV()
+                    await writeEHAP2InputLeftResultsToCSV()
+                    
+                    // Hold these until end of test cycle
                     await writeEHAP2SummarydResultsToCSV()
                     await writeEHAP2InputDetailedResultsToCSV()
                     await writeEHAP2InputDetailedResultsToCSV()
@@ -2448,8 +2515,7 @@ extension EHATTSTestPart2View {
                     await writeEHAP2RightResultsToCSV()
                     await writeEHAP2LeftResultsToCSV()
                     await writeEHAP2InputRightLeftResultsToCSV()
-                    await writeEHAP2InputRightResultsToCSV()
-                    await writeEHAP2InputLeftResultsToCSV()
+
                     
                     await ehaP2getEHAP1Data()
                     await ehaP2saveEHA1ToJSON()
@@ -2555,7 +2621,7 @@ extension EHATTSTestPart2View {
         let ehaP2DocumentsDirectory = ehaP2paths[0]
 //        print("ehaP2DocumentsDirectory: \(ehaP2DocumentsDirectory)")
         let ehaP2FilePaths = ehaP2DocumentsDirectory.appendingPathComponent(fileehaP2Name)
-        print(ehaP2FilePaths)
+//        print(ehaP2FilePaths)
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         do {
@@ -2590,7 +2656,7 @@ extension EHATTSTestPart2View {
             let csvehaP2DetailDocumentsDirectory = csvehaP2DetailPath
 //                print("CSV DocumentsDirectory: \(csvEHAP1DetailDocumentsDirectory)")
             let csvehaP2DetailFilePath = csvehaP2DetailDocumentsDirectory.appendingPathComponent(detailedehaP2CSVName)
-            print(csvehaP2DetailFilePath)
+//            print(csvehaP2DetailFilePath)
             
             let writer = try CSVWriter(fileURL: csvehaP2DetailFilePath, append: false)
             
@@ -2632,7 +2698,7 @@ extension EHATTSTestPart2View {
              let csvehaP2SummaryDocumentsDirectory = csvehaP2SummaryPath
 //                 print("CSV Summary EHA Part 1 DocumentsDirectory: \(csvEHAP1SummaryDocumentsDirectory)")
              let csvehaP2SummaryFilePath = csvehaP2SummaryDocumentsDirectory.appendingPathComponent(summaryehaP2CSVName)
-             print(csvehaP2SummaryFilePath)
+//             print(csvehaP2SummaryFilePath)
              let writer = try CSVWriter(fileURL: csvehaP2SummaryFilePath, append: false)
              try writer.write(row: [ehaP2stringFinalStoredResultsFrequency])
              try writer.write(row: [ehaP2stringFinalStoredTestPan])
@@ -2673,7 +2739,7 @@ extension EHATTSTestPart2View {
             let csvInputehaP2DetailDocumentsDirectory = csvInputehaP2DetailPath
 //                print("CSV Input EHAP1 Detail DocumentsDirectory: \(csvInputEHAP1DetailDocumentsDirectory)")
             let csvInputehaP2DetailFilePath = csvInputehaP2DetailDocumentsDirectory.appendingPathComponent(inputehaP2DetailedCSVName)
-            print(csvInputehaP2DetailFilePath)
+//            print(csvInputehaP2DetailFilePath)
             let writer = try CSVWriter(fileURL: csvInputehaP2DetailFilePath, append: false)
             try writer.write(row: [ehaP2stringFinalStoredIndex])
             try writer.write(row: [ehaP2stringFinalStoredTestPan])
@@ -2711,9 +2777,9 @@ extension EHATTSTestPart2View {
          do {
              let csvehaP2InputSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvehaP2InputSummaryDocumentsDirectory = csvehaP2InputSummaryPath
-             print("CSV Input ehaP2 Summary DocumentsDirectory: \(csvehaP2InputSummaryDocumentsDirectory)")
+//             print("CSV Input ehaP2 Summary DocumentsDirectory: \(csvehaP2InputSummaryDocumentsDirectory)")
              let csvehaP2InputSummaryFilePath = csvehaP2InputSummaryDocumentsDirectory.appendingPathComponent(inputehaP2SummaryCSVName)
-             print(csvehaP2InputSummaryFilePath)
+//             print(csvehaP2InputSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvehaP2InputSummaryFilePath, append: false)
              try writer.write(row: [ehaP2stringFinalStoredResultsFrequency])
              try writer.write(row: [ehaP2stringFinalStoredTestPan])
