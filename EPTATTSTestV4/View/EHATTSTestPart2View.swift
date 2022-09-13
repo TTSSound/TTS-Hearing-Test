@@ -2428,11 +2428,11 @@ extension EHATTSTestPart2View {
         ehaP2stop()
         ehaP2userPausedTest = true
         ehaP2playingStringColorIndex = 2
-        if ehaP2_index == 31 {
-            ehaP2playingStringColorIndex2 = 2
-        } else {
-            ehaP2playingStringColorIndex2 = 1
-        }
+//        if ehaP2_index == 31 {
+//            ehaP2playingStringColorIndex2 = 2
+//        } else {
+//            ehaP2playingStringColorIndex2 = 1
+//        }
         
 //        ehaP2audioThread.async {
 //            ehaP2localPlaying = 0

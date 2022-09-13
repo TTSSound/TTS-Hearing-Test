@@ -197,6 +197,10 @@ struct EHATTSTestPart1View: View {
     @State var playingStringColorIndex2 = 0
     @State var userPausedTest: Bool = false
     
+    @State var ehaP1fullTestCompleted: Bool = false
+    @State var ehaP1fullTestCompletedHoldingArray: [Bool] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true]
+    
+    
     @State var jsonHoldingString: [String] = [String]()
     
 
@@ -315,7 +319,9 @@ struct EHATTSTestPart1View: View {
                     VStack(alignment: .leading) {
         
                         Button(action: {
-                         
+                            if ehaP1fullTestCompleted == true {
+                                showTestCompletionSheet.toggle()
+                            } else if ehaP1fullTestCompleted == false {
                                 showTestCompletionSheet.toggle()
                                 endTestSeries = false
                                 testIsPlaying = true
@@ -324,7 +330,7 @@ struct EHATTSTestPart1View: View {
                                 userPausedTest = false
                                 
                                 print("Start Button Clicked. Playing = \(localPlaying)")
-                            
+                            }
                         }, label: {
                             Image(systemName: "xmark")
                                 .font(.headline)
@@ -338,9 +344,13 @@ struct EHATTSTestPart1View: View {
                             .padding()
                         Spacer()
                         Button(action: {
-                            DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
-                                Task(priority: .userInitiated) {
-                                    await combinedPauseRestartAndStartNexTestCycle()
+                            if ehaP1fullTestCompleted == true {
+                                showTestCompletionSheet.toggle()
+                            } else if ehaP1fullTestCompleted == false {
+                                DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
+                                    Task(priority: .userInitiated) {
+                                        await combinedPauseRestartAndStartNexTestCycle()
+                                    }
                                 }
                             }
                         }, label: {
@@ -409,6 +419,7 @@ struct EHATTSTestPart1View: View {
                 DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3.6) {
                     if self.localHeard == 1 {
                         localTestCount += 1
+                        ehaP1fullTestCompleted = ehaP1fullTestCompletedHoldingArray[envDataObjectModel_index]
                         Task(priority: .userInitiated) {
                             await responseHeardArray()      //envDataObjectModel_heardArray.append(1)
                             await localResponseTracking()
@@ -425,6 +436,7 @@ struct EHATTSTestPart1View: View {
                     }
                     else if envDataObjectModel_heardArray.last == nil || self.localHeard == -1 {
                         localTestCount += 1
+                        ehaP1fullTestCompleted = ehaP1fullTestCompletedHoldingArray[envDataObjectModel_index]
                         Task(priority: .userInitiated) {
                             await heardArrayNormalize()
                             await count()
@@ -439,6 +451,7 @@ struct EHATTSTestPart1View: View {
                         }
                     } else {
                         localTestCount = 1
+                        ehaP1fullTestCompleted = ehaP1fullTestCompletedHoldingArray[envDataObjectModel_index]
                         Task(priority: .background) {
                             await resetPlaying()
 //                            print("Fatal Error: Stopped in Task else")
@@ -521,7 +534,7 @@ struct EHATTSTestPart1View: View {
         localReversalEnd = 0
         envDataObjectModel_testGain = 0.2
         envDataObjectModel_index = envDataObjectModel_index + 1
-        print(envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index])
+//        print(envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index])
         print("envDataObjectModel_index: \(envDataObjectModel_index)")
         userPausedTest = false
         testIsPlaying = true
@@ -1192,6 +1205,22 @@ extension EHATTSTestPart1View {
                 print("=============================")
                 print("!!!!! End of Test Series!!!!!!")
                 print("=============================")
+            if ehaP1fullTestCompleted == true {
+                ehaP1fullTestCompleted = true
+                endTestSeries = true
+                localPlaying = -1
+                print("*****************************")
+                print("=============================")
+                print("^^^^^^End of Full Test Series^^^^^^")
+                print("=============================")
+                print("*****************************")
+            } else if ehaP1fullTestCompleted == false {
+                ehaP1fullTestCompleted = false
+                endTestSeries = true
+                localPlaying = -1
+                envDataObjectModel_eptaSamplesCountArrayIdx += 1
+            }
+            
         } else {
 //                print("Reversal Limit Not Hit")
 
