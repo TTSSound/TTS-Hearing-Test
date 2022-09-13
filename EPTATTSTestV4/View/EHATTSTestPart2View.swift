@@ -275,8 +275,8 @@ struct EHATTSTestPart2View: View {
     @State var ehaP2_averageGain = Float()
 
     @State var ehaP2_eptaSamplesCount = 2 //8 //17
-    @State var ehaP2_eptaSamplesCountArray = [2, 2, 2]
-//    @State var ehaP2_eptaSamplesCountArray = [8, 8, 8, 8, 8, 8, 8, 8, 8, 17, 17, 17, 17, 17, 17, 17, 17, 17, 26, 26, 26, 26, 26, 26, 26, 26, 26, 35, 35, 35, 35, 35, 35, 35, 35, 35, 44, 44, 44, 44, 44, 44, 44, 44, 44, 53, 53, 53, 53, 53, 53, 53, 53, 53, 62, 62, 62, 62, 62, 62, 62, 62, 62, 71, 71, 71, 71, 71, 71, 71, 71, 71, 78, 78, 78, 78, 78, 78, 78, 85, 85, 85, 85, 85, 85, 85]
+//    @State var ehaP2_eptaSamplesCountArray = [2, 2, 2]
+    @State var ehaP2_eptaSamplesCountArray = [8, 8, 8, 8, 8, 8, 8, 8, 8, 17, 17, 17, 17, 17, 17, 17, 17, 17, 26, 26, 26, 26, 26, 26, 26, 26, 26, 35, 35, 35, 35, 35, 35, 35, 35, 35, 44, 44, 44, 44, 44, 44, 44, 44, 44, 53, 53, 53, 53, 53, 53, 53, 53, 53, 62, 62, 62, 62, 62, 62, 62, 62, 62, 71, 71, 71, 71, 71, 71, 71, 71, 71, 78, 78, 78, 78, 78, 78, 78, 85, 85, 85, 85, 85, 85, 85]
     @State var ehaP2_eptaSamplesCountArrayIdx = 0  //[0, 1, 2, 3]
 
     @State var ehaP2_finalStoredIndex: [Int] = [Int]()
@@ -670,6 +670,7 @@ struct EHATTSTestPart2View: View {
                    DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3.6) {
                        if self.ehaP2localHeard == 1 {
                            ehaP2localTestCount += 1
+                           ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
                            Task(priority: .userInitiated) {
                                await ehaP2responseHeardArray()      //ehaP2_heardArray.append(1)
                                await ehaP2localResponseTracking()
@@ -686,6 +687,7 @@ struct EHATTSTestPart2View: View {
                        }
                        else if ehaP2_heardArray.last == nil || self.ehaP2localHeard == -1 {
                            ehaP2localTestCount += 1
+                           ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
                            Task(priority: .userInitiated) {
                                await ehaP2heardArrayNormalize()
                                await ehaP2count()
@@ -700,6 +702,7 @@ struct EHATTSTestPart2View: View {
                            }
                        } else {
                            ehaP2localTestCount = 1
+                           ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
                            Task(priority: .background) {
                                await ehaP2resetPlaying()
                                print("Fatal Error: Stopped in Task else")
@@ -2381,7 +2384,8 @@ extension EHATTSTestPart2View {
             ehaP2endTestSeries = true
             ehaP2localPlaying = -1
             ehaP2_eptaSamplesCountArrayIdx += 1
-            if ehaP2_index >= 2 {
+//            ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
+            if ehaP2fullTestCompleted == true {
                 ehaP2fullTestCompleted = true
                 ehaP2endTestSeries = true
                 ehaP2localPlaying = -1
@@ -2391,7 +2395,7 @@ extension EHATTSTestPart2View {
                 print("^^^^^^End of Full Test Series^^^^^^")
                 print("=============================")
                 print("*****************************")
-            } else if ehaP2_index < 2 {
+            } else if ehaP2fullTestCompleted == false {
                 ehaP2fullTestCompleted = false
                 ehaP2endTestSeries = true
                 ehaP2localPlaying = -1
