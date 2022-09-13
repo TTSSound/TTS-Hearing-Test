@@ -597,9 +597,14 @@ struct Bilateral1kHzTestView: View {
     
     
     func onekHzSetHeardIndicies() async {
+        print("!!!!@@@@@")
+        print("onekHzfirstGainRight1: \(onekHzfirstGainRight1)")
+        print("onekHzsecondGainRight1: \(onekHzsecondGainRight1)")
+        print("onekHzfirstHeardIsTrue: \(onekHzfirstHeardIsTrue)")
         if onekHz_pan == 1.0 {
-            if onekHzfirstGainRight1 <= 0.0 {
+            if onekHzfirstGainRight1 <= 0.0 || onekHzfirstHeardIsTrue == false {
                 onekHzfirstGainRight1 = onekHz_testGain
+  
             } else if onekHzfirstGainRight1 > 0.0 && onekHzsecondGainRight1 <= 0.0 {
                 onekHzsecondGainRight1 = onekHz_testGain
                 onekHzsecondHeardIsTrue = true
@@ -908,33 +913,35 @@ extension Bilateral1kHzTestView {
     }
     
     func onekHzresetAfterTooHigh() async {
+
         onekHzfirstHeardResponseIndex = Int()
         onekHzfirstHeardIsTrue = false
         onekHzsecondHeardResponseIndex = Int()
         onekHzsecondHeardIsTrue = false
-        if onekHz_pan == 1.0 {
-            if onekHzsecondGainRight2 > 0.0 {
-                onekHzsecondGainRight2 = Float()
-                onekHzsecondGainRight1 = Float()
-            } else if onekHzsecondGainRight2 <= 0.0 && onekHzfirstGainRight2 > 0.0 {
-                onekHzfirstGainRight2 = Float()
-                onekHzfirstGainRight1 = Float()
-            } else {
-                print("!!!Fatal Error in rightgain resetaftertoohigh")
-            }
-        } else if onekHz_pan == -1.0 {
-            if onekHzsecondGainLeft2 > 0.0 {
-                onekHzsecondGainLeft2 = Float()
-                onekHzsecondGainLeft1 = Float()
-            } else if onekHzsecondGainLeft2 <= 0.0 && onekHzfirstGainLeft2 > 0.0 {
-                onekHzfirstGainLeft2 = Float()
-                onekHzfirstGainLeft1 = Float()
-            } else {
-                print("!!!Fatal Error in leftgain resetaftertoohigh")
-            }
-        } else {
-            print("!!! Fatal Error in master else of resetaftertoohigh")
-        }
+        needToRepeatTesting = true
+//        if onekHz_pan == 1.0 {
+//            if onekHzsecondGainRight2 > 0.0 {
+//                onekHzsecondGainRight2 = Float()
+//                onekHzsecondGainRight1 = Float()
+//            } else if onekHzsecondGainRight2 <= 0.0 {
+//                onekHzfirstGainRight2 = Float()
+//                onekHzfirstGainRight1 = Float()
+//            } else {
+//                print("!!!Fatal Error in rightgain resetaftertoohigh")
+//            }
+//        } else if onekHz_pan == -1.0 {
+//            if onekHzsecondGainLeft2 > 0.0 {
+//                onekHzsecondGainLeft2 = Float()
+//                onekHzsecondGainLeft1 = Float()
+//            } else if onekHzsecondGainLeft2 <= 0.0 && onekHzfirstGainLeft2 > 0.0 {
+//                onekHzfirstGainLeft2 = Float()
+//                onekHzfirstGainLeft1 = Float()
+//            } else {
+//                print("!!!Fatal Error in leftgain resetaftertoohigh")
+//            }
+//        } else {
+//            print("!!! Fatal Error in master else of resetaftertoohigh")
+//        }
         
     }
    
