@@ -795,8 +795,8 @@ struct EHATTSTestPart2View: View {
     func ehaP2setDualMonoVariables() {
         if ehaP2MonoTest == false && ehaP2VariableArraysSet == false {
             ehaP2localPanHoldingArray = ehaP2panArray
-//            ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedLR
-            ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedTestingArray
+            ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedLR
+//            ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedTestingArray
             ehaP2totalCount = ehaP2DualTotalCount
             ehaP2_samples = ehaP2_dualSamples
             ehaP2VariableArraysSet = true
@@ -2502,24 +2502,30 @@ extension EHATTSTestPart2View {
         if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 {
             DispatchQueue.global(qos: .userInitiated).async {
                 Task(priority: .userInitiated) {
-                    await writeEHAP2DetailedResultsToCSV()
-                    await writeEHAP2InputRightResultsToCSV()
-                    await writeEHAP2InputLeftResultsToCSV()
+                    if ehaP2endTestSeries == false {
+                        await writeEHAP2DetailedResultsToCSV()
+                        await writeEHAP2InputRightResultsToCSV()
+                        await writeEHAP2InputLeftResultsToCSV()
+                    } else if ehaP2endTestSeries == true {
                     
                     // Hold these until end of test cycle
-                    await writeEHAP2SummarydResultsToCSV()
-                    await writeEHAP2InputDetailedResultsToCSV()
-                    await writeEHAP2InputDetailedResultsToCSV()
-                    
-                    await writeEHAP2RightLeftResultsToCSV()
-                    await writeEHAP2RightResultsToCSV()
-                    await writeEHAP2LeftResultsToCSV()
-                    await writeEHAP2InputRightLeftResultsToCSV()
+                        await writeEHAP2DetailedResultsToCSV()
+                        await writeEHAP2InputRightResultsToCSV()
+                        await writeEHAP2InputLeftResultsToCSV()
+                        await writeEHAP2SummarydResultsToCSV()
+                        await writeEHAP2InputDetailedResultsToCSV()
+                        await writeEHAP2InputDetailedResultsToCSV()
+                        
+                        await writeEHAP2RightLeftResultsToCSV()
+                        await writeEHAP2RightResultsToCSV()
+                        await writeEHAP2LeftResultsToCSV()
+                        await writeEHAP2InputRightLeftResultsToCSV()
 
-                    
-                    await ehaP2getEHAP1Data()
-                    await ehaP2saveEHA1ToJSON()
-        //                await ehaP2_uploadSummaryResultsTest()
+                        
+                        await ehaP2getEHAP1Data()
+                        await ehaP2saveEHA1ToJSON()
+            //                await ehaP2_uploadSummaryResultsTest()
+                    }
                 }
             }
         }
@@ -2621,7 +2627,7 @@ extension EHATTSTestPart2View {
         let ehaP2DocumentsDirectory = ehaP2paths[0]
 //        print("ehaP2DocumentsDirectory: \(ehaP2DocumentsDirectory)")
         let ehaP2FilePaths = ehaP2DocumentsDirectory.appendingPathComponent(fileehaP2Name)
-//        print(ehaP2FilePaths)
+        print(ehaP2FilePaths)
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         do {
