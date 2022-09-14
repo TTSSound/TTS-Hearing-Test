@@ -1382,7 +1382,7 @@ extension Bilateral1kHzTestView {
     }
 
     func onekHzwriteInputSummarydResultsToCSV() async {
-        let onekHzstringFinalOnekHzactiveFrequency = [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
+//        let onekHzstringFinalOnekHzactiveFrequency = [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
         let onekHzstringFinalAverageGainRightArray = onekHz_averageGainRightArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalAverageGainLeftArray = onekHz_averageGainLeftArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalAverageLowestGainRightArray = onekHz_averageLowestGainRightArray.map { String($0) }.joined(separator: ",")
@@ -1397,7 +1397,7 @@ extension Bilateral1kHzTestView {
              let csvonekHzInputSummaryFilePath = csvonekHzInputSummaryDocumentsDirectory.appendingPathComponent(inputOnekHzSummaryCSVName)
              print(csvonekHzInputSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvonekHzInputSummaryFilePath, append: false)
-             try writer.write(row: [onekHzstringFinalOnekHzactiveFrequency])
+//             try writer.write(row: [onekHzstringFinalOnekHzactiveFrequency])
              try writer.write(row: [onekHzstringFinalAverageGainRightArray])
              try writer.write(row: [onekHzstringFinalAverageGainLeftArray])
              try writer.write(row: [onekHzstringFinalAverageLowestGainRightArray])
