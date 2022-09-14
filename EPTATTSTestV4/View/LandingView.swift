@@ -80,7 +80,7 @@ struct LandingView: View {
             }
             .tag(0)
             
-            TrainingTestHoldingPlace()
+            BetaTestingLandingView()
             .tabItem {
                 Image(systemName: "ear.fill")
                     .accentColor(colorModel.tiffanyBlue)

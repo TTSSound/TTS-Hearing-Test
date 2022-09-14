@@ -27,6 +27,8 @@
 		7C24C1EC28BEE0A1006E77DD /* PostTestDirectorSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C24C1EB28BEE0A1006E77DD /* PostTestDirectorSplashView.swift */; };
 		7C24C1EE28BF01D8006E77DD /* SurveyErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C24C1ED28BF01D8006E77DD /* SurveyErrorView.swift */; };
 		7C24C1F028BF0886006E77DD /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C24C1EF28BF0886006E77DD /* StorageManager.swift */; };
+		7C3316EF28D2515100721935 /* BetaTestingLandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3316EE28D2515100721935 /* BetaTestingLandingView.swift */; };
+		7C3316F128D25D2700721935 /* PostBilateral1kHzTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3316F028D25D2700721935 /* PostBilateral1kHzTestView.swift */; };
 		7C3D20AD289DADCB0039EDA6 /* EPTATTSTestV4App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3D20AC289DADCB0039EDA6 /* EPTATTSTestV4App.swift */; };
 		7C3D20AF289DADCB0039EDA6 /* EPTATTSTestV4List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3D20AE289DADCB0039EDA6 /* EPTATTSTestV4List.swift */; };
 		7C3D20B1289DADCC0039EDA6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C3D20B0289DADCC0039EDA6 /* Assets.xcassets */; };
@@ -207,6 +209,8 @@
 		7C24C1ED28BF01D8006E77DD /* SurveyErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyErrorView.swift; sourceTree = "<group>"; };
 		7C24C1EF28BF0886006E77DD /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		7C24C1F128BF26BD006E77DD /* ConditionalButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionalButton.swift; sourceTree = "<group>"; };
+		7C3316EE28D2515100721935 /* BetaTestingLandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetaTestingLandingView.swift; sourceTree = "<group>"; };
+		7C3316F028D25D2700721935 /* PostBilateral1kHzTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostBilateral1kHzTestView.swift; sourceTree = "<group>"; };
 		7C3D20A9289DADCB0039EDA6 /* EPTATTSTestV4.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EPTATTSTestV4.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C3D20AC289DADCB0039EDA6 /* EPTATTSTestV4App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPTATTSTestV4App.swift; sourceTree = "<group>"; };
 		7C3D20AE289DADCB0039EDA6 /* EPTATTSTestV4List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPTATTSTestV4List.swift; sourceTree = "<group>"; };
@@ -600,9 +604,11 @@
 				7C76D5E028B183420044958B /* UserWrittenHearingAssessmentView.swift */,
 				7C24C1ED28BF01D8006E77DD /* SurveyErrorView.swift */,
 				7C3E16BB28BC2AE4003A0DA9 /* PreTestView.swift */,
+				7C3316EE28D2515100721935 /* BetaTestingLandingView.swift */,
 				7C76D5EB28B1895B0044958B /* TrainingTestHoldingPlace.swift */,
 				7CECF1EB28C9859900B5A99E /* TrainingTestView.swift */,
 				7C99A16D28C95DFA00E46C65 /* Bilateral1kHzTestView.swift */,
+				7C3316F028D25D2700721935 /* PostBilateral1kHzTestView.swift */,
 				7C4D018928C1724100361559 /* EHATTSTestPart1View.swift */,
 				7C3D20AE289DADCB0039EDA6 /* EPTATTSTestV4List.swift */,
 				7C4D018B28C1728D00361559 /* SimpleTestView.swift */,
@@ -959,6 +965,7 @@
 				7C3D20AD289DADCB0039EDA6 /* EPTATTSTestV4App.swift in Sources */,
 				7C76D5E428B184ED0044958B /* LandingView.swift in Sources */,
 				7CDB3E1328A20DB300CB4DB1 /* EPTATTSTESTV4List.swift in Sources */,
+				7C3316EF28D2515100721935 /* BetaTestingLandingView.swift in Sources */,
 				7C4D017A28C00A4A00361559 /* DeviceSelectionModel.swift in Sources */,
 				7C99A16E28C95DFA00E46C65 /* Bilateral1kHzTestView.swift in Sources */,
 				7C179FE528B805DB00964AAC /* SimpleTrialDescriptionView.swift in Sources */,
@@ -971,6 +978,7 @@
 				7C7A94FC28B7009300DD8FAC /* EPTADescription.swift in Sources */,
 				7C24C1EA28BECCDD006E77DD /* PostEHATestView.swift in Sources */,
 				7C4D019E28C28E1100361559 /* SystemSettingsEndEHAModel.swift in Sources */,
+				7C3316F128D25D2700721935 /* PostBilateral1kHzTestView.swift in Sources */,
 				7C901FB728B970DE007E1336 /* ManualDeviceEntryInformationView.swift in Sources */,
 				7C24C1E828BEC9B1006E77DD /* EHAResultsDisplayView.swift in Sources */,
 				7C901FC228B9A8AA007E1336 /* UserDataEntrySplashView.swift in Sources */,

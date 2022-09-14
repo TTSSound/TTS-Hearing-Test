@@ -240,6 +240,10 @@ struct Bilateral1kHzTestView: View {
     @State var RightEar1kHzdBFinal = Float()
     @State var LeftEar1kHzdBFinal = Float()
 
+    @State var bilateral1kHzTestCompleted: Bool = false
+    
+    @State var continuePastBilateralTest: Bool = false
+    
     @State var onekHzjsonHoldingString: [String] = [String]()
     
     let fileOnekHzName = "SummaryOnekHzResults.json"
@@ -260,13 +264,24 @@ struct Bilateral1kHzTestView: View {
         ZStack{
             RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
         VStack {
-                Spacer()
-            Text("Bilateral 1kHz Test")
-                .fontWeight(.bold)
-                .padding()
-                .foregroundColor(.white)
-                .padding(.top, 40)
-                .padding(.bottom, 40)
+            Spacer()
+            if bilateral1kHzTestCompleted == false {
+                Text("Bilateral 1kHz Test")
+                    .fontWeight(.bold)
+                    .padding()
+                    .foregroundColor(.white)
+                    .padding(.top, 40)
+                    .padding(.bottom, 40)
+            } else if bilateral1kHzTestCompleted == true {
+                NavigationLink("Test Phase Complete, Press To Continue", destination: PostBilateral1kHzTestView(), isActive: $continuePastBilateralTest)//", label: [])
+//                NavigationLink("Test Phase Complete, Press To Continue", destination: PostBilateral1kHzTestView())
+                    .padding()
+                    .foregroundColor(.green)
+                    .font(.title)
+                    .padding(.top, 40)
+                    .padding(.bottom, 40)
+            }
+            
                 HStack {
                     Spacer()
                     Text(String(onekHz_testGain))
@@ -375,9 +390,21 @@ struct Bilateral1kHzTestView: View {
                     })
                     Spacer()
                     Text("Take a moment for a break before exiting to continue with the next test segment")
-                        .foregroundColor(.blue)
-                        .font(.title)
-                        .padding()
+
+                    Spacer()
+                    Button {
+                        continuePastBilateralTest = true
+                        onekHzshowTestCompletionSheet.toggle()
+                    } label: {
+                        Text("Test Phase Complete, Press To Continue")
+                    }
+//
+//                    NavigationLink("Test Phase Complete, Press To Continue", destination: PostBilateral1kHzTestView())
+//                        .foregroundColor(.green)
+//                        .font(.title)
+//                        .padding()
+                    Spacer()
+                    
                 }
             })
         }
@@ -1028,6 +1055,7 @@ extension Bilateral1kHzTestView {
         } else if onekHzlocalMarkNewTestCycle == 1 && onekHzlocalReversalEnd == 1 && onekHz_index == onekHz_eptaSamplesCount && onekHzendTestSeries == false {
             onekHzendTestSeries = true
             onekHzlocalPlaying = -1
+            bilateral1kHzTestCompleted = true
                 print("=============================")
                 print("!!!!! End of Test Series!!!!!!")
                 print("=============================")
@@ -1042,6 +1070,7 @@ extension Bilateral1kHzTestView {
             print("end Test Series = \(onekHzendTestSeries)")
         } else if onekHzendTestSeries == true {
             onekHzshowTestCompletionSheet = true
+            bilateral1kHzTestCompleted = true
             await onekHzendTestSeriesStop()
         }
     }
