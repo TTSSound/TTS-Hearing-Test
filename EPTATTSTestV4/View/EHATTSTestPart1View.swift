@@ -1315,21 +1315,27 @@ extension EHATTSTestPart1View {
         if localMarkNewTestCycle == 1 && localReversalEnd == 1 {
             DispatchQueue.global(qos: .userInitiated).async {
                 Task(priority: .userInitiated) {
-                    await writeEHA1DetailedResultsToCSV()
-                    await writeEHA1SummarydResultsToCSV()
-                    await writeEHA1InputDetailedResultsToCSV()
-                    await writeEHA1InputDetailedResultsToCSV()
+                    if endTestSeries == false {
+                        await writeEHA1DetailedResultsToCSV()
+                        await writeEHA1InputRightResultsToCSV()
+                        await writeEHA1InputLeftResultsToCSV()
+                    } else if endTestSeries == true {
+                        await writeEHA1DetailedResultsToCSV()
+                        await writeEHA1SummarydResultsToCSV()
+                        await writeEHA1InputDetailedResultsToCSV()
+                        await writeEHA1InputDetailedResultsToCSV()
 
-                    await writeEHA1RightLeftResultsToCSV()
-                    await writeEHA1RightResultsToCSV()
-                    await writeEHA1LeftResultsToCSV()
-                    await writeEHA1InputRightLeftResultsToCSV()
-                    await writeEHA1InputRightResultsToCSV()
-                    await writeEHA1InputLeftResultsToCSV()
-                    
-                    await getEHAP1Data()
-                    await saveEHA1ToJSON()
-        //                await envDataObjectModel_uploadSummaryResultsTest()
+                        await writeEHA1RightLeftResultsToCSV()
+                        await writeEHA1RightResultsToCSV()
+                        await writeEHA1LeftResultsToCSV()
+                        await writeEHA1InputRightLeftResultsToCSV()
+                        await writeEHA1InputRightResultsToCSV()
+                        await writeEHA1InputLeftResultsToCSV()
+                        
+                        await getEHAP1Data()
+                        await saveEHA1ToJSON()
+            //                await envDataObjectModel_uploadSummaryResultsTest()
+                    }
                 }
             }
         }

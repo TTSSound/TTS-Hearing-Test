@@ -154,6 +154,7 @@
 		7C901FC828B9BA1E007E1336 /* DNDSiriSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C901FC728B9BA1E007E1336 /* DNDSiriSetupView.swift */; };
 		7C901FCA28B9BAC9007E1336 /* SilentModeSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C901FC928B9BAC9007E1336 /* SilentModeSetupView.swift */; };
 		7C94955F28AD2D0200FDEFAD /* SummaryResultsProject.json in Resources */ = {isa = PBXBuildFile; fileRef = 7C94955E28AD2D0200FDEFAD /* SummaryResultsProject.json */; };
+		7C95E37128D18B5700163DCC /* GainReferenceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C95E37028D18B5700163DCC /* GainReferenceModel.swift */; };
 		7C98187028B43FD8006FE75A /* userAgreementText.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7C98186F28B43FD8006FE75A /* userAgreementText.txt */; };
 		7C99A16E28C95DFA00E46C65 /* Bilateral1kHzTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C99A16D28C95DFA00E46C65 /* Bilateral1kHzTestView.swift */; };
 		7CA0EA3428C3B5DA00F465BA /* Sample0.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7CA0EA3128C3B5DA00F465BA /* Sample0.wav */; };
@@ -345,6 +346,7 @@
 		7C901FC728B9BA1E007E1336 /* DNDSiriSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DNDSiriSetupView.swift; sourceTree = "<group>"; };
 		7C901FC928B9BAC9007E1336 /* SilentModeSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SilentModeSetupView.swift; sourceTree = "<group>"; };
 		7C94955E28AD2D0200FDEFAD /* SummaryResultsProject.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = SummaryResultsProject.json; path = EPTATTSTestV4/Model/SummaryResultsProject.json; sourceTree = SOURCE_ROOT; };
+		7C95E37028D18B5700163DCC /* GainReferenceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GainReferenceModel.swift; sourceTree = "<group>"; };
 		7C98186F28B43FD8006FE75A /* userAgreementText.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = userAgreementText.txt; sourceTree = "<group>"; };
 		7C9863DF28A71ACB005AA5E1 /* ReversalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReversalViewModel.swift; sourceTree = "<group>"; };
 		7C99A16B28C95D0800E46C65 /* DONOTChangeReferenceEHATest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DONOTChangeReferenceEHATest.swift; sourceTree = "<group>"; };
@@ -654,6 +656,7 @@
 				7C4D019D28C28E1100361559 /* SystemSettingsEndEHAModel.swift */,
 				7C4D019528C2635900361559 /* InAppPurchaseModel.swift */,
 				7C4D019728C283AE00361559 /* HoldingCSVInputModel.swift */,
+				7C95E37028D18B5700163DCC /* GainReferenceModel.swift */,
 				7C14A7F628ACA77900601602 /* SummaryResults.json */,
 				7C94955E28AD2D0200FDEFAD /* SummaryResultsProject.json */,
 				7C411BD028AD7F40008C47C2 /* SummaryResultsCSV.csv */,
@@ -912,6 +915,7 @@
 				7C179FED28B81B7500964AAC /* InAppPurchaseView.swift in Sources */,
 				7C125E3328B2236E00109CE5 /* SetupDataModel.swift in Sources */,
 				7C901FBD28B98517007E1336 /* ManualDeviceEntryView.swift in Sources */,
+				7C95E37128D18B5700163DCC /* GainReferenceModel.swift in Sources */,
 				7C76D5F428B18BA30044958B /* PurchaseView.swift in Sources */,
 				7C901FC028B9A359007E1336 /* SetupListActionView.swift in Sources */,
 				7C76D5EA28B189090044958B /* InstructionsForTakingTest.swift in Sources */,
