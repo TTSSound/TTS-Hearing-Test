@@ -1045,22 +1045,6 @@ class HoldingCSVInputModel: ObservableObject {
         return documentsDirectory
     }
 
-    func checkDataLink() async {
-        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
-        let fileManager = FileManager.default
-        let dataPath = (await self.getGainDataLinkPath() as NSString).strings(byAppendingPaths: dataName)
-        if fileManager.fileExists(atPath: dataPath[0]) {
-            let dataFilePath = URL(fileURLWithPath: dataPath[0])
-            if dataFilePath.isFileURL  {
-                dataFileURL = dataFilePath
-                print("dataFilePath: \(dataFilePath)")
-                print("dataFileURL: \(dataFileURL)")
-                print("Input File Exists")
-            } else {
-                print("Data File Path Does Not Exist")
-            }
-        }
-    }
     
     func checkGain2_5DataLink() async {
         let dataGain2_5Name = ["2_5.csv"]

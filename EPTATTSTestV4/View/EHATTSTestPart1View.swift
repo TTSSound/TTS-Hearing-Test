@@ -65,7 +65,8 @@ struct EHATTSTestPart1View: View {
     }
     
     var audioSessionModel = AudioSessionModel()
-
+    @StateObject var gainReferenceModel: GainReferenceModel = GainReferenceModel()
+    
     @State var localHeard = 0
     @State var localPlaying = Int()    // Playing = 1. Stopped = -1
     @State var localReversal = Int()
@@ -84,7 +85,7 @@ struct EHATTSTestPart1View: View {
     @State var startTooHigh = 0
     @State var firstGain = Float()
     @State var secondGain = Float()
-    @State var endTestSeries: Bool = false
+    @State var endTestSeriesValue: Bool = false
     @State var showTestCompletionSheet: Bool = false
     
 //    @State var envDataObjectModel_samples: [String] = ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16", "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
@@ -201,6 +202,21 @@ struct EHATTSTestPart1View: View {
     @State var ehaP1fullTestCompletedHoldingArray: [Bool] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true]
     
     
+    
+    @State var dataFileURLEHAP1Gain1 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP1Gain2 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP1Gain3 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP1Gain4 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP1Gain5 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP1Gain6 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP1Gain7 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP1Gain8 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP1Gain9 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP1Gain10 = URL(fileURLWithPath: "")
+    
+    @State var gainEHAP1SettingArrayLink = Float()
+    @State var gainEHAP1SettingArray = [Float]()
+    
     @State var jsonHoldingString: [String] = [String]()
     
 
@@ -246,7 +262,7 @@ struct EHATTSTestPart1View: View {
                         Task(priority: .userInitiated) {
                             audioSessionModel.setAudioSession()
                             localPlaying = 1
-                            endTestSeries = false
+                            endTestSeriesValue = false
                             print("Start Button Clicked. Playing = \(localPlaying)")
                         }
                     }
@@ -259,7 +275,7 @@ struct EHATTSTestPart1View: View {
                         localPlaying = 1
                         userPausedTest = false
                         playingStringColorIndex = 0
-                        endTestSeries = false
+                        endTestSeriesValue = false
                         print("Restart After Pause Button Clicked. Playing = \(localPlaying)")
                     } label: {
                         Text(playingString[playingStringColorIndex])
@@ -323,7 +339,7 @@ struct EHATTSTestPart1View: View {
                                 showTestCompletionSheet.toggle()
                             } else if ehaP1fullTestCompleted == false {
                                 showTestCompletionSheet.toggle()
-                                endTestSeries = false
+                                endTestSeriesValue = false
                                 testIsPlaying = true
                                 localPlaying = 1
                                 playingStringColorIndex = 2
@@ -365,19 +381,19 @@ struct EHATTSTestPart1View: View {
             })
         }
         .onChange(of: testIsPlaying, perform: { testBoolValue in
-            if testBoolValue == true && endTestSeries == false {
+            if testBoolValue == true && endTestSeriesValue == false {
             //User is starting test for first time
                 audioSessionModel.setAudioSession()
                 localPlaying = 1
                 playingStringColorIndex = 0
                 userPausedTest = false
-            } else if testBoolValue == false && endTestSeries == false {
+            } else if testBoolValue == false && endTestSeriesValue == false {
             // User is pausing test for firts time
                 stop()
                 localPlaying = 0
                 playingStringColorIndex = 1
                 userPausedTest = true
-            } else if testBoolValue == true && endTestSeries == true {
+            } else if testBoolValue == true && endTestSeriesValue == true {
                 stop()
                 localPlaying = -1
                 playingStringColorIndex = 2
@@ -478,7 +494,7 @@ struct EHATTSTestPart1View: View {
                         await concatenateFinalArrays()
 //                        await printConcatenatedArrays()
                         await saveFinalStoredArrays()
-                        await endTestSeries()
+                        await endTestSeriesFunc()
                         await newTestCycle()
                         await restartPresentation()
 //                        print("End of Reversals")
@@ -526,7 +542,7 @@ struct EHATTSTestPart1View: View {
         localStartingNonHeardArraySet = false
         firstHeardIsTrue = false
         secondHeardIsTrue = false
-        endTestSeries = false
+        endTestSeriesValue = false
         playingStringColorIndex = 0
         startTooHigh = 0
         localTestCount = 0
@@ -548,6 +564,9 @@ struct EHATTSTestPart1View: View {
         print("Pan: \(localPan)")
         print("Pan Index \(envDataObjectModel_index)")
     }
+    
+    
+    //gain = gainEHAP1SettingArray[envDataObjectModel_index]
     
     func loadAndTestPresentation(sample: String, gain: Float, pan: Float) {
           do{
@@ -1136,12 +1155,12 @@ extension EHATTSTestPart1View {
 //    }
         
     func restartPresentation() async {
-        if endTestSeries == false {
+        if endTestSeriesValue == false {
             localPlaying = 1
-            endTestSeries = false
-        } else if endTestSeries == true {
+            endTestSeriesValue = false
+        } else if endTestSeriesValue == true {
             localPlaying = -1
-            endTestSeries = true
+            endTestSeriesValue = true
             showTestCompletionSheet = true
             playingStringColorIndex = 2
         }
@@ -1176,7 +1195,7 @@ extension EHATTSTestPart1View {
         envDataObjectModel_index = envDataObjectModel_index + 1
 //        envDataObjectModel_eptaSamplesCountArrayIdx += 1
         envDataObjectModel_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
-        endTestSeries = false
+        endTestSeriesValue = false
         showTestCompletionSheet = false
         testIsPlaying = true
         userPausedTest = false
@@ -1187,18 +1206,18 @@ extension EHATTSTestPart1View {
     }
     
     func newTestCycle() async {
-//        if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCount && endTestSeries == false {
-        if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index] && endTestSeries == false {
+//        if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCount && endTestSeriesValue == false {
+        if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index] && endTestSeriesValue == false {
             startTooHigh = 0
             localMarkNewTestCycle = 0
             localReversalEnd = 0
             envDataObjectModel_index = envDataObjectModel_index + 1
             envDataObjectModel_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
-            endTestSeries = false
+            endTestSeriesValue = false
             await wipeArrays()
-//        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCount && endTestSeries == false {
-        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index] && endTestSeries == false {
-                endTestSeries = true
+//        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCount && endTestSeriesValue == false {
+        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index] && endTestSeriesValue == false {
+                endTestSeriesValue = true
                 localPlaying = -1
 //                envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
                 envDataObjectModel_eptaSamplesCountArrayIdx += 1
@@ -1207,7 +1226,7 @@ extension EHATTSTestPart1View {
                 print("=============================")
             if ehaP1fullTestCompleted == true {
                 ehaP1fullTestCompleted = true
-                endTestSeries = true
+                endTestSeriesValue = true
                 localPlaying = -1
                 print("*****************************")
                 print("=============================")
@@ -1216,7 +1235,7 @@ extension EHATTSTestPart1View {
                 print("*****************************")
             } else if ehaP1fullTestCompleted == false {
                 ehaP1fullTestCompleted = false
-                endTestSeries = true
+                endTestSeriesValue = true
                 localPlaying = -1
                 envDataObjectModel_eptaSamplesCountArrayIdx += 1
             }
@@ -1227,11 +1246,11 @@ extension EHATTSTestPart1View {
         }
     }
     
-    func endTestSeries() async {
-        if endTestSeries == false {
+    func endTestSeriesFunc() async {
+        if endTestSeriesValue == false {
             //Do Nothing and continue
-//            print("end Test Series = \(endTestSeries)")
-        } else if endTestSeries == true {
+//            print("end Test Series = \(endTestSeriesValue)")
+        } else if endTestSeriesValue == true {
             showTestCompletionSheet = true
             envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
             await endTestSeriesStop()
@@ -1315,11 +1334,11 @@ extension EHATTSTestPart1View {
         if localMarkNewTestCycle == 1 && localReversalEnd == 1 {
             DispatchQueue.global(qos: .userInitiated).async {
                 Task(priority: .userInitiated) {
-                    if endTestSeries == false {
+                    if await endTestSeriesValue == false {
                         await writeEHA1DetailedResultsToCSV()
                         await writeEHA1InputRightResultsToCSV()
                         await writeEHA1InputLeftResultsToCSV()
-                    } else if endTestSeries == true {
+                    } else if await endTestSeriesValue == true {
                         await writeEHA1DetailedResultsToCSV()
                         await writeEHA1SummarydResultsToCSV()
                         await writeEHA1InputDetailedResultsToCSV()
@@ -1723,3 +1742,234 @@ extension EHATTSTestPart1View {
     
 }
 
+extension EHATTSTestPart1View {
+//MARK: Extension for Gain Link File Checking
+    
+    
+    func gainCurveAssignment() async {
+        if gainEHAP1SettingArrayLink == 2.5 {
+            gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS2_5_EHAP1)
+        } else if gainEHAP1SettingArrayLink == 4 {
+            gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS4_EHAP1)
+        } else if gainEHAP1SettingArrayLink == 5 {
+            gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS5_EHAP1)
+        } else if gainEHAP1SettingArrayLink == 7 {
+            gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS7_EHAP1)
+        } else if gainEHAP1SettingArrayLink == 8 {
+            gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS8_EHAP1)
+        } else if gainEHAP1SettingArrayLink == 11 {
+            gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS11_EHAP1)
+        } else if gainEHAP1SettingArrayLink == 16 {
+            gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS16_EHAP1)
+        } else if gainEHAP1SettingArrayLink == 17 {
+            gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS17_EHAP1)
+        } else if gainEHAP1SettingArrayLink == 24 {
+            gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS24_EHAP1)
+        } else if gainEHAP1SettingArrayLink == 27 {
+            gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS27_EHAP1)
+        } else {
+            print("!!!! Fatal Error in gainCurveAssignment() Logic")
+        }
+   
+    }
+    
+    func getGainEHAP1DataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
+
+    
+    func checkGainEHAP1_2_5DataLink() async {
+        let dataGainEHAP1_2_5Name = ["2_5.csv"]
+        let fileGainEHAP1_2_5Manager = FileManager.default
+        let dataGainEHAP1_2_5Path = (await self.getGainEHAP1DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP1_2_5Name)
+        if fileGainEHAP1_2_5Manager.fileExists(atPath: dataGainEHAP1_2_5Path[0]) {
+            let dataGainEHAP1_2_5FilePath = URL(fileURLWithPath: dataGainEHAP1_2_5Path[0])
+            if dataGainEHAP1_2_5FilePath.isFileURL  {
+                dataFileURLEHAP1Gain1 = dataGainEHAP1_2_5FilePath
+                print("2_5.csv dataFilePath: \(dataGainEHAP1_2_5FilePath)")
+                print("2_5.csv dataFileURL: \(dataFileURLEHAP1Gain1)")
+                print("2_5.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP1SettingArrayLink = 2.5
+            } else {
+                print("2_5.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGainEHAP1_4DataLink() async {
+        let dataGainEHAP1_4Name = ["4.csv"]
+        let fileGainEHAP1_4Manager = FileManager.default
+        let dataGainEHAP1_4Path = (await self.getGainEHAP1DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP1_4Name)
+        if fileGainEHAP1_4Manager.fileExists(atPath: dataGainEHAP1_4Path[0]) {
+            let dataGainEHAP1_4FilePath = URL(fileURLWithPath: dataGainEHAP1_4Path[0])
+            if dataGainEHAP1_4FilePath.isFileURL  {
+                dataFileURLEHAP1Gain2 = dataGainEHAP1_4FilePath
+                print("4.csv dataFilePath: \(dataGainEHAP1_4FilePath)")
+                print("4.csv dataFileURL: \(dataFileURLEHAP1Gain2)")
+                print("4.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP1SettingArrayLink = 4
+            } else {
+                print("4.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGainEHAP1_5DataLink() async {
+        let dataGainEHAP1_5Name = ["5.csv"]
+        let fileGainEHAP1_5Manager = FileManager.default
+        let dataGainEHAP1_5Path = (await self.getGainEHAP1DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP1_5Name)
+        if fileGainEHAP1_5Manager.fileExists(atPath: dataGainEHAP1_5Path[0]) {
+            let dataGainEHAP1_5FilePath = URL(fileURLWithPath: dataGainEHAP1_5Path[0])
+            if dataGainEHAP1_5FilePath.isFileURL  {
+                dataFileURLEHAP1Gain3 = dataGainEHAP1_5FilePath
+                print("5.csv dataFilePath: \(dataGainEHAP1_5FilePath)")
+                print("5.csv dataFileURL: \(dataFileURLEHAP1Gain3)")
+                print("5.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP1SettingArrayLink = 5
+            } else {
+                print("5.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGainEHAP1_7DataLink() async {
+        let dataGainEHAP1_7Name = ["7.csv"]
+        let fileGainEHAP1_7Manager = FileManager.default
+        let dataGainEHAP1_7Path = (await self.getGainEHAP1DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP1_7Name)
+        if fileGainEHAP1_7Manager.fileExists(atPath: dataGainEHAP1_7Path[0]) {
+            let dataGainEHAP1_7FilePath = URL(fileURLWithPath: dataGainEHAP1_7Path[0])
+            if dataGainEHAP1_7FilePath.isFileURL  {
+                dataFileURLEHAP1Gain4 = dataGainEHAP1_7FilePath
+                print("7.csv dataFilePath: \(dataGainEHAP1_7FilePath)")
+                print("7.csv dataFileURL: \(dataFileURLEHAP1Gain4)")
+                print("7.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP1SettingArrayLink = 7
+            } else {
+                print("7.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+
+    func checkGainEHAP1_8DataLink() async {
+        let dataGainEHAP1_8Name = ["8.csv"]
+        let fileGainEHAP1_8Manager = FileManager.default
+        let dataGainEHAP1_8Path = (await self.getGainEHAP1DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP1_8Name)
+        if fileGainEHAP1_8Manager.fileExists(atPath: dataGainEHAP1_8Path[0]) {
+            let dataGainEHAP1_8FilePath = URL(fileURLWithPath: dataGainEHAP1_8Path[0])
+            if dataGainEHAP1_8FilePath.isFileURL  {
+                dataFileURLEHAP1Gain5 = dataGainEHAP1_8FilePath
+                print("8.csv dataFilePath: \(dataGainEHAP1_8FilePath)")
+                print("8.csv dataFileURL: \(dataFileURLEHAP1Gain5)")
+                print("8.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP1SettingArrayLink = 8
+            } else {
+                print("8.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+
+    func checkGainEHAP1_11DataLink() async {
+        let dataGainEHAP1_11Name = ["11.csv"]
+        let fileGainEHAP1_11Manager = FileManager.default
+        let dataGainEHAP1_11Path = (await self.getGainEHAP1DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP1_11Name)
+        if fileGainEHAP1_11Manager.fileExists(atPath: dataGainEHAP1_11Path[0]) {
+            let dataGainEHAP1_11FilePath = URL(fileURLWithPath: dataGainEHAP1_11Path[0])
+            if dataGainEHAP1_11FilePath.isFileURL  {
+                dataFileURLEHAP1Gain6 = dataGainEHAP1_11FilePath
+                print("11.csv dataFilePath: \(dataGainEHAP1_11FilePath)")
+                print("11.csv dataFileURL: \(dataFileURLEHAP1Gain6)")
+                print("11.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP1SettingArrayLink = 11
+            } else {
+                print("11.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGainEHAP1_16DataLink() async {
+        let dataGainEHAP1_16Name = ["16.csv"]
+        let fileGainEHAP1_16Manager = FileManager.default
+        let dataGainEHAP1_16Path = (await self.getGainEHAP1DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP1_16Name)
+        if fileGainEHAP1_16Manager.fileExists(atPath: dataGainEHAP1_16Path[0]) {
+            let dataGainEHAP1_16FilePath = URL(fileURLWithPath: dataGainEHAP1_16Path[0])
+            if dataGainEHAP1_16FilePath.isFileURL  {
+                dataFileURLEHAP1Gain7 = dataGainEHAP1_16FilePath
+                print("16.csv dataFilePath: \(dataGainEHAP1_16FilePath)")
+                print("16.csv dataFileURL: \(dataFileURLEHAP1Gain7)")
+                print("16.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP1SettingArrayLink = 16
+            } else {
+                print("16.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGainEHAP1_17DataLink() async {
+        let dataGainEHAP1_17Name = ["17.csv"]
+        let fileGainEHAP1_17Manager = FileManager.default
+        let dataGainEHAP1_17Path = (await self.getGainEHAP1DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP1_17Name)
+        if fileGainEHAP1_17Manager.fileExists(atPath: dataGainEHAP1_17Path[0]) {
+            let dataGainEHAP1_17FilePath = URL(fileURLWithPath: dataGainEHAP1_17Path[0])
+            if dataGainEHAP1_17FilePath.isFileURL  {
+                dataFileURLEHAP1Gain8 = dataGainEHAP1_17FilePath
+                print("17.csv dataFilePath: \(dataGainEHAP1_17FilePath)")
+                print("17.csv dataFileURL: \(dataFileURLEHAP1Gain8)")
+                print("17.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP1SettingArrayLink = 17
+            } else {
+                print("17.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGainEHAP1_24DataLink() async {
+        let dataGainEHAP1_24Name = ["24.csv"]
+        let fileGainEHAP1_24Manager = FileManager.default
+        let dataGainEHAP1_24Path = (await self.getGainEHAP1DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP1_24Name)
+        if fileGainEHAP1_24Manager.fileExists(atPath: dataGainEHAP1_24Path[0]) {
+            let dataGainEHAP1_24FilePath = URL(fileURLWithPath: dataGainEHAP1_24Path[0])
+            if dataGainEHAP1_24FilePath.isFileURL  {
+                dataFileURLEHAP1Gain9 = dataGainEHAP1_24FilePath
+                print("24.csv dataFilePath: \(dataGainEHAP1_24FilePath)")
+                print("24.csv dataFileURL: \(dataFileURLEHAP1Gain9)")
+                print("24.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP1SettingArrayLink = 24
+            } else {
+                print("24.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+
+    func checkGainEHAP1_27DataLink() async {
+        let dataGainEHAP1_27Name = ["27.csv"]
+        let fileGainEHAP1_27Manager = FileManager.default
+        let dataGainEHAP1_27Path = (await self.getGainEHAP1DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP1_27Name)
+        if fileGainEHAP1_27Manager.fileExists(atPath: dataGainEHAP1_27Path[0]) {
+            let dataGainEHAP1_27FilePath = URL(fileURLWithPath: dataGainEHAP1_27Path[0])
+            if dataGainEHAP1_27FilePath.isFileURL  {
+                dataFileURLEHAP1Gain10 = dataGainEHAP1_27FilePath
+                print("27.csv dataFilePath: \(dataGainEHAP1_27FilePath)")
+                print("27.csv dataFileURL: \(dataFileURLEHAP1Gain10)")
+                print("27.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP1SettingArrayLink = 27
+            } else {
+                print("27.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    
+    
+}
