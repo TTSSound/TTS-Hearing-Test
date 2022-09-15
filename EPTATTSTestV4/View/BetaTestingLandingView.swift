@@ -130,7 +130,8 @@ struct BetaTestingLandingView: View {
                     }
                     if betaSelectionsSubmitted == true {
                         NavigationLink {
-                            Bilateral1kHzTestView()
+                            TestIDInputView()
+//                            Bilateral1kHzTestView()
                         } label: {
                             VStack{
                                 Image(systemName: "arrowshape.bounce.right")
@@ -391,7 +392,7 @@ struct BetaTestingLandingView: View {
             let csvBetaEPTAInputTestPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvBetaEPTAInputTestDocumentsDirectory = csvBetaEPTAInputTestPath
             print("CSV Beta EPTA Input Test Selection DocumentsDirectory: \(csvBetaEPTAInputTestDocumentsDirectory)")
-            let csvBetaEPTAInputTestFilePath = csvBetaEPTAInputTestDocumentsDirectory.appendingPathComponent("epta.csv")
+            let csvBetaEPTAInputTestFilePath = csvBetaEPTAInputTestDocumentsDirectory.appendingPathComponent("EPTA.csv")
             print(csvBetaEPTAInputTestFilePath)
             let writerSetup = try CSVWriter(fileURL: csvBetaEPTAInputTestFilePath, append: false)
             try writerSetup.write(row: [selectedBetaEPTATest])
@@ -408,7 +409,7 @@ struct BetaTestingLandingView: View {
             let csvBetaEHAInputTestPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvBetaEHAInputTestDocumentsDirectory = csvBetaEHAInputTestPath
             print("CSV Beta EHA Input Test Selection DocumentsDirectory: \(csvBetaEHAInputTestDocumentsDirectory)")
-            let csvBetaEHAInputTestFilePath = csvBetaEHAInputTestDocumentsDirectory.appendingPathComponent("eha.csv")
+            let csvBetaEHAInputTestFilePath = csvBetaEHAInputTestDocumentsDirectory.appendingPathComponent("EHA.csv")
             print(csvBetaEHAInputTestFilePath)
             let writerSetup = try CSVWriter(fileURL: csvBetaEHAInputTestFilePath, append: false)
             try writerSetup.write(row: [selectedBetaEHATest])

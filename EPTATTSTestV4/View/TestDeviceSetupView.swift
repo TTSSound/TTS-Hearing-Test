@@ -117,9 +117,11 @@ struct TestDeviceSetupView: View {
 
                 
                 NavigationLink(
-                    destination: TestIDInputView(),
+                    destination: LandingView(),
+//                    destination: TestIDInputView(),
                     label: {
-                    Text("Continue to Start The Hearing Test")
+                    Text("Continue to Return Home and Start The Hearing Test")
+//                    Text("Continue to Start The Hearing Test")
                         .fontWeight(.bold)
                         .padding()
                         .foregroundColor(.white)

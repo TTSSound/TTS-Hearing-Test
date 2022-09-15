@@ -45,7 +45,7 @@ struct PreTestView: View {
                     .foregroundColor(.white)
                 
                 NavigationLink {
-                    LandingView()
+                    Bilateral1kHzTestView()
 //                   TrainingTestHoldingPlace()
                 } label: {
                     Text("We are Now Ready To Start The Test.\nClick Continue to Get Started!")

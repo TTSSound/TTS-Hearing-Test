@@ -149,7 +149,7 @@ struct EHATTSTestPart1View: View {
     
     
     @State var envDataObjectModel_index: Int = 0
-    @State var envDataObjectModel_testGain: Float = 0.2
+    @State var envDataObjectModel_testGain: Float = Float()
     @State var envDataObjectModel_heardArray: [Int] = [Int]()
     @State var envDataObjectModel_indexForTest = [Int]()
     @State var envDataObjectModel_testCount: [Int] = [Int]()
@@ -263,12 +263,13 @@ struct EHATTSTestPart1View: View {
                         .padding(.top, 40)
                         .padding(.bottom, 5)
                 }
-                
-                Text("Gain Setting: \(gainEHAP1SettingArray[envDataObjectModel_index])")
+           
+                Text("Gain Setting: \(envDataObjectModel_testGain)")
                     .foregroundColor(.white)
                     .font(.caption)
                     .padding(.top, 5)
                     .padding(.bottom, 10)
+       
 
                 Text("Click to Stat Test")
                     .fontWeight(.bold)
@@ -421,6 +422,8 @@ struct EHATTSTestPart1View: View {
                     await checkGainEHAP1_24DataLink()
                     await checkGainEHAP1_27DataLink()
                     await gainCurveAssignment()
+                    envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]
+                    gainPhonIsSet = true
                 } else if gainPhonIsSet == true {
                     print("Gain Already Set")
                 } else {
@@ -457,6 +460,7 @@ struct EHATTSTestPart1View: View {
             envDataObjectModel_pan = panArray[envDataObjectModel_index]
             localHeard = 0
             localReversal = 0
+           
             
             if playingValue == 1{
                 print("envDataObjectModel_testGain: \(envDataObjectModel_testGain)")
@@ -623,8 +627,8 @@ struct EHATTSTestPart1View: View {
               testPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: urlSample))
               guard let testPlayer = testPlayer else { return }
               testPlayer.prepareToPlay()    // Test Player Prepare to Play
-              testPlayer.setVolume(gainEHAP1SettingArray[envDataObjectModel_index], fadeDuration: 0)
-//              testPlayer.setVolume(envDataObjectModel_testGain, fadeDuration: 0)      // Set Gain for Playback
+//              testPlayer.setVolume(gainEHAP1SettingArray[envDataObjectModel_index], fadeDuration: 0)
+              testPlayer.setVolume(envDataObjectModel_testGain, fadeDuration: 0)      // Set Gain for Playback
               testPlayer.pan = localPan // panArray[envDataObjectModel_index]
               testPlayer.play()   // Start Playback
           } catch { print("Error in playerSessionSetUp Function Execution") }
@@ -1243,7 +1247,7 @@ extension EHATTSTestPart1View {
         localReversalEnd = 0
         envDataObjectModel_index = envDataObjectModel_index + 1
 //        envDataObjectModel_eptaSamplesCountArrayIdx += 1
-        envDataObjectModel_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
+        envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]       // Add code to reset starting test gain by linking to table of expected HL
         endTestSeriesValue = false
         showTestCompletionSheet = false
         testIsPlaying = true
@@ -1261,7 +1265,7 @@ extension EHATTSTestPart1View {
             localMarkNewTestCycle = 0
             localReversalEnd = 0
             envDataObjectModel_index = envDataObjectModel_index + 1
-            envDataObjectModel_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
+            envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]       // Add code to reset starting test gain by linking to table of expected HL
             endTestSeriesValue = false
             await wipeArrays()
 //        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCount && endTestSeriesValue == false {

@@ -308,7 +308,7 @@ struct PostBilateral1kHzTestView: View {
 //NEED NEW APPROACH. THIS DOESN'T WORK IF TWO FILES ARE CREATED
 // NEED TO FIGURE OUT HOW TO DELETE FILES ON SECOND ATTEMPT TO TAKE TEST
     func checkBetaEHATestLik() async {
-        let ehaBetaName = ["eha.csv"]
+        let ehaBetaName = ["EHA.csv"]
         let fileEHABetaManager = FileManager.default
         let ehaBetaPath = (await self.getBetaTestLinkPath() as NSString).strings(byAppendingPaths: ehaBetaName)
         if fileEHABetaManager.fileExists(atPath: ehaBetaPath[0]) {
@@ -322,7 +322,7 @@ struct PostBilateral1kHzTestView: View {
     }
         
     func checkTrainEPTATestLik() async {
-        let eptaBetaName = ["epta.csv"]
+        let eptaBetaName = ["EPTA.csv"]
         let fileEPTABetaManager = FileManager.default
         let eptaBetaPath = (await self.getBetaTestLinkPath() as NSString).strings(byAppendingPaths: eptaBetaName)
         if fileEPTABetaManager.fileExists(atPath: eptaBetaPath[0]) {
