@@ -564,7 +564,7 @@ struct EHATTSTestPart1View: View {
         localMarkNewTestCycle = 0
         localReversalEnd = 0
         envDataObjectModel_index = envDataObjectModel_index
-        envDataObjectModel_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
+        envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]       // Add code to reset starting test gain by linking to table of expected HL
         testIsPlaying = false
         localPlaying = 0
         envDataObjectModel_testCount.removeAll()
@@ -600,10 +600,11 @@ struct EHATTSTestPart1View: View {
         localTestCount = 0
         localMarkNewTestCycle = 0
         localReversalEnd = 0
-        envDataObjectModel_testGain = 0.2
+      
         envDataObjectModel_index = envDataObjectModel_index + 1
 //        print(envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index])
         print("envDataObjectModel_index: \(envDataObjectModel_index)")
+        envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]
         userPausedTest = false
         testIsPlaying = true
         localPlaying = 1
