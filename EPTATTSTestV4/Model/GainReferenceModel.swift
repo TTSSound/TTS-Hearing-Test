@@ -84,6 +84,8 @@ class GainReferenceModel: ObservableObject {
     
     
     //LR Standard Test Cycles EHAP1 & EPTA
+    
+    
     @Published var ABS2_5_EHAP1: [Float] = [0.025, 0.223, 0.045, 0.115, 0.14, 0.01, 0.01, 0.045,
                                             0.127, 0.136, 0.134, 0.124, 0.656, 0.183, 0.656, 0.394]
     

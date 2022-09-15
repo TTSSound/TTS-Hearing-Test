@@ -118,7 +118,7 @@ struct Bilateral1kHzTestView: View {
             //!!!!! Changes Above
     
     @State var onekHz_index: Int = 0
-    @State var onekHz_testGain: Float = 0.2
+    @State var onekHz_testGain: Float = 0.025
     @State var onekHz_heardArray: [Int] = [Int]()
     @State var onekHz_indexForTest = [Int]()
     @State var onekHz_testCount: [Int] = [Int]()
@@ -526,7 +526,7 @@ struct Bilateral1kHzTestView: View {
         onekHzlocalMarkNewTestCycle = 0
         onekHzlocalReversalEnd = 0
         onekHz_index = onekHz_index
-        onekHz_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
+        onekHz_testGain = 0.025       // Add code to reset starting test gain by linking to table of expected HL
         onekHztestIsPlaying = false
         onekHzlocalPlaying = 0
         onekHz_testCount.removeAll()
@@ -555,6 +555,7 @@ struct Bilateral1kHzTestView: View {
               onekHztestPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: onekHzurlSample))
               guard let onekHztestPlayer = onekHztestPlayer else { return }
               onekHztestPlayer.prepareToPlay()    // Test Player Prepare to Play
+//              onekHztestPlayer.setVolume(onekHz_testGain, fadeDuration: 0)      // Set Gain for Playback
               onekHztestPlayer.setVolume(onekHz_testGain, fadeDuration: 0)      // Set Gain for Playback
               onekHztestPlayer.pan = onekHz_pan
               onekHztestPlayer.play()   // Start Playback
@@ -1049,7 +1050,7 @@ extension Bilateral1kHzTestView {
             onekHzlocalMarkNewTestCycle = 0
             onekHzlocalReversalEnd = 0
             onekHz_index = onekHz_index + 1
-            onekHz_testGain = 0.2
+            onekHz_testGain = 0.025
             onekHzendTestSeries = false
          
         } else if onekHzlocalMarkNewTestCycle == 1 && onekHzlocalReversalEnd == 1 && onekHz_index == onekHz_eptaSamplesCount && onekHzendTestSeries == false {

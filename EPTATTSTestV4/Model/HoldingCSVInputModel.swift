@@ -1058,7 +1058,7 @@ class HoldingCSVInputModel: ObservableObject {
                 print("2_5.csv dataFileURL: \(dataFileURLGain1)")
                 print("2_5.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
-                let gainSettingArray = 2.5
+//                let gainSettingArray = 2.5
             } else {
                 print("2_5.csv Data File Path Does Not Exist")
             }
@@ -1077,7 +1077,7 @@ class HoldingCSVInputModel: ObservableObject {
                 print("4.csv dataFileURL: \(dataFileURLGain2)")
                 print("4.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
-                let gainSettingArray = 4
+//                let gainSettingArray = 4
             } else {
                 print("4.csv Data File Path Does Not Exist")
             }
@@ -1096,7 +1096,7 @@ class HoldingCSVInputModel: ObservableObject {
                 print("5.csv dataFileURL: \(dataFileURLGain3)")
                 print("5.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
-                let gainSettingArray = 5
+//                let gainSettingArray = 5
             } else {
                 print("5.csv Data File Path Does Not Exist")
             }
@@ -1115,7 +1115,7 @@ class HoldingCSVInputModel: ObservableObject {
                 print("7.csv dataFileURL: \(dataFileURLGain4)")
                 print("7.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
-                let gainSettingArray = 7
+//                let gainSettingArray = 7
             } else {
                 print("7.csv Data File Path Does Not Exist")
             }
@@ -1134,7 +1134,7 @@ class HoldingCSVInputModel: ObservableObject {
                 print("8.csv dataFileURL: \(dataFileURLGain5)")
                 print("8.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
-                let gainSettingArray = 8
+//                let gainSettingArray = 8
             } else {
                 print("8.csv Data File Path Does Not Exist")
             }
@@ -1153,7 +1153,7 @@ class HoldingCSVInputModel: ObservableObject {
                 print("11.csv dataFileURL: \(dataFileURLGain6)")
                 print("11.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
-                let gainSettingArray = 11
+//                let gainSettingArray = 11
             } else {
                 print("11.csv Data File Path Does Not Exist")
             }
@@ -1172,7 +1172,7 @@ class HoldingCSVInputModel: ObservableObject {
                 print("16.csv dataFileURL: \(dataFileURLGain7)")
                 print("16.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
-                let gainSettingArray = 16
+//                let gainSettingArray = 16
             } else {
                 print("16.csv Data File Path Does Not Exist")
             }
@@ -1191,7 +1191,7 @@ class HoldingCSVInputModel: ObservableObject {
                 print("17.csv dataFileURL: \(dataFileURLGain8)")
                 print("17.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
-                let gainSettingArray = 17
+//                let gainSettingArray = 17
             } else {
                 print("17.csv Data File Path Does Not Exist")
             }
@@ -1210,7 +1210,7 @@ class HoldingCSVInputModel: ObservableObject {
                 print("24.csv dataFileURL: \(dataFileURLGain9)")
                 print("24.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
-                let gainSettingArray = 24
+//                let gainSettingArray = 24
             } else {
                 print("24.csv Data File Path Does Not Exist")
             }
@@ -1229,7 +1229,7 @@ class HoldingCSVInputModel: ObservableObject {
                 print("27.csv dataFileURL: \(dataFileURLGain10)")
                 print("27.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
-                let gainSettingArray = 27
+//                let gainSettingArray = 27
             } else {
                 print("27.csv Data File Path Does Not Exist")
             }

@@ -14,9 +14,12 @@ struct PostBilateral1kHzTestView: View {
     
     @State var ehaBetaLinkExists = Bool()
     @State var eptaBetaLinkExists = Bool()
-    @State var betaTestsArray = ["Shorter EPTA", "Full EHA", "Error in Test Index"]
-    @State var betaTestSelectedIdx = Int()
+    @State var betaTestsArray = ["", "Shorter EPTA", "Full EHA", "Error in Test Index"]
+    @State var betaTestSelectedIdx = 0
     @State var betaTestColorArray: [Color] = [Color.blue, Color.green, Color.red]
+    @State var betaEPTATestSelectedIdx = Int()
+    @State var betaEHAP1TestSelectedIdx = Int()
+    @State var betaEHAP2TestSelectedIdx = Int()
     
     @State var phonGain = Float()
     @State var betaUserTestedIntraEarDelta = Float()
@@ -89,9 +92,9 @@ struct PostBilateral1kHzTestView: View {
                     }
                 } label: {
                     Text("Check Test Selection and Determine Gain Curve")
-                        .foregroundColor(.blue)
+                        .foregroundColor(.green)
                 }
-                .padding(.top, 20)
+                .padding(.top, 40)
                 .padding(.bottom, 20)
                 
                 Text("Test Selected: \(betaTestsArray[betaTestSelectedIdx])")
@@ -104,11 +107,11 @@ struct PostBilateral1kHzTestView: View {
                     .padding(.bottom, 5)
                 
                 Spacer()
-                NavigationLink("EPTA Test", destination: EHATTSTestPart1View()).foregroundColor(betaTestColorArray[betaTestSelectedIdx])
+                NavigationLink("EPTA Test", destination: EHATTSTestPart1View()).foregroundColor(betaTestColorArray[betaEPTATestSelectedIdx])
                 Spacer()
-                NavigationLink("EHATTSTestPart1", destination: EHATTSTestPart1View()).foregroundColor(betaTestColorArray[betaTestSelectedIdx])
+                NavigationLink("EHATTSTestPart1", destination: EHATTSTestPart1View()).foregroundColor(betaTestColorArray[betaEHAP1TestSelectedIdx])
                 Spacer()
-                NavigationLink("EHATTSTestPart2", destination: EHATTSTestPart2View()).foregroundColor(betaTestColorArray[betaTestSelectedIdx])
+                NavigationLink("EHATTSTestPart2", destination: EHATTSTestPart2View()).foregroundColor(betaTestColorArray[betaEHAP2TestSelectedIdx])
                 Spacer()
                 
             }
@@ -177,33 +180,41 @@ struct PostBilateral1kHzTestView: View {
     }
     
     func compareBetaUserPhonGains() async {
-        if phonGain > betaUserTestedReferenceGain {
-            betaUserVPhonDiff = phonGain - betaUserTestedReferenceGain
+        if phonGain/100 > betaUserTestedReferenceGain {
+            betaUserVPhonDiff = phonGain/100 - betaUserTestedReferenceGain
             phonIsGreater = true
-            print("phonGain: \(phonGain)")
+            print("phonGain: \(phonGain/100)")
             print("betaUserTestedReferenceGain: \(betaUserTestedReferenceGain)")
-        } else if phonGain < betaUserTestedReferenceGain {
-            betaUserVPhonDiff = betaUserTestedReferenceGain - phonGain
+        } else if phonGain/100 < betaUserTestedReferenceGain {
+            betaUserVPhonDiff = betaUserTestedReferenceGain - phonGain/100
             phonIsGreater = false
-            print("phonGain: \(phonGain)")
+            print("phonGain: \(phonGain/100)")
             print("betaUserTestedReferenceGain: \(betaUserTestedReferenceGain)")
         } else {
             print("Critical Error in compareBetaUserPhonGains")
-            print("phonGain: \(phonGain)")
+            print("phonGain: \(phonGain/100)")
             print("betaUserTestedReferenceGain: \(betaUserTestedReferenceGain)")
         }
     }
     
     func betaUserItrnaEarDeltaGain() async {
+        print("betaInputOnekHz_averageLowestGainRightArray: \(betaInputOnekHz_averageLowestGainRightArray)")
+        print("betaInputOnekHz_HoldingLowestRightGainArray: \(betaInputOnekHz_HoldingLowestRightGainArray)")
+        print("betaInputOnekHz_averageLowestGainLeftArray: \(betaInputOnekHz_averageLowestGainLeftArray)")
+        print("betaInputOnekHz_HoldingLowestLeftGainArray: \(betaInputOnekHz_HoldingLowestLeftGainArray)")
         
         if betaInputOnekHz_averageLowestGainRightArray > betaInputOnekHz_averageLowestGainLeftArray {
             betaUserTestedIntraEarDelta = betaInputOnekHz_averageLowestGainRightArray - betaInputOnekHz_averageLowestGainLeftArray
             betaUserTestedReferenceGain = betaInputOnekHz_averageLowestGainLeftArray
             betaUserBetterEar = -1.0
-        } else if betaInputOnekHz_averageLowestGainRightArray < betaInputOnekHz_averageLowestGainLeftArray {
+            print("betaUserTestedReferenceGain : \(betaUserTestedReferenceGain )")
+            print("betaUserBetterEar: \(betaUserBetterEar)")
+        } else if betaInputOnekHz_averageLowestGainRightArray <= betaInputOnekHz_averageLowestGainLeftArray {
             betaUserTestedIntraEarDelta = betaInputOnekHz_averageLowestGainLeftArray - betaInputOnekHz_averageLowestGainRightArray
             betaUserTestedReferenceGain = betaInputOnekHz_averageLowestGainRightArray
             betaUserBetterEar = 1.0
+            print("betaUserTestedReferenceGain : \(betaUserTestedReferenceGain )")
+            print("betaUserBetterEar: \(betaUserBetterEar)")
         } else {
             print("!!!Fatal error in betaUserIntraEarDeltaGain() Logic")
         }
@@ -268,13 +279,22 @@ struct PostBilateral1kHzTestView: View {
     
     func returnBetaTestSelected() async {
         if eptaBetaLinkExists == true && ehaBetaLinkExists == false {
-            betaTestSelectedIdx = 0
+            betaTestSelectedIdx = 1
+            betaEPTATestSelectedIdx = 1
+            betaEHAP1TestSelectedIdx = 2
+            betaEHAP2TestSelectedIdx = 2
             print("EPTA Test Link Exists")
         } else if eptaBetaLinkExists == false && ehaBetaLinkExists == true {
             betaTestSelectedIdx = 1
+            betaEPTATestSelectedIdx = 2
+            betaEHAP1TestSelectedIdx = 1
+            betaEHAP2TestSelectedIdx = 2
             print("EHA Link Exist")
         } else {
             betaTestSelectedIdx = 2
+            betaEPTATestSelectedIdx = 2
+            betaEHAP1TestSelectedIdx = 2
+            betaEHAP2TestSelectedIdx = 2
             print("Error in test index")
         }
     }
@@ -417,7 +437,7 @@ struct PostBilateral1kHzTestView: View {
         let age5BetaName = ["age5.csv"]
         let fileAge5BetaManager = FileManager.default
         let age5BetaPath = (await self.getBetaTestLinkPath() as NSString).strings(byAppendingPaths: age5BetaName)
-        if fileAge5BetaManager.fileExists(atPath: age5BetaPath[5]) {
+        if fileAge5BetaManager.fileExists(atPath: age5BetaPath[0]) {
             let age5BetaFilePath = URL(fileURLWithPath: age5BetaPath[0])
             if age5BetaFilePath.isFileURL  {
                 age5BetaLinkExists = true
@@ -472,55 +492,55 @@ struct PostBilateral1kHzTestView: View {
             print("onekHZResults Read")
             let rows = results.columns
             print("rows: \(rows)")
-            let fieldOnekHz_averageGainRightArray1: String = results[row:0, column: 0]
-            let fieldOnekHz_averageGainRightArray2: String = results[row:0, column: 1]
-            let fieldOnekHz_averageGainRightArray3: String = results[row:0, column: 2]
-            let fieldOnekHz_averageGainRightArray4: String = results[row:0, column: 3]
-            let fieldOnekHz_averageGainLeftArray1: String = results[row:1, column: 0]
-            let fieldOnekHz_averageGainLeftArray2: String = results[row:1, column: 1]
-            let fieldOnekHz_averageGainLeftArray3: String = results[row:1, column: 2]
-            let fieldOnekHz_averageGainLeftArray4: String = results[row:1, column: 3]
+//            let fieldOnekHz_averageGainRightArray1: String = results[row:0, column: 0]
+//            let fieldOnekHz_averageGainRightArray2: String = results[row:0, column: 1]
+//            let fieldOnekHz_averageGainRightArray3: String = results[row:0, column: 2]
+//            let fieldOnekHz_averageGainRightArray4: String = results[row:0, column: 3]
+//            let fieldOnekHz_averageGainLeftArray1: String = results[row:1, column: 0]
+//            let fieldOnekHz_averageGainLeftArray2: String = results[row:1, column: 1]
+//            let fieldOnekHz_averageGainLeftArray3: String = results[row:1, column: 2]
+//            let fieldOnekHz_averageGainLeftArray4: String = results[row:1, column: 3]
             let fieldOnekHz_averageLowestGainRightArray: String = results[row:2, column: 0]
             let fieldOnekHz_HoldingLowestRightGainArray: String = results[row:3, column: 0]
             let fieldOnekHz_averageLowestGainLeftArray: String = results[row:4, column: 0]
             let fieldOnekHz_HoldingLowestLeftGainArray: String = results[row:5, column: 0]
          
-            print("fieldOnekHz_averageGainRightArray1: \(fieldOnekHz_averageGainRightArray1)")
-            print("fieldOnekHz_averageGainRightArray2: \(fieldOnekHz_averageGainRightArray2)")
-            print("fieldOnekHz_averageGainRightArray3: \(fieldOnekHz_averageGainRightArray3)")
-            print("fieldOnekHz_averageGainRightArray4: \(fieldOnekHz_averageGainRightArray4)")
-            print("fieldOnekHz_averageGainLeftArray1: \(fieldOnekHz_averageGainLeftArray1)")
-            print("fieldOnekHz_averageGainLeftArray2: \(fieldOnekHz_averageGainLeftArray2)")
-            print("fieldOnekHz_averageGainLeftArray3: \(fieldOnekHz_averageGainLeftArray3)")
-            print("fieldOnekHz_averageGainLeftArray4: \(fieldOnekHz_averageGainLeftArray4)")
+//            print("fieldOnekHz_averageGainRightArray1: \(fieldOnekHz_averageGainRightArray1)")
+//            print("fieldOnekHz_averageGainRightArray2: \(fieldOnekHz_averageGainRightArray2)")
+//            print("fieldOnekHz_averageGainRightArray3: \(fieldOnekHz_averageGainRightArray3)")
+//            print("fieldOnekHz_averageGainRightArray4: \(fieldOnekHz_averageGainRightArray4)")
+//            print("fieldOnekHz_averageGainLeftArray1: \(fieldOnekHz_averageGainLeftArray1)")
+//            print("fieldOnekHz_averageGainLeftArray2: \(fieldOnekHz_averageGainLeftArray2)")
+//            print("fieldOnekHz_averageGainLeftArray3: \(fieldOnekHz_averageGainLeftArray3)")
+//            print("fieldOnekHz_averageGainLeftArray4: \(fieldOnekHz_averageGainLeftArray4)")
             print("fieldOnekHz_averageLowestGainRightArray: \(fieldOnekHz_averageLowestGainRightArray)")
             print("fieldOnekHz_HoldingLowestRightGainArray: \(fieldOnekHz_HoldingLowestRightGainArray)")
             print("fieldOnekHz_averageLowestGainLeftArray: \(fieldOnekHz_averageLowestGainLeftArray)")
             print("fieldOnekHz_HoldingLowestLeftGainArray: \(fieldOnekHz_HoldingLowestLeftGainArray)")
             
-            let inputOnekHz_averageGainRightArry1 = Float(fieldOnekHz_averageGainRightArray1)
-            betaInputOnekHz_averageGainRightArray1 = inputOnekHz_averageGainRightArry1 ?? -99.9
-            
-            let inputOnekHz_averageGainRightArry2 = Float(fieldOnekHz_averageGainRightArray2)
-            betaInputOnekHz_averageGainRightArray2 = inputOnekHz_averageGainRightArry2 ?? -99.9
-            
-            let inputOnekHz_averageGainRightArry3 = Float(fieldOnekHz_averageGainRightArray3)
-            betaInputOnekHz_averageGainRightArray3 = inputOnekHz_averageGainRightArry3 ?? -99.9
-            
-            let inputOnekHz_averageGainRightArry4 = Float(fieldOnekHz_averageGainRightArray4)
-            betaInputOnekHz_averageGainRightArray4 = inputOnekHz_averageGainRightArry4 ?? -99.9
-            
-            let inputOnekHz_averageGainLeftArry1 = Float(fieldOnekHz_averageGainLeftArray1)
-            betaInputOnekHz_averageGainLeftArray1 = inputOnekHz_averageGainLeftArry1 ?? -99.9
-            
-            let inputOnekHz_averageGainLeftArry2 = Float(fieldOnekHz_averageGainLeftArray2)
-            betaInputOnekHz_averageGainLeftArray2 = inputOnekHz_averageGainLeftArry2 ?? -99.9
-            
-            let inputOnekHz_averageGainLeftArry3 = Float(fieldOnekHz_averageGainLeftArray3)
-            betaInputOnekHz_averageGainLeftArray3 = inputOnekHz_averageGainLeftArry3 ?? -99.9
-            
-            let inputOnekHz_averageGainLeftArry4 = Float(fieldOnekHz_averageGainLeftArray4)
-            betaInputOnekHz_averageGainLeftArray4 = inputOnekHz_averageGainLeftArry4 ?? -99.9
+//            let inputOnekHz_averageGainRightArry1 = Float(fieldOnekHz_averageGainRightArray1)
+//            betaInputOnekHz_averageGainRightArray1 = inputOnekHz_averageGainRightArry1 ?? -99.9
+//            
+//            let inputOnekHz_averageGainRightArry2 = Float(fieldOnekHz_averageGainRightArray2)
+//            betaInputOnekHz_averageGainRightArray2 = inputOnekHz_averageGainRightArry2 ?? -99.9
+//            
+//            let inputOnekHz_averageGainRightArry3 = Float(fieldOnekHz_averageGainRightArray3)
+//            betaInputOnekHz_averageGainRightArray3 = inputOnekHz_averageGainRightArry3 ?? -99.9
+//            
+//            let inputOnekHz_averageGainRightArry4 = Float(fieldOnekHz_averageGainRightArray4)
+//            betaInputOnekHz_averageGainRightArray4 = inputOnekHz_averageGainRightArry4 ?? -99.9
+//            
+//            let inputOnekHz_averageGainLeftArry1 = Float(fieldOnekHz_averageGainLeftArray1)
+//            betaInputOnekHz_averageGainLeftArray1 = inputOnekHz_averageGainLeftArry1 ?? -99.9
+//            
+//            let inputOnekHz_averageGainLeftArry2 = Float(fieldOnekHz_averageGainLeftArray2)
+//            betaInputOnekHz_averageGainLeftArray2 = inputOnekHz_averageGainLeftArry2 ?? -99.9
+//            
+//            let inputOnekHz_averageGainLeftArry3 = Float(fieldOnekHz_averageGainLeftArray3)
+//            betaInputOnekHz_averageGainLeftArray3 = inputOnekHz_averageGainLeftArry3 ?? -99.9
+//            
+//            let inputOnekHz_averageGainLeftArry4 = Float(fieldOnekHz_averageGainLeftArray4)
+//            betaInputOnekHz_averageGainLeftArray4 = inputOnekHz_averageGainLeftArry4 ?? -99.9
             
             let inputOnekHz_averageLowestGainRightArry = Float(fieldOnekHz_averageLowestGainRightArray)
             betaInputOnekHz_averageLowestGainRightArray = inputOnekHz_averageLowestGainRightArry ?? -99.9

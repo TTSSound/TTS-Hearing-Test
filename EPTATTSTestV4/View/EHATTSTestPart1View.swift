@@ -216,8 +216,11 @@ struct EHATTSTestPart1View: View {
     
     @State var gainEHAP1SettingArrayLink = Float()
     @State var gainEHAP1SettingArray = [Float]()
+    @State var gainPhonIsSet = false
     
     @State var jsonHoldingString: [String] = [String]()
+    
+    @State var ehaP1EPTATestCompleted: Bool = false
     
 
     let fileEHAP1Name = "SummaryEHAP1Results.json"
@@ -245,13 +248,27 @@ struct EHATTSTestPart1View: View {
         ZStack{
             RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
             VStack {
-
-                Text("EHA Part 1 / EPTA Test")
-                    .fontWeight(.bold)
-                    .padding()
+                
+                if ehaP1EPTATestCompleted == false {
+                    Text("EHA Part 1 / EPTA Test")
+                        .fontWeight(.bold)
+                        .padding()
+                        .foregroundColor(.white)
+                        .padding(.top, 40)
+                        .padding(.bottom, 5)
+                } else if ehaP1EPTATestCompleted == true {
+                    NavigationLink("Test Phase Complete, Press To Continue", destination: PostAllTestsSplashView(), isActive: $ehaP1EPTATestCompleted)
+                        .padding()
+                        .foregroundColor(.green)
+                        .padding(.top, 40)
+                        .padding(.bottom, 5)
+                }
+                
+                Text("Gain Setting: \(gainEHAP1SettingArray[envDataObjectModel_index])")
                     .foregroundColor(.white)
-                    .padding(.top, 40)
-                    .padding(.bottom, 20)
+                    .font(.caption)
+                    .padding(.top, 5)
+                    .padding(.bottom, 10)
 
                 Text("Click to Stat Test")
                     .fontWeight(.bold)
@@ -376,9 +393,40 @@ struct EHATTSTestPart1View: View {
                                 .padding()
                         })
                         Spacer()
+                        Button {
+                            ehaP1EPTATestCompleted = true
+                            showTestCompletionSheet.toggle()
+                        } label: {
+                            Text("Test Phase Complete, Press To Continue")
+                                .foregroundColor(.green)
+                                .font(.title3)
+                                .padding()
+                        }
+
                     }
                 }
             })
+        }
+        .onAppear() {
+            Task(priority: .userInitiated) {
+                if gainPhonIsSet == false {
+                    await checkGainEHAP1_2_5DataLink()
+                    await checkGainEHAP1_4DataLink()
+                    await checkGainEHAP1_5DataLink()
+                    await checkGainEHAP1_7DataLink()
+                    await checkGainEHAP1_8DataLink()
+                    await checkGainEHAP1_11DataLink()
+                    await checkGainEHAP1_16DataLink()
+                    await checkGainEHAP1_17DataLink()
+                    await checkGainEHAP1_24DataLink()
+                    await checkGainEHAP1_27DataLink()
+                    await gainCurveAssignment()
+                } else if gainPhonIsSet == true {
+                    print("Gain Already Set")
+                } else {
+                    print("!!!Fatal Error in gainPhonIsSet OnAppear Functions")
+                }
+            }
         }
         .onChange(of: testIsPlaying, perform: { testBoolValue in
             if testBoolValue == true && endTestSeriesValue == false {
@@ -575,7 +623,8 @@ struct EHATTSTestPart1View: View {
               testPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: urlSample))
               guard let testPlayer = testPlayer else { return }
               testPlayer.prepareToPlay()    // Test Player Prepare to Play
-              testPlayer.setVolume(envDataObjectModel_testGain, fadeDuration: 0)      // Set Gain for Playback
+              testPlayer.setVolume(gainEHAP1SettingArray[envDataObjectModel_index], fadeDuration: 0)
+//              testPlayer.setVolume(envDataObjectModel_testGain, fadeDuration: 0)      // Set Gain for Playback
               testPlayer.pan = localPan // panArray[envDataObjectModel_index]
               testPlayer.play()   // Start Playback
           } catch { print("Error in playerSessionSetUp Function Execution") }
@@ -1749,29 +1798,52 @@ extension EHATTSTestPart1View {
     func gainCurveAssignment() async {
         if gainEHAP1SettingArrayLink == 2.5 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS2_5_EHAP1)
+            gainPhonIsSet = true
+            print("Phon of 2.5: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 4 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS4_EHAP1)
+            gainPhonIsSet = true
+            print("Phon of 4: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 5 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS5_EHAP1)
+            gainPhonIsSet = true
+            print("Phon of 5: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 7 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS7_EHAP1)
+            gainPhonIsSet = true
+            print("Phon of 7: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 8 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS8_EHAP1)
+            gainPhonIsSet = true
+            print("Phon of 8: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 11 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS11_EHAP1)
+            gainPhonIsSet = true
+            print("Phon of 11: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 16 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS16_EHAP1)
+            gainPhonIsSet = true
+            print("Phon of 16: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 17 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS17_EHAP1)
+            gainPhonIsSet = true
+            print("Phon of 17: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 24 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS24_EHAP1)
+            gainPhonIsSet = true
+            print("Phon of 24: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 27 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS27_EHAP1)
+            gainPhonIsSet = true
+            print("Phon of 27: \(gainEHAP1SettingArray)")
         } else {
+            gainPhonIsSet = false
             print("!!!! Fatal Error in gainCurveAssignment() Logic")
         }
    
     }
+    
+    
     
     func getGainEHAP1DataLinkPath() async -> String {
         let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
@@ -1793,6 +1865,7 @@ extension EHATTSTestPart1View {
                 print("2_5.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
                 gainEHAP1SettingArrayLink = 2.5
+                print("gainEHAP1SettingArrayLink = 2.5 \(gainEHAP1SettingArrayLink)")
             } else {
                 print("2_5.csv Data File Path Does Not Exist")
             }
@@ -1812,6 +1885,7 @@ extension EHATTSTestPart1View {
                 print("4.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
                 gainEHAP1SettingArrayLink = 4
+                print("gainEHAP1SettingArrayLink = 4 \(gainEHAP1SettingArrayLink)")
             } else {
                 print("4.csv Data File Path Does Not Exist")
             }
@@ -1831,6 +1905,7 @@ extension EHATTSTestPart1View {
                 print("5.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
                 gainEHAP1SettingArrayLink = 5
+                print("gainEHAP1SettingArrayLink = 5 \(gainEHAP1SettingArrayLink)")
             } else {
                 print("5.csv Data File Path Does Not Exist")
             }
@@ -1850,6 +1925,7 @@ extension EHATTSTestPart1View {
                 print("7.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
                 gainEHAP1SettingArrayLink = 7
+                print("gainEHAP1SettingArrayLink = 7 \(gainEHAP1SettingArrayLink)")
             } else {
                 print("7.csv Data File Path Does Not Exist")
             }
@@ -1869,6 +1945,7 @@ extension EHATTSTestPart1View {
                 print("8.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
                 gainEHAP1SettingArrayLink = 8
+                print("gainEHAP1SettingArrayLink = 8: \(gainEHAP1SettingArrayLink)")
             } else {
                 print("8.csv Data File Path Does Not Exist")
             }
@@ -1888,6 +1965,7 @@ extension EHATTSTestPart1View {
                 print("11.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
                 gainEHAP1SettingArrayLink = 11
+                print("gainEHAP1SettingArrayLink = 11 \(gainEHAP1SettingArrayLink)")
             } else {
                 print("11.csv Data File Path Does Not Exist")
             }
@@ -1907,6 +1985,7 @@ extension EHATTSTestPart1View {
                 print("16.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
                 gainEHAP1SettingArrayLink = 16
+                print("gainEHAP1SettingArrayLink = 16: \(gainEHAP1SettingArrayLink)")
             } else {
                 print("16.csv Data File Path Does Not Exist")
             }
@@ -1926,6 +2005,7 @@ extension EHATTSTestPart1View {
                 print("17.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
                 gainEHAP1SettingArrayLink = 17
+                print("gainEHAP1SettingArrayLink = 17: \(gainEHAP1SettingArrayLink)")
             } else {
                 print("17.csv Data File Path Does Not Exist")
             }
@@ -1945,6 +2025,7 @@ extension EHATTSTestPart1View {
                 print("24.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
                 gainEHAP1SettingArrayLink = 24
+                print("gainEHAP1SettingArrayLink = 24 : \(gainEHAP1SettingArrayLink)")
             } else {
                 print("24.csv Data File Path Does Not Exist")
             }
@@ -1964,6 +2045,7 @@ extension EHATTSTestPart1View {
                 print("27.csv Input File Exists")
                 // CHANGE THIS VARIABLE PER VIEW
                 gainEHAP1SettingArrayLink = 27
+                print("gainEHAP1SettingArrayLink = 27: \(gainEHAP1SettingArrayLink)")
             } else {
                 print("27.csv Data File Path Does Not Exist")
             }
