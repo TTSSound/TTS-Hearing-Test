@@ -1027,6 +1027,234 @@ class HoldingCSVInputModel: ObservableObject {
         }
     }
     
+    // Gain Setting Functions for EHAP1/EPTA/EHAP2 Tests
+    @State var dataFileURLGain1 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain2 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain3 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain4 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain5 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain6 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain7 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain8 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain9 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain10 = URL(fileURLWithPath: "")
+    
+    func getGainDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
+
+    func checkDataLink() async {
+        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
+        let fileManager = FileManager.default
+        let dataPath = (await self.getGainDataLinkPath() as NSString).strings(byAppendingPaths: dataName)
+        if fileManager.fileExists(atPath: dataPath[0]) {
+            let dataFilePath = URL(fileURLWithPath: dataPath[0])
+            if dataFilePath.isFileURL  {
+                dataFileURL = dataFilePath
+                print("dataFilePath: \(dataFilePath)")
+                print("dataFileURL: \(dataFileURL)")
+                print("Input File Exists")
+            } else {
+                print("Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGain2_5DataLink() async {
+        let dataGain2_5Name = ["2_5.csv"]
+        let fileGain2_5Manager = FileManager.default
+        let dataGain2_5Path = (await self.getGainDataLinkPath() as NSString).strings(byAppendingPaths: dataGain2_5Name)
+        if fileGain2_5Manager.fileExists(atPath: dataGain2_5Path[0]) {
+            let dataGain2_5FilePath = URL(fileURLWithPath: dataGain2_5Path[0])
+            if dataGain2_5FilePath.isFileURL  {
+                dataFileURLGain1 = dataGain2_5FilePath
+                print("2_5.csv dataFilePath: \(dataGain2_5FilePath)")
+                print("2_5.csv dataFileURL: \(dataFileURLGain1)")
+                print("2_5.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                let gainSettingArray = 2.5
+            } else {
+                print("2_5.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGain4DataLink() async {
+        let dataGain4Name = ["4.csv"]
+        let fileGain4Manager = FileManager.default
+        let dataGain4Path = (await self.getGainDataLinkPath() as NSString).strings(byAppendingPaths: dataGain4Name)
+        if fileGain4Manager.fileExists(atPath: dataGain4Path[0]) {
+            let dataGain4FilePath = URL(fileURLWithPath: dataGain4Path[0])
+            if dataGain4FilePath.isFileURL  {
+                dataFileURLGain2 = dataGain4FilePath
+                print("4.csv dataFilePath: \(dataGain4FilePath)")
+                print("4.csv dataFileURL: \(dataFileURLGain2)")
+                print("4.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                let gainSettingArray = 4
+            } else {
+                print("4.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGain5DataLink() async {
+        let dataGain5Name = ["5.csv"]
+        let fileGain5Manager = FileManager.default
+        let dataGain5Path = (await self.getGainDataLinkPath() as NSString).strings(byAppendingPaths: dataGain5Name)
+        if fileGain5Manager.fileExists(atPath: dataGain5Path[0]) {
+            let dataGain5FilePath = URL(fileURLWithPath: dataGain5Path[0])
+            if dataGain5FilePath.isFileURL  {
+                dataFileURLGain3 = dataGain5FilePath
+                print("5.csv dataFilePath: \(dataGain5FilePath)")
+                print("5.csv dataFileURL: \(dataFileURLGain3)")
+                print("5.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                let gainSettingArray = 5
+            } else {
+                print("5.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGain7DataLink() async {
+        let dataGain7Name = ["7.csv"]
+        let fileGain7Manager = FileManager.default
+        let dataGain7Path = (await self.getGainDataLinkPath() as NSString).strings(byAppendingPaths: dataGain7Name)
+        if fileGain7Manager.fileExists(atPath: dataGain7Path[0]) {
+            let dataGain7FilePath = URL(fileURLWithPath: dataGain7Path[0])
+            if dataGain7FilePath.isFileURL  {
+                dataFileURLGain4 = dataGain7FilePath
+                print("7.csv dataFilePath: \(dataGain7FilePath)")
+                print("7.csv dataFileURL: \(dataFileURLGain4)")
+                print("7.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                let gainSettingArray = 7
+            } else {
+                print("7.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+
+    func checkGain8DataLink() async {
+        let dataGain8Name = ["8.csv"]
+        let fileGain8Manager = FileManager.default
+        let dataGain8Path = (await self.getGainDataLinkPath() as NSString).strings(byAppendingPaths: dataGain8Name)
+        if fileGain8Manager.fileExists(atPath: dataGain8Path[0]) {
+            let dataGain8FilePath = URL(fileURLWithPath: dataGain8Path[0])
+            if dataGain8FilePath.isFileURL  {
+                dataFileURLGain5 = dataGain8FilePath
+                print("8.csv dataFilePath: \(dataGain8FilePath)")
+                print("8.csv dataFileURL: \(dataFileURLGain5)")
+                print("8.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                let gainSettingArray = 8
+            } else {
+                print("8.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+
+    func checkGain11DataLink() async {
+        let dataGain11Name = ["11.csv"]
+        let fileGain11Manager = FileManager.default
+        let dataGain11Path = (await self.getGainDataLinkPath() as NSString).strings(byAppendingPaths: dataGain11Name)
+        if fileGain11Manager.fileExists(atPath: dataGain11Path[0]) {
+            let dataGain11FilePath = URL(fileURLWithPath: dataGain11Path[0])
+            if dataGain11FilePath.isFileURL  {
+                dataFileURLGain6 = dataGain11FilePath
+                print("11.csv dataFilePath: \(dataGain11FilePath)")
+                print("11.csv dataFileURL: \(dataFileURLGain6)")
+                print("11.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                let gainSettingArray = 11
+            } else {
+                print("11.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGain16DataLink() async {
+        let dataGain16Name = ["16.csv"]
+        let fileGain16Manager = FileManager.default
+        let dataGain16Path = (await self.getGainDataLinkPath() as NSString).strings(byAppendingPaths: dataGain16Name)
+        if fileGain16Manager.fileExists(atPath: dataGain16Path[0]) {
+            let dataGain16FilePath = URL(fileURLWithPath: dataGain16Path[0])
+            if dataGain16FilePath.isFileURL  {
+                dataFileURLGain7 = dataGain16FilePath
+                print("16.csv dataFilePath: \(dataGain16FilePath)")
+                print("16.csv dataFileURL: \(dataFileURLGain7)")
+                print("16.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                let gainSettingArray = 16
+            } else {
+                print("16.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGain17DataLink() async {
+        let dataGain17Name = ["17.csv"]
+        let fileGain17Manager = FileManager.default
+        let dataGain17Path = (await self.getGainDataLinkPath() as NSString).strings(byAppendingPaths: dataGain17Name)
+        if fileGain17Manager.fileExists(atPath: dataGain17Path[0]) {
+            let dataGain17FilePath = URL(fileURLWithPath: dataGain17Path[0])
+            if dataGain17FilePath.isFileURL  {
+                dataFileURLGain8 = dataGain17FilePath
+                print("17.csv dataFilePath: \(dataGain17FilePath)")
+                print("17.csv dataFileURL: \(dataFileURLGain8)")
+                print("17.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                let gainSettingArray = 17
+            } else {
+                print("17.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGain24DataLink() async {
+        let dataGain24Name = ["24.csv"]
+        let fileGain24Manager = FileManager.default
+        let dataGain24Path = (await self.getGainDataLinkPath() as NSString).strings(byAppendingPaths: dataGain24Name)
+        if fileGain24Manager.fileExists(atPath: dataGain24Path[0]) {
+            let dataGain24FilePath = URL(fileURLWithPath: dataGain24Path[0])
+            if dataGain24FilePath.isFileURL  {
+                dataFileURLGain9 = dataGain24FilePath
+                print("24.csv dataFilePath: \(dataGain24FilePath)")
+                print("24.csv dataFileURL: \(dataFileURLGain9)")
+                print("24.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                let gainSettingArray = 24
+            } else {
+                print("24.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+
+    func checkGain27DataLink() async {
+        let dataGain27Name = ["27.csv"]
+        let fileGain27Manager = FileManager.default
+        let dataGain27Path = (await self.getGainDataLinkPath() as NSString).strings(byAppendingPaths: dataGain27Name)
+        if fileGain27Manager.fileExists(atPath: dataGain27Path[0]) {
+            let dataGain27FilePath = URL(fileURLWithPath: dataGain27Path[0])
+            if dataGain27FilePath.isFileURL  {
+                dataFileURLGain10 = dataGain27FilePath
+                print("27.csv dataFilePath: \(dataGain27FilePath)")
+                print("27.csv dataFileURL: \(dataFileURLGain10)")
+                print("27.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                let gainSettingArray = 27
+            } else {
+                print("27.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+
+
+
+    
 
     
 }

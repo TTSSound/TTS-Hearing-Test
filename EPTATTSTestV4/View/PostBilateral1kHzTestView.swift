@@ -23,6 +23,11 @@ struct PostBilateral1kHzTestView: View {
     @State var betaUserTestedReferenceGain = Float()
     @State var betaUserBetterEar = Float()      // Left = -1,0  and Right = 1.0
     @State var betaUserVPhonDiff = Float()
+    @State var phonIsGreater = Bool()
+    @State var reassessGainCurve = Bool()
+    @State var finalUserGainSetting = Float()
+    
+    @State var gainLinkName = String()
     
     
     @State var femaleBetaLinkExists: Bool = false
@@ -80,9 +85,10 @@ struct PostBilateral1kHzTestView: View {
                         await checkAge5Link()
                         await checkAge6Link()
                         await betaOnekHzInputResultsCSVReader()
+                        await betaReviewWriteGainSetting()
                     }
                 } label: {
-                    Text("Check Test Selection")
+                    Text("Check Test Selection and Determine Gain Curve")
                         .foregroundColor(.blue)
                 }
                 .padding(.top, 20)
@@ -90,8 +96,12 @@ struct PostBilateral1kHzTestView: View {
                 
                 Text("Test Selected: \(betaTestsArray[betaTestSelectedIdx])")
                     .foregroundColor(.white)
-                    .padding(.top, 20)
-                    .padding(.bottom, 20)
+                    .padding(.top, 5)
+                    .padding(.bottom, 5)
+                Text("Gain Curve: \(finalUserGainSetting)")
+                    .foregroundColor(.white)
+                    .padding(.top, 5)
+                    .padding(.bottom, 5)
                 
                 Spacer()
                 NavigationLink("EPTA Test", destination: EHATTSTestPart1View()).foregroundColor(betaTestColorArray[betaTestSelectedIdx])
@@ -105,7 +115,17 @@ struct PostBilateral1kHzTestView: View {
         }
     }
     
+    func betaReviewWriteGainSetting() async {
+        await betaGainCurveGenderAge()
+        await betaUserItrnaEarDeltaGain()
+        await compareBetaUserPhonGains()
+        await compareDetlta()
+        await determineBetaGainCurve()
+        await writeBetaFinalGainSettingToCSV()
+    }
+    
     func determineBetaGainCurve() async {
+        //TODO: Unclear on how to make this work without having actual testing data. For now, just use phon value
         
         // compare actual bilateral results with gender age curve and pick the best option
         // unclear how to write this logic. Maybe based on age? Need to find a way to pick the cloest
@@ -115,19 +135,62 @@ struct PostBilateral1kHzTestView: View {
         
         // Only need the above logic when reference is > phon
         
-        // if reference is less than phon, find the next lowest phon value below the reference value and use that phon value for the gain setting
+         // if reference is less than phon, find the next lowest phon value below the reference value and use that phon value for the gain setting
         
         // once phon setting is determined, create a csv file with phon(#) to then look for in each test view
-            
+        
+        finalUserGainSetting = phonGain
+        if finalUserGainSetting == 2.5 {
+            self.gainLinkName = "2_5.csv"
+        } else if finalUserGainSetting == 4 {
+            self.gainLinkName = "4.csv"
+        } else if finalUserGainSetting == 5 {
+            self.gainLinkName = "5.csv"
+        }  else if finalUserGainSetting == 7 {
+            self.gainLinkName = "7.csv"
+        } else if finalUserGainSetting == 8 {
+            self.gainLinkName = "8.csv"
+        } else if finalUserGainSetting == 11 {
+            self.gainLinkName = "11.csv"
+        } else if finalUserGainSetting == 16 {
+            self.gainLinkName = "16.csv"
+        } else if finalUserGainSetting == 17 {
+            self.gainLinkName = "17.csv"
+        } else if finalUserGainSetting == 24 {
+            self.gainLinkName = "24.csv"
+        } else if finalUserGainSetting == 27 {
+            self.gainLinkName = "27.csv"
+        } else {
+            print("!!Critical Error in determineBetaGainCurve() Logic")
+        }
+    }
+    
+    func compareDetlta() async {
+        if betaUserVPhonDiff >= 0.05 {
+            reassessGainCurve = true
+            print("!!!! Critical Difference in Bilateral Test and Phon Value")
+        } else if betaUserVPhonDiff < 0.05 {
+            reassessGainCurve = false
+        } else {
+            print("Critical Error in compareDelta() Logic")
+        }
     }
     
     func compareBetaUserPhonGains() async {
         if phonGain > betaUserTestedReferenceGain {
             betaUserVPhonDiff = phonGain - betaUserTestedReferenceGain
+            phonIsGreater = true
+            print("phonGain: \(phonGain)")
+            print("betaUserTestedReferenceGain: \(betaUserTestedReferenceGain)")
         } else if phonGain < betaUserTestedReferenceGain {
             betaUserVPhonDiff = betaUserTestedReferenceGain - phonGain
+            phonIsGreater = false
+            print("phonGain: \(phonGain)")
+            print("betaUserTestedReferenceGain: \(betaUserTestedReferenceGain)")
         } else {
             print("Critical Error in compareBetaUserPhonGains")
+            print("phonGain: \(phonGain)")
+            print("betaUserTestedReferenceGain: \(betaUserTestedReferenceGain)")
         }
     }
     
@@ -165,7 +228,7 @@ struct PostBilateral1kHzTestView: View {
             } else if age0BetaLinkExists == false && age1BetaLinkExists == false && age2BetaLinkExists == true && age3BetaLinkExists == false && age4BetaLinkExists == false && age5BetaLinkExists == false && age6BetaLinkExists == false {
                 phonGain = 4  //4
             } else if age0BetaLinkExists == false && age1BetaLinkExists == false && age2BetaLinkExists == false && age3BetaLinkExists == true && age4BetaLinkExists == false && age5BetaLinkExists == false && age6BetaLinkExists == false {
-                phonGain = 17   //7
+                phonGain = 7   //7
             } else if age0BetaLinkExists == false && age1BetaLinkExists == false && age2BetaLinkExists == false && age3BetaLinkExists == false && age4BetaLinkExists == true && age5BetaLinkExists == false && age6BetaLinkExists == false {
                 phonGain = 11   //11
             } else if age0BetaLinkExists == false && age1BetaLinkExists == false && age2BetaLinkExists == false && age3BetaLinkExists == false && age4BetaLinkExists == false && age5BetaLinkExists == true && age6BetaLinkExists == false {
@@ -486,6 +549,23 @@ struct PostBilateral1kHzTestView: View {
             print("inputOnekHz_HoldingLowestLeftGainArray: \(betaInputOnekHz_HoldingLowestLeftGainArray)")
         } catch {
             print("Error in reading onekHZ results")
+        }
+    }
+    
+    func writeBetaFinalGainSettingToCSV() async {
+        let gainSettingsName = gainLinkName
+        print("writeBetaFinalGainSettingToCSV Start")
+        do {
+            let csvBetaFinalGainSettingPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvBetaFinalGainSettingDocumentsDirectory = csvBetaFinalGainSettingPath
+            print("CSV BetaBetaFinalGainSetting DocumentsDirectory: \(csvBetaFinalGainSettingDocumentsDirectory)")
+            let csvBetaFinalGainSettingFilePath = csvBetaFinalGainSettingDocumentsDirectory.appendingPathComponent(gainLinkName)
+            print(csvBetaFinalGainSettingFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvBetaFinalGainSettingFilePath, append: false)
+            try writerSetup.write(row: [gainSettingsName])
+            print("CVS BetaBetaFinalGainSetting Writer Success")
+        } catch {
+            print("CVSWriter BetaBetaFinalGainSetting Error or Error Finding File for BetaBetaFinalGainSetting CSV \(error.localizedDescription)")
         }
     }
 }
