@@ -248,7 +248,7 @@ struct EHATTSTestPart1View: View {
         ZStack{
             RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
             VStack {
-                
+                Spacer()
                 if ehaP1EPTATestCompleted == false {
                     Text("EHA Part 1 / EPTA Test")
                         .fontWeight(.bold)
@@ -329,7 +329,7 @@ struct EHATTSTestPart1View: View {
                             .foregroundColor(.yellow)
                     }
                     .padding(.top, 20)
-                    .padding(.bottom, 80)
+                    .padding(.bottom, 60)
     
             Text("Press if You Hear The Tone")
                 .fontWeight(.semibold)
@@ -380,6 +380,7 @@ struct EHATTSTestPart1View: View {
                         Button(action: {
                             if ehaP1fullTestCompleted == true {
                                 showTestCompletionSheet.toggle()
+                                self.ehaP1EPTATestCompleted = true
                             } else if ehaP1fullTestCompleted == false {
                                 DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
                                     Task(priority: .userInitiated) {
@@ -395,8 +396,10 @@ struct EHATTSTestPart1View: View {
                         })
                         Spacer()
                         Button {
-                            ehaP1EPTATestCompleted = true
-                            showTestCompletionSheet.toggle()
+                            DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
+                                self.ehaP1EPTATestCompleted = true
+                                showTestCompletionSheet.toggle()
+                            }
                         } label: {
                             Text("Test Phase Complete, Press To Continue")
                                 .foregroundColor(.green)
@@ -507,6 +510,10 @@ struct EHATTSTestPart1View: View {
                         ehaP1fullTestCompleted = ehaP1fullTestCompletedHoldingArray[envDataObjectModel_index]
                         Task(priority: .userInitiated) {
                             await heardArrayNormalize()
+                            
+                            //Key Change from EHAP2, need to see if it works
+                            await maxGainReachedReversal()
+                            
                             await count()
                             await logNotPlaying()   //self.envDataObjectModel_playing = -1
                             await resetPlaying()
@@ -712,35 +719,94 @@ struct EHATTSTestPart1View: View {
         }
     }
     
-    func heardArrayNormalize() async {
-        idxHA = envDataObjectModel_heardArray.count
-        idxForTest = envDataObjectModel_indexForTest.count
-        idxForTestNet1 = idxForTest - 1
-        isCountSame = idxHA - idxForTest
-        heardArrayIdxAfnet1 = envDataObjectModel_heardArray.index(after: idxForTestNet1)
-      
-        if localStartingNonHeardArraySet == false {
-            envDataObjectModel_heardArray.append(0)
+    
+    
+// New Function!!!!!!!!!!!
+// Untested!!!!!!!!!!!!!
+    func maxGainReachedReversal() async {
+        if envDataObjectModel_testGain == 0.995 && firstHeardIsTrue == false && secondHeardIsTrue == false {
+            //remove last gain value from preeventlogging
+            envDataObjectModel_testTestGain.removeLast(1)
+            //responseHeardArray
+            firstHeardResponseIndex = localTestCount
+            firstHeardIsTrue = true
+            //Append a gain value of 1.0, indicating sound not heard a max volume
+            envDataObjectModel_testTestGain.append(1.0)
+            // Local Response Tracking
+            envDataObjectModel_heardArray.append(1)
+            self.idxHA = envDataObjectModel_heardArray.count
             self.localStartingNonHeardArraySet = true
+            
+            //run the rest of the functions to trigger next cycle
+//            await count()
+//            await logNotPlaying()           //envDataObjectModel_playing = -1
+//            await resetPlaying()
+//            await resetHeard()
+//            await resetNonResponseCount()
+//            await createReversalHeardArray()
+//            await createReversalGainArray()
+//            await checkHeardReversalArrays()
+//            await reversalStart()
+        } else if envDataObjectModel_testGain == 0.995 && firstHeardIsTrue == true && secondHeardIsTrue == false {
+            //remove last gain value from preeventlogging
+            envDataObjectModel_testTestGain.removeLast(1)
+            //responseHeardArray
+            secondHeardResponseIndex = localTestCount
+            secondHeardIsTrue = true
+            //Append a gain value of 1.0, indicating sound not heard a max volume
+            envDataObjectModel_testTestGain.append(1.0)
+            // Local Response Tracking
+            envDataObjectModel_heardArray.append(1)
+            self.idxHA = envDataObjectModel_heardArray.count
+            self.localStartingNonHeardArraySet = true
+            
+            //run the rest of the functions to trigger next cycle
+//            await count()
+//            await logNotPlaying()           //envDataObjectModel_playing = -1
+//            await resetPlaying()
+//            await resetHeard()
+//            await resetNonResponseCount()
+//            await createReversalHeardArray()
+//            await createReversalGainArray()
+//            await checkHeardReversalArrays()
+//            await reversalStart()
+        }
+    }
+    
+    // Make this only run for a non response if gain is < 0.995. If gain is above it, skip it, as the logging of heard is hard coded into maxGainReachedReversal()
+    func heardArrayNormalize() async {
+        if envDataObjectModel_testGain < 0.995 {
             idxHA = envDataObjectModel_heardArray.count
-            idxHAZero = idxHA - idxHA
-            idxHAFirst = idxHAZero + 1
+            idxForTest = envDataObjectModel_indexForTest.count
+            idxForTestNet1 = idxForTest - 1
             isCountSame = idxHA - idxForTest
             heardArrayIdxAfnet1 = envDataObjectModel_heardArray.index(after: idxForTestNet1)
-        } else if localStartingNonHeardArraySet == true {
-            if isCountSame != 0 && heardArrayIdxAfnet1 != 1 {
+            
+            if localStartingNonHeardArraySet == false {
                 envDataObjectModel_heardArray.append(0)
+                self.localStartingNonHeardArraySet = true
                 idxHA = envDataObjectModel_heardArray.count
                 idxHAZero = idxHA - idxHA
                 idxHAFirst = idxHAZero + 1
                 isCountSame = idxHA - idxForTest
                 heardArrayIdxAfnet1 = envDataObjectModel_heardArray.index(after: idxForTestNet1)
-
+            } else if localStartingNonHeardArraySet == true {
+                if isCountSame != 0 && heardArrayIdxAfnet1 != 1 {
+                    envDataObjectModel_heardArray.append(0)
+                    idxHA = envDataObjectModel_heardArray.count
+                    idxHAZero = idxHA - idxHA
+                    idxHAFirst = idxHAZero + 1
+                    isCountSame = idxHA - idxForTest
+                    heardArrayIdxAfnet1 = envDataObjectModel_heardArray.index(after: idxForTestNet1)
+                    
+                } else {
+                    print("Error in arrayNormalization else if isCountSame && heardAIAFnet1 if segment")
+                }
             } else {
-                print("Error in arrayNormalization else if isCountSame && heardAIAFnet1 if segment")
+                print("Critial Error in Heard Array Count and or Values")
             }
         } else {
-            print("Critial Error in Heard Array Count and or Values")
+            print("!!!Critical Max Gain Reached, logging 1.0 for no response to sound")
         }
     }
       
@@ -832,7 +898,7 @@ extension EHATTSTestPart1View {
             envDataObjectModel_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
         } else if r01NewGain >= 1.0 {
-            envDataObjectModel_testGain = 1.0
+            envDataObjectModel_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfOne Logic")
@@ -848,7 +914,7 @@ extension EHATTSTestPart1View {
             envDataObjectModel_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
         } else if r02NewGain >= 1.0 {
-            envDataObjectModel_testGain = 1.0
+            envDataObjectModel_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfTwo Logic")
@@ -864,7 +930,7 @@ extension EHATTSTestPart1View {
             envDataObjectModel_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
         } else if r03NewGain >= 1.0 {
-            envDataObjectModel_testGain = 1.0
+            envDataObjectModel_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfThree Logic")
@@ -880,7 +946,7 @@ extension EHATTSTestPart1View {
             envDataObjectModel_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
         } else if r04NewGain >= 1.0 {
-            envDataObjectModel_testGain = 1.0
+            envDataObjectModel_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfFour Logic")
@@ -896,7 +962,7 @@ extension EHATTSTestPart1View {
             envDataObjectModel_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
         } else if r05NewGain >= 1.0 {
-            envDataObjectModel_testGain = 1.0
+            envDataObjectModel_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfFive Logic")
@@ -912,7 +978,7 @@ extension EHATTSTestPart1View {
             envDataObjectModel_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
         } else if r10NewGain >= 1.0 {
-            envDataObjectModel_testGain = 1.0
+            envDataObjectModel_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfTen Logic")
@@ -945,10 +1011,15 @@ extension EHATTSTestPart1View {
         } else if idxReversalHeardCount >= 3 {
             print("reversal section >= 3")
             if secondHeardResponseIndex - firstHeardResponseIndex == 1 {
-//                print("reversal section >= 3")
-//                print("In first if section sHRI - fHRI == 1")
-//                print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
-            } else if localSeriesNoResponses == 3 {
+                //                print("reversal section >= 3")
+                //                print("In first if section sHRI - fHRI == 1")
+                //                print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
+                
+                
+// Changed this to >=3 instead of ==3
+// Untested Change!!!!
+// Not in EHAP2
+            } else if localSeriesNoResponses >= 3 {
                 await reversalOfTen()
             } else if localSeriesNoResponses == 2 {
                 await reversalOfFour()
@@ -1003,6 +1074,8 @@ extension EHATTSTestPart1View {
         secondHeardResponseIndex = Int()
         secondHeardIsTrue = false
     }
+    
+ 
 
     func reversalsCompleteLogging() async {
         if secondHeardIsTrue == true {
