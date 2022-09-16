@@ -270,11 +270,11 @@ struct EHATTSTestPart1View: View {
                     .padding(.top, 5)
                     .padding(.bottom, 10)
                 
-                NavigationLink("Test Phase Complete, Press To Continue", destination: PostAllTestsSplashView())
-                    .padding()
-                    .foregroundColor(.green)
-                    .font(.caption)
-                    .padding(.bottom, 5)
+//                NavigationLink("Test Phase Complete, Press To Continue", destination: PostAllTestsSplashView())
+//                    .padding()
+//                    .foregroundColor(.green)
+//                    .font(.caption)
+//                    .padding(.bottom, 5)
        
 
                 Text("Click to Stat Test")
@@ -354,7 +354,7 @@ struct EHATTSTestPart1View: View {
             }
             .fullScreenCover(isPresented: $showTestCompletionSheet, content: {
                 ZStack{
-                    RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300)
+                    RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
                 
                     VStack(alignment: .leading) {
         
@@ -383,35 +383,35 @@ struct EHATTSTestPart1View: View {
                             .font(.title3)
                             .padding()
                         Spacer()
-                        Button(action: {
-                            if ehaP1fullTestCompleted == true {
-                                showTestCompletionSheet.toggle()
-                            } else if ehaP1fullTestCompleted == false {
-                                DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
-                                    Task(priority: .userInitiated) {
-                                        await combinedPauseRestartAndStartNexTestCycle()
+                        if ehaP1fullTestCompleted == false {
+                            Button(action: {
+                                if ehaP1fullTestCompleted == true {
+                                    showTestCompletionSheet.toggle()
+                                } else if ehaP1fullTestCompleted == false {
+                                    DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
+                                        Task(priority: .userInitiated) {
+                                            await combinedPauseRestartAndStartNexTestCycle()
+                                        }
                                     }
                                 }
+                            }, label: {
+                                Text("Start The Next Cycle")
+                                    .foregroundColor(.blue)
+                                    .font(.title)
+                                    .padding()
+                            })
+                        } else if ehaP1fullTestCompleted == true {
+                            Button {
+                                    self.ehaP1EPTATestCompleted = true
+                                    showTestCompletionSheet.toggle()
+                            } label: {
+                                Text("Test Phase Complete, Press To Continue")
+                                    .foregroundColor(.green)
+                                    .font(.title)
+                                    .padding()
                             }
-                        }, label: {
-                            Text("Start The Next Cycle")
-                                .foregroundColor(.green)
-                                .font(.title)
-                                .padding()
-                        })
-                        Spacer()
-                        Button {
-             
-                                self.ehaP1EPTATestCompleted = true
-                                showTestCompletionSheet.toggle()
-                            
-                        } label: {
-                            Text("Test Phase Complete, Press To Continue")
-                                .foregroundColor(.green)
-                                .font(.title3)
-                                .padding()
                         }
-
+                        Spacer()
                     }
                 }
             })
@@ -732,7 +732,7 @@ struct EHATTSTestPart1View: View {
 // New Function!!!!!!!!!!!
 // Untested!!!!!!!!!!!!!
     func maxGainReachedReversal() async {
-        if envDataObjectModel_testGain == 0.995 && firstHeardIsTrue == false && secondHeardIsTrue == false {
+        if envDataObjectModel_testGain >= 0.995 && firstHeardIsTrue == false && secondHeardIsTrue == false {
             //remove last gain value from preeventlogging
             envDataObjectModel_testTestGain.removeLast(1)
             //responseHeardArray
@@ -757,7 +757,7 @@ struct EHATTSTestPart1View: View {
 //            await createReversalGainArray()
 //            await checkHeardReversalArrays()
 //            await reversalStart()
-        } else if envDataObjectModel_testGain == 0.995 && firstHeardIsTrue == true && secondHeardIsTrue == false {
+        } else if envDataObjectModel_testGain >= 0.995 && firstHeardIsTrue == true && secondHeardIsTrue == false {
             //remove last gain value from preeventlogging
             envDataObjectModel_testTestGain.removeLast(1)
             //responseHeardArray
@@ -891,7 +891,7 @@ extension EHATTSTestPart1View {
         if envDataObjectModel_testGain < 0.995 {
             //        envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
             envDataObjectModel_reversalGain.append(envDataObjectModel_testGain)
-        } else if envDataObjectModel_testGain == 0.995 {
+        } else if envDataObjectModel_testGain >= 0.995 {
             envDataObjectModel_reversalGain.append(1.0)
         }
     }
@@ -927,7 +927,7 @@ extension EHATTSTestPart1View {
         } else if r01NewGain <= 0.0 {
             envDataObjectModel_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if r01NewGain >= 1.0 {
+        } else if r01NewGain >= 0.995 {
             envDataObjectModel_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
@@ -943,7 +943,7 @@ extension EHATTSTestPart1View {
         } else if r02NewGain <= 0.0 {
             envDataObjectModel_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if r02NewGain >= 1.0 {
+        } else if r02NewGain >= 0.995 {
             envDataObjectModel_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
@@ -959,7 +959,7 @@ extension EHATTSTestPart1View {
         } else if r03NewGain <= 0.0 {
             envDataObjectModel_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if r03NewGain >= 1.0 {
+        } else if r03NewGain >= 0.995 {
             envDataObjectModel_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
@@ -975,7 +975,7 @@ extension EHATTSTestPart1View {
         } else if r04NewGain <= 0.0 {
             envDataObjectModel_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if r04NewGain >= 1.0 {
+        } else if r04NewGain >= 0.995 {
             envDataObjectModel_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
@@ -991,7 +991,7 @@ extension EHATTSTestPart1View {
         } else if r05NewGain <= 0.0 {
             envDataObjectModel_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if r05NewGain >= 1.0 {
+        } else if r05NewGain >= 0.995 {
             envDataObjectModel_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
@@ -1007,7 +1007,7 @@ extension EHATTSTestPart1View {
         } else if r10NewGain <= 0.0 {
             envDataObjectModel_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if r10NewGain >= 1.0 {
+        } else if r10NewGain >= 0.995 {
             envDataObjectModel_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {

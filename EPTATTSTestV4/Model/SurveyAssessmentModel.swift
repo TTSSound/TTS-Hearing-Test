@@ -84,17 +84,22 @@ class SurveyAssessmentModel: ObservableObject {
 // Original JSON Functions that Overwrite data at each call with only data in that view. Seems like class variables are not persisting across views in this class
     // JSON Variables
     func getSurveyData() async {
-        guard let surveyData = await getSurveyJSONData() else { return }
-        print("Json Survey Data:")
-        print(surveyData)
-        let jsonSurveyString = String(data: surveyData, encoding: .utf8)
-        print(jsonSurveyString!)
-        do {
-        self.saveSurveyAssessmentResults = try JSONDecoder().decode(SaveSurveyAssessmentResults.self, from: surveyData)
-            print("JSON Get Survey Data Run")
-            print("data: \(surveyData)")
-        } catch let error {
-            print("!!!Error decoding survey json data: \(error)")
+        DispatchQueue.main.async {
+            Task {
+                
+                guard let surveyData = await self.getSurveyJSONData() else { return }
+                print("Json Survey Data:")
+                print(surveyData)
+                let jsonSurveyString = String(data: surveyData, encoding: .utf8)
+                print(jsonSurveyString!)
+                do {
+                    self.saveSurveyAssessmentResults = try JSONDecoder().decode(SaveSurveyAssessmentResults.self, from: surveyData)
+                    print("JSON Get Survey Data Run")
+                    print("data: \(surveyData)")
+                } catch let error {
+                    print("!!!Error decoding survey json data: \(error)")
+                }
+            }
         }
     }
     
@@ -119,6 +124,7 @@ class SurveyAssessmentModel: ObservableObject {
         print("Json Encoded \(jsonSurveyData!)")
         return jsonSurveyData
     }
+        
     
     func saveSurveyToJSON() async {
     // !!!This saves to device directory, whish is likely what is desired

@@ -246,6 +246,8 @@ struct Bilateral1kHzTestView: View {
     
     @State var onekHzjsonHoldingString: [String] = [String]()
     
+    @State var onekHzTestStarted: Bool = false
+    
     let fileOnekHzName = "SummaryOnekHzResults.json"
     let summaryOnekHzCSVName = "SummaryOnekHzResultsCSV.csv"
     let detailedOnekHzCSVName = "DetailedOnekHzResultsCSV.csv"
@@ -262,43 +264,42 @@ struct Bilateral1kHzTestView: View {
     var body: some View {
  
         ZStack{
-            RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
-        VStack {
-            Spacer()
-            if bilateral1kHzTestCompleted == false {
-                Text("Bilateral 1kHz Test")
-                    .fontWeight(.bold)
-                    .padding()
-                    .foregroundColor(.white)
-                    .padding(.top, 40)
-                    .padding(.bottom, 40)
-            } else if bilateral1kHzTestCompleted == true {
-                NavigationLink("Test Phase Complete, Press To Continue", destination: PostBilateral1kHzTestView(), isActive: $continuePastBilateralTest)//", label: [])
-//                NavigationLink("Test Phase Complete, Press To Continue", destination: PostBilateral1kHzTestView())
-                    .padding()
-                    .foregroundColor(.green)
-                    .font(.title)
-                    .padding(.top, 40)
-                    .padding(.bottom, 40)
-            }
-            
-                HStack {
-                    Spacer()
-                    Text(String(onekHz_testGain))
+            RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
+            VStack {
+                Spacer()
+                if bilateral1kHzTestCompleted == false {
+                    Text("Bilateral 1kHz Test")
                         .fontWeight(.bold)
                         .padding()
                         .foregroundColor(.white)
                         .padding(.top, 40)
-                        .padding(.bottom, 40)
-                    Spacer()
-                    Text(String(onekHz_index))
-//                    Text(String(onekHz_pan))
+                        .padding(.bottom, 20)
+                } else if bilateral1kHzTestCompleted == true {
+                    NavigationLink("Test Phase Complete, Press To Continue", destination: PostBilateral1kHzTestView(), isActive: $continuePastBilateralTest)//", label: [])
+    //                NavigationLink("Test Phase Complete, Press To Continue", destination: PostBilateral1kHzTestView())
+                        .padding()
+                        .foregroundColor(.green)
+                        .font(.title)
+                        .padding(.top, 40)
+                        .padding(.bottom, 20)
+                }
+         
+                if onekHzTestStarted == false {
+                    Text("Click to Stat Test")
                         .fontWeight(.bold)
                         .padding()
-                        .foregroundColor(.white)
-                        .padding(.top, 40)
-                        .padding(.bottom, 40)
-                    Spacer()
+                        .foregroundColor(.blue)
+                        .onTapGesture {
+                            Task(priority: .userInitiated) {
+                                audioSessionModel.setAudioSession()
+                                onekHzlocalPlaying = 1
+                                print("Start Button Clicked. Playing = \(onekHzlocalPlaying)")
+                            }
+                        }
+                        .padding(.top, 20)
+                        .padding(.bottom, 20)
+                } else if onekHzTestStarted == true {
+                    
                     Button {
                         onekHz_heardArray.removeAll()
                         onekHzpauseRestartTestCycle()
@@ -311,43 +312,27 @@ struct Bilateral1kHzTestView: View {
                         Text(onekHzplayingString[onekHzplayingStringColorIndex])
                             .foregroundColor(onekHzplayingStringColor[onekHzplayingStringColorIndex])
                     }
-                    .padding(.top, 40)
-                    .padding(.bottom, 40)
-                    Spacer()
-                }
-                Spacer()
-                HStack{
-                    Spacer()
-                    Text("Click to Stat Test")
-                        .fontWeight(.bold)
-                        .padding()
-                        .foregroundColor(.blue)
-                        .onTapGesture {
-                            Task(priority: .userInitiated) {
-                                audioSessionModel.setAudioSession()
-                                onekHzlocalPlaying = 1
-                                print("Start Button Clicked. Playing = \(onekHzlocalPlaying)")
-                            }
-                        }
-                    Spacer()
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
+                    
                     Button {
                         onekHzlocalPlaying = 0
                         onekHzstop()
                         onekHzuserPausedTest = true
                         onekHzplayingStringColorIndex = 1
-                        onekHzaudioThread.async {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.2, qos: .userInitiated) {
                             onekHzlocalPlaying = 0
                             onekHzstop()
                             onekHzuserPausedTest = true
                             onekHzplayingStringColorIndex = 1
                         }
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.6, qos: .userInitiated) {
                             onekHzlocalPlaying = 0
                             onekHzstop()
                             onekHzuserPausedTest = true
                             onekHzplayingStringColorIndex = 1
                         }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, qos: .userInitiated) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.4, qos: .userInitiated) {
                             onekHzlocalPlaying = 0
                             onekHzstop()
                             onekHzuserPausedTest = true
@@ -357,13 +342,11 @@ struct Bilateral1kHzTestView: View {
                         Text("Pause Test")
                             .foregroundColor(.yellow)
                     }
-                    Spacer()
+                    .padding(.top, 20)
+                    .padding(.bottom, 60)
                 }
-                .padding(.top, 40)
-                .padding(.bottom, 40)
      
-            
-            Spacer()
+   
             Text("Press if You Hear The Tone")
                 .fontWeight(.semibold)
                 .padding()
@@ -375,36 +358,39 @@ struct Bilateral1kHzTestView: View {
                     onekHzheardThread.async{ self.onekHzlocalHeard = 1
                     }
                 }
+                .padding(.top, 20)
+                
             Spacer()
             }
             .fullScreenCover(isPresented: $onekHzshowTestCompletionSheet, content: {
-                VStack(alignment: .leading) {
-    
-                    Button(action: {
-                        onekHzshowTestCompletionSheet.toggle()
-                    }, label: {
-                        Image(systemName: "xmark")
-                            .font(.headline)
-                            .padding(10)
-                            .foregroundColor(.red)
-                    })
-                    Spacer()
-                    Text("Take a moment for a break before exiting to continue with the next test segment")
+                ZStack{
+                    RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
+                    VStack(alignment: .leading) {
+                        
+                        Button(action: {
+                            onekHzshowTestCompletionSheet.toggle()
+                        }, label: {
+                            Image(systemName: "xmark")
+                                .font(.headline)
+                                .padding(10)
+                                .foregroundColor(.red)
+                        })
+                        Spacer()
+                        Text("Take a moment for a break before exiting to continue with the next test segment")
+                        
+                        Spacer()
+                        Button {
+                            continuePastBilateralTest = true
+                            onekHzshowTestCompletionSheet.toggle()
+                        } label: {
+                            Text("Test Phase Complete, Press To Continue")
+                                .foregroundColor(.green)
+                                .font(.title)
+                                .padding()
+                        }
 
-                    Spacer()
-                    Button {
-                        continuePastBilateralTest = true
-                        onekHzshowTestCompletionSheet.toggle()
-                    } label: {
-                        Text("Test Phase Complete, Press To Continue")
+                        Spacer()
                     }
-//
-//                    NavigationLink("Test Phase Complete, Press To Continue", destination: PostBilateral1kHzTestView())
-//                        .foregroundColor(.green)
-//                        .font(.title)
-//                        .padding()
-                    Spacer()
-                    
                 }
             })
         }
@@ -435,6 +421,7 @@ struct Bilateral1kHzTestView: View {
             onekHzactiveFrequency = onekHz_samples[onekHz_index]
             onekHzlocalHeard = 0
             onekHzlocalReversal = 0
+            onekHzTestStarted = true
             if onekHzplayingValue == 1{
                 
                 onekHzSetPan()
