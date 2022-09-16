@@ -35,14 +35,10 @@ struct EHAInterimPostEPTAView: View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack{
+                Spacer()
                 Text("View for EHA test takers after they have completed the EPTA test")
                     .foregroundColor(.white)
-                Text("Great Work!")
-                    .foregroundColor(.white)
-                Text("Let's take a moment for a break")
-                    .foregroundColor(.white)
-                Text("MonoEarTestingPan: \(monoEarTestingPan)")
-                    .foregroundColor(.white)
+
                 
                 HStack{
                     Spacer()
@@ -55,10 +51,12 @@ struct EHAInterimPostEPTAView: View {
                         }
                     } label: {
                             Text("Recheck Settings Before Proceeding")
-                            .foregroundColor(.red)
+                            .foregroundColor(.green)
+                            .font(.title)
                         }
                     Spacer()
                     }
+                .padding(.all)
             
                 HStack{
                     Spacer()
@@ -75,7 +73,7 @@ struct EHAInterimPostEPTAView: View {
                         .font(.caption)
                     Spacer()
                 }
-                
+                .padding(.all)
                 
                 
                 VStack{
@@ -85,6 +83,7 @@ struct EHAInterimPostEPTAView: View {
                         Text(String(volumeEHAStartingTest))
                             .foregroundColor(.white)
                     }
+                    .padding(.all)
                     HStack{
                         Text("Is Volume Set Correctly?")
                             .foregroundColor(.white)
@@ -93,8 +92,10 @@ struct EHAInterimPostEPTAView: View {
                             .font(.caption)
                             .padding()
                     }
+                    .padding(.all)
                     Text("Volume Is Set Correctly")
                         .foregroundColor(ehaColors[ehaLinkColorIndex])
+                        .padding(.all)
                 }
        
                 VStack{
@@ -104,19 +105,23 @@ struct EHAInterimPostEPTAView: View {
                         Text(ehaSilentModeSettingString[ehaSilentModeSettingIndex])
                             .foregroundColor(.white)
                     }
+                    .padding(.all)
                     HStack{
                         Text("Silent Mode Is Off")
                             .foregroundColor(silEHAColors[silEHALinkColorIndex])
                             .padding()
                         Text("Silent Mode Off Int: \(silentEHAModeOff)")
                     }
+                    .padding(.all)
                 }
                 
                 HStack{
                     Button {
-                        Task{
-                            await concantenateFinalEHASystemVolumeArray()
-                            await saveInterimEHATestSystemSettings()
+                        DispatchQueue.main.async {
+                            Task{
+                                await concantenateFinalEHASystemVolumeArray()
+                                await saveInterimEHATestSystemSettings()
+                            }
                         }
                     } label: {
                         Text("Submit Results")
@@ -132,6 +137,7 @@ struct EHAInterimPostEPTAView: View {
                     }
                 }
             }
+        Spacer()
         .onAppear {
             Task{
                 audioSessionModel.setAudioSession()
@@ -156,7 +162,7 @@ struct EHAInterimPostEPTAView: View {
             ehaLinkColorIndex = 1
             ehaVolumeSettingIndex = 1
         }
-        if audioSessionModel.audioSession.outputVolume >= 0.619 && audioSessionModel.audioSession.outputVolume <= 0.626 {
+        if audioSessionModel.audioSession.outputVolume >= 0.60 && audioSessionModel.audioSession.outputVolume <= 0.626 {
             volumeEHACorrect = 2
             ehaLinkColorIndex = 2
             ehaVolumeSettingIndex = 2

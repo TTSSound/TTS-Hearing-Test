@@ -155,7 +155,7 @@ struct TestDeviceSetupView: View {
             tdLinkColorIndex = 1
             volumeSettingIndex = 1
         }
-        if audioSessionModel.audioSession.outputVolume >= 0.619 && audioSessionModel.audioSession.outputVolume <= 0.626 {
+        if audioSessionModel.audioSession.outputVolume >= 0.60 && audioSessionModel.audioSession.outputVolume <= 0.626 {
             volumeCorrect = 2
             tdLinkColorIndex = 2
             volumeSettingIndex = 2

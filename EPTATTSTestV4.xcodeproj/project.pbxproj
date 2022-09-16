@@ -373,6 +373,7 @@
 		7CB876F328A1FF6300528455 /* EnvDataObjectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvDataObjectModel.swift; sourceTree = "<group>"; };
 		7CC6C32428A34C06007AA9CA /* FailedEnvDataObjectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailedEnvDataObjectModel.swift; sourceTree = "<group>"; };
 		7CC6C32628A34C47007AA9CA /* FailedEPTATTSTestV4List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailedEPTATTSTestV4List.swift; sourceTree = "<group>"; };
+		7CCB2B2C28D4C5CD00056C49 /* DONOTChangeReferenceEHAP2TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DONOTChangeReferenceEHAP2TestView.swift; sourceTree = "<group>"; };
 		7CD23A6D28ADAA9300AEBB02 /* DetailedResultsCSV.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = DetailedResultsCSV.csv; path = "../../../../Users/jeffreyjaskunas/Library/Mobile Documents/com~apple~CloudDocs/XCode_Swift_Coding/SwiftCodingProjects/EPTATTSTestV4/EPTATTSTestV4/Model/DetailedResultsCSV.csv"; sourceTree = DEVELOPER_DIR; };
 		7CD23A7028AE056000AEBB02 /* JSONandCoreDataFuncsNotes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = JSONandCoreDataFuncsNotes.txt; sourceTree = "<group>"; };
 		7CDB3E1228A20DB300CB4DB1 /* EPTATTSTESTV4List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPTATTSTESTV4List.swift; sourceTree = "<group>"; };
@@ -627,6 +628,7 @@
 				7C179FEC28B81B7500964AAC /* InAppPurchaseView.swift */,
 				7C99A16B28C95D0800E46C65 /* DONOTChangeReferenceEHATest.swift */,
 				7C0AE96C28CCF55D00A4F652 /* DONOTChangeReferenceEPTATTSTestV4List.swift */,
+				7CCB2B2C28D4C5CD00056C49 /* DONOTChangeReferenceEHAP2TestView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
