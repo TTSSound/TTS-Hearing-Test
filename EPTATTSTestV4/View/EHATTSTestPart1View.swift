@@ -216,11 +216,13 @@ struct EHATTSTestPart1View: View {
     
     @State var gainEHAP1SettingArrayLink = Float()
     @State var gainEHAP1SettingArray = [Float]()
-    @State var gainPhonIsSet = false
+    @State var gainEHAP1PhonIsSet = false
     
     @State var jsonHoldingString: [String] = [String]()
     
     @State var ehaP1EPTATestCompleted: Bool = false
+    
+    @State var ehaP1TestStarted: Bool = false
     
 
     let fileEHAP1Name = "SummaryEHAP1Results.json"
@@ -275,38 +277,25 @@ struct EHATTSTestPart1View: View {
 //                    .foregroundColor(.green)
 //                    .font(.caption)
 //                    .padding(.bottom, 5)
-       
-
-                Text("Click to Stat Test")
-                    .fontWeight(.bold)
-                    .font(.title)
-                    .padding()
-                    .foregroundColor(.green)
-                    .onTapGesture {
-                        Task(priority: .userInitiated) {
-                            audioSessionModel.setAudioSession()
-                            localPlaying = 1
-                            endTestSeriesValue = false
-                            print("Start Button Clicked. Playing = \(localPlaying)")
+                
+                Spacer()
+                if ehaP1TestStarted == false {
+                    Text("Click to Stat Test")
+                        .fontWeight(.bold)
+                        .font(.title)
+                        .padding()
+                        .foregroundColor(.green)
+                        .onTapGesture {
+                            Task(priority: .userInitiated) {
+                                audioSessionModel.setAudioSession()
+                                localPlaying = 1
+                                endTestSeriesValue = false
+                                print("Start Button Clicked. Playing = \(localPlaying)")
+                            }
                         }
-                    }
-                    .padding(.top, 20)
-                    .padding(.bottom, 20)
-                    Button {
-                        envDataObjectModel_heardArray.removeAll()
-                        pauseRestartTestCycle()
-                        audioSessionModel.setAudioSession()
-                        localPlaying = 1
-                        userPausedTest = false
-                        playingStringColorIndex = 0
-                        endTestSeriesValue = false
-                        print("Restart After Pause Button Clicked. Playing = \(localPlaying)")
-                    } label: {
-                        Text(playingString[playingStringColorIndex])
-                            .foregroundColor(playingStringColor[playingStringColorIndex])
-                    }
-                    .padding(.top, 20)
-                    .padding(.bottom, 20)
+                        .padding(.top, 20)
+                        .padding(.bottom, 20)
+                } else if ehaP1TestStarted == true {
                     Button {
                         localPlaying = 0
                         stop()
@@ -335,8 +324,26 @@ struct EHATTSTestPart1View: View {
                             .foregroundColor(.yellow)
                     }
                     .padding(.top, 20)
+                    .padding(.bottom, 20)
+                    
+                    Button {
+                        envDataObjectModel_heardArray.removeAll()
+                        pauseRestartTestCycle()
+                        audioSessionModel.setAudioSession()
+                        localPlaying = 1
+                        userPausedTest = false
+                        playingStringColorIndex = 0
+                        endTestSeriesValue = false
+                        print("Restart After Pause Button Clicked. Playing = \(localPlaying)")
+                    } label: {
+                        Text(playingString[playingStringColorIndex])
+                            .foregroundColor(playingStringColor[playingStringColorIndex])
+                    }
+                    .padding(.top, 20)
                     .padding(.bottom, 60)
-    
+                }
+            
+            Spacer()
             Text("Press if You Hear The Tone")
                 .fontWeight(.semibold)
                 .padding()
@@ -402,8 +409,8 @@ struct EHATTSTestPart1View: View {
                             })
                         } else if ehaP1fullTestCompleted == true {
                             Button {
-                                    self.ehaP1EPTATestCompleted = true
-                                    showTestCompletionSheet.toggle()
+                                self.ehaP1EPTATestCompleted = true
+                                showTestCompletionSheet.toggle()
                             } label: {
                                 Text("Test Phase Complete, Press To Continue")
                                     .foregroundColor(.green)
@@ -418,7 +425,7 @@ struct EHATTSTestPart1View: View {
         }
         .onAppear() {
             Task(priority: .userInitiated) {
-                if gainPhonIsSet == false {
+                if gainEHAP1PhonIsSet == false {
                     await checkGainEHAP1_2_5DataLink()
                     await checkGainEHAP1_4DataLink()
                     await checkGainEHAP1_5DataLink()
@@ -431,11 +438,11 @@ struct EHATTSTestPart1View: View {
                     await checkGainEHAP1_27DataLink()
                     await gainCurveAssignment()
                     envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]
-                    gainPhonIsSet = true
-                } else if gainPhonIsSet == true {
+                    gainEHAP1PhonIsSet = true
+                } else if gainEHAP1PhonIsSet == true {
                     print("Gain Already Set")
                 } else {
-                    print("!!!Fatal Error in gainPhonIsSet OnAppear Functions")
+                    print("!!!Fatal Error in gainEHAP1PhonIsSet OnAppear Functions")
                 }
             }
         }
@@ -468,7 +475,7 @@ struct EHATTSTestPart1View: View {
             envDataObjectModel_pan = panArray[envDataObjectModel_index]
             localHeard = 0
             localReversal = 0
-           
+            ehaP1TestStarted = true
             
             if playingValue == 1{
                 print("envDataObjectModel_testGain: \(envDataObjectModel_testGain)")
@@ -517,7 +524,7 @@ struct EHATTSTestPart1View: View {
                             await heardArrayNormalize()
                             
                             //Key Change from EHAP2, need to see if it works
-                            await maxGainReachedReversal()
+                            await maxEHAP1GainReachedReversal()
                             
                             await count()
                             await logNotPlaying()   //self.envDataObjectModel_playing = -1
@@ -731,7 +738,7 @@ struct EHATTSTestPart1View: View {
     
 // New Function!!!!!!!!!!!
 // Untested!!!!!!!!!!!!!
-    func maxGainReachedReversal() async {
+    func maxEHAP1GainReachedReversal() async {
         if envDataObjectModel_testGain >= 0.995 && firstHeardIsTrue == false && secondHeardIsTrue == false {
             //remove last gain value from preeventlogging
             envDataObjectModel_testTestGain.removeLast(1)
@@ -784,7 +791,7 @@ struct EHATTSTestPart1View: View {
         }
     }
     
-    // Make this only run for a non response if gain is < 0.995. If gain is above it, skip it, as the logging of heard is hard coded into maxGainReachedReversal()
+    // Make this only run for a non response if gain is < 0.995. If gain is above it, skip it, as the logging of heard is hard coded into maxmaxEHAP1GainReachedReversal()
     func heardArrayNormalize() async {
         if envDataObjectModel_testGain < 0.995 {
             idxHA = envDataObjectModel_heardArray.count
@@ -1906,46 +1913,46 @@ extension EHATTSTestPart1View {
     func gainCurveAssignment() async {
         if gainEHAP1SettingArrayLink == 2.5 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS2_5_EHAP1)
-            gainPhonIsSet = true
+            gainEHAP1PhonIsSet = true
             print("Phon of 2.5: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 4 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS4_EHAP1)
-            gainPhonIsSet = true
+            gainEHAP1PhonIsSet = true
             print("Phon of 4: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 5 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS5_EHAP1)
-            gainPhonIsSet = true
+            gainEHAP1PhonIsSet = true
             print("Phon of 5: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 7 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS7_EHAP1)
-            gainPhonIsSet = true
+            gainEHAP1PhonIsSet = true
             print("Phon of 7: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 8 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS8_EHAP1)
-            gainPhonIsSet = true
+            gainEHAP1PhonIsSet = true
             print("Phon of 8: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 11 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS11_EHAP1)
-            gainPhonIsSet = true
+            gainEHAP1PhonIsSet = true
             print("Phon of 11: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 16 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS16_EHAP1)
-            gainPhonIsSet = true
+            gainEHAP1PhonIsSet = true
             print("Phon of 16: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 17 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS17_EHAP1)
-            gainPhonIsSet = true
+            gainEHAP1PhonIsSet = true
             print("Phon of 17: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 24 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS24_EHAP1)
-            gainPhonIsSet = true
+            gainEHAP1PhonIsSet = true
             print("Phon of 24: \(gainEHAP1SettingArray)")
         } else if gainEHAP1SettingArrayLink == 27 {
             gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS27_EHAP1)
-            gainPhonIsSet = true
+            gainEHAP1PhonIsSet = true
             print("Phon of 27: \(gainEHAP1SettingArray)")
         } else {
-            gainPhonIsSet = false
+            gainEHAP1PhonIsSet = false
             print("!!!! Fatal Error in gainCurveAssignment() Logic")
         }
    

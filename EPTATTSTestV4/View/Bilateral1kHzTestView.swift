@@ -299,22 +299,6 @@ struct Bilateral1kHzTestView: View {
                         .padding(.top, 20)
                         .padding(.bottom, 20)
                 } else if onekHzTestStarted == true {
-                    
-                    Button {
-                        onekHz_heardArray.removeAll()
-                        onekHzpauseRestartTestCycle()
-                        audioSessionModel.setAudioSession()
-                        onekHzlocalPlaying = 1
-                        onekHzuserPausedTest = false
-                        onekHzplayingStringColorIndex = 0
-                        print("Start Button Clicked. Playing = \(onekHzlocalPlaying)")
-                    } label: {
-                        Text(onekHzplayingString[onekHzplayingStringColorIndex])
-                            .foregroundColor(onekHzplayingStringColor[onekHzplayingStringColorIndex])
-                    }
-                    .padding(.top, 20)
-                    .padding(.bottom, 20)
-                    
                     Button {
                         onekHzlocalPlaying = 0
                         onekHzstop()
@@ -341,6 +325,21 @@ struct Bilateral1kHzTestView: View {
                     } label: {
                         Text("Pause Test")
                             .foregroundColor(.yellow)
+                    }
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
+                    
+                    Button {
+                        onekHz_heardArray.removeAll()
+                        onekHzpauseRestartTestCycle()
+                        audioSessionModel.setAudioSession()
+                        onekHzlocalPlaying = 1
+                        onekHzuserPausedTest = false
+                        onekHzplayingStringColorIndex = 0
+                        print("Start Button Clicked. Playing = \(onekHzlocalPlaying)")
+                    } label: {
+                        Text(onekHzplayingString[onekHzplayingStringColorIndex])
+                            .foregroundColor(onekHzplayingStringColor[onekHzplayingStringColorIndex])
                     }
                     .padding(.top, 20)
                     .padding(.bottom, 60)

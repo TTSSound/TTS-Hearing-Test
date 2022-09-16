@@ -60,6 +60,7 @@ struct EHATTSTestPart2View: View {
     }
     
     var audioSessionModel = AudioSessionModel()
+    @StateObject var gainReferenceModel: GainReferenceModel = GainReferenceModel()
 
     @State var ehaP2localHeard = 0
     @State var ehaP2localPlaying = Int()    // Playing = 1. Stopped = -1
@@ -79,7 +80,7 @@ struct EHATTSTestPart2View: View {
     @State var ehaP2startTooHigh = 0
     @State var ehaP2firstGain = Float()
     @State var ehaP2secondGain = Float()
-    @State var ehaP2endTestSeries: Bool = false
+    @State var ehaP2endTestSeriesValue: Bool = false
     @State var ehaP2showTestCompletionSheet: Bool = false
     
     @State var ehaP2_samples: [String] = [String]()
@@ -334,8 +335,27 @@ struct EHATTSTestPart2View: View {
     
     //ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
     
+    @State var dataFileURLEHAP2Gain1 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP2Gain2 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP2Gain3 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP2Gain4 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP2Gain5 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP2Gain6 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP2Gain7 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP2Gain8 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP2Gain9 = URL(fileURLWithPath: "")
+    @State var dataFileURLEHAP2Gain10 = URL(fileURLWithPath: "")
+    
+    @State var gainEHAP2SettingArrayLink = Float()
+    @State var gainEHAP2SettingArray = [Float]()
+    @State var gainEHAP2PhonIsSet = false
     
     @State var ehaP2jsonHoldingString: [String] = [String]()
+    
+    @State var ehaP2EPTATestCompleted: Bool = false
+    
+    @State var ehaP2TestStarted: Bool = false
+    
 
     let fileehaP2Name = "SummaryehaP2Results.json"
     let summaryehaP2CSVName = "SummaryehaP2ResultsCSV.csv"
@@ -362,13 +382,34 @@ struct EHATTSTestPart2View: View {
        ZStack{
            RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
            VStack {
-                   
-               Text("EHA Part 2 Test")
-                   .fontWeight(.bold)
-                   .padding()
-                   .foregroundColor(.white)
-                   .padding(.top, 40)
-                   .padding(.bottom, 20)
+               Spacer()
+               if ehaP2fullTestCompleted == false {
+                   Text("EHA Part 2 Test")
+                       .fontWeight(.bold)
+                       .padding()
+                       .foregroundColor(.white)
+                       .padding(.top, 40)
+                       .padding(.bottom, 20)
+               } else if ehaP2fullTestCompleted == true {
+                   NavigationLink("Test Phase Complete, Press To Continue", destination: PostEHATestView(), isActive: $ehaP2EPTATestCompleted)
+                       .padding()
+                       .foregroundColor(.green)
+                       .padding(.top, 40)
+                       .padding(.bottom, 20)
+               }
+               HStack {
+                   Spacer()
+                   Text("Gain Setting: \(ehaP2_testGain)")
+                       .foregroundColor(.white)
+                       .font(.caption)
+                   Spacer()
+                   Text("Pan: \(ehaP2_pan)")
+                       .foregroundColor(.white)
+                       .font(.caption)
+                   Spacer()
+               }
+               .padding(.top, 5)
+               .padding(.bottom, 10)
                
                HStack {
                    Spacer()
@@ -393,6 +434,7 @@ struct EHATTSTestPart2View: View {
                }
                .padding(.top, 20)
                .padding(.bottom, 20)
+               
                .onChange(of: ehaP2MonoRightTest, perform: { rightValue in
                    if rightValue == true {
                            // Set Pan to 1.0
@@ -475,70 +517,73 @@ struct EHATTSTestPart2View: View {
 //                   }
 //               }
                
-               Text("Click to Stat Test")
-                   .fontWeight(.bold)
-                   .padding()
-                   .foregroundColor(.blue)
-                   .onTapGesture {
-                       Task(priority: .userInitiated) {
-                           audioSessionModel.setAudioSession()
-                           ehaP2setDualMonoVariables()
-                           ehaP2localPlaying = 1
-                           ehaP2endTestSeries = false
-                           print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
+               Spacer()
+               if ehaP2TestStarted == false {
+                   Text("Click to Stat Test")
+                       .fontWeight(.bold)
+                       .padding()
+                       .foregroundColor(.blue)
+                       .onTapGesture {
+                           Task(priority: .userInitiated) {
+                               audioSessionModel.setAudioSession()
+                               ehaP2setDualMonoVariables()
+                               ehaP2localPlaying = 1
+                               ehaP2endTestSeriesValue = false
+                               print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
+                           }
                        }
+                       .padding(.top, 20)
+                       .padding(.bottom, 20)
+               } else if ehaP2TestStarted == true {
+                   Button {
+                       ehaP2localPlaying = 0
+                       ehaP2stop()
+                       ehaP2userPausedTest = true
+                       ehaP2playingStringColorIndex = 1
+                       DispatchQueue.main.asyncAfter(deadline: .now() + 2.2, qos: .userInitiated) {
+                           ehaP2localPlaying = 0
+                           ehaP2stop()
+                           ehaP2userPausedTest = true
+                           ehaP2playingStringColorIndex = 1
+                       }
+                       DispatchQueue.main.asyncAfter(deadline: .now() + 3.6, qos: .userInitiated) {
+                           ehaP2localPlaying = 0
+                           ehaP2stop()
+                           ehaP2userPausedTest = true
+                           ehaP2playingStringColorIndex = 1
+                       }
+                       DispatchQueue.main.asyncAfter(deadline: .now() + 5.4, qos: .userInitiated) {
+                           ehaP2localPlaying = 0
+                           ehaP2stop()
+                           ehaP2userPausedTest = true
+                           ehaP2playingStringColorIndex = 1
+                       }
+                   } label: {
+                       Text("Pause Test")
+                           .foregroundColor(.yellow)
                    }
                    .padding(.top, 20)
                    .padding(.bottom, 20)
-               
-               Button {
-                   ehaP2_heardArray.removeAll()
-                   ehaP2pauseRestartTestCycle()
-                   audioSessionModel.setAudioSession()
-                   ehaP2localPlaying = 1
-                   ehaP2userPausedTest = false
-                   ehaP2playingStringColorIndex = 0
-                   ehaP2endTestSeries = false
-                   ehaP2setDualMonoVariables()
-                   print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
-               } label: {
-                   Text(ehaP2playingString[ehaP2playingStringColorIndex])
-                       .foregroundColor(ehaP2playingStringColor[ehaP2playingStringColorIndex])
+                   
+                   Button {
+                       ehaP2_heardArray.removeAll()
+                       ehaP2pauseRestartTestCycle()
+                       audioSessionModel.setAudioSession()
+                       ehaP2localPlaying = 1
+                       ehaP2userPausedTest = false
+                       ehaP2playingStringColorIndex = 0
+                       ehaP2endTestSeriesValue = false
+                       ehaP2setDualMonoVariables()
+                       print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
+                   } label: {
+                       Text(ehaP2playingString[ehaP2playingStringColorIndex])
+                           .foregroundColor(ehaP2playingStringColor[ehaP2playingStringColorIndex])
+                   }
+                   .padding(.top, 20)
+                   .padding(.bottom, 60)
                }
-               .padding(.top, 10)
-               .padding(.bottom, 10)
-                     
-               Button {
-                   ehaP2localPlaying = 0
-                   ehaP2stop()
-                   ehaP2userPausedTest = true
-                   ehaP2playingStringColorIndex = 1
-                   DispatchQueue.main.asyncAfter(deadline: .now() + 2.2, qos: .userInitiated) {
-                       ehaP2localPlaying = 0
-                       ehaP2stop()
-                       ehaP2userPausedTest = true
-                       ehaP2playingStringColorIndex = 1
-                   }
-                   DispatchQueue.main.asyncAfter(deadline: .now() + 3.6, qos: .userInitiated) {
-                       ehaP2localPlaying = 0
-                       ehaP2stop()
-                       ehaP2userPausedTest = true
-                       ehaP2playingStringColorIndex = 1
-                   }
-                   DispatchQueue.main.asyncAfter(deadline: .now() + 5.4, qos: .userInitiated) {
-                       ehaP2localPlaying = 0
-                       ehaP2stop()
-                       ehaP2userPausedTest = true
-                       ehaP2playingStringColorIndex = 1
-                   }
-               } label: {
-                   Text("Pause Test")
-                       .foregroundColor(.yellow)
-               }
-               .padding(.top, 20)
-               .padding(.bottom, 60)
-        
                
+               Spacer()
                Text("Press if You Hear The Tone")
                    .fontWeight(.semibold)
                    .padding()
@@ -555,7 +600,7 @@ struct EHATTSTestPart2View: View {
                }
                .fullScreenCover(isPresented: $ehaP2showTestCompletionSheet, content: {
                    ZStack{
-                       RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300)
+                       RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
                        
                        VStack(alignment: .leading) {
                            
@@ -565,7 +610,7 @@ struct EHATTSTestPart2View: View {
                                } else if ehaP2fullTestCompleted == false {
                                    ehaP2showTestCompletionSheet.toggle()
                                    ehaP2setDualMonoVariables()
-                                   ehaP2endTestSeries = false
+                                   ehaP2endTestSeriesValue = false
                                    ehaP2testIsPlaying = true
                                    ehaP2localPlaying = 1
                                    ehaP2playingStringColorIndex = 2
@@ -586,41 +631,76 @@ struct EHATTSTestPart2View: View {
                                .font(.title3)
                                .padding()
                            Spacer()
-                           Button(action: {
-                               if ehaP2fullTestCompleted == true {
-                                   ehaP2showTestCompletionSheet.toggle()
-                               } else if ehaP2fullTestCompleted == false {
-                                   DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
-                                       Task(priority: .userInitiated) {
-                                           await ehaP2combinedPauseRestartAndStartNexTestCycle()
+                           if ehaP2fullTestCompleted == false {
+                               Button(action: {
+                                   if ehaP2fullTestCompleted == true {
+                                       ehaP2showTestCompletionSheet.toggle()
+                                   } else if ehaP2fullTestCompleted == false {
+                                       DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
+                                           Task(priority: .userInitiated) {
+                                               await ehaP2combinedPauseRestartAndStartNexTestCycle()
+                                           }
                                        }
                                    }
+                               }, label: {
+                                   Text("Start The Next Cycle")
+                                       .foregroundColor(.green)
+                                       .font(.title)
+                                       .padding()
+                               })
+                           } else if ehaP2fullTestCompleted == true {
+                               Button {
+                                   self.ehaP2EPTATestCompleted = true
+                                   ehaP2showTestCompletionSheet.toggle()
+                               } label: {
+                                   Text("Test Phase Complete, Press To Continue")
+                                       .foregroundColor(.green)
+                                       .font(.title)
+                                       .padding()
                                }
-                           }, label: {
-                               Text("Start The Next Cycle")
-                                   .foregroundColor(.green)
-                                   .font(.title)
-                                   .padding()
-                           })
+                           }
                            Spacer()
                        }
                    }
                })
            }
+           .onAppear() {
+               Task(priority: .userInitiated) {
+                   if gainEHAP2PhonIsSet == false {
+                       await checkGainEHAP2_2_5DataLink()
+                       await checkGainEHAP2_4DataLink()
+                       await checkGainEHAP2_5DataLink()
+                       await checkGainEHAP2_7DataLink()
+                       await checkGainEHAP2_8DataLink()
+                       await checkGainEHAP2_11DataLink()
+                       await checkGainEHAP2_16DataLink()
+                       await checkGainEHAP2_17DataLink()
+                       await checkGainEHAP2_24DataLink()
+                       await checkGainEHAP2_27DataLink()
+                       await gainEHAP2CurveAssignment()
+                       ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]
+                       gainEHAP2PhonIsSet = true
+                   } else if gainEHAP2PhonIsSet == true {
+                       print("Gain Already Set")
+                   } else {
+                       print("!!!Fatal Error in gainEHAP1PhonIsSet OnAppear Functions")
+                   }
+               }
+           }
            .onChange(of: ehaP2testIsPlaying, perform: { ehaP2testBoolValue in
-               if ehaP2testBoolValue == true && ehaP2endTestSeries == false {
+               if ehaP2testBoolValue == true && ehaP2endTestSeriesValue == false {
                //User is starting test for first time
                    audioSessionModel.setAudioSession()
                    ehaP2localPlaying = 1
                    ehaP2playingStringColorIndex = 0
                    ehaP2userPausedTest = false
-               } else if ehaP2testBoolValue == false && ehaP2endTestSeries == false {
+               } else if ehaP2testBoolValue == false && ehaP2endTestSeriesValue == false {
                // User is pausing test for firts time
                    ehaP2stop()
                    ehaP2localPlaying = 0
                    ehaP2playingStringColorIndex = 1
                    ehaP2userPausedTest = true
-               } else if ehaP2testBoolValue == true && ehaP2endTestSeries == true {
+               } else if ehaP2testBoolValue == true && ehaP2endTestSeriesValue == true {
                    ehaP2stop()
                    ehaP2localPlaying = -1
                    ehaP2playingStringColorIndex = 2
@@ -644,6 +724,7 @@ struct EHATTSTestPart2View: View {
 //               ehaP2_pan = ehaP2panArray[ehaP2_index]
                ehaP2localHeard = 0
                ehaP2localReversal = 0
+               ehaP2TestStarted = true
                
                if ehaP2playingValue == 1{
 //                   print("envDataObjectModel_testGain: \(ehaP2_testGain)")
@@ -690,13 +771,19 @@ struct EHATTSTestPart2View: View {
                            ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
                            Task(priority: .userInitiated) {
                                await ehaP2heardArrayNormalize()
+                               
+                               await maxEHAP2GainReachedReversal()
+                               
                                await ehaP2count()
                                await ehaP2logNotPlaying()   //self.ehaP2_playing = -1
                                await ehaP2resetPlaying()
                                await ehaP2resetHeard()
                                await ehaP2nonResponseCounting()
                                await ehaP2createReversalHeardArray()
-                               await ehaP2createReversalGainArray()
+                               
+                               await ehaP2createReversalGainArrayNonResponse()
+//                               await ehaP2createReversalGainArray()
+                               
                                await ehaP2checkHeardReversalArrays()
                                await ehaP2reversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change    event
                            }
@@ -730,7 +817,7 @@ struct EHATTSTestPart2View: View {
                            await ehaP2concatenateFinalArrays()
    //                        await ehaP2printConcatenatedArrays()
                            await ehaP2saveFinalStoredArrays()
-                           await ehaP2endTestSeries()
+                           await ehaP2endTestSeriesFunc()
                            await ehaP2newTestCycle()
                            await ehaP2restartPresentation()
                            print("End of Reversals")
@@ -748,7 +835,7 @@ struct EHATTSTestPart2View: View {
        ehaP2localMarkNewTestCycle = 0
        ehaP2localReversalEnd = 0
        ehaP2_index = ehaP2_index
-       ehaP2_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
+       ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]       // Add code to reset starting test gain by linking to table of expected HL
        ehaP2testIsPlaying = false
        ehaP2localPlaying = 0
        ehaP2_testCount.removeAll()
@@ -778,16 +865,17 @@ struct EHATTSTestPart2View: View {
         ehaP2localStartingNonHeardArraySet = false
         ehaP2firstHeardIsTrue = false
         ehaP2secondHeardIsTrue = false
-        ehaP2endTestSeries = false
+        ehaP2endTestSeriesValue = false
         ehaP2playingStringColorIndex = 0
         ehaP2startTooHigh = 0
         ehaP2localTestCount = 0
         ehaP2localMarkNewTestCycle = 0
         ehaP2localReversalEnd = 0
-        ehaP2_testGain = 0.2
+        
         ehaP2_index = ehaP2_index + 1
 //        print(ehaP2_eptaSamplesCountArray[ehaP2_index]) /// This is causing the issue
         print("ehaP2_index: \(ehaP2_index)")
+        ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]
         ehaP2userPausedTest = false
         ehaP2testIsPlaying = true
         ehaP2localPlaying = 1
@@ -918,37 +1006,98 @@ struct EHATTSTestPart2View: View {
             print("Error in localResponseTrackingLogic")
         }
     }
+    
+    
+    
+    
+    func maxEHAP2GainReachedReversal() async {
+        if ehaP2_testGain >= 0.995 && ehaP2firstHeardIsTrue == false && ehaP2secondHeardIsTrue == false {
+            //remove last gain value from preeventlogging
+            ehaP2_testTestGain.removeLast(1)
+            //responseHeardArray
+            ehaP2firstHeardResponseIndex = ehaP2localTestCount
+            ehaP2firstHeardIsTrue = true
+            //Append a gain value of 1.0, indicating sound not heard a max volume
+            ehaP2_testTestGain.append(1.0)
+            // Local Response Tracking
+            ehaP2_heardArray.append(1)
+            self.ehaP2idxHA = ehaP2_heardArray.count
+            self.ehaP2localStartingNonHeardArraySet = true
+            await ehaP2resetNonResponseCount()
+            
+            
+            //run the rest of the functions to trigger next cycle
+//            await count()
+//            await logNotPlaying()           //envDataObjectModel_playing = -1
+//            await resetPlaying()
+//            await resetHeard()
+//            await resetNonResponseCount()
+//            await createReversalHeardArray()
+//            await createReversalGainArray()
+//            await checkHeardReversalArrays()
+//            await reversalStart()
+        } else if ehaP2_testGain >= 0.995 && ehaP2firstHeardIsTrue == true && ehaP2secondHeardIsTrue == false {
+            //remove last gain value from preeventlogging
+            ehaP2_testTestGain.removeLast(1)
+            //responseHeardArray
+            ehaP2secondHeardResponseIndex = ehaP2localTestCount
+            ehaP2secondHeardIsTrue = true
+            //Append a gain value of 1.0, indicating sound not heard a max volume
+            ehaP2_testTestGain.append(1.0)
+            // Local Response Tracking
+            ehaP2_heardArray.append(1)
+            self.ehaP2idxHA = ehaP2_heardArray.count
+            self.ehaP2localStartingNonHeardArraySet = true
+            await ehaP2resetNonResponseCount()
+            
+            //run the rest of the functions to trigger next cycle
+//            await count()
+//            await logNotPlaying()           //envDataObjectModel_playing = -1
+//            await resetPlaying()
+//            await resetHeard()
+//            await resetNonResponseCount()
+//            await createReversalHeardArray()
+//            await createReversalGainArray()
+//            await checkHeardReversalArrays()
+//            await reversalStart()
+        }
+    }
+    
    
 
     func ehaP2heardArrayNormalize() async {
-        ehaP2idxHA = ehaP2_heardArray.count
-        ehaP2idxForTest = ehaP2_indexForTest.count
-        ehaP2idxForTestNet1 = ehaP2idxForTest - 1
-        ehaP2isCountSame = ehaP2idxHA - ehaP2idxForTest
-        ehaP2heardArrayIdxAfnet1 = ehaP2_heardArray.index(after: ehaP2idxForTestNet1)
-     
-        if ehaP2localStartingNonHeardArraySet == false {
-            ehaP2_heardArray.append(0)
-            self.ehaP2localStartingNonHeardArraySet = true
+        if ehaP2_testGain < 0.995 {
             ehaP2idxHA = ehaP2_heardArray.count
-            ehaP2idxHAZero = ehaP2idxHA - ehaP2idxHA
-            ehaP2idxHAFirst = ehaP2idxHAZero + 1
+            ehaP2idxForTest = ehaP2_indexForTest.count
+            ehaP2idxForTestNet1 = ehaP2idxForTest - 1
             ehaP2isCountSame = ehaP2idxHA - ehaP2idxForTest
             ehaP2heardArrayIdxAfnet1 = ehaP2_heardArray.index(after: ehaP2idxForTestNet1)
-        } else if ehaP2localStartingNonHeardArraySet == true {
-            if ehaP2isCountSame != 0 && ehaP2heardArrayIdxAfnet1 != 1 {
+            
+            if ehaP2localStartingNonHeardArraySet == false {
                 ehaP2_heardArray.append(0)
+                self.ehaP2localStartingNonHeardArraySet = true
                 ehaP2idxHA = ehaP2_heardArray.count
                 ehaP2idxHAZero = ehaP2idxHA - ehaP2idxHA
                 ehaP2idxHAFirst = ehaP2idxHAZero + 1
                 ehaP2isCountSame = ehaP2idxHA - ehaP2idxForTest
                 ehaP2heardArrayIdxAfnet1 = ehaP2_heardArray.index(after: ehaP2idxForTestNet1)
-
+            } else if ehaP2localStartingNonHeardArraySet == true {
+                if ehaP2isCountSame != 0 && ehaP2heardArrayIdxAfnet1 != 1 {
+                    ehaP2_heardArray.append(0)
+                    ehaP2idxHA = ehaP2_heardArray.count
+                    ehaP2idxHAZero = ehaP2idxHA - ehaP2idxHA
+                    ehaP2idxHAFirst = ehaP2idxHAZero + 1
+                    ehaP2isCountSame = ehaP2idxHA - ehaP2idxForTest
+                    ehaP2heardArrayIdxAfnet1 = ehaP2_heardArray.index(after: ehaP2idxForTestNet1)
+                    
+                } else {
+                    print("Error in arrayNormalization else if isCountSame && heardAIAFnet1 if segment")
+                }
             } else {
-                print("Error in arrayNormalization else if isCountSame && heardAIAFnet1 if segment")
+                print("Critial Error in Heard Array Count and or Values")
             }
         } else {
-            print("Critial Error in Heard Array Count and or Values")
+            print("!!!Critical Max Gain Reached, logging 1.0 for no response to sound")
         }
     }
      
@@ -976,11 +1125,39 @@ extension EHATTSTestPart2View {
         ehaP2_reversalHeard.append(ehaP2_heardArray[ehaP2idxHA-1])
         self.ehaP2idxReversalHeardCount = ehaP2_reversalHeard.count
     }
+    
+    
+    
+    
+    func ehaP2createReversalHeardArrayNonResponse() async {
+        ehaP2_reversalHeard.append(ehaP2_heardArray[ehaP2idxHA-1])
+        self.ehaP2idxReversalHeardCount = ehaP2_reversalHeard.count
+    }
+    
+    
+    
+    
         
     func ehaP2createReversalGainArray() async {
         ehaP2_reversalGain.append(ehaP2_testGain)
 //        ehaP2_reversalGain.append(ehaP2_testTestGain[ehaP2idxHA-1])
     }
+    
+    
+    
+    
+    func ehaP2createReversalGainArrayNonResponse() async {
+        if ehaP2_testGain < 0.995 {
+            ehaP2_reversalGain.append(ehaP2_testGain)
+            //        ehaP2_reversalGain.append(ehaP2_testTestGain[ehaP2idxHA-1])
+        } else if ehaP2_testGain >= 0.995 {
+            ehaP2_reversalGain.append(1.0)
+        }
+    }
+    
+    
+    
+    
     
     func ehaP2checkHeardReversalArrays() async {
         if ehaP2idxHA - ehaP2idxReversalHeardCount == 0 {
@@ -1013,8 +1190,8 @@ extension EHATTSTestPart2View {
         } else if ehaP2r01NewGain <= 0.0 {
             ehaP2_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if ehaP2r01NewGain >= 1.0 {
-            ehaP2_testGain = 1.0
+        } else if ehaP2r01NewGain >= 0.995 {
+            ehaP2_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfOne Logic")
@@ -1029,8 +1206,8 @@ extension EHATTSTestPart2View {
         } else if ehaP2r02NewGain <= 0.0 {
             ehaP2_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if ehaP2r02NewGain >= 1.0 {
-            ehaP2_testGain = 1.0
+        } else if ehaP2r02NewGain >= 0.995 {
+            ehaP2_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfTwo Logic")
@@ -1045,8 +1222,8 @@ extension EHATTSTestPart2View {
         } else if ehaP2r03NewGain <= 0.0 {
             ehaP2_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if ehaP2r03NewGain >= 1.0 {
-            ehaP2_testGain = 1.0
+        } else if ehaP2r03NewGain >= 0.995 {
+            ehaP2_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfThree Logic")
@@ -1061,8 +1238,8 @@ extension EHATTSTestPart2View {
         } else if ehaP2r04NewGain <= 0.0 {
             ehaP2_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if ehaP2r04NewGain >= 1.0 {
-            ehaP2_testGain = 1.0
+        } else if ehaP2r04NewGain >= 0.995 {
+            ehaP2_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfFour Logic")
@@ -1077,8 +1254,8 @@ extension EHATTSTestPart2View {
         } else if ehaP2r05NewGain <= 0.0 {
             ehaP2_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if ehaP2r05NewGain >= 1.0 {
-            ehaP2_testGain = 1.0
+        } else if ehaP2r05NewGain >= 0.995 {
+            ehaP2_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfFive Logic")
@@ -1093,8 +1270,8 @@ extension EHATTSTestPart2View {
         } else if ehaP2r10NewGain <= 0.0 {
             ehaP2_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if ehaP2r10NewGain >= 1.0 {
-            ehaP2_testGain = 1.0
+        } else if ehaP2r10NewGain >= 0.995 {
+            ehaP2_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfTen Logic")
@@ -1112,13 +1289,32 @@ extension EHATTSTestPart2View {
     }
     
     func ehaP2reversalComplexAction() async {
+        print("!! In reversalComplexAction")
+        print("ehaP2localSeriesNoResponses: \(ehaP2localSeriesNoResponses)")
         if ehaP2idxReversalHeardCount <= 1 && ehaP2idxHA <= 1 {
+            print("!!!In first if section for reversal Action")
             await ehaP2reversalAction()
         }  else if ehaP2idxReversalHeardCount == 2 {
+            print("!!!In first else if section")
             if ehaP2idxReversalHeardCount == 2 && ehaP2secondHeardIsTrue == true {
+                print("!!! In first sub if of else if check too high")
                 await ehaP2startTooHighCheck()
+
             } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false {
+                print("!!! In first sub else if heard count == 2. reversal action")
                 await ehaP2reversalAction()
+            
+//// Changes HERE From EHAP1
+//// !!!!
+//            } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false && ehaP2localSeriesNoResponses < 2 {
+//                print("!!! In first sub else if heard count == 2. reversal action")
+//                await ehaP2reversalAction()
+//            } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false && ehaP2localSeriesNoResponses == 2 {
+//                print("!!!in second sub else if heard count ==2 local series no response == 2 reversal of four")
+//                await ehaP2reversalOfFour()
+//// !!! Changes Above from EHAP1
+                
+                
             } else {
                 print("In reversal section == 2")
                 print("Failed reversal section startTooHigh")
@@ -1130,11 +1326,14 @@ extension EHATTSTestPart2View {
                 print("reversal section >= 3")
                 print("In first if section sHRI - fHRI == 1")
                 print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
-            } else if ehaP2localSeriesNoResponses == 3 {
+            } else if ehaP2localSeriesNoResponses >= 3 {
+                print("!!! In first else if localSeriesNoResponse >= 3")
                 await ehaP2reversalOfTen()
             } else if ehaP2localSeriesNoResponses == 2 {
+                print("!!! In second else if localSeriesNoResponse == 2")
                 await ehaP2reversalOfFour()
             } else {
+                print("!!!In else section reversal action")
                 await ehaP2reversalAction()
             }
         } else {
@@ -2305,12 +2504,12 @@ extension EHATTSTestPart2View {
     
         
     func ehaP2restartPresentation() async {
-        if ehaP2endTestSeries == false {
+        if ehaP2endTestSeriesValue == false {
             ehaP2localPlaying = 1
-            ehaP2endTestSeries = false
-        } else if ehaP2endTestSeries == true {
+            ehaP2endTestSeriesValue = false
+        } else if ehaP2endTestSeriesValue == true {
             ehaP2localPlaying = -1
-            ehaP2endTestSeries = true
+            ehaP2endTestSeriesValue = true
             ehaP2showTestCompletionSheet = true
             ehaP2playingStringColorIndex = 2
         }
@@ -2349,8 +2548,8 @@ extension EHATTSTestPart2View {
         ehaP2localReversalEnd = 0
         ehaP2_index = ehaP2_index + 1
 //        envDataObjectModel_eptaSamplesCountArrayIdx += 1
-        ehaP2_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
-        ehaP2endTestSeries = false
+        ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]       // Add code to reset starting test gain by linking to table of expected HL
+        ehaP2endTestSeriesValue = false
         ehaP2showTestCompletionSheet = false
         ehaP2testIsPlaying = true
         ehaP2userPausedTest = false
@@ -2363,31 +2562,31 @@ extension EHATTSTestPart2View {
     
     
     func ehaP2newTestCycle() async {
-//        if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index < ehaP2_eptaSamplesCount && ehaP2endTestSeries == false {
-        if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index < ehaP2_eptaSamplesCountArray[ehaP2_index] && ehaP2endTestSeries == false {
+//        if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index < ehaP2_eptaSamplesCount && ehaP2endTestSeriesValue == false {
+        if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index < ehaP2_eptaSamplesCountArray[ehaP2_index] && ehaP2endTestSeriesValue == false {
             print("New Test Cycle Triggered")
             await ehaP2wipeArrays()
             ehaP2startTooHigh = 0
             ehaP2localMarkNewTestCycle = 0
             ehaP2localReversalEnd = 0
             ehaP2_index = ehaP2_index + 1
-            ehaP2_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
-            ehaP2endTestSeries = false
+            ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]       // Add code to reset starting test gain by linking to table of expected HL
+            ehaP2endTestSeriesValue = false
 //                Task(priority: .userInitiated) {
            
 //                }
-//        } else if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index == ehaP2_eptaSamplesCount && ehaP2endTestSeries == false {
-        } else if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index == ehaP2_eptaSamplesCountArray[ehaP2_index] && ehaP2endTestSeries == false {
+//        } else if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index == ehaP2_eptaSamplesCount && ehaP2endTestSeriesValue == false {
+        } else if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index == ehaP2_eptaSamplesCountArray[ehaP2_index] && ehaP2endTestSeriesValue == false {
             print("=============================")
             print("!!!!! End of Test Series!!!!!!")
             print("=============================")
-            ehaP2endTestSeries = true
+            ehaP2endTestSeriesValue = true
             ehaP2localPlaying = -1
             ehaP2_eptaSamplesCountArrayIdx += 1
 //            ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
             if ehaP2fullTestCompleted == true {
                 ehaP2fullTestCompleted = true
-                ehaP2endTestSeries = true
+                ehaP2endTestSeriesValue = true
                 ehaP2localPlaying = -1
 //                ehaP2_eptaSamplesCountArrayIdx += 1
                 print("*****************************")
@@ -2397,7 +2596,7 @@ extension EHATTSTestPart2View {
                 print("*****************************")
             } else if ehaP2fullTestCompleted == false {
                 ehaP2fullTestCompleted = false
-                ehaP2endTestSeries = true
+                ehaP2endTestSeriesValue = true
                 ehaP2localPlaying = -1
                 ehaP2_eptaSamplesCountArrayIdx += 1
             } else {
@@ -2411,11 +2610,11 @@ extension EHATTSTestPart2View {
         }
     }
     
-    func ehaP2endTestSeries() async {
-        if ehaP2endTestSeries == false {
+    func ehaP2endTestSeriesFunc() async {
+        if ehaP2endTestSeriesValue == false {
             //Do Nothing and continue
-            print("end Test Series = \(ehaP2endTestSeries)")
-        } else if ehaP2endTestSeries == true {
+            print("end Test Series = \(ehaP2endTestSeriesValue)")
+        } else if ehaP2endTestSeriesValue == true {
             ehaP2showTestCompletionSheet = true
             ehaP2_eptaSamplesCount = ehaP2_eptaSamplesCountArray[ehaP2_index]
 //            ehaP2_eptaSamplesCount = ehaP2_eptaSamplesCount + 8
@@ -2506,11 +2705,11 @@ extension EHATTSTestPart2View {
         if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 {
             DispatchQueue.global(qos: .userInitiated).async {
                 Task(priority: .userInitiated) {
-                    if ehaP2endTestSeries == false {
+                    if await ehaP2endTestSeriesValue == false {
                         await writeEHAP2DetailedResultsToCSV()
                         await writeEHAP2InputRightResultsToCSV()
                         await writeEHAP2InputLeftResultsToCSV()
-                    } else if ehaP2endTestSeries == true {
+                    } else if await ehaP2endTestSeriesValue == true {
                     
                     // Hold these until end of test cycle
                         await writeEHAP2DetailedResultsToCSV()
@@ -2923,6 +3122,321 @@ extension EHATTSTestPart2View {
              print("CVSWriter Summary EHA Part 2 Left Input Data Error or Error Finding File for Detailed CSV \(error)")
          }
     }
+    
+}
+
+extension EHATTSTestPart2View {
+//MARK: Extension for Gain Link File Checking
+    
+    
+    func gainEHAP2CurveAssignment() async {
+        if ehaP2MonoTest == false {
+            if gainEHAP2SettingArrayLink == 2.5 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS2_5_EHAP2LR)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 2.5: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 4 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS4_EHAP2LR)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 4: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 5 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS5_EHAP2LR)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 5: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 7 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS7_EHAP2LR)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 7: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 8 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS8_EHAP2LR)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 8: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 11 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS11_EHAP2LR)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 11: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 16 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS16_EHAP2LR)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 16: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 17 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS17_EHAP2LR)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 17: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 24 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS24_EHAP2LR)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 24: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 27 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS27_EHAP2LR)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 27: \(gainEHAP2SettingArray)")
+            } else {
+                gainEHAP2PhonIsSet = false
+                print("!!!! Fatal Error in gainEHAP2CurveAssignment() if segment Logic")
+            }
+        } else if ehaP2MonoTest == true {
+            if gainEHAP2SettingArrayLink == 2.5 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS2_5_EHAP2Mono)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 2.5: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 4 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS4_EHAP2Mono)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 4: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 5 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS5_EHAP2Mono)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 5: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 7 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS7_EHAP2Mono)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 7: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 8 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS8_EHAP2Mono)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 8: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 11 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS11_EHAP2Mono)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 11: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 16 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS16_EHAP2Mono)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 16: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 17 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS17_EHAP2Mono)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 17: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 24 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS24_EHAP2Mono)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 24: \(gainEHAP2SettingArray)")
+            } else if gainEHAP2SettingArrayLink == 27 {
+                gainEHAP2SettingArray.append(contentsOf: gainReferenceModel.ABS27_EHAP2Mono)
+                gainEHAP2PhonIsSet = true
+                print("Phon of 27: \(gainEHAP2SettingArray)")
+            } else {
+                gainEHAP2PhonIsSet = false
+                print("!!!! Fatal Error in gainEHAP2CurveAssignment() if segment Logic")
+            }
+            
+            
+        } else {
+            print("!!!!Fatal error in gainCurveEHAP2Assignment() Master Logic")
+        }
+    }
+    
+    
+    
+    func getGainEHAP2DataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
+
+    
+    func checkGainEHAP2_2_5DataLink() async {
+        let dataGainEHAP2_2_5Name = ["2_5.csv"]
+        let fileGainEHAP2_2_5Manager = FileManager.default
+        let dataGainEHAP2_2_5Path = (await self.getGainEHAP2DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP2_2_5Name)
+        if fileGainEHAP2_2_5Manager.fileExists(atPath: dataGainEHAP2_2_5Path[0]) {
+            let dataGainEHAP2_2_5FilePath = URL(fileURLWithPath: dataGainEHAP2_2_5Path[0])
+            if dataGainEHAP2_2_5FilePath.isFileURL  {
+                dataFileURLEHAP2Gain1 = dataGainEHAP2_2_5FilePath
+                print("2_5.csv dataFilePath: \(dataGainEHAP2_2_5FilePath)")
+                print("2_5.csv dataFileURL: \(dataFileURLEHAP2Gain1)")
+                print("2_5.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP2SettingArrayLink = 2.5
+                print("gainEHAP2SettingArrayLink = 2.5 \(gainEHAP2SettingArrayLink)")
+            } else {
+                print("2_5.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGainEHAP2_4DataLink() async {
+        let dataGainEHAP2_4Name = ["4.csv"]
+        let fileGainEHAP2_4Manager = FileManager.default
+        let dataGainEHAP2_4Path = (await self.getGainEHAP2DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP2_4Name)
+        if fileGainEHAP2_4Manager.fileExists(atPath: dataGainEHAP2_4Path[0]) {
+            let dataGainEHAP2_4FilePath = URL(fileURLWithPath: dataGainEHAP2_4Path[0])
+            if dataGainEHAP2_4FilePath.isFileURL  {
+                dataFileURLEHAP2Gain2 = dataGainEHAP2_4FilePath
+                print("4.csv dataFilePath: \(dataGainEHAP2_4FilePath)")
+                print("4.csv dataFileURL: \(dataFileURLEHAP2Gain2)")
+                print("4.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP2SettingArrayLink = 4
+                print("gainEHAP2SettingArrayLink = 4 \(gainEHAP2SettingArrayLink)")
+            } else {
+                print("4.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGainEHAP2_5DataLink() async {
+        let dataGainEHAP2_5Name = ["5.csv"]
+        let fileGainEHAP2_5Manager = FileManager.default
+        let dataGainEHAP2_5Path = (await self.getGainEHAP2DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP2_5Name)
+        if fileGainEHAP2_5Manager.fileExists(atPath: dataGainEHAP2_5Path[0]) {
+            let dataGainEHAP2_5FilePath = URL(fileURLWithPath: dataGainEHAP2_5Path[0])
+            if dataGainEHAP2_5FilePath.isFileURL  {
+                dataFileURLEHAP2Gain3 = dataGainEHAP2_5FilePath
+                print("5.csv dataFilePath: \(dataGainEHAP2_5FilePath)")
+                print("5.csv dataFileURL: \(dataFileURLEHAP2Gain3)")
+                print("5.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP2SettingArrayLink = 5
+                print("gainEHAP2SettingArrayLink = 5 \(gainEHAP2SettingArrayLink)")
+            } else {
+                print("5.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGainEHAP2_7DataLink() async {
+        let dataGainEHAP2_7Name = ["7.csv"]
+        let fileGainEHAP2_7Manager = FileManager.default
+        let dataGainEHAP2_7Path = (await self.getGainEHAP2DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP2_7Name)
+        if fileGainEHAP2_7Manager.fileExists(atPath: dataGainEHAP2_7Path[0]) {
+            let dataGainEHAP2_7FilePath = URL(fileURLWithPath: dataGainEHAP2_7Path[0])
+            if dataGainEHAP2_7FilePath.isFileURL  {
+                dataFileURLEHAP2Gain4 = dataGainEHAP2_7FilePath
+                print("7.csv dataFilePath: \(dataGainEHAP2_7FilePath)")
+                print("7.csv dataFileURL: \(dataFileURLEHAP2Gain4)")
+                print("7.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP2SettingArrayLink = 7
+                print("gainEHAP2SettingArrayLink = 7 \(gainEHAP2SettingArrayLink)")
+            } else {
+                print("7.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+
+    func checkGainEHAP2_8DataLink() async {
+        let dataGainEHAP2_8Name = ["8.csv"]
+        let fileGainEHAP2_8Manager = FileManager.default
+        let dataGainEHAP2_8Path = (await self.getGainEHAP2DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP2_8Name)
+        if fileGainEHAP2_8Manager.fileExists(atPath: dataGainEHAP2_8Path[0]) {
+            let dataGainEHAP2_8FilePath = URL(fileURLWithPath: dataGainEHAP2_8Path[0])
+            if dataGainEHAP2_8FilePath.isFileURL  {
+                dataFileURLEHAP2Gain5 = dataGainEHAP2_8FilePath
+                print("8.csv dataFilePath: \(dataGainEHAP2_8FilePath)")
+                print("8.csv dataFileURL: \(dataFileURLEHAP2Gain5)")
+                print("8.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP2SettingArrayLink = 8
+                print("gainEHAP2SettingArrayLink = 8: \(gainEHAP2SettingArrayLink)")
+            } else {
+                print("8.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+
+    func checkGainEHAP2_11DataLink() async {
+        let dataGainEHAP2_11Name = ["11.csv"]
+        let fileGainEHAP2_11Manager = FileManager.default
+        let dataGainEHAP2_11Path = (await self.getGainEHAP2DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP2_11Name)
+        if fileGainEHAP2_11Manager.fileExists(atPath: dataGainEHAP2_11Path[0]) {
+            let dataGainEHAP2_11FilePath = URL(fileURLWithPath: dataGainEHAP2_11Path[0])
+            if dataGainEHAP2_11FilePath.isFileURL  {
+                dataFileURLEHAP2Gain6 = dataGainEHAP2_11FilePath
+                print("11.csv dataFilePath: \(dataGainEHAP2_11FilePath)")
+                print("11.csv dataFileURL: \(dataFileURLEHAP2Gain6)")
+                print("11.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP2SettingArrayLink = 11
+                print("gainEHAP2SettingArrayLink = 11 \(gainEHAP2SettingArrayLink)")
+            } else {
+                print("11.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGainEHAP2_16DataLink() async {
+        let dataGainEHAP2_16Name = ["16.csv"]
+        let fileGainEHAP2_16Manager = FileManager.default
+        let dataGainEHAP2_16Path = (await self.getGainEHAP2DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP2_16Name)
+        if fileGainEHAP2_16Manager.fileExists(atPath: dataGainEHAP2_16Path[0]) {
+            let dataGainEHAP2_16FilePath = URL(fileURLWithPath: dataGainEHAP2_16Path[0])
+            if dataGainEHAP2_16FilePath.isFileURL  {
+                dataFileURLEHAP2Gain7 = dataGainEHAP2_16FilePath
+                print("16.csv dataFilePath: \(dataGainEHAP2_16FilePath)")
+                print("16.csv dataFileURL: \(dataFileURLEHAP2Gain7)")
+                print("16.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP2SettingArrayLink = 16
+                print("gainEHAP2SettingArrayLink = 16: \(gainEHAP2SettingArrayLink)")
+            } else {
+                print("16.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGainEHAP2_17DataLink() async {
+        let dataGainEHAP2_17Name = ["17.csv"]
+        let fileGainEHAP2_17Manager = FileManager.default
+        let dataGainEHAP2_17Path = (await self.getGainEHAP2DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP2_17Name)
+        if fileGainEHAP2_17Manager.fileExists(atPath: dataGainEHAP2_17Path[0]) {
+            let dataGainEHAP2_17FilePath = URL(fileURLWithPath: dataGainEHAP2_17Path[0])
+            if dataGainEHAP2_17FilePath.isFileURL  {
+                dataFileURLEHAP2Gain8 = dataGainEHAP2_17FilePath
+                print("17.csv dataFilePath: \(dataGainEHAP2_17FilePath)")
+                print("17.csv dataFileURL: \(dataFileURLEHAP2Gain8)")
+                print("17.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP2SettingArrayLink = 17
+                print("gainEHAP2SettingArrayLink = 17: \(gainEHAP2SettingArrayLink)")
+            } else {
+                print("17.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    func checkGainEHAP2_24DataLink() async {
+        let dataGainEHAP2_24Name = ["24.csv"]
+        let fileGainEHAP2_24Manager = FileManager.default
+        let dataGainEHAP2_24Path = (await self.getGainEHAP2DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP2_24Name)
+        if fileGainEHAP2_24Manager.fileExists(atPath: dataGainEHAP2_24Path[0]) {
+            let dataGainEHAP2_24FilePath = URL(fileURLWithPath: dataGainEHAP2_24Path[0])
+            if dataGainEHAP2_24FilePath.isFileURL  {
+                dataFileURLEHAP2Gain9 = dataGainEHAP2_24FilePath
+                print("24.csv dataFilePath: \(dataGainEHAP2_24FilePath)")
+                print("24.csv dataFileURL: \(dataFileURLEHAP2Gain9)")
+                print("24.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP2SettingArrayLink = 24
+                print("gainEHAP2SettingArrayLink = 24 : \(gainEHAP2SettingArrayLink)")
+            } else {
+                print("24.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+
+    func checkGainEHAP2_27DataLink() async {
+        let dataGainEHAP2_27Name = ["27.csv"]
+        let fileGainEHAP2_27Manager = FileManager.default
+        let dataGainEHAP2_27Path = (await self.getGainEHAP2DataLinkPath() as NSString).strings(byAppendingPaths: dataGainEHAP2_27Name)
+        if fileGainEHAP2_27Manager.fileExists(atPath: dataGainEHAP2_27Path[0]) {
+            let dataGainEHAP2_27FilePath = URL(fileURLWithPath: dataGainEHAP2_27Path[0])
+            if dataGainEHAP2_27FilePath.isFileURL  {
+                dataFileURLEHAP2Gain10 = dataGainEHAP2_27FilePath
+                print("27.csv dataFilePath: \(dataGainEHAP2_27FilePath)")
+                print("27.csv dataFileURL: \(dataFileURLEHAP2Gain10)")
+                print("27.csv Input File Exists")
+                // CHANGE THIS VARIABLE PER VIEW
+                gainEHAP2SettingArrayLink = 27
+                print("gainEHAP2SettingArrayLink = 27: \(gainEHAP2SettingArrayLink)")
+            } else {
+                print("27.csv Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    
     
 }
 
