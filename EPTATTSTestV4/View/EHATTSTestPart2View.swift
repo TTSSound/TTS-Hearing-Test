@@ -1299,20 +1299,19 @@ extension EHATTSTestPart2View {
             if ehaP2idxReversalHeardCount == 2 && ehaP2secondHeardIsTrue == true {
                 print("!!! In first sub if of else if check too high")
                 await ehaP2startTooHighCheck()
-
-            } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false {
-                print("!!! In first sub else if heard count == 2. reversal action")
-                await ehaP2reversalAction()
-            
-//// Changes HERE From EHAP1
-//// !!!!
-//            } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false && ehaP2localSeriesNoResponses < 2 {
+//            } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false {
 //                print("!!! In first sub else if heard count == 2. reversal action")
 //                await ehaP2reversalAction()
-//            } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false && ehaP2localSeriesNoResponses == 2 {
-//                print("!!!in second sub else if heard count ==2 local series no response == 2 reversal of four")
-//                await ehaP2reversalOfFour()
-//// !!! Changes Above from EHAP1
+            
+// Changes HERE From EHAP1
+// !!!!
+            } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false && ehaP2localSeriesNoResponses < 2 {
+                print("!!! In first sub else if heard count == 2. reversal action")
+                await ehaP2reversalAction()
+            } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false && ehaP2localSeriesNoResponses == 2 {
+                print("!!!in second sub else if heard count ==2 local series no response == 2 reversal of four")
+                await ehaP2reversalOfFour()
+// !!! Changes Above from EHAP1
                 
                 
             } else {

@@ -819,8 +819,16 @@ extension Bilateral1kHzTestView {
         }  else if onekHzidxReversalHeardCount == 2 {
             if onekHzidxReversalHeardCount == 2 && onekHzsecondHeardIsTrue == true {
                 await onekHzstartTooHighCheck()
-            } else if onekHzidxReversalHeardCount == 2  && onekHzsecondHeardIsTrue == false {
+//            } else if onekHzidxReversalHeardCount == 2  && onekHzsecondHeardIsTrue == false {
+//                await onekHzreversalAction()
+                
+//!!! Changes Below From Original Test Models
+            } else if onekHzidxReversalHeardCount == 2  && onekHzsecondHeardIsTrue == false && onekHzlocalSeriesNoResponses < 2 {
                 await onekHzreversalAction()
+            } else if onekHzidxReversalHeardCount == 2  && onekHzsecondHeardIsTrue == false && onekHzlocalSeriesNoResponses == 2 {
+                await onekHzreversalOfFour()
+//!!! Changes Above From Original Test Models
+                
             } else {
                 print("In reversal section == 2")
                 print("Failed reversal section startTooHigh")

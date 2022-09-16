@@ -1038,8 +1038,16 @@ extension EHATTSTestPart1View {
         }  else if idxReversalHeardCount == 2 {
             if idxReversalHeardCount == 2 && secondHeardIsTrue == true {
                 await startTooHighCheck()
-            } else if idxReversalHeardCount == 2  && secondHeardIsTrue == false {
+//            } else if idxReversalHeardCount == 2  && secondHeardIsTrue == false {
+//                await reversalAction()
+                
+// !!! Changes Below from Original Test Models
+            } else if idxReversalHeardCount == 2  && secondHeardIsTrue == false && localSeriesNoResponses < 2 {
                 await reversalAction()
+            } else if idxReversalHeardCount == 2  && secondHeardIsTrue == false && localSeriesNoResponses == 2 {
+              await reversalOfFour()
+// !!! Changes Above from Original Test Models
+                
             } else {
                 print("In reversal section == 2")
                 print("Failed reversal section startTooHigh")
