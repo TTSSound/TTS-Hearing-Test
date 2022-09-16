@@ -249,7 +249,7 @@ struct EHATTSTestPart1View: View {
             RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
             VStack {
                 Spacer()
-                if ehaP1EPTATestCompleted == false {
+                if ehaP1fullTestCompleted == false {
                     Text("EHA Part 1 / EPTA Test")
                         .fontWeight(.bold)
                         .padding()
@@ -269,6 +269,12 @@ struct EHATTSTestPart1View: View {
                     .font(.caption)
                     .padding(.top, 5)
                     .padding(.bottom, 10)
+                
+                NavigationLink("Test Phase Complete, Press To Continue", destination: PostAllTestsSplashView())
+                    .padding()
+                    .foregroundColor(.green)
+                    .font(.caption)
+                    .padding(.bottom, 5)
        
 
                 Text("Click to Stat Test")
@@ -380,7 +386,6 @@ struct EHATTSTestPart1View: View {
                         Button(action: {
                             if ehaP1fullTestCompleted == true {
                                 showTestCompletionSheet.toggle()
-                                self.ehaP1EPTATestCompleted = true
                             } else if ehaP1fullTestCompleted == false {
                                 DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
                                     Task(priority: .userInitiated) {
@@ -396,10 +401,10 @@ struct EHATTSTestPart1View: View {
                         })
                         Spacer()
                         Button {
-                            DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
+             
                                 self.ehaP1EPTATestCompleted = true
                                 showTestCompletionSheet.toggle()
-                            }
+                            
                         } label: {
                             Text("Test Phase Complete, Press To Continue")
                                 .foregroundColor(.green)
@@ -520,7 +525,10 @@ struct EHATTSTestPart1View: View {
                             await resetHeard()
                             await nonResponseCounting()
                             await createReversalHeardArray()
-                            await createReversalGainArray()
+                            
+                // !!!!!! New function and removal of function, not in EHAP2
+                            await createReversalGainArrayNonResponse()
+//                            await createReversalGainArray()
                             await checkHeardReversalArrays()
                             await reversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change event
                         }
@@ -736,6 +744,8 @@ struct EHATTSTestPart1View: View {
             envDataObjectModel_heardArray.append(1)
             self.idxHA = envDataObjectModel_heardArray.count
             self.localStartingNonHeardArraySet = true
+            await resetNonResponseCount()
+            
             
             //run the rest of the functions to trigger next cycle
 //            await count()
@@ -759,6 +769,7 @@ struct EHATTSTestPart1View: View {
             envDataObjectModel_heardArray.append(1)
             self.idxHA = envDataObjectModel_heardArray.count
             self.localStartingNonHeardArraySet = true
+            await resetNonResponseCount()
             
             //run the rest of the functions to trigger next cycle
 //            await count()
@@ -860,10 +871,29 @@ extension EHATTSTestPart1View {
         envDataObjectModel_reversalHeard.append(envDataObjectModel_heardArray[idxHA-1])
         self.idxReversalHeardCount = envDataObjectModel_reversalHeard.count
     }
+    
+    func createReversalHeardArrayNonResponse() async {
+        envDataObjectModel_reversalHeard.append(envDataObjectModel_heardArray[idxHA-1])
+        self.idxReversalHeardCount = envDataObjectModel_reversalHeard.count
+    }
+
+
         
     func createReversalGainArray() async {
 //        envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
         envDataObjectModel_reversalGain.append(envDataObjectModel_testGain)
+    }
+    
+
+//New Function for Max Gain Non Response Catch
+// Not in EHAP2
+    func createReversalGainArrayNonResponse() async {
+        if envDataObjectModel_testGain < 0.995 {
+            //        envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
+            envDataObjectModel_reversalGain.append(envDataObjectModel_testGain)
+        } else if envDataObjectModel_testGain == 0.995 {
+            envDataObjectModel_reversalGain.append(1.0)
+        }
     }
     
     func checkHeardReversalArrays() async {
