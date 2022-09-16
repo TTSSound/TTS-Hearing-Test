@@ -22,7 +22,7 @@ struct PostEHATestView: View {
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack{
                 
-                Text("View for Completion of EPTA Test")
+                Text("View for Completion of EHA Full Test")
                     .foregroundColor(.white)
                     .padding(.top,40)
                     .padding(.bottom, 20)

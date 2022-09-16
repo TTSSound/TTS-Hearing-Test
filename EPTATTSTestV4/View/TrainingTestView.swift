@@ -81,10 +81,10 @@ struct TrainingTestView: View {
     @State var trainingstartTooHigh = 0
     @State var trainingfirstGain = Float()
     @State var trainingsecondGain = Float()
-    @State var trainingendTestSeries: Bool = false
+    @State var trainingendTestSeriesValue: Bool = false
     @State var trainingshowTestCompletionSheet: Bool = false
     
-    @State var training_samples: [String] = ["Sample0", "Sample1", "Sample0", "Sample1"]
+    @State var training_samples: [String] = ["Sample0", "Sample1"]
     @State var training_index: Int = 0
     @State var training_testGain: Float = 0.2
     @State var training_heardArray: [Int] = [Int]()
@@ -103,6 +103,8 @@ struct TrainingTestView: View {
     @State var training_averageGain = Float()
 
     @State var training_eptaSamplesCount = 1 //17
+    @State var training_SamplesCountArray = [1, 1]
+    @State var training_SamplesCountArrayIdx = 0
 
     @State var training_finalStoredIndex: [Int] = [Int]()
     @State var training_finalStoredTestPan: [Int] = [Int]()
@@ -132,6 +134,13 @@ struct TrainingTestView: View {
     @State var trainingplayingStringColorIndex = 0
     @State var traininguserPausedTest: Bool = false
 
+    @State var trainingTestCompleted: Bool = false
+    
+    @State var trainingfullTestCompleted: Bool = false
+    @State var trainingfullTestCompletedHoldingArray: [Bool] = [false, true]
+    @State var trainingTestStarted: Bool = false
+    
+    
     let filetrainingName = "SummaryTrainingResults.json"
     let summarytrainingCSVName = "SummaryTrainingResultsCSV.csv"
     let detailedtrainingCSVName = "DetailedTrainingResultsCSV.csv"
@@ -149,14 +158,22 @@ struct TrainingTestView: View {
  
         ZStack{
             RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
-        VStack {
+            VStack {
                 Spacer()
-            Text("Training Test")
-                .fontWeight(.bold)
-                .padding()
-                .foregroundColor(.white)
-                .padding(.top, 40)
-                .padding(.bottom, 40)
+                if trainingfullTestCompleted == false {
+                    Text("Training Test")
+                        .fontWeight(.bold)
+                        .padding()
+                        .foregroundColor(.white)
+                        .padding(.top, 40)
+                        .padding(.bottom, 40)
+                } else if trainingfullTestCompleted == true {
+                    NavigationLink("Training Complete, Press To Continue to Start Testing", destination: Bilateral1kHzTestView(), isActive: $trainingTestCompleted)
+                        .padding()
+                        .foregroundColor(.white)
+                        .padding(.top, 40)
+                        .padding(.bottom, 40)
+                }
                 HStack {
                     Spacer()
                     Text(String(training_testGain))
@@ -182,13 +199,12 @@ struct TrainingTestView: View {
                     .padding(.bottom, 40)
                     Spacer()
                 }
-                Spacer()
-                HStack{
-                    Spacer()
-                    Text("Click to Stat Test")
+ 
+//                if trainingTestStarted == false {
+                    Text("Click to Start Training")
                         .fontWeight(.bold)
                         .padding()
-                        .foregroundColor(.blue)
+                        .foregroundColor(.green)
                         .onTapGesture {
                             Task(priority: .userInitiated) {
                                 audioSessionModel.setAudioSession()
@@ -196,25 +212,26 @@ struct TrainingTestView: View {
                                 print("Start Button Clicked. Playing = \(traininglocalPlaying)")
                             }
                         }
-                    Spacer()
+//                } else if trainingTestStarted == true {
+                    
                     Button {
                         traininglocalPlaying = 0
                         trainingstop()
                         traininguserPausedTest = true
                         trainingplayingStringColorIndex = 1
-                        trainingaudioThread.async {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.2, qos: .userInitiated) {
                             traininglocalPlaying = 0
                             trainingstop()
                             traininguserPausedTest = true
                             trainingplayingStringColorIndex = 1
                         }
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.6, qos: .userInitiated) {
                             traininglocalPlaying = 0
                             trainingstop()
                             traininguserPausedTest = true
                             trainingplayingStringColorIndex = 1
                         }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, qos: .userInitiated) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.4, qos: .userInitiated) {
                             traininglocalPlaying = 0
                             trainingstop()
                             traininguserPausedTest = true
@@ -224,10 +241,11 @@ struct TrainingTestView: View {
                         Text("Pause Test")
                             .foregroundColor(.yellow)
                     }
-                    Spacer()
+       
                 }
-                .padding(.top, 40)
-                .padding(.bottom, 40)
+                    .padding(.top, 40)
+                    .padding(.bottom, 40)
+//            }
      
             
             Spacer()
@@ -245,38 +263,65 @@ struct TrainingTestView: View {
             Spacer()
             }
             .fullScreenCover(isPresented: $trainingshowTestCompletionSheet, content: {
-                VStack(alignment: .leading) {
-    
-                    Button(action: {
-                        trainingshowTestCompletionSheet.toggle()
-                    }, label: {
-                        Image(systemName: "xmark")
-                            .font(.headline)
-                            .padding(10)
-                            .foregroundColor(.red)
-                    })
-                    Spacer()
-                    Text("Take a moment for a break before exiting to continue with the next test segment")
-                        .foregroundColor(.blue)
-                        .font(.title)
-                        .padding()
+                ZStack{
+                    RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
+                    VStack(alignment: .leading) {
+                        
+                        Button(action: {
+                            trainingshowTestCompletionSheet.toggle()
+                        }, label: {
+                            Image(systemName: "xmark")
+                                .font(.headline)
+                                .padding(10)
+                                .foregroundColor(.red)
+                        })
+                        if trainingfullTestCompleted == false {
+                            Spacer()
+                            Text("Next you will get a chance to experience what taking the test is like. You will hear a tone playing. Whenever you hear a tone playing, press the green button to indicate you have heard the tone.")
+                                .foregroundColor(.white)
+                                .font(.title)
+                                .padding()
+                            Spacer()
+                            Text("Let's continue")
+                                .foregroundColor(.green)
+                                .font(.title)
+                                .padding()
+                        } else if trainingfullTestCompleted == true {
+                            Spacer()
+                            Text("Hopefully, you now have an idea of what you will hear and how to respond when you hear a tone playing.")
+                                .foregroundColor(.white)
+                                .font(.title)
+                                .padding()
+                            Spacer()
+                            Button {
+                                trainingTestCompleted = true
+                                trainingshowTestCompletionSheet.toggle()
+                            } label: {
+                                Text("Let's proceed with the test.")
+                                    .foregroundColor(.green)
+                                    .font(.title)
+                                    .padding()
+                            }
+                        }
+                        Spacer()
+                    }
                 }
             })
         }
         .onChange(of: trainingtestIsPlaying, perform: { trainingtestBoolValue in
-            if trainingtestBoolValue == true && trainingendTestSeries == false {
+            if trainingtestBoolValue == true && trainingendTestSeriesValue == false {
             //User is starting test for first time
                 audioSessionModel.setAudioSession()
                 traininglocalPlaying = 1
                 trainingplayingStringColorIndex = 0
                 traininguserPausedTest = false
-            } else if trainingtestBoolValue == false && trainingendTestSeries == false {
+            } else if trainingtestBoolValue == false && trainingendTestSeriesValue == false {
             // User is pausing test for firts time
                 trainingstop()
                 traininglocalPlaying = 0
                 trainingplayingStringColorIndex = 1
                 traininguserPausedTest = true
-            } else if trainingtestBoolValue == true && trainingendTestSeries == true {
+            } else if trainingtestBoolValue == true && trainingendTestSeriesValue == true {
                 trainingstop()
                 traininglocalPlaying = -1
                 trainingplayingStringColorIndex = 2
@@ -290,6 +335,7 @@ struct TrainingTestView: View {
             trainingactiveFrequency = training_samples[training_index]
             traininglocalHeard = 0
             traininglocalReversal = 0
+            trainingTestStarted = true
             if trainingplayingValue == 1{
                 trainingaudioThread.async {
                     trainingloadAndTestPresentation(sample: trainingactiveFrequency, gain: training_testGain)
@@ -309,6 +355,7 @@ struct TrainingTestView: View {
                 DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3.6) {
                     if self.traininglocalHeard == 1 {
                         traininglocalTestCount += 1
+                        trainingfullTestCompleted = trainingfullTestCompletedHoldingArray[training_index]
                         Task(priority: .userInitiated) {
                             await trainingresponseHeardArray()      //training_heardArray.append(1)
                             await traininglocalResponseTracking()
@@ -325,20 +372,23 @@ struct TrainingTestView: View {
                     }
                     else if training_heardArray.last == nil || self.traininglocalHeard == -1 {
                         traininglocalTestCount += 1
+                        trainingfullTestCompleted = trainingfullTestCompletedHoldingArray[training_index]
                         Task(priority: .userInitiated) {
                             await trainingheardArrayNormalize()
+                            await maxTrainingGainReachedReversal()
                             await trainingcount()
                             await traininglogNotPlaying()   //self.training_playing = -1
                             await trainingresetPlaying()
                             await trainingresetHeard()
                             await trainingnonResponseCounting()
                             await trainingcreateReversalHeardArray()
-                            await trainingcreateReversalGainArray()
+                            await createReversalGainArrayNonResponse()
                             await trainingcheckHeardReversalArrays()
                             await trainingreversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change    event
                         }
                     } else {
                         traininglocalTestCount = 1
+                        trainingfullTestCompleted = trainingfullTestCompletedHoldingArray[training_index]
                         Task(priority: .background) {
                             await trainingresetPlaying()
                             print("Fatal Error: Stopped in Task else")
@@ -357,13 +407,16 @@ struct TrainingTestView: View {
 //                        await trainingcheckHeardReversalArrays()
                         await trainingreversalDirection()
                         await trainingreversalComplexAction()
-                        await trainingreversalsCompleteLogging()
+//                        await trainingreversalsCompleteLogging()
 //                        await trainingprintReversalGain()
 //                        await trainingprintData()
 //                        await trainingprintReversalData()
-                        await trainingconcatenateFinalArrays()
+                        
+//                        await trainingconcatenateFinalArrays()
+                        
 //                        await trainingprintConcatenatedArrays()
-                        await trainingsaveFinalStoredArrays()
+                        
+//                        await trainingsaveFinalStoredArrays()
                         await trainingendTestSeries()
                         await trainingnewTestCycle()
                         await trainingrestartPresentation()
@@ -469,8 +522,8 @@ struct TrainingTestView: View {
     
     func trainingresponseHeardArray() async {
         training_heardArray.append(1)
-      self.trainingidxHA = training_heardArray.count
-      self.traininglocalStartingNonHeardArraySet = true
+        self.trainingidxHA = training_heardArray.count
+        self.traininglocalStartingNonHeardArraySet = true
     }
 
     func traininglocalResponseTracking() async {
@@ -487,36 +540,94 @@ struct TrainingTestView: View {
         }
     }
     
+    func maxTrainingGainReachedReversal() async {
+        if training_testGain >= 0.995 && trainingfirstHeardIsTrue == false && trainingsecondHeardIsTrue == false {
+            //remove last gain value from preeventlogging
+            training_testTestGain.removeLast(1)
+            //responseHeardArray
+            trainingfirstHeardResponseIndex = traininglocalTestCount
+            trainingfirstHeardIsTrue = true
+            //Append a gain value of 1.0, indicating sound not heard a max volume
+            training_testTestGain.append(1.0)
+            // Local Response Tracking
+            training_heardArray.append(1)
+            self.trainingidxHA = training_heardArray.count
+            self.traininglocalStartingNonHeardArraySet = true
+            await trainingresetNonResponseCount()
+            
+            
+            //run the rest of the functions to trigger next cycle
+//            await count()
+//            await logNotPlaying()           //envDataObjectModel_playing = -1
+//            await resetPlaying()
+//            await resetHeard()
+//            await resetNonResponseCount()
+//            await createReversalHeardArray()
+//            await createReversalGainArray()
+//            await checkHeardReversalArrays()
+//            await reversalStart()
+        } else if training_testGain >= 0.995 && trainingfirstHeardIsTrue == true && trainingsecondHeardIsTrue == false {
+            //remove last gain value from preeventlogging
+            training_testTestGain.removeLast(1)
+            //responseHeardArray
+            trainingsecondHeardResponseIndex = traininglocalTestCount
+            trainingsecondHeardIsTrue = true
+            //Append a gain value of 1.0, indicating sound not heard a max volume
+            training_testTestGain.append(1.0)
+            // Local Response Tracking
+            training_heardArray.append(1)
+            self.trainingidxHA = training_heardArray.count
+            self.traininglocalStartingNonHeardArraySet = true
+            await trainingresetNonResponseCount()
+            
+            //run the rest of the functions to trigger next cycle
+//            await count()
+//            await logNotPlaying()           //envDataObjectModel_playing = -1
+//            await resetPlaying()
+//            await resetHeard()
+//            await resetNonResponseCount()
+//            await createReversalHeardArray()
+//            await createReversalGainArray()
+//            await checkHeardReversalArrays()
+//            await reversalStart()
+        }
+    }
+    
+    
 //MARK: - THIS FUNCTION IS CAUSING ISSUES IN HEARD ARRAY. THE ISSUE IS THE DUAL IF STRUCTURE, NOT LINKED BY ELSE IF
     func trainingheardArrayNormalize() async {
-        trainingidxHA = training_heardArray.count
-        trainingidxForTest = training_indexForTest.count
-        trainingidxForTestNet1 = trainingidxForTest - 1
-        trainingisCountSame = trainingidxHA - trainingidxForTest
-        trainingheardArrayIdxAfnet1 = training_heardArray.index(after: trainingidxForTestNet1)
-      
-        if traininglocalStartingNonHeardArraySet == false {
-            training_heardArray.append(0)
-            self.traininglocalStartingNonHeardArraySet = true
+        if training_testGain < 0.995 {
             trainingidxHA = training_heardArray.count
-            trainingidxHAZero = trainingidxHA - trainingidxHA
-            trainingidxHAFirst = trainingidxHAZero + 1
+            trainingidxForTest = training_indexForTest.count
+            trainingidxForTestNet1 = trainingidxForTest - 1
             trainingisCountSame = trainingidxHA - trainingidxForTest
             trainingheardArrayIdxAfnet1 = training_heardArray.index(after: trainingidxForTestNet1)
-        } else if traininglocalStartingNonHeardArraySet == true {
-            if trainingisCountSame != 0 && trainingheardArrayIdxAfnet1 != 1 {
+            
+            if traininglocalStartingNonHeardArraySet == false {
                 training_heardArray.append(0)
+                self.traininglocalStartingNonHeardArraySet = true
                 trainingidxHA = training_heardArray.count
                 trainingidxHAZero = trainingidxHA - trainingidxHA
                 trainingidxHAFirst = trainingidxHAZero + 1
                 trainingisCountSame = trainingidxHA - trainingidxForTest
                 trainingheardArrayIdxAfnet1 = training_heardArray.index(after: trainingidxForTestNet1)
-
+            } else if traininglocalStartingNonHeardArraySet == true {
+                if trainingisCountSame != 0 && trainingheardArrayIdxAfnet1 != 1 {
+                    training_heardArray.append(0)
+                    trainingidxHA = training_heardArray.count
+                    trainingidxHAZero = trainingidxHA - trainingidxHA
+                    trainingidxHAFirst = trainingidxHAZero + 1
+                    trainingisCountSame = trainingidxHA - trainingidxForTest
+                    trainingheardArrayIdxAfnet1 = training_heardArray.index(after: trainingidxForTestNet1)
+                    
+                } else {
+                    print("Error in arrayNormalization else if isCountSame && heardAIAFnet1 if segment")
+                }
             } else {
-                print("Error in arrayNormalization else if isCountSame && heardAIAFnet1 if segment")
+                print("Critial Error in Heard Array Count and or Values")
             }
         } else {
-            print("Critial Error in Heard Array Count and or Values")
+            print("!!!Critical Max Gain Reached, logging 1.0 for no response to sound")
         }
     }
       
@@ -569,14 +680,23 @@ extension TrainingTestView {
         case traininglastError
         case traininglastUnexpected(code: Int)
     }
-
+    
     func trainingcreateReversalHeardArray() async {
         training_reversalHeard.append(training_heardArray[trainingidxHA-1])
         self.trainingidxReversalHeardCount = training_reversalHeard.count
     }
-        
+    
     func trainingcreateReversalGainArray() async {
         training_reversalGain.append(training_testTestGain[trainingidxHA-1])
+    }
+    
+    func createReversalGainArrayNonResponse() async {
+        if training_testGain < 0.995 {
+            //        envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
+            training_reversalGain.append(training_testGain)
+        } else if training_testGain >= 0.995 {
+            training_reversalGain.append(1.0)
+        }
     }
     
     func trainingcheckHeardReversalArrays() async {
@@ -610,8 +730,8 @@ extension TrainingTestView {
         } else if trainingr01NewGain <= 0.0 {
             training_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if trainingr01NewGain >= 1.0 {
-            training_testGain = 1.0
+        } else if trainingr01NewGain >= 0.995 {
+            training_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfOne Logic")
@@ -626,8 +746,8 @@ extension TrainingTestView {
         } else if trainingr02NewGain <= 0.0 {
             training_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if trainingr02NewGain >= 1.0 {
-            training_testGain = 1.0
+        } else if trainingr02NewGain >= 0.995 {
+            training_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfTwo Logic")
@@ -642,8 +762,8 @@ extension TrainingTestView {
         } else if trainingr03NewGain <= 0.0 {
             training_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if trainingr03NewGain >= 1.0 {
-            training_testGain = 1.0
+        } else if trainingr03NewGain >= 0.995 {
+            training_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfThree Logic")
@@ -658,8 +778,8 @@ extension TrainingTestView {
         } else if trainingr04NewGain <= 0.0 {
             training_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if trainingr04NewGain >= 1.0 {
-            training_testGain = 1.0
+        } else if trainingr04NewGain >= 0.995 {
+            training_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfFour Logic")
@@ -674,8 +794,8 @@ extension TrainingTestView {
         } else if trainingr05NewGain <= 0.0 {
             training_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if trainingr05NewGain >= 1.0 {
-            training_testGain = 1.0
+        } else if trainingr05NewGain >= 0.995 {
+            training_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfFive Logic")
@@ -690,8 +810,8 @@ extension TrainingTestView {
         } else if trainingr10NewGain <= 0.0 {
             training_testGain = 0.00001
             print("!!!Fatal Zero Gain Catch")
-        } else if trainingr10NewGain >= 1.0 {
-            training_testGain = 1.0
+        } else if trainingr10NewGain >= 0.995 {
+            training_testGain = 0.995
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfTen Logic")
@@ -747,16 +867,16 @@ extension TrainingTestView {
     }
     
     func trainingreversalHeardCount1() async {
-       await trainingreversalAction()
-   }
-            
+        await trainingreversalAction()
+    }
+    
     func trainingcheck2PositiveSeriesReversals() async {
         if training_reversalHeard[trainingidxHA-2] == 1 && training_reversalHeard[trainingidxHA-1] == 1 {
             print("reversal - check2PositiveSeriesReversals")
             print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
         }
     }
-
+    
     func trainingcheckTwoNegativeSeriesReversals() async {
         if training_reversalHeard.count >= 3 && training_reversalHeard[trainingidxHA-2] == 0 && training_reversalHeard[trainingidxHA-1] == 0 {
             await trainingreversalOfFour()
@@ -782,7 +902,7 @@ extension TrainingTestView {
         trainingsecondHeardResponseIndex = Int()
         trainingsecondHeardIsTrue = false
     }
-
+    
     func trainingreversalsCompleteLogging() async {
         if trainingsecondHeardIsTrue == true {
             self.traininglocalReversalEnd = 1
@@ -790,7 +910,7 @@ extension TrainingTestView {
             self.trainingfirstGain = training_reversalGain[trainingfirstHeardResponseIndex-1]
             self.trainingsecondGain = training_reversalGain[trainingsecondHeardResponseIndex-1]
             print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
-
+            
             let trainingdelta = trainingfirstGain - trainingsecondGain
             let trainingavg = (trainingfirstGain + trainingsecondGain)/2
             
@@ -819,34 +939,34 @@ extension TrainingTestView {
                 print("average Gain: \(training_averageGain)")
             }
         } else if trainingsecondHeardIsTrue == false {
-                print("Contine, second hear is true = false")
+            print("Contine, second hear is true = false")
         } else {
-                print("Critical error in reversalsCompletLogging Logic")
+            print("Critical error in reversalsCompletLogging Logic")
         }
     }
-
-    func trainingprintReversalData() async {
-        print("--------Reversal Values Logged-------------")
-        print("indexForTest: \(training_indexForTest)")
-        print("Test Pan: \(training_testPan)")
-        print("New TestGain: \(training_testTestGain)")
-        print("reversalFrequency: \(trainingactiveFrequency)")
-        print("testCount: \(training_testCount)")
-        print("heardArray: \(training_heardArray)")
-        print("reversalHeard: \(training_reversalHeard)")
-        print("FirstGain: \(trainingfirstGain)")
-        print("SecondGain: \(trainingsecondGain)")
-        print("AverageGain: \(training_averageGain)")
-        print("------------------------------------------")
-    }
-        
+    
+//    func trainingprintReversalData() async {
+//        print("--------Reversal Values Logged-------------")
+//        print("indexForTest: \(training_indexForTest)")
+//        print("Test Pan: \(training_testPan)")
+//        print("New TestGain: \(training_testTestGain)")
+//        print("reversalFrequency: \(trainingactiveFrequency)")
+//        print("testCount: \(training_testCount)")
+//        print("heardArray: \(training_heardArray)")
+//        print("reversalHeard: \(training_reversalHeard)")
+//        print("FirstGain: \(trainingfirstGain)")
+//        print("SecondGain: \(trainingsecondGain)")
+//        print("AverageGain: \(training_averageGain)")
+//        print("------------------------------------------")
+//    }
+    
     func trainingrestartPresentation() async {
-        if trainingendTestSeries == false {
+        if trainingendTestSeriesValue == false {
             traininglocalPlaying = 1
-            trainingendTestSeries = false
-        } else if trainingendTestSeries == true {
+            trainingendTestSeriesValue = false
+        } else if trainingendTestSeriesValue == true {
             traininglocalPlaying = -1
-            trainingendTestSeries = true
+            trainingendTestSeriesValue = true
             trainingshowTestCompletionSheet = true
             trainingplayingStringColorIndex = 2
         }
@@ -857,6 +977,7 @@ extension TrainingTestView {
             training_heardArray.removeAll()
             training_testCount.removeAll()
             training_reversalHeard.removeAll()
+            training_reversalGain.removeAll()
             training_averageGain = Float()
             training_reversalDirection = Float()
             traininglocalStartingNonHeardArraySet = false
@@ -871,35 +992,71 @@ extension TrainingTestView {
         })
     }
     
+    func startNextTestCycle() async {
+        await trainingwipeArrays()
+        trainingshowTestCompletionSheet.toggle()
+        trainingstartTooHigh = 0
+        traininglocalMarkNewTestCycle = 0
+        traininglocalReversalEnd = 0
+        training_index = training_index + 1
+//        envDataObjectModel_eptaSamplesCountArrayIdx += 1
+        training_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
+        trainingendTestSeriesValue = false
+        trainingshowTestCompletionSheet = false
+        trainingtestIsPlaying = true
+        traininguserPausedTest = false
+        trainingplayingStringColorIndex = 2
+//        envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
+        print(training_SamplesCountArray[training_index])
+        traininglocalPlaying = 1
+    }
+    
     func trainingnewTestCycle() async {
-        if traininglocalMarkNewTestCycle == 1 && traininglocalReversalEnd == 1 && training_index < training_eptaSamplesCount && trainingendTestSeries == false {
+        if traininglocalMarkNewTestCycle == 1 && traininglocalReversalEnd == 1 && training_index < training_SamplesCountArray[training_index] && trainingendTestSeriesValue == false {
             trainingstartTooHigh = 0
             traininglocalMarkNewTestCycle = 0
             traininglocalReversalEnd = 0
             training_index = training_index + 1
             training_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
-            trainingendTestSeries = false
-//                Task(priority: .userInitiated) {
+            trainingendTestSeriesValue = false
+            //                Task(priority: .userInitiated) {
             await trainingwipeArrays()
-//                }
-        } else if traininglocalMarkNewTestCycle == 1 && traininglocalReversalEnd == 1 && training_index == training_eptaSamplesCount && trainingendTestSeries == false {
-            trainingendTestSeries = true
+            //                }
+        } else if traininglocalMarkNewTestCycle == 1 && traininglocalReversalEnd == 1 && training_index == training_SamplesCountArray[training_index] && trainingendTestSeriesValue == false {
+            trainingendTestSeriesValue = true
             traininglocalPlaying = -1
+            training_SamplesCountArrayIdx += 1
+            print("=============================")
+            print("!!!!! End of Test Series!!!!!!")
+            print("=============================")
+            if trainingfullTestCompleted == true {
+                trainingfullTestCompleted = true
+                trainingendTestSeriesValue = true
+                traininglocalPlaying = -1
+                print("*****************************")
                 print("=============================")
-                print("!!!!! End of Test Series!!!!!!")
+                print("^^^^^^End of Full Test Series^^^^^^")
                 print("=============================")
+                print("*****************************")
+            } else if trainingfullTestCompleted == false {
+                trainingfullTestCompleted = false
+                trainingendTestSeriesValue = true
+                traininglocalPlaying = -1
+                training_SamplesCountArrayIdx += 1
+            }
         } else {
-//                print("Reversal Limit Not Hit")
-
+            //                print("Reversal Limit Not Hit")
+            
         }
     }
     
     func trainingendTestSeries() async {
-        if trainingendTestSeries == false {
+        if trainingendTestSeriesValue == false {
             //Do Nothing and continue
-            print("end Test Series = \(trainingendTestSeries)")
-        } else if trainingendTestSeries == true {
+            print("end Test Series = \(trainingendTestSeriesValue)")
+        } else if trainingendTestSeriesValue == true {
             trainingshowTestCompletionSheet = true
+            training_eptaSamplesCount = training_eptaSamplesCount + 1
             await trainingendTestSeriesStop()
         }
     }
@@ -910,78 +1067,79 @@ extension TrainingTestView {
         traininguserPausedTest = true
         trainingplayingStringColorIndex = 2
         
-        trainingaudioThread.async {
-            traininglocalPlaying = 0
-            trainingstop()
-            traininguserPausedTest = true
-            trainingplayingStringColorIndex = 2
-        }
-        
-        DispatchQueue.main.async {
-            traininglocalPlaying = 0
-            trainingstop()
-            traininguserPausedTest = true
-            trainingplayingStringColorIndex = 2
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, qos: .userInitiated) {
-            traininglocalPlaying = 0
-            trainingstop()
-            traininguserPausedTest = true
-            trainingplayingStringColorIndex = 2
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3, qos: .userInitiated) {
-            traininglocalPlaying = -1
-            trainingstop()
-            traininguserPausedTest = true
-            trainingplayingStringColorIndex = 2
-        }
+//        trainingaudioThread.async {
+//            traininglocalPlaying = 0
+//            trainingstop()
+//            traininguserPausedTest = true
+//            trainingplayingStringColorIndex = 2
+//        }
+//
+//        DispatchQueue.main.async {
+//            traininglocalPlaying = 0
+//            trainingstop()
+//            traininguserPausedTest = true
+//            trainingplayingStringColorIndex = 2
+//        }
+//
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, qos: .userInitiated) {
+//            traininglocalPlaying = 0
+//            trainingstop()
+//            traininguserPausedTest = true
+//            trainingplayingStringColorIndex = 2
+//        }
+//
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3, qos: .userInitiated) {
+//            traininglocalPlaying = -1
+//            trainingstop()
+//            traininguserPausedTest = true
+//            trainingplayingStringColorIndex = 2
+//        }
     }
+}
     
-    func trainingconcatenateFinalArrays() async {
-        if traininglocalMarkNewTestCycle == 1 && traininglocalReversalEnd == 1 {
-            training_finalStoredIndex.append(contentsOf: [100000000] + training_indexForTest)
-            training_finalStoredTestPan.append(contentsOf: [100000000] + training_testPan)
-            training_finalStoredTestTestGain.append(contentsOf: [1000000.0] + training_testTestGain)
-            training_finalStoredFrequency.append(contentsOf: ["100000000"] + [String(trainingactiveFrequency)])
-            training_finalStoredTestCount.append(contentsOf: [100000000] + training_testCount)
-            training_finalStoredHeardArray.append(contentsOf: [100000000] + training_heardArray)
-            training_finalStoredReversalHeard.append(contentsOf: [100000000] + training_reversalHeard)
-            training_finalStoredFirstGain.append(contentsOf: [1000000.0] + [trainingfirstGain])
-            training_finalStoredSecondGain.append(contentsOf: [1000000.0] + [trainingsecondGain])
-            training_finalStoredAverageGain.append(contentsOf: [1000000.0] + [training_averageGain])
-        }
-    }
-    
-    func trainingprintConcatenatedArrays() async {
-        print("finalStoredIndex: \(training_finalStoredIndex)")
-        print("finalStoredTestPan: \(training_finalStoredTestPan)")
-        print("finalStoredTestTestGain: \(training_finalStoredTestTestGain)")
-        print("finalStoredFrequency: \(training_finalStoredFrequency)")
-        print("finalStoredTestCount: \(training_finalStoredTestCount)")
-        print("finalStoredHeardArray: \(training_finalStoredHeardArray)")
-        print("finalStoredReversalHeard: \(training_finalStoredReversalHeard)")
-        print("finalStoredFirstGain: \(training_finalStoredFirstGain)")
-        print("finalStoredSecondGain: \(training_finalStoredSecondGain)")
-        print("finalStoredAverageGain: \(training_finalStoredAverageGain)")
-    }
-        
-    func trainingsaveFinalStoredArrays() async {
-        if traininglocalMarkNewTestCycle == 1 && traininglocalReversalEnd == 1 {
-            DispatchQueue.global(qos: .userInitiated).async {
-                Task(priority: .userInitiated) {
-                    await trainingwriteEHA1DetailedResultsToCSV()
-                    await trainingwriteEHA1SummarydResultsToCSV()
-                    await trainingwriteEHA1InputDetailedResultsToCSV()
-                    await trainingwriteEHA1InputDetailedResultsToCSV()
-                    await traininggetEHAP1Data()
-                    await trainingsaveEHA1ToJSON()
-        //                await training_uploadSummaryResultsTest()
-                }
-            }
-        }
-    }
+//    func trainingconcatenateFinalArrays() async {
+//        if traininglocalMarkNewTestCycle == 1 && traininglocalReversalEnd == 1 {
+//            training_finalStoredIndex.append(contentsOf: [100000000] + training_indexForTest)
+//            training_finalStoredTestPan.append(contentsOf: [100000000] + training_testPan)
+//            training_finalStoredTestTestGain.append(contentsOf: [1000000.0] + training_testTestGain)
+//            training_finalStoredFrequency.append(contentsOf: ["100000000"] + [String(trainingactiveFrequency)])
+//            training_finalStoredTestCount.append(contentsOf: [100000000] + training_testCount)
+//            training_finalStoredHeardArray.append(contentsOf: [100000000] + training_heardArray)
+//            training_finalStoredReversalHeard.append(contentsOf: [100000000] + training_reversalHeard)
+//            training_finalStoredFirstGain.append(contentsOf: [1000000.0] + [trainingfirstGain])
+//            training_finalStoredSecondGain.append(contentsOf: [1000000.0] + [trainingsecondGain])
+//            training_finalStoredAverageGain.append(contentsOf: [1000000.0] + [training_averageGain])
+//        }
+//    }
+//
+//    func trainingprintConcatenatedArrays() async {
+//        print("finalStoredIndex: \(training_finalStoredIndex)")
+//        print("finalStoredTestPan: \(training_finalStoredTestPan)")
+//        print("finalStoredTestTestGain: \(training_finalStoredTestTestGain)")
+//        print("finalStoredFrequency: \(training_finalStoredFrequency)")
+//        print("finalStoredTestCount: \(training_finalStoredTestCount)")
+//        print("finalStoredHeardArray: \(training_finalStoredHeardArray)")
+//        print("finalStoredReversalHeard: \(training_finalStoredReversalHeard)")
+//        print("finalStoredFirstGain: \(training_finalStoredFirstGain)")
+//        print("finalStoredSecondGain: \(training_finalStoredSecondGain)")
+//        print("finalStoredAverageGain: \(training_finalStoredAverageGain)")
+//    }
+//
+//    func trainingsaveFinalStoredArrays() async {
+//        if traininglocalMarkNewTestCycle == 1 && traininglocalReversalEnd == 1 {
+//            DispatchQueue.global(qos: .userInitiated).async {
+//                Task(priority: .userInitiated) {
+//                    await trainingwriteEHA1DetailedResultsToCSV()
+//                    await trainingwriteEHA1SummarydResultsToCSV()
+//                    await trainingwriteEHA1InputDetailedResultsToCSV()
+//                    await trainingwriteEHA1InputDetailedResultsToCSV()
+//                    await traininggetEHAP1Data()
+//                    await trainingsaveEHA1ToJSON()
+//        //                await training_uploadSummaryResultsTest()
+//                }
+//            }
+//        }
+//    }
     
 
     
@@ -1022,199 +1180,199 @@ extension TrainingTestView {
 //extension EHATTSTestPart1View {
 //MARK: -JSON and CSV Writing
     
-    func traininggetEHAP1Data() async {
-        guard let trainingdata = await traininggetEHAP1JSONData() else { return }
-        print("Json Data:")
-        print(trainingdata)
-        let trainingjsonString = String(data: trainingdata, encoding: .utf8)
-        print(trainingjsonString!)
-        do {
-        self.trainingsaveFinalResults = try JSONDecoder().decode(trainingSaveFinalResults.self, from: trainingdata)
-            print("JSON GetData Run")
-            print("data: \(trainingdata)")
-        } catch let error {
-            print("error decoding \(error)")
-        }
-    }
-    
-    func traininggetEHAP1JSONData() async -> Data? {
-        let trainingsaveFinalResults = trainingSaveFinalResults(
-            jsonName: "Jeff",
-            jsonAge: 36,
-            jsonSex: 1,
-            jsonEmail: "blank@blank.com",
-            json1kHzRightEarHL: 1.5,
-            json1kHzLeftEarHL: 0.5,
-            json1kHzIntraEarDeltaHL: 1.0,
-            jsonPhonCurve: 2,
-            jsonReferenceCurve: 7,
-            jsonSystemVoluem: 100.00,
-            jsonActualFrequency: 1.000,
-            jsonFrequency: [trainingactiveFrequency],
-            jsonPan: training_finalStoredTestPan,
-            jsonStoredIndex: training_finalStoredIndex,
-            jsonStoredTestPan: training_finalStoredTestPan,
-            jsonStoredTestTestGain: training_finalStoredTestTestGain,
-            jsonStoredTestCount: training_finalStoredTestCount,
-            jsonStoredHeardArray: training_finalStoredHeardArray,
-            jsonStoredReversalHeard: training_finalStoredReversalHeard,
-            jsonStoredFirstGain: training_finalStoredFirstGain,
-            jsonStoredSecondGain: training_finalStoredSecondGain,
-            jsonStoredAverageGain: training_finalStoredAverageGain)
-
-        let trainingjsonData = try? JSONEncoder().encode(trainingsaveFinalResults)
-        print("saveFinalResults: \(trainingsaveFinalResults)")
-        print("Json Encoded \(trainingjsonData!)")
-        return trainingjsonData
-    }
-
-    func trainingsaveEHA1ToJSON() async {
-        // !!!This saves to device directory, whish is likely what is desired
-        let trainingpaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let trainingDocumentsDirectory = trainingpaths[0]
-        print("trainingDocumentsDirectory: \(trainingDocumentsDirectory)")
-        let trainingFilePaths = trainingDocumentsDirectory.appendingPathComponent(filetrainingName)
-        print(trainingFilePaths)
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        do {
-            let trainingjsonData = try encoder.encode(trainingsaveFinalResults)
-            print(trainingjsonData)
-          
-            try trainingjsonData.write(to: trainingFilePaths)
-        } catch {
-            print("Error writing EHAP1 to JSON file: \(error)")
-        }
-    }
-
-    func trainingwriteEHA1DetailedResultsToCSV() async {
-        let trainingstringFinalStoredIndex = "finalStoredIndex," + training_finalStoredIndex.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredTestPan = "finalStoredTestPan," + training_finalStoredTestPan.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredTestTestGain = "finalStoredTestTestGain," + training_finalStoredTestTestGain.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredFrequency = "finalStoredFrequency," + [trainingactiveFrequency].map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredTestCount = "finalStoredTestCount," + training_finalStoredTestCount.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredHeardArray = "finalStoredHeardArray," + training_finalStoredHeardArray.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredReversalHeard = "finalStoredReversalHeard," + training_finalStoredReversalHeard.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredPan = "finalStoredPan," + training_testPan.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredFirstGain = "finalStoredFirstGain," + training_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredSecondGain = "finalStoredSecondGain," + training_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredAverageGain = "finalStoredAverageGain," + training_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
-        
-        do {
-            let csvtrainingDetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
-            let csvtrainingDetailDocumentsDirectory = csvtrainingDetailPath
-//                print("CSV DocumentsDirectory: \(csvEHAP1DetailDocumentsDirectory)")
-            let csvtrainingDetailFilePath = csvtrainingDetailDocumentsDirectory.appendingPathComponent(detailedtrainingCSVName)
-            print(csvtrainingDetailFilePath)
-            
-            let writer = try CSVWriter(fileURL: csvtrainingDetailFilePath, append: false)
-            
-            try writer.write(row: [trainingstringFinalStoredIndex])
-            try writer.write(row: [trainingstringFinalStoredTestPan])
-            try writer.write(row: [trainingstringFinalStoredTestTestGain])
-            try writer.write(row: [trainingstringFinalStoredFrequency])
-            try writer.write(row: [trainingstringFinalStoredTestCount])
-            try writer.write(row: [trainingstringFinalStoredHeardArray])
-            try writer.write(row: [trainingstringFinalStoredReversalHeard])
-            try writer.write(row: [trainingstringFinalStoredPan])
-            try writer.write(row: [trainingstringFinalStoredFirstGain])
-            try writer.write(row: [trainingstringFinalStoredSecondGain])
-            try writer.write(row: [trainingstringFinalStoredAverageGain])
+//    func traininggetEHAP1Data() async {
+//        guard let trainingdata = await traininggetEHAP1JSONData() else { return }
+//        print("Json Data:")
+//        print(trainingdata)
+//        let trainingjsonString = String(data: trainingdata, encoding: .utf8)
+//        print(trainingjsonString!)
+//        do {
+//        self.trainingsaveFinalResults = try JSONDecoder().decode(trainingSaveFinalResults.self, from: trainingdata)
+//            print("JSON GetData Run")
+//            print("data: \(trainingdata)")
+//        } catch let error {
+//            print("error decoding \(error)")
+//        }
+//    }
 //
-//                print("CVS EHAP1 Detailed Writer Success")
-        } catch {
-            print("CVSWriter EHAP1 Detailed Error or Error Finding File for Detailed CSV \(error)")
-        }
-    }
-
-    func trainingwriteEHA1SummarydResultsToCSV() async {
-         let trainingstringFinalStoredResultsFrequency = "finalStoredResultsFrequency," + [trainingactiveFrequency].map { String($0) }.joined(separator: ",")
-         let trainingstringFinalStoredTestPan = "finalStoredTestPan," + training_testPan.map { String($0) }.joined(separator: ",")
-         let trainingstringFinalStoredFirstGain = "finalStoredFirstGain," + training_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
-         let trainingstringFinalStoredSecondGain = "finalStoredSecondGain," + training_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
-         let trainingstringFinalStoredAverageGain = "finalStoredAverageGain," + training_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
-        
-         do {
-             let csvtrainingSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
-             let csvtrainingSummaryDocumentsDirectory = csvtrainingSummaryPath
-//                 print("CSV Summary EHA Part 1 DocumentsDirectory: \(csvEHAP1SummaryDocumentsDirectory)")
-             let csvtrainingSummaryFilePath = csvtrainingSummaryDocumentsDirectory.appendingPathComponent(summarytrainingCSVName)
-             print(csvtrainingSummaryFilePath)
-             let writer = try CSVWriter(fileURL: csvtrainingSummaryFilePath, append: false)
-             try writer.write(row: [trainingstringFinalStoredResultsFrequency])
-             try writer.write(row: [trainingstringFinalStoredTestPan])
-             try writer.write(row: [trainingstringFinalStoredFirstGain])
-             try writer.write(row: [trainingstringFinalStoredSecondGain])
-             try writer.write(row: [trainingstringFinalStoredAverageGain])
+//    func traininggetEHAP1JSONData() async -> Data? {
+//        let trainingsaveFinalResults = trainingSaveFinalResults(
+//            jsonName: "Jeff",
+//            jsonAge: 36,
+//            jsonSex: 1,
+//            jsonEmail: "blank@blank.com",
+//            json1kHzRightEarHL: 1.5,
+//            json1kHzLeftEarHL: 0.5,
+//            json1kHzIntraEarDeltaHL: 1.0,
+//            jsonPhonCurve: 2,
+//            jsonReferenceCurve: 7,
+//            jsonSystemVoluem: 100.00,
+//            jsonActualFrequency: 1.000,
+//            jsonFrequency: [trainingactiveFrequency],
+//            jsonPan: training_finalStoredTestPan,
+//            jsonStoredIndex: training_finalStoredIndex,
+//            jsonStoredTestPan: training_finalStoredTestPan,
+//            jsonStoredTestTestGain: training_finalStoredTestTestGain,
+//            jsonStoredTestCount: training_finalStoredTestCount,
+//            jsonStoredHeardArray: training_finalStoredHeardArray,
+//            jsonStoredReversalHeard: training_finalStoredReversalHeard,
+//            jsonStoredFirstGain: training_finalStoredFirstGain,
+//            jsonStoredSecondGain: training_finalStoredSecondGain,
+//            jsonStoredAverageGain: training_finalStoredAverageGain)
 //
-//                 print("CVS Summary EHA Part 1 Data Writer Success")
-         } catch {
-             print("CVSWriter Summary EHA Part 1 Data Error or Error Finding File for Detailed CSV \(error)")
-         }
-    }
-
-
-    func trainingwriteEHA1InputDetailedResultsToCSV() async {
-        let trainingstringFinalStoredIndex = training_finalStoredIndex.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredTestPan = training_finalStoredTestPan.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredTestTestGain = training_finalStoredTestTestGain.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredTestCount = training_finalStoredTestCount.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredHeardArray = training_finalStoredHeardArray.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredReversalHeard = training_finalStoredReversalHeard.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredResultsFrequency = [trainingactiveFrequency].map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredPan = training_testPan.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredFirstGain = training_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredSecondGain = training_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
-        let trainingstringFinalStoredAverageGain = training_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
-
-        do {
-            let csvInputtrainingDetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
-            let csvInputtrainingDetailDocumentsDirectory = csvInputtrainingDetailPath
-//                print("CSV Input EHAP1 Detail DocumentsDirectory: \(csvInputEHAP1DetailDocumentsDirectory)")
-            let csvInputtrainingDetailFilePath = csvInputtrainingDetailDocumentsDirectory.appendingPathComponent(inputtrainingDetailedCSVName)
-            print(csvInputtrainingDetailFilePath)
-            let writer = try CSVWriter(fileURL: csvInputtrainingDetailFilePath, append: false)
-            try writer.write(row: [trainingstringFinalStoredIndex])
-            try writer.write(row: [trainingstringFinalStoredTestPan])
-            try writer.write(row: [trainingstringFinalStoredTestTestGain])
-            try writer.write(row: [trainingstringFinalStoredTestCount])
-            try writer.write(row: [trainingstringFinalStoredHeardArray])
-            try writer.write(row: [trainingstringFinalStoredReversalHeard])
-            try writer.write(row: [trainingstringFinalStoredResultsFrequency])
-            try writer.write(row: [trainingstringFinalStoredPan])
-            try writer.write(row: [trainingstringFinalStoredFirstGain])
-            try writer.write(row: [trainingstringFinalStoredSecondGain])
-            try writer.write(row: [trainingstringFinalStoredAverageGain])
+//        let trainingjsonData = try? JSONEncoder().encode(trainingsaveFinalResults)
+//        print("saveFinalResults: \(trainingsaveFinalResults)")
+//        print("Json Encoded \(trainingjsonData!)")
+//        return trainingjsonData
+//    }
 //
-//                print("CVS Input EHA Part 1Detailed Writer Success")
-        } catch {
-            print("CVSWriter Input EHA Part 1 Detailed Error or Error Finding File for Input Detailed CSV \(error)")
-        }
-    }
-
-    func trainingwriteEHA1InputSummarydResultsToCSV() async {
-         let trainingstringFinalStoredResultsFrequency = [trainingactiveFrequency].map { String($0) }.joined(separator: ",")
-         let trainingstringFinalStoredTestPan = training_finalStoredTestPan.map { String($0) }.joined(separator: ",")
-         let trainingstringFinalStoredFirstGain = training_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
-         let trainingstringFinalStoredSecondGain = training_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
-         let trainingstringFinalStoredAverageGain = training_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
-         
-         do {
-             let csvtrainingInputSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
-             let csvtrainingInputSummaryDocumentsDirectory = csvtrainingInputSummaryPath
-             print("CSV Input training Summary DocumentsDirectory: \(csvtrainingInputSummaryDocumentsDirectory)")
-             let csvtrainingInputSummaryFilePath = csvtrainingInputSummaryDocumentsDirectory.appendingPathComponent(inputtrainingSummaryCSVName)
-             print(csvtrainingInputSummaryFilePath)
-             let writer = try CSVWriter(fileURL: csvtrainingInputSummaryFilePath, append: false)
-             try writer.write(row: [trainingstringFinalStoredResultsFrequency])
-             try writer.write(row: [trainingstringFinalStoredTestPan])
-             try writer.write(row: [trainingstringFinalStoredFirstGain])
-             try writer.write(row: [trainingstringFinalStoredSecondGain])
-             try writer.write(row: [trainingstringFinalStoredAverageGain])
+//    func trainingsaveEHA1ToJSON() async {
+//        // !!!This saves to device directory, whish is likely what is desired
+//        let trainingpaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+//        let trainingDocumentsDirectory = trainingpaths[0]
+//        print("trainingDocumentsDirectory: \(trainingDocumentsDirectory)")
+//        let trainingFilePaths = trainingDocumentsDirectory.appendingPathComponent(filetrainingName)
+//        print(trainingFilePaths)
+//        let encoder = JSONEncoder()
+//        encoder.outputFormatting = .prettyPrinted
+//        do {
+//            let trainingjsonData = try encoder.encode(trainingsaveFinalResults)
+//            print(trainingjsonData)
 //
-//                 print("CVS Input EHA Part 1 Summary Data Writer Success")
-         } catch {
-             print("CVSWriter Input EHA Part 1 Summary Data Error or Error Finding File for Input Summary CSV \(error)")
-         }
-    }
-}
+//            try trainingjsonData.write(to: trainingFilePaths)
+//        } catch {
+//            print("Error writing EHAP1 to JSON file: \(error)")
+//        }
+//    }
+//
+//    func trainingwriteEHA1DetailedResultsToCSV() async {
+//        let trainingstringFinalStoredIndex = "finalStoredIndex," + training_finalStoredIndex.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredTestPan = "finalStoredTestPan," + training_finalStoredTestPan.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredTestTestGain = "finalStoredTestTestGain," + training_finalStoredTestTestGain.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredFrequency = "finalStoredFrequency," + [trainingactiveFrequency].map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredTestCount = "finalStoredTestCount," + training_finalStoredTestCount.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredHeardArray = "finalStoredHeardArray," + training_finalStoredHeardArray.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredReversalHeard = "finalStoredReversalHeard," + training_finalStoredReversalHeard.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredPan = "finalStoredPan," + training_testPan.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredFirstGain = "finalStoredFirstGain," + training_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredSecondGain = "finalStoredSecondGain," + training_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredAverageGain = "finalStoredAverageGain," + training_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
+//
+//        do {
+//            let csvtrainingDetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+//            let csvtrainingDetailDocumentsDirectory = csvtrainingDetailPath
+////                print("CSV DocumentsDirectory: \(csvEHAP1DetailDocumentsDirectory)")
+//            let csvtrainingDetailFilePath = csvtrainingDetailDocumentsDirectory.appendingPathComponent(detailedtrainingCSVName)
+//            print(csvtrainingDetailFilePath)
+//
+//            let writer = try CSVWriter(fileURL: csvtrainingDetailFilePath, append: false)
+//
+//            try writer.write(row: [trainingstringFinalStoredIndex])
+//            try writer.write(row: [trainingstringFinalStoredTestPan])
+//            try writer.write(row: [trainingstringFinalStoredTestTestGain])
+//            try writer.write(row: [trainingstringFinalStoredFrequency])
+//            try writer.write(row: [trainingstringFinalStoredTestCount])
+//            try writer.write(row: [trainingstringFinalStoredHeardArray])
+//            try writer.write(row: [trainingstringFinalStoredReversalHeard])
+//            try writer.write(row: [trainingstringFinalStoredPan])
+//            try writer.write(row: [trainingstringFinalStoredFirstGain])
+//            try writer.write(row: [trainingstringFinalStoredSecondGain])
+//            try writer.write(row: [trainingstringFinalStoredAverageGain])
+////
+////                print("CVS EHAP1 Detailed Writer Success")
+//        } catch {
+//            print("CVSWriter EHAP1 Detailed Error or Error Finding File for Detailed CSV \(error)")
+//        }
+//    }
+//
+//    func trainingwriteEHA1SummarydResultsToCSV() async {
+//         let trainingstringFinalStoredResultsFrequency = "finalStoredResultsFrequency," + [trainingactiveFrequency].map { String($0) }.joined(separator: ",")
+//         let trainingstringFinalStoredTestPan = "finalStoredTestPan," + training_testPan.map { String($0) }.joined(separator: ",")
+//         let trainingstringFinalStoredFirstGain = "finalStoredFirstGain," + training_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
+//         let trainingstringFinalStoredSecondGain = "finalStoredSecondGain," + training_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
+//         let trainingstringFinalStoredAverageGain = "finalStoredAverageGain," + training_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
+//
+//         do {
+//             let csvtrainingSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+//             let csvtrainingSummaryDocumentsDirectory = csvtrainingSummaryPath
+////                 print("CSV Summary EHA Part 1 DocumentsDirectory: \(csvEHAP1SummaryDocumentsDirectory)")
+//             let csvtrainingSummaryFilePath = csvtrainingSummaryDocumentsDirectory.appendingPathComponent(summarytrainingCSVName)
+//             print(csvtrainingSummaryFilePath)
+//             let writer = try CSVWriter(fileURL: csvtrainingSummaryFilePath, append: false)
+//             try writer.write(row: [trainingstringFinalStoredResultsFrequency])
+//             try writer.write(row: [trainingstringFinalStoredTestPan])
+//             try writer.write(row: [trainingstringFinalStoredFirstGain])
+//             try writer.write(row: [trainingstringFinalStoredSecondGain])
+//             try writer.write(row: [trainingstringFinalStoredAverageGain])
+////
+////                 print("CVS Summary EHA Part 1 Data Writer Success")
+//         } catch {
+//             print("CVSWriter Summary EHA Part 1 Data Error or Error Finding File for Detailed CSV \(error)")
+//         }
+//    }
+//
+//
+//    func trainingwriteEHA1InputDetailedResultsToCSV() async {
+//        let trainingstringFinalStoredIndex = training_finalStoredIndex.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredTestPan = training_finalStoredTestPan.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredTestTestGain = training_finalStoredTestTestGain.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredTestCount = training_finalStoredTestCount.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredHeardArray = training_finalStoredHeardArray.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredReversalHeard = training_finalStoredReversalHeard.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredResultsFrequency = [trainingactiveFrequency].map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredPan = training_testPan.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredFirstGain = training_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredSecondGain = training_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
+//        let trainingstringFinalStoredAverageGain = training_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
+//
+//        do {
+//            let csvInputtrainingDetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+//            let csvInputtrainingDetailDocumentsDirectory = csvInputtrainingDetailPath
+////                print("CSV Input EHAP1 Detail DocumentsDirectory: \(csvInputEHAP1DetailDocumentsDirectory)")
+//            let csvInputtrainingDetailFilePath = csvInputtrainingDetailDocumentsDirectory.appendingPathComponent(inputtrainingDetailedCSVName)
+//            print(csvInputtrainingDetailFilePath)
+//            let writer = try CSVWriter(fileURL: csvInputtrainingDetailFilePath, append: false)
+//            try writer.write(row: [trainingstringFinalStoredIndex])
+//            try writer.write(row: [trainingstringFinalStoredTestPan])
+//            try writer.write(row: [trainingstringFinalStoredTestTestGain])
+//            try writer.write(row: [trainingstringFinalStoredTestCount])
+//            try writer.write(row: [trainingstringFinalStoredHeardArray])
+//            try writer.write(row: [trainingstringFinalStoredReversalHeard])
+//            try writer.write(row: [trainingstringFinalStoredResultsFrequency])
+//            try writer.write(row: [trainingstringFinalStoredPan])
+//            try writer.write(row: [trainingstringFinalStoredFirstGain])
+//            try writer.write(row: [trainingstringFinalStoredSecondGain])
+//            try writer.write(row: [trainingstringFinalStoredAverageGain])
+////
+////                print("CVS Input EHA Part 1Detailed Writer Success")
+//        } catch {
+//            print("CVSWriter Input EHA Part 1 Detailed Error or Error Finding File for Input Detailed CSV \(error)")
+//        }
+//    }
+//
+//    func trainingwriteEHA1InputSummarydResultsToCSV() async {
+//         let trainingstringFinalStoredResultsFrequency = [trainingactiveFrequency].map { String($0) }.joined(separator: ",")
+//         let trainingstringFinalStoredTestPan = training_finalStoredTestPan.map { String($0) }.joined(separator: ",")
+//         let trainingstringFinalStoredFirstGain = training_finalStoredFirstGain.map { String($0) }.joined(separator: ",")
+//         let trainingstringFinalStoredSecondGain = training_finalStoredSecondGain.map { String($0) }.joined(separator: ",")
+//         let trainingstringFinalStoredAverageGain = training_finalStoredAverageGain.map { String($0) }.joined(separator: ",")
+//
+//         do {
+//             let csvtrainingInputSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+//             let csvtrainingInputSummaryDocumentsDirectory = csvtrainingInputSummaryPath
+//             print("CSV Input training Summary DocumentsDirectory: \(csvtrainingInputSummaryDocumentsDirectory)")
+//             let csvtrainingInputSummaryFilePath = csvtrainingInputSummaryDocumentsDirectory.appendingPathComponent(inputtrainingSummaryCSVName)
+//             print(csvtrainingInputSummaryFilePath)
+//             let writer = try CSVWriter(fileURL: csvtrainingInputSummaryFilePath, append: false)
+//             try writer.write(row: [trainingstringFinalStoredResultsFrequency])
+//             try writer.write(row: [trainingstringFinalStoredTestPan])
+//             try writer.write(row: [trainingstringFinalStoredFirstGain])
+//             try writer.write(row: [trainingstringFinalStoredSecondGain])
+//             try writer.write(row: [trainingstringFinalStoredAverageGain])
+////
+////                 print("CVS Input EHA Part 1 Summary Data Writer Success")
+//         } catch {
+//             print("CVSWriter Input EHA Part 1 Summary Data Error or Error Finding File for Input Summary CSV \(error)")
+//         }
+//    }
+//}
