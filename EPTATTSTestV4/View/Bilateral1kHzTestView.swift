@@ -345,7 +345,7 @@ struct Bilateral1kHzTestView: View {
                     .padding(.bottom, 60)
                 }
      
-   
+                
             Text("Press if You Hear The Tone")
                 .fontWeight(.semibold)
                 .padding()

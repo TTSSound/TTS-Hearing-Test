@@ -62,6 +62,7 @@ struct TrainingTestView: View {
     }
     
     var audioSessionModel = AudioSessionModel()
+    var colorModel: ColorModel = ColorModel()
 
     @State var traininglocalHeard = 0
     @State var traininglocalPlaying = Int()    // Playing = 1. Stopped = -1
@@ -129,15 +130,20 @@ struct TrainingTestView: View {
     @State var trainingisCountSame = Int()
     @State var trainingheardArrayIdxAfnet1 = Int()
     @State var trainingtestIsPlaying: Bool = false
-    @State var trainingplayingString: [String] = ["", "Start or Restart Test", "Great Job, You've Completed This Test Segment"]
+    @State var trainingplayingString: [String] = ["", "Restart Test", "Great Job, You've Completed This Test Segment"]
     @State var trainingplayingStringColor: [Color] = [Color.clear, Color.yellow, Color.green]
+    
+    @State var trainingplayingAlternateStringColor: [Color] = [Color.clear, Color(red: 0.06666666666666667, green: 0.6549019607843137, blue: 0.7333333333333333), Color.white, Color.green]
+    @State var trainingTappingColorIndex = 0
+    @State var trainingTappingGesture: Bool = false
+    
     @State var trainingplayingStringColorIndex = 0
     @State var traininguserPausedTest: Bool = false
 
     @State var trainingTestCompleted: Bool = false
     
     @State var trainingfullTestCompleted: Bool = false
-    @State var trainingfullTestCompletedHoldingArray: [Bool] = [false, true]
+    @State var trainingfullTestCompletedHoldingArray: [Bool] = [false, false, true]
     @State var trainingTestStarted: Bool = false
     
     
@@ -151,68 +157,63 @@ struct TrainingTestView: View {
 
     let trainingheardThread = DispatchQueue(label: "BackGroundThread", qos: .userInitiated)
     let trainingarrayThread = DispatchQueue(label: "BackGroundPlayBack", qos: .background)
-    let trainingaudioThread = DispatchQueue(label: "AudioThread", qos: .background)
+    let trainingaudioThread = DispatchQueue(label: "AudioThread", qos: .userInitiated)
     let trainingpreEventThread = DispatchQueue(label: "PreeventThread", qos: .userInitiated)
     
     var body: some View {
  
         ZStack{
-            RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
+            colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+//            RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
             VStack {
                 Spacer()
                 if trainingfullTestCompleted == false {
-                    Text("Training Test")
+                    Text("Practice Test")
+                        .font(.title)
                         .fontWeight(.bold)
                         .padding()
                         .foregroundColor(.white)
                         .padding(.top, 40)
-                        .padding(.bottom, 40)
+                        .padding(.bottom, 20)
                 } else if trainingfullTestCompleted == true {
-                    NavigationLink("Training Complete, Press To Continue to Start Testing", destination: Bilateral1kHzTestView(), isActive: $trainingTestCompleted)
+                    NavigationLink("Training Complete, Press To Continue & Start Testing", destination: Bilateral1kHzTestView(), isActive: $trainingTestCompleted)
                         .padding()
                         .foregroundColor(.white)
                         .padding(.top, 40)
-                        .padding(.bottom, 40)
+                        .padding(.bottom, 20)
                 }
-                HStack {
-                    Spacer()
-                    Text(String(training_testGain))
-                        .fontWeight(.bold)
-                        .padding()
-                        .foregroundColor(.white)
-                        .padding(.top, 40)
-                        .padding(.bottom, 40)
-                    Spacer()
+
+                Spacer()
+                if trainingTestStarted == false {
                     Button {
-                        training_heardArray.removeAll()
-                        trainingpauseRestartTestCycle()
-                        audioSessionModel.setAudioSession()
-                        traininglocalPlaying = 1
-                        traininguserPausedTest = false
-                        trainingplayingStringColorIndex = 0
-                        print("Start Button Clicked. Playing = \(traininglocalPlaying)")
+                        Task(priority: .userInitiated) {
+                            audioSessionModel.setAudioSession()
+                            traininglocalPlaying = 1
+                            print("Start Button Clicked. Playing = \(traininglocalPlaying)")
+                        }
                     } label: {
-                        Text(trainingplayingString[trainingplayingStringColorIndex])
-                            .foregroundColor(trainingplayingStringColor[trainingplayingStringColorIndex])
+                        Text("Click to Start")
+                            .fontWeight(.bold)
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(colorModel.tiffanyBlue)
+                            .foregroundColor(.white)
+                            .cornerRadius(300)
                     }
-                    .padding(.top, 40)
-                    .padding(.bottom, 40)
-                    Spacer()
-                }
- 
-//                if trainingTestStarted == false {
-                    Text("Click to Start Training")
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
+
+                    Text("")
                         .fontWeight(.bold)
                         .padding()
-                        .foregroundColor(.green)
-                        .onTapGesture {
-                            Task(priority: .userInitiated) {
-                                audioSessionModel.setAudioSession()
-                                traininglocalPlaying = 1
-                                print("Start Button Clicked. Playing = \(traininglocalPlaying)")
-                            }
-                        }
-//                } else if trainingTestStarted == true {
+                        .frame(width: 200, height: 50, alignment: .center)
+                        .background(Color .clear)
+                        .foregroundColor(.clear)
+                        .cornerRadius(300)
+                        .padding(.top, 20)
+                        .padding(.bottom, 40)
+                    
+                } else if trainingTestStarted == true {
                     
                     Button {
                         traininglocalPlaying = 0
@@ -239,32 +240,62 @@ struct TrainingTestView: View {
                         }
                     } label: {
                         Text("Pause Test")
-                            .foregroundColor(.yellow)
+                            .fontWeight(.semibold)
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(Color .yellow)
+                            .foregroundColor(.black)
+                            .cornerRadius(300)
+                        
                     }
-       
-                }
-                    .padding(.top, 40)
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
+                    
+                    Button {
+                        training_heardArray.removeAll()
+                        trainingpauseRestartTestCycle()
+                        audioSessionModel.setAudioSession()
+                        traininglocalPlaying = 1
+                        traininguserPausedTest = false
+                        trainingplayingStringColorIndex = 0
+                        print("Start Button Clicked. Playing = \(traininglocalPlaying)")
+                    } label: {
+                        Text(trainingplayingString[trainingplayingStringColorIndex])
+                            .foregroundColor(trainingplayingAlternateStringColor[trainingplayingStringColorIndex+1])
+                            .fontWeight(.semibold)
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(trainingplayingAlternateStringColor[trainingplayingStringColorIndex])
+                            .cornerRadius(300)
+                    }
+                    .padding(.top, 20)
                     .padding(.bottom, 40)
-//            }
+                }
+
      
             
-            Spacer()
-            Text("Press if You Hear The Tone")
-                .fontWeight(.semibold)
-                .padding()
-                .frame(width: 300, height: 100, alignment: .center)
-                .background(Color .green)
-                .foregroundColor(.black)
-                .cornerRadius(300)
-                .onTapGesture(count: 1) {
+//            Spacer()
+                Button {
                     trainingheardThread.async{ self.traininglocalHeard = 1
                     }
+                } label: {
+                    Text("Press if You Hear The Tone")
+                        .fontWeight(.semibold)
+                        .padding()
+                        .frame(width: 300, height: 100, alignment: .center)
+                        .background(Color .green)
+                        .foregroundColor(.black)
+                        .cornerRadius(300)
                 }
+                .padding(.top, 20)
+                .padding(.bottom, 80)
+
             Spacer()
             }
             .fullScreenCover(isPresented: $trainingshowTestCompletionSheet, content: {
                 ZStack{
-                    RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
+                    colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+//                    RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
                     VStack(alignment: .leading) {
                         
                         Button(action: {
@@ -293,15 +324,29 @@ struct TrainingTestView: View {
                                 .font(.title)
                                 .padding()
                             Spacer()
-                            Button {
-                                trainingTestCompleted = true
-                                trainingshowTestCompletionSheet.toggle()
-                            } label: {
-                                Text("Let's proceed with the test.")
-                                    .foregroundColor(.green)
-                                    .font(.title)
-                                    .padding()
+                            Text("Let's proceed with the test.")
+                                .foregroundColor(.green)
+                                .font(.title)
+                                .padding()
+                                .padding(.bottom, 20)
+                            HStack{
+                                Spacer()
+                                Button {
+                                    trainingTestCompleted = true
+                                    trainingshowTestCompletionSheet.toggle()
+                                } label: {
+                                    Text("Continue")
+                                        .fontWeight(.semibold)
+                                        .padding()
+                                        .frame(width: 200, height: 50, alignment: .center)
+                                        .background(Color .green)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(300)
+                                }
+                                Spacer()
                             }
+                            .padding(.top, 20)
+                            .padding(.bottom, 40)
                         }
                         Spacer()
                     }
@@ -337,6 +382,7 @@ struct TrainingTestView: View {
             traininglocalReversal = 0
             trainingTestStarted = true
             if trainingplayingValue == 1{
+                
                 trainingaudioThread.async {
                     trainingloadAndTestPresentation(sample: trainingactiveFrequency, gain: training_testGain)
                     while trainingtestPlayer!.isPlaying == true && self.traininglocalHeard == 0 { }
@@ -402,21 +448,9 @@ struct TrainingTestView: View {
             if trainingreversalValue == 1 {
                 DispatchQueue.global(qos: .background).async {
                     Task(priority: .userInitiated) {
-//                        await trainingcreateReversalHeardArray()
-//                        await trainingcreateReversalGainArray()
-//                        await trainingcheckHeardReversalArrays()
                         await trainingreversalDirection()
                         await trainingreversalComplexAction()
-//                        await trainingreversalsCompleteLogging()
-//                        await trainingprintReversalGain()
-//                        await trainingprintData()
-//                        await trainingprintReversalData()
-                        
-//                        await trainingconcatenateFinalArrays()
-                        
-//                        await trainingprintConcatenatedArrays()
-                        
-//                        await trainingsaveFinalStoredArrays()
+                        await trainingreversalsCompleteLogging()
                         await trainingendTestSeries()
                         await trainingnewTestCycle()
                         await trainingrestartPresentation()
@@ -637,12 +671,6 @@ struct TrainingTestView: View {
         training_testCount.append(trainingidxTestCountUpdated)
     }
 
-//struct Bilateral1kHzTestView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        Bilateral1kHzTestView()
-//    }
-//}
-
     
 //    func arrayTesting() async {
 //        let arraySet1 = Int(training_testPan.count)
@@ -654,25 +682,25 @@ struct TrainingTestView: View {
 //        }
 //    }
     
-    func trainingprintData () async {
-        DispatchQueue.global(qos: .background).async {
-            print("Start printData)(")
-            print("--------Array Values Logged-------------")
-            print("testPan: \(training_testPan)")
-            print("testTestGain: \(training_testTestGain)")
-            print("frequency: \(training_frequency)")
-            print("testCount: \(training_testCount)")
-            print("heardArray: \(training_heardArray)")
-            print("---------------------------------------")
-        }
-    }
+//    func trainingprintData () async {
+//        DispatchQueue.global(qos: .background).async {
+//            print("Start printData)(")
+//            print("--------Array Values Logged-------------")
+//            print("testPan: \(training_testPan)")
+//            print("testTestGain: \(training_testTestGain)")
+//            print("frequency: \(training_frequency)")
+//            print("testCount: \(training_testCount)")
+//            print("heardArray: \(training_heardArray)")
+//            print("---------------------------------------")
+//        }
+//    }
 }
 
-//struct TrainingTestView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TrainingTestView()
-//    }
-//}
+struct TrainingTestView_Previews: PreviewProvider {
+    static var previews: some View {
+        TrainingTestView()
+    }
+}
 
 extension TrainingTestView {
     
@@ -859,12 +887,12 @@ extension TrainingTestView {
         }
     }
     
-    func trainingprintReversalGain() async {
-        DispatchQueue.global(qos: .background).async {
-            print("New Gain: \(training_testGain)")
-            print("Reversal Direcction: \(training_reversalDirection)")
-        }
-    }
+//    func trainingprintReversalGain() async {
+//        DispatchQueue.global(qos: .background).async {
+//            print("New Gain: \(training_testGain)")
+//            print("Reversal Direcction: \(training_reversalDirection)")
+//        }
+//    }
     
     func trainingreversalHeardCount1() async {
         await trainingreversalAction()
@@ -1024,6 +1052,7 @@ extension TrainingTestView {
             //                }
         } else if traininglocalMarkNewTestCycle == 1 && traininglocalReversalEnd == 1 && training_index == training_SamplesCountArray[training_index] && trainingendTestSeriesValue == false {
             trainingendTestSeriesValue = true
+            trainingfullTestCompleted = true
             traininglocalPlaying = -1
             training_SamplesCountArrayIdx += 1
             print("=============================")
