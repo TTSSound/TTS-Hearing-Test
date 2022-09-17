@@ -12,7 +12,6 @@ import CodableCSV
 struct BetaTestingLandingView: View {
     
     @StateObject var colorModel: ColorModel = ColorModel()
-//    @ObservedObject var testSelectLinkModel: TestSelectLinkModel = TestSelectLinkModel()
     
     @State var betaSexIdx = Int()
     @State var betaSexTitle = "Sex"
@@ -423,8 +422,8 @@ struct BetaTestingLandingView: View {
     
 }
 
-struct BetaTestingLandingView_Previews: PreviewProvider {
-    static var previews: some View {
-        BetaTestingLandingView()
-    }
-}
+//struct BetaTestingLandingView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        BetaTestingLandingView()
+//    }
+//}

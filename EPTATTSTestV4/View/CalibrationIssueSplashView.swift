@@ -10,8 +10,7 @@ import SwiftUI
 struct CalibrationIssueSplashView: View {
     
     @StateObject var colorModel: ColorModel = ColorModel()
-    @EnvironmentObject var deviceSelectionModel: DeviceSelectionModel
-    @EnvironmentObject var manualDeviceSelectionModel: ManualDeviceSelectionModel
+//    @EnvironmentObject var deviceSelectionModel: DeviceSelectionModel
     
     var body: some View {
         ZStack{
@@ -62,7 +61,6 @@ struct CalibrationIssueSplashView: View {
 //struct CalibrationIssueSplashView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        CalibrationIssueSplashView()
-//            .environmentObject(DeviceSelectionModel())
-//            .environmentObject(ManualDeviceSelectionModel())
+//    //            .environmentObject(DeviceSelectionModel())
 //    }
 //}

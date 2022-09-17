@@ -6,12 +6,23 @@
 //
 
 import SwiftUI
+import CodableCSV
+
+struct SaveSystemSettingsInterimStartEHA: Codable {
+    var jsonFinalInterimStartingEHASystemVolume = [Float]()
+    var jsonFinalInterimStartingEHASilentMode = Int()
+
+    enum CodingKeys: String, CodingKey {
+        case jsonFinalInterimStartingEHASystemVolume
+        case jsonFinalInterimStartingEHASilentMode
+    }
+}
 
 struct EHAInterimPostEPTAView: View {
     
-    @ObservedObject var audioSessionModel = AudioSessionModel()
+    var audioSessionModel = AudioSessionModel()
     @StateObject var colorModel: ColorModel = ColorModel()
-    @StateObject var systemSettingsInterimStartEHAModel: SystemSettingsInterimStartEHAModel = SystemSettingsInterimStartEHAModel()
+    
     @State var volumeInterimEHATest = Float()
     @State var volumeEHAStartingTest = Float()
     
@@ -21,25 +32,39 @@ struct EHAInterimPostEPTAView: View {
     @State var ehaLinkColorIndex = 0
     @State var silEHAColors: [Color] = [Color.clear, Color.green]
     @State var silEHALinkColorIndex = 0
-    @State var ehaVolumeSettingString = ["No, Volume Is Not Set Correctly. Please Repeat Volume Setup", "Yes, Volume Is Set Perfectly", "Yes, Volume Is Set To Acceptable Range"]
+    @State var ehaVolumeSettingString = ["No", "Yes", "Acceptable"]
     @State var ehaVolumeSettingIndex = Int()
-    @State var ehaSilentModeSettingString = ["No, Silent Mode Is Not Off. Please Repeat Silent Mode Setup", "Yes, Silent Mode Is Off"]
+    @State var ehaSilentModeSettingString = ["No", "Yes"]
     @State var ehaSilentModeSettingIndex = Int()
     
     @State var monoRightEarBetterExists = Bool()
     @State var monoLeftEarBetterExists = Bool()
     @State var monoEarTestingPan = Float()
     
+    @State var interimEHAResultsSubmitted: Bool = false
+    
+    @State var finalInterimStartingEHASystemVolume: [Float] = [Float]()
+    @State var finalInterimStartingEHASilentMode: [Int] = [Int]()
+    
+    let fileSystemInterimStartingEHAName = ["SystemSettingsInterimStartingEHA.json"]
+    let systemInterimStartingEHACSVName = "SystemSettingsInterimStartingEHACSV.csv"
+    let inputSystemInterimStartingEHACSVName = "InputSystemSettingsInterimStartingEHACSV.csv"
+    
+    @State var saveSystemSettingsInterimStartEHA: SaveSystemSettingsInterimStartEHA? = nil
+    
     
     var body: some View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
-            VStack{
-                Spacer()
-                Text("View for EHA test takers after they have completed the EPTA test")
+            VStack(alignment: .leading) {
+              
+                Text("View for EHA test takers after they have completed the EPTA test. The extended phase of the hearing assessment is next.")
                     .foregroundColor(.white)
-
-                
+                    .padding()
+                    .padding()
+                    .padding(.top, 60)
+                    .padding(.bottom, 40)
+        
                 HStack{
                     Spacer()
                     Button {
@@ -47,17 +72,20 @@ struct EHAInterimPostEPTAView: View {
                             audioSessionModel.setAudioSession()
                             await recheckEHASystemVolume()
                             await recheckEHASilentMode()
-    //                        audioSessionModel.cancelAudioSession()
                         }
                     } label: {
                             Text("Recheck Settings Before Proceeding")
-                            .foregroundColor(.green)
-                            .font(.title)
-                        }
-                    Spacer()
+                            .padding()
+                            .frame(width: 300, height: 50, alignment: .center)
+                            .font(.caption)
+                            .background(.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(300)
                     }
-                .padding(.all)
-            
+                Spacer()
+                }
+                .padding(.bottom, 20)
+
                 HStack{
                     Spacer()
                     Text(String(volumeEHAStartingTest))
@@ -73,67 +101,82 @@ struct EHAInterimPostEPTAView: View {
                         .font(.caption)
                     Spacer()
                 }
-                .padding(.all)
-                
-                
-                VStack{
-                    HStack{
-                        Text("System Volume is Set To: ")
-                            .foregroundColor(.white)
-                        Text(String(volumeEHAStartingTest))
-                            .foregroundColor(.white)
-                    }
-                    .padding(.all)
-                    HStack{
-                        Text("Is Volume Set Correctly?")
-                            .foregroundColor(.white)
-                        Text(ehaVolumeSettingString[ehaVolumeSettingIndex])
-                            .foregroundColor(.white)
-                            .font(.caption)
-                            .padding()
-                    }
-                    .padding(.all)
-                    Text("Volume Is Set Correctly")
-                        .foregroundColor(ehaColors[ehaLinkColorIndex])
-                        .padding(.all)
-                }
-       
-                VStack{
-                    HStack{
-                        Text("Is Silent Mode Turned Off?")
-                            .foregroundColor(.white)
-                        Text(ehaSilentModeSettingString[ehaSilentModeSettingIndex])
-                            .foregroundColor(.white)
-                    }
-                    .padding(.all)
-                    HStack{
-                        Text("Silent Mode Is Off")
-                            .foregroundColor(silEHAColors[silEHALinkColorIndex])
-                            .padding()
-                        Text("Silent Mode Off Int: \(silentEHAModeOff)")
-                    }
-                    .padding(.all)
-                }
-                
+                .padding(.top, 20)
+                .padding(.bottom, 20)
+    
                 HStack{
-                    Button {
-                        DispatchQueue.main.async {
-                            Task{
-                                await concantenateFinalEHASystemVolumeArray()
-                                await saveInterimEHATestSystemSettings()
-                            }
-                        }
-                    } label: {
-                        Text("Submit Results")
-                            .foregroundColor(.green)
-                    }
-
+                    Spacer()
+                    Text("System Volume is: ")
+                        .foregroundColor(.white)
+                    Spacer()
+                    Text(String(volumeEHAStartingTest))
+                        .foregroundColor(.white)
+                    Spacer()
                 }
-                    NavigationLink {
-                        EHATTSTestPart2View()
-                    } label: {
-                        Text("Continue To Start the extended phase of the hearing assessment")
-                            .foregroundColor(.green)
+                .padding(.trailing)
+              
+                HStack{
+                    Spacer()
+                    Text("Is Volume Correct?")
+                        .foregroundColor(.white)
+                    Spacer()
+                    Text(ehaVolumeSettingString[ehaVolumeSettingIndex])
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+                .padding(.trailing)
+           
+
+                HStack{
+                    Spacer()
+                    Text("Silent Mode Is Off?")
+                        .foregroundColor(.white)
+                    Spacer()
+                    Text(ehaSilentModeSettingString[ehaSilentModeSettingIndex])
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+                .padding(.trailing)
+
+                    if interimEHAResultsSubmitted == false {
+                        HStack{
+                            Spacer()
+                            Button {
+                                DispatchQueue.main.async {
+                                    Task{
+                                        await concantenateFinalEHASystemVolumeArray()
+                                        await saveInterimEHATestSystemSettings()
+                                    }
+                                }
+                            } label: {
+                                Text("Submit Results")
+                                    .padding()
+                                    .frame(width: 200, height: 50, alignment: .center)
+                                    .background(.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(300)
+                            }
+                            Spacer()
+                        }
+                        .padding(.top, 100)
+                        .padding(.bottom, 20)
+                    } else if interimEHAResultsSubmitted == true {
+                        HStack{
+                            Spacer()
+                            NavigationLink {
+                                EHATTSTestPart2View()
+                            } label: {
+                                Text("Continue")
+                                    .padding()
+                                    .frame(width: 200, height: 50, alignment: .center)
+                                    .background(.green)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(300)
+                            }
+                            Spacer()
+                        }
+                        .padding(.top, 80)
+                        .padding(.bottom, 40)
                     }
                 }
             }
@@ -151,9 +194,9 @@ struct EHAInterimPostEPTAView: View {
     
     func checkInterimEHATestVolume() async {
         volumeInterimEHATest = audioSessionModel.audioSession.outputVolume
-        systemSettingsInterimStartEHAModel.finalInterimStartingEHASystemVolume.append(volumeInterimEHATest)
+        finalInterimStartingEHASystemVolume.append(volumeInterimEHATest)
         print("Volume Post Test: \(volumeInterimEHATest)")
-        print("setupDataModel finalEndingSystemVolume: \(systemSettingsInterimStartEHAModel.finalInterimStartingEHASystemVolume)")
+        print("setupDataModel finalEndingSystemVolume: \(finalInterimStartingEHASystemVolume)")
     }
     
     func recheckEHASystemVolume() async {
@@ -193,16 +236,17 @@ struct EHAInterimPostEPTAView: View {
     }
     
     func concantenateFinalEHASystemVolumeArray() async {
-        systemSettingsInterimStartEHAModel.finalInterimStartingEHASystemVolume.append(volumeEHAStartingTest)
-        systemSettingsInterimStartEHAModel.finalInterimStartingEHASilentMode.append(silentEHAModeOff)
+        finalInterimStartingEHASystemVolume.append(volumeEHAStartingTest)
+        finalInterimStartingEHASilentMode.append(silentEHAModeOff)
+        interimEHAResultsSubmitted = true
         print("setupDataModel finalStartingSystemVolume: \(volumeEHAStartingTest)")
     }
     
     func saveInterimEHATestSystemSettings() async {
-        await systemSettingsInterimStartEHAModel.getInterimStartingEHAData()
-        await systemSettingsInterimStartEHAModel.saveSystemInterimStartingEHAToJSON()
-        await systemSettingsInterimStartEHAModel.writeSystemInterimStartingEHAResultsToCSV()
-        await systemSettingsInterimStartEHAModel.writeInputSystemInterimStartingEHAResultsToCSV()
+        await getInterimStartingEHAData()
+        await saveSystemInterimStartingEHAToJSON()
+        await writeSystemInterimStartingEHAResultsToCSV()
+        await writeInputSystemInterimStartingEHAResultsToCSV()
     }
     
     //TODO: Code to calculate delta at each EPTA frequency between ears. If gain delta is <= 2.5 dB (either at every frequency or in average, maybe with focus on 4kHz range, then allow user to select best ear test only for EHA Part 2. After completing this assessment, if applicable, generate a trigger csv file called. monoRightEarBetter.csv or monoLeftEarBetter.csv. Then check for each of these files and if one exists, that triggers the ability to test in that ear (Right or left) only for EHAP2. If neither file exists, then mono test is not available.
@@ -271,8 +315,94 @@ struct EHAInterimPostEPTAView: View {
     }
 }
 
-//struct EHAPostEPTAView_Previews: PreviewProvider {
+//struct EHAInterimPostEPTAView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        EHAPostEPTAView()
+//        EHAInterimPostEPTAView()
 //    }
 //}
+
+
+extension EHAInterimPostEPTAView {
+    
+    func getInterimStartingEHAData() async {
+        guard let systemSettingsInterimStartingEHAData = await getSystemInterimStartingEHAJSONData() else { return }
+        print("Json System Settings Interim Starting EHA Data:")
+        print(systemSettingsInterimStartingEHAData)
+        let jsonSystemSettingsInterimStartingEHAString = String(data: systemSettingsInterimStartingEHAData, encoding: .utf8)
+        print(jsonSystemSettingsInterimStartingEHAString!)
+        do {
+        self.saveSystemSettingsInterimStartEHA = try JSONDecoder().decode(SaveSystemSettingsInterimStartEHA.self, from: systemSettingsInterimStartingEHAData)
+            print("JSON Get System Interim Starting EHA Settings Run")
+            print("data: \(systemSettingsInterimStartingEHAData)")
+        } catch let error {
+            print("!!!Error decoding system Settings Interim Starting EHA json data: \(error)")
+        }
+    }
+    
+    func getSystemInterimStartingEHAJSONData() async -> Data? {
+        let saveSystemSettingsInterimStartEHA = SaveSystemSettingsInterimStartEHA (
+        jsonFinalInterimStartingEHASystemVolume: finalInterimStartingEHASystemVolume)
+        let jsonSystemInterimStartingEHASettingsData = try? JSONEncoder().encode(saveSystemSettingsInterimStartEHA)
+        print("saveFinalResults: \(saveSystemSettingsInterimStartEHA)")
+        print("Json Encoded \(jsonSystemInterimStartingEHASettingsData!)")
+        return jsonSystemInterimStartingEHASettingsData
+    }
+    
+    func saveSystemInterimStartingEHAToJSON() async {
+    // !!!This saves to device directory, whish is likely what is desired
+        let systemInterimStartingEHAPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let interimStartingEHADocumentsDirectory = systemInterimStartingEHAPaths[0]
+        print("interimStartingEHADocumentsDirectory: \(interimStartingEHADocumentsDirectory)")
+        let systemInterimStartingEHAFilePaths = interimStartingEHADocumentsDirectory.appendingPathComponent(fileSystemInterimStartingEHAName[0])
+        print(systemInterimStartingEHAFilePaths)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        do {
+            let jsonSystemInterimStartingEHAData = try encoder.encode(saveSystemSettingsInterimStartEHA)
+            print(jsonSystemInterimStartingEHAData)
+            try jsonSystemInterimStartingEHAData.write(to: systemInterimStartingEHAFilePaths)
+        } catch {
+            print("Error writing to JSON System Interim Starting EHA Settings file: \(error)")
+        }
+    }
+
+    func writeSystemInterimStartingEHAResultsToCSV() async {
+        print("writeSystemInterimStartingEHAResultsToCSV Start")
+        let stringFinalInterimStartingEHASystemVolume = "finalInterimStartingEHASystemVolume," + finalInterimStartingEHASystemVolume.map { String($0) }.joined(separator: ",")
+        let stringFinalInterimStartingEHASilentMode = "finalInterimStartingEHASilentMode," + finalInterimStartingEHASilentMode.map { String($0) }.joined(separator: "'")
+        do {
+            let csvSystemInterimStartingEHAPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvSystemInterimStartingEHADocumentsDirectory = csvSystemInterimStartingEHAPath
+            print("CSV System Interim Starting EHA Settings DocumentsDirectory: \(csvSystemInterimStartingEHADocumentsDirectory)")
+            let csvSystemInterimStartingEHAFilePath = csvSystemInterimStartingEHADocumentsDirectory.appendingPathComponent(systemInterimStartingEHACSVName)
+            print(csvSystemInterimStartingEHAFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvSystemInterimStartingEHAFilePath, append: false)
+            try writerSetup.write(row: [stringFinalInterimStartingEHASystemVolume])
+            try writerSetup.write(row: [stringFinalInterimStartingEHASilentMode])
+            print("CVS System Starting EHA Settings Writer Success")
+        } catch {
+            print("CVSWriter System Starting EHA Settings Error or Error Finding File for System Starting EHA Settings CSV \(error.localizedDescription)")
+        }
+    }
+    
+    func writeInputSystemInterimStartingEHAResultsToCSV() async {
+        print("writeInputSystemInterimStartingEHAResultsToCSV Start")
+
+        let stringFinalInterimStartingEHASystemVolume = finalInterimStartingEHASystemVolume.map { String($0) }.joined(separator: ",")
+        let stringFinalInterimStartingEHASilentMode = finalInterimStartingEHASilentMode.map { String($0) }.joined(separator: "'")
+        do {
+            let csvInputSystemInterimStartingEHAPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvInputSystemInterimStartingEHADocumentsDirectory = csvInputSystemInterimStartingEHAPath
+            print("CSV Input System Interim Starting EHA Settings DocumentsDirectory: \(csvInputSystemInterimStartingEHADocumentsDirectory)")
+            let csvInputSystemInterimStartingEHAFilePath = csvInputSystemInterimStartingEHADocumentsDirectory.appendingPathComponent(inputSystemInterimStartingEHACSVName)
+            print(csvInputSystemInterimStartingEHAFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvInputSystemInterimStartingEHAFilePath, append: false)
+            try writerSetup.write(row: [stringFinalInterimStartingEHASystemVolume])
+            try writerSetup.write(row: [stringFinalInterimStartingEHASilentMode])
+            print("CVS Input System Interim Starting EHA Settings Writer Success")
+        } catch {
+            print("CVSWriter Input System Interim Starting EHA Settings Error or Error Finding File for Input System Starting EHA Settings CSV \(error.localizedDescription)")
+        }
+    }
+    
+}

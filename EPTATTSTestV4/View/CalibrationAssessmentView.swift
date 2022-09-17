@@ -56,6 +56,25 @@
 //}
 
 import SwiftUI
+import CodableCSV
+
+struct SaveFinalDeviceSelection: Codable {  // This is a model
+    var jsonFinalDevicSelectionName = [String]()
+    var jsonFinalDeviceSelectionIndex = [Int]()
+    var jsonStringFinalDeviceSelectionUUID = [String]()
+    var jsonFinalDeviceSelectionUUID = [UUID]()
+    var jsonFinalHeadphoneModelIsUnknownIndex = [Int]()
+//    var jsonFinalUncalibratedUserAgreementAgreed = [Bool]()
+
+    enum CodingKeys: String, CodingKey {
+        case jsonFinalDevicSelectionName
+        case jsonFinalDeviceSelectionIndex
+        case jsonStringFinalDeviceSelectionUUID
+        case jsonFinalDeviceSelectionUUID
+        case jsonFinalHeadphoneModelIsUnknownIndex
+    }
+}
+
 
 struct HeadphoneModels: Identifiable, Hashable {
     let name: String
@@ -70,7 +89,7 @@ struct CalibrationAssessmentView: View {
    
     @StateObject var colorModel: ColorModel = ColorModel()
 //    @State var deviceSelection = 1
-    @StateObject var deviceSelectionModel: DeviceSelectionModel = DeviceSelectionModel()
+    
     @State var showDeviceSheet: Bool = false
     @State var refreshView: Bool = false
 //    @State var deviceListSheet = DeviceListSheet()
@@ -104,6 +123,27 @@ struct CalibrationAssessmentView: View {
         HeadphoneModels(name: "Skullcandy Indy Anc"),
         HeadphoneModels(name: "Soundcore Liberty 3")
     ]
+    
+    
+    @State var deviceSelection = [Int]()
+    @State var userSelectedDeviceName = [String]()
+    @State var userSelectedDeviceUUID = [UUID]()
+    @State var userSelectedDeviceIndex = [Int]()
+    @State var headphoneModelsUnknownIndex = [Int]()
+    @State var manualDeviceEntryRequired = [Int]()
+    @State var finalDevicSelectionName: [String] = [String]()
+    @State var finalDeviceSelectionIndex: [Int] = [Int]()
+    @State var finalDeviceSelectionUUID: [UUID] = [UUID]()
+    @State var finalHeadphoneModelIsUnknownIndex: [Int] = [Int]()
+    @State var stringJsonFDSUUID = [String]()
+    @State var stringFDSUUID = [String]()
+    @State var stringInputFDSUUID = [String]()
+    
+    let fileDeviceName = ["DeviceSelection.json"]
+    let deviceCSVName = "DeviceSelectionCSV.csv"
+    let inputDeviceCSVName = "InputDeviceSelectionCSV.csv"
+    
+    @State var saveFinalDeviceSelection: SaveFinalDeviceSelection? = nil
     
     var body: some View {
         ZStack{
@@ -156,20 +196,20 @@ struct CalibrationAssessmentView: View {
 //                                                deviceApprovalFinding = Int()
 //                                                selectedDeviceName.removeAll()
 //                                                selectedDeviceUUID.removeAll()
-//                                                deviceSelectionModel.userSelectedDeviceName.removeAll()
-//                                                deviceSelectionModel.userSelectedDeviceUUID.removeAll()
-//                                                deviceSelectionModel.userSelectedDeviceIndex.removeAll()
-//                                                deviceSelectionModel.headphoneModelsUnknownIndex.removeAll()
+//                                                userSelectedDeviceName.removeAll()
+//                                                userSelectedDeviceUUID.removeAll()
+//                                                userSelectedDeviceIndex.removeAll()
+//                                                headphoneModelsUnknownIndex.removeAll()
                                                 deviceSelectionIndex.removeAll()
                                                 selectedDeviceName.append(self.headphones[index].name)
                                                 selectedDeviceUUID.append(self.headphones[index].id)
                                                 
                                                 deviceApprovalFinding = index
                                                 multipleDevicesCheck.append(deviceApprovalFinding)
-                                                deviceSelectionModel.userSelectedDeviceName.append(headphones[index].name)
-                                                deviceSelectionModel.userSelectedDeviceUUID.append(headphones[index].id)
-                                                deviceSelectionModel.userSelectedDeviceIndex.append(index)
-                                                deviceSelectionModel.headphoneModelsUnknownIndex.append(self.headphones.count)
+                                                userSelectedDeviceName.append(headphones[index].name)
+                                                userSelectedDeviceUUID.append(headphones[index].id)
+                                                userSelectedDeviceIndex.append(index)
+                                                headphoneModelsUnknownIndex.append(self.headphones.count)
                                                 deviceSelectionIndex.append(index)
                                                 
                                                 print("isokaytoproceed: \(isOkayToProceed)")
@@ -182,9 +222,9 @@ struct CalibrationAssessmentView: View {
                                                 print(self.headphones[index].id)
                                                 print(self.headphones[0].id)
                                                 print(deviceSelectionIndex)
-                                                print(deviceSelectionModel.userSelectedDeviceName)
-                                                print(deviceSelectionModel.userSelectedDeviceUUID)
-                                                print(deviceSelectionModel.userSelectedDeviceIndex)
+                                                print(userSelectedDeviceName)
+                                                print(userSelectedDeviceUUID)
+                                                print(userSelectedDeviceIndex)
                                             })
                                         }
                                     }
@@ -199,12 +239,12 @@ struct CalibrationAssessmentView: View {
                                     deviceApprovalFinding = Int()
                                     selectedDeviceName.removeAll()
                                     selectedDeviceUUID.removeAll()
-                                    deviceSelectionModel.userSelectedDeviceName.removeAll()
-                                    deviceSelectionModel.userSelectedDeviceUUID.removeAll()
-                                    deviceSelectionModel.userSelectedDeviceIndex.removeAll()
-                                    deviceSelectionModel.headphoneModelsUnknownIndex.removeAll()
+                                    userSelectedDeviceName.removeAll()
+                                    userSelectedDeviceUUID.removeAll()
+                                    userSelectedDeviceIndex.removeAll()
+                                    headphoneModelsUnknownIndex.removeAll()
                                     deviceSelectionIndex.removeAll()
-                                    deviceSelectionModel.deviceSelection.removeAll()
+                                    deviceSelection.removeAll()
                                 })
                             }
                         }
@@ -275,7 +315,6 @@ struct CalibrationAssessmentView: View {
                 isSubmitted = false
                 linkColorIndex = 0
             }
-            .environmentObject(deviceSelectionModel)
     }
     
     
@@ -283,19 +322,19 @@ struct CalibrationAssessmentView: View {
         if deviceSelectionIndex.count > 0 {
             if deviceSelectionIndex.last! == 0 {
                 //Not Listed Selected; Go To Splash
-                deviceSelectionModel.deviceSelection.append(0)
+                deviceSelection.append(0)
                 print("User is using an unapproved device")
             } else if deviceSelectionIndex.last! == 1 {
                 //Unknow selected; Go To Manual Entry
-                deviceSelectionModel.deviceSelection.append(1)
+                deviceSelection.append(1)
                 print("User is using an unknown device")
             } else if deviceSelectionIndex.last! >= 2 {
                 // Accepted device selected; proceed to disclaimer view
-                deviceSelectionModel.deviceSelection.append(2)
+                deviceSelection.append(2)
                 print("User is using a Approved device")
             } else {
               // Error go to Manual Entry
-                deviceSelectionModel.deviceSelection.append(3)
+                deviceSelection.append(3)
                 print("!!!Error Device Selection Error")
             }
         } else {
@@ -306,40 +345,40 @@ struct CalibrationAssessmentView: View {
     func compareDeviceCalibration()  async {
         if  deviceApprovalFinding == 0 {
 //            deviceApprovalFinding = 0
-            deviceSelectionModel.manualDeviceEntryRequired.append(0)
+            manualDeviceEntryRequired.append(0)
 //            print(deviceApprovalFinding)
-//            print(deviceSelectionModel.manualDeviceEntryRequired)
+//            print(manualDeviceEntryRequired)
             print("User is using an unapproved device")
 //            print(deviceApprovalFinding)
-//            print(deviceSelectionModel.userSelectedDeviceName)
-//            print(deviceSelectionModel.userSelectedDeviceUUID)
-//            print(deviceSelectionModel.userSelectedDeviceIndex)
+//            print(userSelectedDeviceName)
+//            print(userSelectedDeviceUUID)
+//            print(userSelectedDeviceIndex)
         } else if   deviceApprovalFinding == 1 {
             deviceApprovalFinding = 1
-            deviceSelectionModel.manualDeviceEntryRequired.append(0)
+            manualDeviceEntryRequired.append(0)
 //            print(deviceApprovalFinding)
-//            print(deviceSelectionModel.manualDeviceEntryRequired)
+//            print(manualDeviceEntryRequired)
             print("User is using an unknown device")
-//            print(deviceSelectionModel.userSelectedDeviceName)
-//            print(deviceSelectionModel.userSelectedDeviceUUID)
-//            print(deviceSelectionModel.userSelectedDeviceIndex)
+//            print(userSelectedDeviceName)
+//            print(userSelectedDeviceUUID)
+//            print(userSelectedDeviceIndex)
         } else if deviceApprovalFinding > 1 {
             deviceApprovalFinding = 2
-            deviceSelectionModel.manualDeviceEntryRequired.append(2)
+            manualDeviceEntryRequired.append(2)
 //            print(deviceApprovalFinding)
-//            print(deviceSelectionModel.manualDeviceEntryRequired)
+//            print(manualDeviceEntryRequired)
             print("User States Device is Unknown")
             print("Manual Device Entry is Required")
-//            print(deviceSelectionModel.userSelectedDeviceName)
-//            print(deviceSelectionModel.userSelectedDeviceUUID)
-//            print(deviceSelectionModel.userSelectedDeviceIndex)
+//            print(userSelectedDeviceName)
+//            print(userSelectedDeviceUUID)
+//            print(userSelectedDeviceIndex)
         } else {
             print("Error!!! in compareDeviceCalibration Func")
 //            print(deviceApprovalFinding)
-//            print(deviceSelectionModel.manualDeviceEntryRequired)
-//            print(deviceSelectionModel.userSelectedDeviceName)
-//            print(deviceSelectionModel.userSelectedDeviceUUID)
-//            print(deviceSelectionModel.userSelectedDeviceIndex)
+//            print(manualDeviceEntryRequired)
+//            print(userSelectedDeviceName)
+//            print(userSelectedDeviceUUID)
+//            print(userSelectedDeviceIndex)
         }
     }
     
@@ -380,32 +419,148 @@ struct CalibrationAssessmentView: View {
 
 // This is duplicating the appends in the toggle functions in view
     func appendDeviceCalibrationResults()  async {
-//        deviceSelectionModel.userSelectedDeviceName.append(contentsOf: selectedDeviceName)
-//        deviceSelectionModel.userSelectedDeviceUUID.append(contentsOf: selectedDeviceUUID)
-//        deviceSelectionModel.userSelectedDeviceIndex.append(contentsOf: deviceSelectionIndex)
-//        deviceSelectionModel.headphoneModelsUnknownIndex.append(self.headphones.count)
-        print("deviceSelectionModel userSelectedDeviceName: \(deviceSelectionModel.userSelectedDeviceName)")
-        print("deviceSelectionModel userSelectedDeviceUUID: \(deviceSelectionModel.userSelectedDeviceUUID)")
-        print("deviceSelectionModel userSelectedDeviceIndex: \(deviceSelectionModel.userSelectedDeviceIndex)")
-        print("deviceSelectionModel headphoneModelisUnknownIndex: \(deviceSelectionModel.headphoneModelsUnknownIndex)")
+//        userSelectedDeviceName.append(contentsOf: selectedDeviceName)
+//        userSelectedDeviceUUID.append(contentsOf: selectedDeviceUUID)
+//        userSelectedDeviceIndex.append(contentsOf: deviceSelectionIndex)
+//        headphoneModelsUnknownIndex.append(self.headphones.count)
+        print("userSelectedDeviceName: \(userSelectedDeviceName)")
+        print("userSelectedDeviceUUID: \(userSelectedDeviceUUID)")
+        print("userSelectedDeviceIndex: \(userSelectedDeviceIndex)")
+        print("headphoneModelisUnknownIndex: \(headphoneModelsUnknownIndex)")
     }
     
     func concentenateFinalDeviceArrays() async {
-        deviceSelectionModel.finalDevicSelectionName.append(contentsOf: deviceSelectionModel.userSelectedDeviceName)
-        deviceSelectionModel.finalDeviceSelectionIndex.append(contentsOf: deviceSelectionModel.userSelectedDeviceIndex)
-        deviceSelectionModel.finalDeviceSelectionUUID.append(contentsOf: deviceSelectionModel.userSelectedDeviceUUID)
-        deviceSelectionModel.finalHeadphoneModelIsUnknownIndex.append(contentsOf: deviceSelectionModel.headphoneModelsUnknownIndex)
-        print("deviceSelectionModel finalDeviceSelectionName: \(deviceSelectionModel.finalDevicSelectionName)")
-        print("deviceSelectionModel finalDeviceSelectionIndex: \(deviceSelectionModel.finalDeviceSelectionIndex)")
-        print("deviceSelectionModel finalDeviceSelectionUUID: \(deviceSelectionModel.finalDeviceSelectionUUID)")
-        print("deviceSelectionModel finalHeadphoneModelIsUnknownIndex: \(deviceSelectionModel.finalHeadphoneModelIsUnknownIndex)")
+        finalDevicSelectionName.append(contentsOf: userSelectedDeviceName)
+        finalDeviceSelectionIndex.append(contentsOf: userSelectedDeviceIndex)
+        finalDeviceSelectionUUID.append(contentsOf: userSelectedDeviceUUID)
+        finalHeadphoneModelIsUnknownIndex.append(contentsOf: headphoneModelsUnknownIndex)
+        print("finalDeviceSelectionName: \(finalDevicSelectionName)")
+        print("finalDeviceSelectionIndex: \(finalDeviceSelectionIndex)")
+        print("finalDeviceSelectionUUID: \(finalDeviceSelectionUUID)")
+        print("finalHeadphoneModelIsUnknownIndex: \(finalHeadphoneModelIsUnknownIndex)")
     }
     
     func saveCalibrationData() async {
-        await deviceSelectionModel.getDeviceData()
-        await deviceSelectionModel.saveDeviceToJSON()
-        await deviceSelectionModel.writeDeviceResultsToCSV()
-        await deviceSelectionModel.writeInputDeviceResultsToCSV()
+        await getDeviceData()
+        await saveDeviceToJSON()
+        await writeDeviceResultsToCSV()
+        await writeInputDeviceResultsToCSV()
+    }
+    
+    
+    func getDeviceData() async {
+        guard let deviceSelectionData = await getDeviceJSONData() else { return }
+        print("Json Device Selection Data:")
+        print(deviceSelectionData)
+        let jsonDeviceSelectionString = String(data: deviceSelectionData, encoding: .utf8)
+        print(jsonDeviceSelectionString!)
+        do {
+        self.saveFinalDeviceSelection = try JSONDecoder().decode(SaveFinalDeviceSelection.self, from: deviceSelectionData)
+            print("JSON GetDeviceSelectionData Run")
+            print("data: \(deviceSelectionData)")
+        } catch let error {
+            print("!!!Error decoding Device selection json data: \(error)")
+        }
+    }
+    
+    func getDeviceJSONData() async -> Data? {
+        let formatter3J = DateFormatter()
+        formatter3J.dateFormat = "HH:mm E, d MMM y"
+        if finalDeviceSelectionUUID.count != 0 {
+            stringJsonFDSUUID = finalDeviceSelectionUUID.map { ($0).uuidString }
+        } else {
+            print("finalDeviceSelectionUUID is nil")
+        }
+        let saveFinalDeviceSelection = SaveFinalDeviceSelection (
+            jsonFinalDevicSelectionName: finalDevicSelectionName,
+            jsonFinalDeviceSelectionIndex: finalDeviceSelectionIndex,
+            jsonStringFinalDeviceSelectionUUID: stringJsonFDSUUID,
+            jsonFinalDeviceSelectionUUID: finalDeviceSelectionUUID,
+            jsonFinalHeadphoneModelIsUnknownIndex: finalHeadphoneModelIsUnknownIndex)
+        let jsonDeviceData = try? JSONEncoder().encode(saveFinalDeviceSelection)
+        print("saveFinalDeviceSelection: \(saveFinalDeviceSelection)")
+        print("Json Encoded \(jsonDeviceData!)")
+        return jsonDeviceData
+    }
+
+    func saveDeviceToJSON() async {
+    // !!!This saves to device directory, whish is likely what is desired
+        let devicePaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = devicePaths[0]
+        print("DocumentsDirectory: \(documentsDirectory)")
+        let deviceFilePaths = documentsDirectory.appendingPathComponent(fileDeviceName[0])
+        print(deviceFilePaths)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        do {
+            let jsonDeviceData = try encoder.encode(saveFinalDeviceSelection)
+            print(jsonDeviceData)
+          
+            try jsonDeviceData.write(to: deviceFilePaths)
+        } catch {
+            print("Error writing to JSON Device Selection file: \(error)")
+        }
+    }
+
+    func writeDeviceResultsToCSV() async {
+        print("writeDeviceSelectionToCSV Start")
+        let formatter3 = DateFormatter()
+        formatter3.dateFormat = "HH:mm E, d MMM y"
+        if finalDeviceSelectionUUID.count != 0 {
+            stringFDSUUID = finalDeviceSelectionUUID.map { ($0).uuidString }
+        } else {
+            print("finalDeviceSelectionUUID is nil")
+        }
+        let stringFinalDevicSelectionName = "finalDevicSelectionName," +  finalDevicSelectionName.map { String($0) }.joined(separator: ",")
+        let stringFinalDeviceSelectionIndex = "finalDeviceSelectionIndex," + finalDeviceSelectionIndex.map { String($0) }.joined(separator: ",")
+        let stringFinalDeviceSelectionUUID = "finalDeviceSelectionUUID," + stringFDSUUID.map { String($0) }.joined(separator: ",")
+        let stringFinalHeadphoneModelIsUnknownIndex = "finalHeadphoneModelIsUnknownIndex," + finalHeadphoneModelIsUnknownIndex.map { String($0) }.joined(separator: ",")
+        do {
+            let csvDevicePath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvDeviceDocumentsDirectory = csvDevicePath
+            print("CSV Device Selection DocumentsDirectory: \(csvDeviceDocumentsDirectory)")
+            let csvDeviceFilePath = csvDeviceDocumentsDirectory.appendingPathComponent(deviceCSVName)
+            print(csvDeviceFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvDeviceFilePath, append: false)
+            try writerSetup.write(row: [stringFinalDevicSelectionName])
+            try writerSetup.write(row: [stringFinalDeviceSelectionIndex])
+            try writerSetup.write(row: [stringFinalDeviceSelectionUUID])
+            try writerSetup.write(row: [stringFinalHeadphoneModelIsUnknownIndex])
+            print("CVS Device Selection Writer Success")
+        } catch {
+            print("CVSWriter Device Selection Error or Error Finding File for Device Selection CSV \(error.localizedDescription)")
+        }
+    
+    }
+    
+    func writeInputDeviceResultsToCSV() async {
+        print("writeInputDeviceSelectionToCSV Start")
+        let formatter3 = DateFormatter()
+        formatter3.dateFormat = "HH:mm E, d MMM y"
+        if finalDeviceSelectionUUID.count != 0 {
+            stringInputFDSUUID = finalDeviceSelectionUUID.map { ($0).uuidString }
+        } else {
+            print("finalDeviceSelectionUUID is nil")
+        }
+        let stringFinalDevicSelectionName = finalDevicSelectionName.map { String($0) }.joined(separator: ",")
+        let stringFinalDeviceSelectionIndex = finalDeviceSelectionIndex.map { String($0) }.joined(separator: ",")
+        let stringFinalDeviceSelectionUUID = stringFDSUUID.map { String($0) }.joined(separator: ",")
+        let stringFinalHeadphoneModelIsUnknownIndex = finalHeadphoneModelIsUnknownIndex.map { String($0) }.joined(separator: ",")
+        do {
+            let csvInputDevicePath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvInputDeviceDocumentsDirectory = csvInputDevicePath
+            print("CSV Input Device Selection DocumentsDirectory: \(csvInputDeviceDocumentsDirectory)")
+            let csvInputDeviceFilePath = csvInputDeviceDocumentsDirectory.appendingPathComponent(inputDeviceCSVName)
+            print(csvInputDeviceFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvInputDeviceFilePath, append: false)
+            try writerSetup.write(row: [stringFinalDevicSelectionName])
+            try writerSetup.write(row: [stringFinalDeviceSelectionIndex])
+            try writerSetup.write(row: [stringFinalDeviceSelectionUUID])
+            try writerSetup.write(row: [stringFinalHeadphoneModelIsUnknownIndex])
+            print("CVS Input Device Selection Writer Success")
+        } catch {
+            print("CVSWriter Input Device Selection Error or Error Finding File for Input Device Selection CSV \(error.localizedDescription)")
+        }
     }
     
 }
@@ -414,7 +569,6 @@ struct CalibrationAssessmentView: View {
 //struct CalibrationAssessmentView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        CalibrationAssessmentView()
-//            .environmentObject(DeviceSelectionModel())
 //            
 //    }
 //}

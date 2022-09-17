@@ -9,9 +9,9 @@ import SwiftUI
 
 struct PostEPTATestView: View {
     
-    @ObservedObject var audioSessionModel = AudioSessionModel()
+    var audioSessionModel = AudioSessionModel()
     @StateObject var colorModel: ColorModel = ColorModel()
-//    @EnvironmentObject var systemSettingsModel: SystemSettingsModel
+
     @State var volumeEPTAPostTest = Float()
     
     var body: some View {

@@ -6,15 +6,30 @@
 //
 
 import SwiftUI
+import CodableCSV
 
 //Add in final test selection class write int and final test tolken UUID
+
+struct SaveFinalTestSelection: Codable {  // This is a model
+    var jsonFinalSelectedEHATest = [Int]()
+    var jsonFinalSelectedEPTATest = [Int]()
+    var jsonFinalSelectedSimpleTest = [Int]()
+    var jsonSelectedSimpleTestUUID = [String]()
+    var jsonFinalTestSelected = [Int]()
+
+    enum CodingKeys: String, CodingKey {
+        case jsonFinalSelectedEHATest
+        case jsonFinalSelectedEPTATest
+        case jsonFinalSelectedSimpleTest
+        case jsonSelectedSimpleTestUUID
+        case jsonFinalTestSelected
+    }
+}
 
 struct TestSelectionView: View {
 
     @StateObject var colorModel = ColorModel()
-    @StateObject var testSelectionModel = TestSelectionModel()
-    @EnvironmentObject var manualDeviceSelectionModel: ManualDeviceSelectionModel
-    @StateObject var testSelectLinkModel: TestSelectLinkModel = TestSelectLinkModel()
+    
  
     @State var selectedEHA: Bool = false
     @State var selectedEPTA: Bool = false
@@ -34,6 +49,22 @@ struct TestSelectionView: View {
     @State var tsLinkColorIndex = Int()
     
  
+    @State var finalSelectedEHATest: [Int] = [Int]()
+    @State var finalSelectedEPTATest: [Int] = [Int]()
+    @State var finalSelectedSimpleTest: [Int] = [Int]()
+    @State var finalSelectedSimpleTestUUID: [String] = [String]()  // 1 = Purchased The EHA Test, 2 = EPTA, 3 = simpleTest
+    @State var finalTestSelected: [Int] = [Int]()
+    
+    let fileTestSelectionName = ["TestSelection.json"]
+    let testSelectionCSVName = "TestSelectionCSV.csv"
+    let inputTestSelectionCSVName = "InputTestSelectionCSV.csv"
+    
+    let ehaLink = "EHA.csv"
+    let eptaLink = "EPTA.csv"
+    let simpleLink = "Simple.csv"
+    
+    @State var saveFinalTestSelection: SaveFinalTestSelection? = nil
+    
     var body: some View {
 
 // Marketing and info on EPTA vs EHA Tests
@@ -46,12 +77,10 @@ struct TestSelectionView: View {
                     .foregroundColor(.white)
                     .padding(.top, 40)
                     .padding(.bottom, 40)
-                
                 Divider()
                     .frame(width: 400, height: 3)
                     .background(.blue)
                     .foregroundColor(.blue)
-                
                 Toggle("I Want the Gold Standard! Give Me The EHA!", isOn: $selectedEHA)
                     .foregroundColor(colorModel.neonGreen)
 //                    .foregroundColor(Color(red: 0.8313725490196079, green: 0.6862745098039216, blue: 0.21568627450980393)) // Gold
@@ -77,7 +106,6 @@ struct TestSelectionView: View {
                     .frame(width: 400, height: 3)
                     .background(.gray)
                     .foregroundColor(.gray)
-
                 Toggle("I'm Only Interested In Assessing My Hearing. Give me the EPTA", isOn: $selectedEPTA)
                     .padding(.leading)
                     .padding(.leading)
@@ -98,12 +126,10 @@ struct TestSelectionView: View {
                     }
                     .padding(.top, 20)
                     .padding(.bottom, 20)
-                
                 Divider()
                     .frame(width: 400, height: 3)
                     .background(.gray)
                     .foregroundColor(.gray)
-                
                 Toggle("I'd Like To Trial The Simple Hearing Test.", isOn: $selectedSimple)
                     .padding(.leading)
                     .padding(.leading)
@@ -123,7 +149,6 @@ struct TestSelectionView: View {
                     }
                     .padding(.top, 20)
                     .padding(.bottom, 20)
-                
                 Divider()
                     .frame(width: 400, height: 3)
                     .background(.gray)
@@ -133,63 +158,64 @@ struct TestSelectionView: View {
 //possibly use non standard if else navigation link results
                 
                 if isOkayToContinue == false {
-               
-                    Button {
-                        Task(priority: .userInitiated, operation: {
-                            await singleSelection()
-                            await checkMultipleSelections()
-                            await isSelectionSuccessful()
-                            print("button clicked")
-                            //                           await assignIntToAllTests()
-                            //                           await assignTempTestSelection()
-                            await finalTestSelectionArrays()
-                            await saveTestSelection()
-                            await saveTestLinkFile()
-                        })
-                    } label: {
-                        HStack{
-                            Spacer()
-                            Text("Submit Selection")
-                            Spacer()
-                            Image(systemName: "arrow.up.doc.fill")
-                            Spacer()
+                    HStack{
+                    Spacer()
+                        Button {
+                            Task(priority: .userInitiated, operation: {
+                                await singleSelection()
+                                await checkMultipleSelections()
+                                await isSelectionSuccessful()
+                                print("button clicked")
+                                //                           await assignIntToAllTests()
+                                //                           await assignTempTestSelection()
+                                await finalTestSelectionArrays()
+                                await saveTestSelection()
+                                await saveTestLinkFile()
+                            })
+                        } label: {
+                            HStack{
+                                Spacer()
+                                Text("Submit Selection")
+                                Spacer()
+                                Image(systemName: "arrow.up.doc.fill")
+                                Spacer()
+                            }
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(Color.blue)
+                            .foregroundColor(.green)
+                            .cornerRadius(300)
                         }
-                        .frame(width: 200, height: 50, alignment: .center)
-                        .background(Color.blue)
-                        .foregroundColor(.green)
-                        .cornerRadius(300)
+                    Spacer()
                     }
                     .padding(.bottom, 40)
                     Spacer()
                
                 } else if isOkayToContinue == true {
-                    
-
-                    
-                    NavigationLink(destination:
-                                    isOkayToContinue == true ? AnyView(CalibrationAssessmentView())
-                                   : isOkayToContinue == false ? AnyView(TestSelectionSplashView())
-                                   : AnyView(TestSelectionView())
-                    ){
-                        HStack{
-                            Spacer()
-                            Text("Continue To Setup")
-                            Spacer()
-                            Image(systemName: "arrowshape.bounce.right")
-                            Spacer()
+                    HStack{
+                        Spacer()
+                        NavigationLink(destination:
+                                        isOkayToContinue == true ? AnyView(CalibrationAssessmentView())
+                                       : isOkayToContinue == false ? AnyView(TestSelectionSplashView())
+                                       : AnyView(TestSelectionView())
+                        ){
+                            HStack{
+                                Spacer()
+                                Text("Continue To Setup")
+                                Spacer()
+                                Image(systemName: "arrowshape.bounce.right")
+                                Spacer()
+                            }
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(300)
                         }
-                        .frame(width: 200, height: 50, alignment: .center)
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(300)
+                        Spacer()
                     }
                     .padding(.bottom, 40)
                     Spacer()
-
                 }
-
             }
-            .environmentObject(testSelectionModel)
         }
         .onAppear {
             tsLinkColorIndex = 0
@@ -200,27 +226,27 @@ struct TestSelectionView: View {
     func singleSelection() async {
         if selectedEHA == true {
             singleEHA = 1
-            testSelectionModel.finalTestSelected.append(1)
-            testSelectionModel.finalSelectedEPTATest.append(-1)
-            testSelectionModel.finalSelectedSimpleTest.append(-1)
-            testSelectionModel.finalSelectedSimpleTestUUID.append("SimpleTestNOTSelected")
+            finalTestSelected.append(1)
+            finalSelectedEPTATest.append(-1)
+            finalSelectedSimpleTest.append(-1)
+            finalSelectedSimpleTestUUID.append("SimpleTestNOTSelected")
             singleEHAArray.append(singleEHA)
             print("SingleEHA")
         }
         if selectedEPTA == true {
             singleEPTA = 1
-            testSelectionModel.finalTestSelected.append(2)
-            testSelectionModel.finalSelectedEHATest.append(-1)
-            testSelectionModel.finalSelectedSimpleTest.append(-1)
-            testSelectionModel.finalSelectedSimpleTestUUID.append("SimpleTestNOTSelected")
+            finalTestSelected.append(2)
+            finalSelectedEHATest.append(-1)
+            finalSelectedSimpleTest.append(-1)
+            finalSelectedSimpleTestUUID.append("SimpleTestNOTSelected")
             singleEPTAArray.append(singleEPTA)
             print("SingleEPTA")
         }
         if selectedSimple == true {
             singleSimple = 1
-            testSelectionModel.finalTestSelected.append(3)
-            testSelectionModel.finalSelectedEHATest.append(-1)
-            testSelectionModel.finalSelectedEPTATest.append(-1)
+            finalTestSelected.append(3)
+            finalSelectedEHATest.append(-1)
+            finalSelectedEPTATest.append(-1)
             singleSimpleArray.append(singleSimple)
             simpleTestUUIDString = UUID().uuidString
             print("Simple")
@@ -295,58 +321,214 @@ struct TestSelectionView: View {
 //    func assignTempTestSelection() async {
 //
 //        if selectedEHA == true {
-//            testSelectionModel.finalTestSelected.append(1)
+//            finalTestSelected.append(1)
 //        } else {
 //            print("Error in EHA assign temp")
 //        }
 //        if selectedEPTA == true {
-//            testSelectionModel.finalTestSelected.append(2)
+//            finalTestSelected.append(2)
 //        } else {
 //            print("Error in EPTA assign temp")
 //        }
 //        if selectedSimple == true {
-//            testSelectionModel.finalTestSelected.append(3)
+//            finalTestSelected.append(3)
 //        } else {
 //            print("Error in Simple assign temp")
 //        }
 //    }
     
     func finalTestSelectionArrays() async {
-        testSelectionModel.finalSelectedEHATest.append(contentsOf: singleEHAArray)
-        testSelectionModel.finalSelectedEPTATest.append(contentsOf: singleEPTAArray)
-        testSelectionModel.finalSelectedSimpleTest.append(contentsOf: singleSimpleArray)
+        finalSelectedEHATest.append(contentsOf: singleEHAArray)
+        finalSelectedEPTATest.append(contentsOf: singleEPTAArray)
+        finalSelectedSimpleTest.append(contentsOf: singleSimpleArray)
 //        simpleTestUUIDString = UUID().uuidString
-        testSelectionModel.finalSelectedSimpleTestUUID.append(simpleTestUUIDString)
-        print("testSelectionModel finalSelectedEHATest: \(testSelectionModel.finalSelectedEHATest)")
-        print("testSelectionModel finalSelectedEPTATest: \(testSelectionModel.finalSelectedEPTATest)")
-        print("testSelectionModel finalSelectedSimpleTest: \(testSelectionModel.finalSelectedSimpleTest)")
+        finalSelectedSimpleTestUUID.append(simpleTestUUIDString)
+        print("testSelectionModel finalSelectedEHATest: \(finalSelectedEHATest)")
+        print("testSelectionModel finalSelectedEPTATest: \(finalSelectedEPTATest)")
+        print("testSelectionModel finalSelectedSimpleTest: \(finalSelectedSimpleTest)")
         print("UUID: \(simpleTestUUIDString)")
-        print("testSelectionModel simpleTestUUID: \(testSelectionModel.finalSelectedSimpleTestUUID)")
+        print("testSelectionModel simpleTestUUID: \(finalSelectedSimpleTestUUID)")
 
     }
 
     func saveTestSelection() async {
-        await testSelectionModel.getTestSelectionData()
-        await testSelectionModel.saveTestSelectionToJSON()
-        await testSelectionModel.writeTestSelectionToCSV()
-        await testSelectionModel.writeInputTestSelectionToCSV()
+        await getTestSelectionData()
+        await saveTestSelectionToJSON()
+        await writeTestSelectionToCSV()
+        await writeInputTestSelectionToCSV()
     }
     
     func saveTestLinkFile() async {
         if singleEHA == 1 {
-            await testSelectLinkModel.writeEHATestLinkToCSV()
+            await writeEHATestLinkToCSV()
         } else {
             print("!!Error in singleEHA test link logic")
         }
         if singleEPTA == 1 {
-            await testSelectLinkModel.writeEPTATestLinkToCSV()
+            await writeEPTATestLinkToCSV()
         } else {
             print("!!Error in singleEPTA test link logic")
         }
         if singleSimple == 1 {
-            await testSelectLinkModel.writeSimpleTestLinkToCSV()
+            await writeSimpleTestLinkToCSV()
         } else {
             print("!!Error in singleSimple test link logic")
+        }
+    }
+    
+//MARK: -TestSelectionModel Funcst
+    
+    func getTestSelectionData() async {
+        guard let testSelectionData = await getTestSelectionJSONData() else { return }
+        print("Json Test Selection Data:")
+        print(testSelectionData)
+        let jsonTestSelectionString = String(data: testSelectionData, encoding: .utf8)
+        print(jsonTestSelectionString!)
+        do {
+        self.saveFinalTestSelection = try JSONDecoder().decode(SaveFinalTestSelection.self, from: testSelectionData)
+            print("JSON GetTestSelectionData Run")
+            print("data: \(testSelectionData)")
+        } catch let error {
+            print("!!!Error decoding test selection json data: \(error)")
+        }
+    }
+ 
+    func getTestSelectionJSONData() async -> Data? {
+        
+        let saveFinalTestSelection = SaveFinalTestSelection (
+            jsonFinalSelectedEHATest: finalSelectedEHATest,
+            jsonFinalSelectedEPTATest: finalSelectedEPTATest,
+            jsonFinalSelectedSimpleTest: finalSelectedSimpleTest,
+            jsonSelectedSimpleTestUUID: finalSelectedSimpleTestUUID,
+            jsonFinalTestSelected: finalTestSelected)
+
+        let jsonTestSelectionData = try? JSONEncoder().encode(saveFinalTestSelection)
+        print("saveTestSelection: \(saveFinalTestSelection)")
+        print("Json Encoded \(jsonTestSelectionData!)")
+        return jsonTestSelectionData
+    }
+    
+    func saveTestSelectionToJSON() async {
+    // !!!This saves to device directory, whish is likely what is desired
+        let testSelectionPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = testSelectionPaths[0]
+        print("DocumentsDirectory: \(documentsDirectory)")
+        let testSelectionFilePaths = documentsDirectory.appendingPathComponent(fileTestSelectionName[0])
+        print(testSelectionFilePaths)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+            do {
+                let jsonTestSelectionData = try encoder.encode(saveFinalTestSelection)
+                print(jsonTestSelectionData)
+              
+                try jsonTestSelectionData.write(to: testSelectionFilePaths)
+            } catch {
+                print("Error writing to JSON Test Selection file: \(error)")
+            }
+        }
+
+    
+    func writeTestSelectionToCSV() async {
+        print("writeTestSelectionToCSV Start")
+        let stringFinalSelectedEHATest = "finalSelectedEHATest," + finalSelectedEHATest.map { String($0) }.joined(separator: ",")
+        let stringFinalSelectedEPTATest = "finalSelectedEPTATest," + finalSelectedEPTATest.map { String($0) }.joined(separator: ",")
+        let stringFinalSelectedSimpleTest = "finalSelectedSimpleTest," + finalSelectedSimpleTest.map { String($0) }.joined(separator: ",")
+        let stringFinalSelectedSimpleTestUUID = "finalSelectedSimpleTestUUID," + finalSelectedSimpleTestUUID.map { String($0) }.joined(separator: ",")
+        let stringFinalTestSelected = "finalTestSelected," + finalTestSelected.map { String($0) }.joined(separator: ",")
+        do {
+            let csvTestPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvTestDocumentsDirectory = csvTestPath
+            print("CSV Test Selection DocumentsDirectory: \(csvTestDocumentsDirectory)")
+            let csvTestFilePath = csvTestDocumentsDirectory.appendingPathComponent(testSelectionCSVName)
+            print(csvTestFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvTestFilePath, append: false)
+            try writerSetup.write(row: [stringFinalSelectedEHATest])
+            try writerSetup.write(row: [stringFinalSelectedEPTATest])
+            try writerSetup.write(row: [stringFinalSelectedSimpleTest])
+            try writerSetup.write(row: [stringFinalSelectedSimpleTestUUID])
+            try writerSetup.write(row: [stringFinalTestSelected])
+            print("CVS Test Selection Writer Success")
+        } catch {
+            print("CVSWriter Test Selection Error or Error Finding File for Test Selection CSV \(error.localizedDescription)")
+        }
+    }
+    
+    func writeInputTestSelectionToCSV() async {
+        print("writeInputTestSelectionToCSV Start")
+        let stringFinalSelectedEHATest = finalSelectedEHATest.map { String($0) }.joined(separator: ",")
+        let stringFinalSelectedEPTATest = finalSelectedEPTATest.map { String($0) }.joined(separator: ",")
+        let stringFinalSelectedSimpleTest = finalSelectedSimpleTest.map { String($0) }.joined(separator: ",")
+        let stringFinalSelectedSimpleTestUUID = finalSelectedSimpleTestUUID.map { String($0) }.joined(separator: ",")
+        let stringFinalTestSelected = finalTestSelected.map { String($0) }.joined(separator: ",")
+        do {
+            let csvInputTestPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvInputTestDocumentsDirectory = csvInputTestPath
+            print("CSV Input Test Selection DocumentsDirectory: \(csvInputTestDocumentsDirectory)")
+            let csvInputTestFilePath = csvInputTestDocumentsDirectory.appendingPathComponent(inputTestSelectionCSVName)
+            print(csvInputTestFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvInputTestFilePath, append: false)
+            try writerSetup.write(row: [stringFinalSelectedEHATest])
+            try writerSetup.write(row: [stringFinalSelectedEPTATest])
+            try writerSetup.write(row: [stringFinalSelectedSimpleTest])
+            try writerSetup.write(row: [stringFinalSelectedSimpleTestUUID])
+            try writerSetup.write(row: [stringFinalTestSelected])
+            print("CVS Input Test Selection Writer Success")
+        } catch {
+            print("CVSWriter Input Test Selection Error or Error Finding File for Input Test Selection CSV \(error.localizedDescription)")
+        }
+    }
+    
+    
+    
+//MARK: -TestSelectionLinkModel Funcs
+    func writeEHATestLinkToCSV() async {
+        print("writeEHATestSelectionLinkToCSV Start")
+        let selectedEHATest = "EHA," + "EHA"
+        do {
+            let ehaTestLinkPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let ehaSetupDocumentsDirectory = ehaTestLinkPath
+            print("CSV Setup DocumentsDirectory: \(ehaSetupDocumentsDirectory)")
+            let ehaLinkFilePath = ehaSetupDocumentsDirectory.appendingPathComponent("EHA.csv")
+            print(ehaLinkFilePath)
+            let writerSetup = try CSVWriter(fileURL: ehaLinkFilePath, append: false)
+            try writerSetup.write(row: [selectedEHATest])
+            print("CVS EHA Link Writer Success")
+        } catch {
+            print("CVSWriter EHA Link  Error or Error Finding File for EHA Link CSV \(error.localizedDescription)")
+        }
+    }
+    
+    func writeEPTATestLinkToCSV() async {
+        print("writeEPTATestSelectionLinkToCSV Start")
+        let selectedEPTATest = "EPTA," + "EPTA"
+        do {
+            let eptaTestLinkPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let eptaSetupDocumentsDirectory = eptaTestLinkPath
+            print("CSV Setup DocumentsDirectory: \(eptaSetupDocumentsDirectory)")
+            let eptaLinkFilePath = eptaSetupDocumentsDirectory.appendingPathComponent("EPTA.csv")
+            print(eptaLinkFilePath)
+            let writerSetup = try CSVWriter(fileURL: eptaLinkFilePath, append: false)
+            try writerSetup.write(row: [selectedEPTATest])
+            print("CVS EPTA Link Writer Success")
+        } catch {
+            print("CVSWriter EPTA Link  Error or Error Finding File for EPTA Link CSV \(error.localizedDescription)")
+        }
+    }
+    
+    func writeSimpleTestLinkToCSV() async {
+        print("writeSimpleTestSelectionLinkToCSV Start")
+        let selectedSimpleTest = "Simple," + "Simple"
+        do {
+            let simpleTestLinkPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let simpleSetupDocumentsDirectory = simpleTestLinkPath
+            print("CSV Setup DocumentsDirectory: \(simpleSetupDocumentsDirectory)")
+            let simpleLinkFilePath = simpleSetupDocumentsDirectory.appendingPathComponent("Simple.csv")
+            print(simpleLinkFilePath)
+            let writerSetup = try CSVWriter(fileURL: simpleLinkFilePath, append: false)
+            try writerSetup.write(row: [selectedSimpleTest])
+            print("CVS Simple Link Writer Success")
+        } catch {
+            print("CVSWriter Simple Link  Error or Error Finding File for Simple Link CSV \(error.localizedDescription)")
         }
     }
 }

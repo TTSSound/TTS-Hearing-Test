@@ -6,11 +6,25 @@
 //
 
 import SwiftUI
+import CodableCSV
+
+struct SaveFinalTestPurchase: Codable {  // This is a model
+    var jsonFinalPurchasedEHATestUUID = [String]()
+    var jsonFinalPurchasedEPTATestUUID = [String]()
+    var jsonFinalPurchasedTestTolken = [String]()
+    var jsonFinalTestPurchased = [Int]()
+
+    enum CodingKeys: String, CodingKey {
+        case jsonFinalPurchasedEHATestUUID
+        case jsonFinalPurchasedEPTATestUUID
+        case jsonFinalPurchasedTestTolken
+        case jsonFinalTestPurchased
+    }
+}
 
 struct InAppPurchaseView: View {
     
     @StateObject var colorModel: ColorModel = ColorModel()
-    @StateObject var inAppPurchaseModel: InAppPurchaseModel = InAppPurchaseModel()
     
     @State var EHAPurchased: Bool = false
     @State var EPTAPurchased: Bool = false
@@ -21,11 +35,25 @@ struct InAppPurchaseView: View {
     @State var purchasedEPTAUUID = String()
     @State var simpleUUID = String()
     
+    
+    @State var userPurchasedTest = [Int]()   // 1 = Purchased The EHA Test, 2 = EPTA, 3 = simpleTest
+    @State var userPurchasedEHAUUIDString = String()
+    @State var userPurchasedEPTAUUIDString = String()
+    @State var finalPurchasedEHATestUUID: [String] = [String]()
+    @State var finalPurchasedEPTATestUUID: [String] = [String]()
+    @State var finalPurchasedTestTolken: [String] = [String]()
+    @State var finalTestPurchased: [Int] = [Int]()  // 1 = Purchased The EHA Test, 2 = EPTA
+ 
+    let fileTestPurchasedName = ["TestPurchase.json"]
+    let testPurchasedCSVName = "TestPurchaseCSV.csv"
+    let inputTestPurchasedCSVName = "InputTestPurchaseCSV.csv"
+    
+    @State var saveFinalTestPurchase: SaveFinalTestPurchase? = nil
+    
     var body: some View {
         ZStack{
             colorModel.colorBackgroundBottomDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
             VStack{
-               
                 Text("In-App Purchases")
                     .foregroundColor(.white)
                     .font(.title)
@@ -35,8 +63,6 @@ struct InAppPurchaseView: View {
                     .frame(width: 400, height: 3)
                     .background(.gray)
                     .foregroundColor(.gray)
-               
-                
                 Toggle("Purchase EHA Test", isOn: $EHAPurchased)
                     .foregroundColor(colorModel.neonGreen)
                     .font(.title)
@@ -56,9 +82,6 @@ struct InAppPurchaseView: View {
                     .frame(width: 400, height: 3)
                     .background(.gray)
                     .foregroundColor(.gray)
-                
-               
-                
                 Toggle("Purchase EPTA Test", isOn: $EPTAPurchased)
                     .foregroundColor(colorModel.tiffanyBlue)
                     .font(.title)
@@ -78,10 +101,7 @@ struct InAppPurchaseView: View {
                     .frame(width: 400, height: 3)
                     .background(.gray)
                     .foregroundColor(.gray)
-                
-
                 Spacer()
-                
                 HStack{
                     Spacer()
                     Button {
@@ -98,11 +118,9 @@ struct InAppPurchaseView: View {
                                 .foregroundColor(.white)
                                 .font(.title3)
                         }
-                      
                     }
                     Spacer()
                 }
-                
                 Spacer()
             }
         }
@@ -112,43 +130,43 @@ struct InAppPurchaseView: View {
         if EHAPurchased == true && EPTAPurchased == false {
             selectedTest = 1
             purchasedEHAUUID = UUID().uuidString
-            inAppPurchaseModel.userPurchasedTest.append(selectedTest)
-            inAppPurchaseModel.userPurchasedEHAUUIDString.append(purchasedEHAUUID)
+            userPurchasedTest.append(selectedTest)
+            userPurchasedEHAUUIDString.append(purchasedEHAUUID)
             print("EHA userUUID: \(purchasedEHAUUID)")
             print("EHA selectedTest: \(selectedTest)")
-            print("EHA testSelectionModel userPurchasedEHAUUID: \(inAppPurchaseModel.userPurchasedEHAUUIDString)")
-            print("EHA testSelectionModel userPurchasedTest EHA: \(inAppPurchaseModel.userPurchasedTest)")
-            inAppPurchaseModel.finalPurchasedEHATestUUID.append(inAppPurchaseModel.userPurchasedEHAUUIDString)
-            print("EHA testSelectionModel finalPurchasedEHATestUUID: \(inAppPurchaseModel.finalPurchasedEHATestUUID)")
-            inAppPurchaseModel.finalPurchasedTestTolken.append(inAppPurchaseModel.userPurchasedEHAUUIDString)
-            inAppPurchaseModel.finalTestPurchased.append(selectedTest)
+            print("EHA testSelectionModel userPurchasedEHAUUID: \(userPurchasedEHAUUIDString)")
+            print("EHA testSelectionModel userPurchasedTest EHA: \(userPurchasedTest)")
+            finalPurchasedEHATestUUID.append(userPurchasedEHAUUIDString)
+            print("EHA testSelectionModel finalPurchasedEHATestUUID: \(finalPurchasedEHATestUUID)")
+            finalPurchasedTestTolken.append(userPurchasedEHAUUIDString)
+            finalTestPurchased.append(selectedTest)
             
             //Making holding false values for EPTA
             let noEPTA = "NoEPTAPruchased"
-            inAppPurchaseModel.userPurchasedEPTAUUIDString.append(noEPTA)
-            print("EHA testSelectionModel userPurchasedEPTAUUID: \(inAppPurchaseModel.userPurchasedEPTAUUIDString)")
-            inAppPurchaseModel.finalPurchasedEPTATestUUID.append(inAppPurchaseModel.userPurchasedEPTAUUIDString)
-            print("EHA testSelectionModel finalPurchasedEPTATestUUID: \(inAppPurchaseModel.finalPurchasedEPTATestUUID)")
+            userPurchasedEPTAUUIDString.append(noEPTA)
+            print("EHA testSelectionModel userPurchasedEPTAUUID: \(userPurchasedEPTAUUIDString)")
+            finalPurchasedEPTATestUUID.append(userPurchasedEPTAUUIDString)
+            print("EHA testSelectionModel finalPurchasedEPTATestUUID: \(finalPurchasedEPTATestUUID)")
             print("EHA PURCHASED!")
         } else if EHAPurchased == false && EPTAPurchased == true {
             selectedTest = 2
             purchasedEPTAUUID = UUID().uuidString
-            inAppPurchaseModel.userPurchasedTest.append(selectedTest)
-            inAppPurchaseModel.userPurchasedEPTAUUIDString.append(purchasedEPTAUUID)
+            userPurchasedTest.append(selectedTest)
+            userPurchasedEPTAUUIDString.append(purchasedEPTAUUID)
             print("EPTA userUUID: \(purchasedEPTAUUID)")
             print("EPTA selectedTest: \(selectedTest)")
-            print("EPTA testSelectionModel userPurchasedEPTAUUID: \(inAppPurchaseModel.userPurchasedEPTAUUIDString)")
-            print("EPTA testSelectionModel userPurchasedTest EPTA: \(inAppPurchaseModel.userPurchasedTest)")
-            inAppPurchaseModel.finalPurchasedEPTATestUUID.append(inAppPurchaseModel.userPurchasedEPTAUUIDString)
-            print("EPTA testSelectionModel finalPurchasedEPTATestUUID: \(inAppPurchaseModel.finalPurchasedEPTATestUUID)")
-            inAppPurchaseModel.finalPurchasedTestTolken.append(inAppPurchaseModel.userPurchasedEPTAUUIDString)
-            inAppPurchaseModel.finalTestPurchased.append(selectedTest)
+            print("EPTA testSelectionModel userPurchasedEPTAUUID: \(userPurchasedEPTAUUIDString)")
+            print("EPTA testSelectionModel userPurchasedTest EPTA: \(userPurchasedTest)")
+            finalPurchasedEPTATestUUID.append(userPurchasedEPTAUUIDString)
+            print("EPTA testSelectionModel finalPurchasedEPTATestUUID: \(finalPurchasedEPTATestUUID)")
+            finalPurchasedTestTolken.append(userPurchasedEPTAUUIDString)
+            finalTestPurchased.append(selectedTest)
             
             let noEHA = "NoEHAPurchased"
-            inAppPurchaseModel.userPurchasedEHAUUIDString.append(noEHA)
-            print("EPTA testSelectionModel userPurchasedEHAAUUID: \(inAppPurchaseModel.userPurchasedEHAUUIDString)")
-            inAppPurchaseModel.finalPurchasedEHATestUUID.append(inAppPurchaseModel.userPurchasedEHAUUIDString)
-            print("EPTA testSelectionModel finalPurchasedEPTATestUUID: \(inAppPurchaseModel.finalPurchasedEHATestUUID)")
+            userPurchasedEHAUUIDString.append(noEHA)
+            print("EPTA testSelectionModel userPurchasedEHAAUUID: \(userPurchasedEHAUUIDString)")
+            finalPurchasedEHATestUUID.append(userPurchasedEHAUUIDString)
+            print("EPTA testSelectionModel finalPurchasedEPTATestUUID: \(finalPurchasedEHATestUUID)")
             print("EPTA PURCHASED!")
         } else {
             print("!!! Error in complete Purchase Logic")
@@ -157,51 +175,144 @@ struct InAppPurchaseView: View {
     
 //    func generateEHAUUID() async {
 //        purchasedEHAUUID = UUID().uuidString
-//        inAppPurchaseModel.userPurchasedEHAUUIDString.append(purchasedEHAUUID)
+//        userPurchasedEHAUUIDString.append(purchasedEHAUUID)
 //
-//        inAppPurchaseModel.userPurchasedTest.append(selectedTest)
+//        userPurchasedTest.append(selectedTest)
 //        print("userUUID: \(purchasedEHAUUID)")
 //        print("selectedTest: \(selectedTest)")
-//        print("testSelectionModel userPurchasedEHAUUID: \(inAppPurchaseModel.userPurchasedEHAUUIDString)")
-//        print("testSelectionModel userPurchasedTest EHA: \(inAppPurchaseModel.userPurchasedTest)")
+//        print("testSelectionModel userPurchasedEHAUUID: \(userPurchasedEHAUUIDString)")
+//        print("testSelectionModel userPurchasedTest EHA: \(userPurchasedTest)")
 //    }
 //
 //    func generateEPTAUUID() async {
 //        purchasedEPTAUUID = UUID().uuidString
-//        inAppPurchaseModel.userPurchasedEPTAUUIDString.append(purchasedEPTAUUID)
+//        userPurchasedEPTAUUIDString.append(purchasedEPTAUUID)
 //        selectedTest = 2
-//        inAppPurchaseModel.userPurchasedTest.append(selectedTest)
+//        userPurchasedTest.append(selectedTest)
 //        print("userUUID: \(purchasedEPTAUUID)")
-//        print("testSelectionModel userPurchasedEPTAUUID: \(inAppPurchaseModel.userPurchasedEPTAUUIDString)")
-//        print("testSelectionModel userPurchasedTest EPTA: \(inAppPurchaseModel.userPurchasedTest)")
+//        print("testSelectionModel userPurchasedEPTAUUID: \(userPurchasedEPTAUUIDString)")
+//        print("testSelectionModel userPurchasedTest EPTA: \(userPurchasedTest)")
 //    }
 //
 //    func concatenatePurchaseTestFinalArrays() async {
-//        inAppPurchaseModel.finalPurchasedEHATestUUID.append(inAppPurchaseModel.userPurchasedEHAUUIDString)
-//        inAppPurchaseModel.finalPurchasedEPTATestUUID.append(inAppPurchaseModel.userPurchasedEPTAUUIDString)
-//        print("testSelectionModel finalPurchasedEHATestUUID: \(inAppPurchaseModel.finalPurchasedEHATestUUID)")
-//        print("testSelectionModel finalPurchasedEPTATestUUID: \(inAppPurchaseModel.finalPurchasedEPTATestUUID)")
+//        finalPurchasedEHATestUUID.append(userPurchasedEHAUUIDString)
+//        finalPurchasedEPTATestUUID.append(userPurchasedEPTAUUIDString)
+//        print("testSelectionModel finalPurchasedEHATestUUID: \(finalPurchasedEHATestUUID)")
+//        print("testSelectionModel finalPurchasedEPTATestUUID: \(finalPurchasedEPTATestUUID)")
 //    }
 //
 //    func assignFinalTestTolken() async {
 //        if selectedTest == 1 {
-//            inAppPurchaseModel.finalPurchasedTestTolken.append(inAppPurchaseModel.userPurchasedEHAUUIDString)
-//            inAppPurchaseModel.finalTestPurchased.append(selectedTest)
+//            finalPurchasedTestTolken.append(userPurchasedEHAUUIDString)
+//            finalTestPurchased.append(selectedTest)
 //        } else if selectedTest == 2 {
-//            inAppPurchaseModel.finalPurchasedTestTolken.append(inAppPurchaseModel.userPurchasedEPTAUUIDString)
-//            inAppPurchaseModel.finalTestPurchased.append(selectedTest)
+//            finalPurchasedTestTolken.append(userPurchasedEPTAUUIDString)
+//            finalTestPurchased.append(selectedTest)
 //        } else {
 //            print("!!!Error in assignFinalTestTolken Logic")
 //        }
-//        print("inAppPurchaseModel finalTestPurchased: \(inAppPurchaseModel.finalTestPurchased)")
-//        print("inAppPurchaseModel finalPurchasedTestTolken: \(inAppPurchaseModel.finalPurchasedTestTolken)")
+//        print("finalTestPurchased: \(finalTestPurchased)")
+//        print("finalPurchasedTestTolken: \(finalPurchasedTestTolken)")
 //    }
 
     func saveTestSelectionTolkens() async {
-        await inAppPurchaseModel.getTestPurchaseData()
-        await inAppPurchaseModel.saveTestPurchaseToJSON()
-        await inAppPurchaseModel.writeTestPurchaseToCSV()
-        await inAppPurchaseModel.writeInputTestPurchaseToCSV()
+        await getTestPurchaseData()
+        await saveTestPurchaseToJSON()
+        await writeTestPurchaseToCSV()
+        await writeInputTestPurchaseToCSV()
+    }
+    
+    
+    func getTestPurchaseData() async {
+        guard let testPurchaseData = await getTestPurchseJSONData() else { return }
+        print("Json Test Purchase Data")
+        print(testPurchaseData)
+        let jsonTestPurchaseString = String(data: testPurchaseData, encoding: .utf8)
+        print(jsonTestPurchaseString!)
+        do {
+        self.saveFinalTestPurchase = try JSONDecoder().decode(SaveFinalTestPurchase.self, from: testPurchaseData)
+            print("JSON GetTestPurchaseData Run")
+            print("data: \(testPurchaseData)")
+        } catch let error {
+            print("!!!Error decoding test purchase json data: \(error)")
+        }
+    }
+    
+    func getTestPurchseJSONData() async -> Data? {
+        let saveFinalTestPurchase = SaveFinalTestPurchase (
+            jsonFinalPurchasedEHATestUUID: finalPurchasedEHATestUUID,
+            jsonFinalPurchasedEPTATestUUID: finalPurchasedEPTATestUUID,
+            jsonFinalPurchasedTestTolken: finalPurchasedTestTolken,
+            jsonFinalTestPurchased: finalTestPurchased)
+        let jsonTestPurchaseData = try? JSONEncoder().encode(saveFinalTestPurchase)
+        print("saveTestPurchase: \(saveFinalTestPurchase)")
+        print("Json Encoded \(jsonTestPurchaseData!)")
+        return jsonTestPurchaseData
+    }
+    
+    func saveTestPurchaseToJSON() async {
+    // !!!This saves to device directory, whish is likely what is desired
+        let testPurchasePaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let purchaseDocumentsDirectory = testPurchasePaths[0]
+        print("purchaseDocumentsDirectory: \(purchaseDocumentsDirectory)")
+        let testPurchaseFilePaths = purchaseDocumentsDirectory.appendingPathComponent(fileTestPurchasedName[0])
+        print(testPurchaseFilePaths)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        do {
+            let jsonTestPurchaseData = try encoder.encode(saveFinalTestPurchase)
+            print(jsonTestPurchaseData)
+          
+            try jsonTestPurchaseData.write(to: testPurchaseFilePaths)
+        } catch {
+            print("Error writing to JSON Test Purchase file: \(error)")
+        }
+    }
+
+    func writeTestPurchaseToCSV() async {
+        print("writeTestPurchaseToCSV Start")
+        let stringFinalPurchasedEHATestUUID = "finalPurchasedEHATestUUID," + finalPurchasedEHATestUUID.map { String($0) }.joined(separator: ",")
+        let stringFinalPurchasedEPTATestUUID = "finalPurchasedEPTATestUUID," + finalPurchasedEPTATestUUID.map { String($0) }.joined(separator: ",")
+        let stringFinalPurchasedTestTolken = "finalTestTolkenPurchased," + finalPurchasedTestTolken.map { String($0) }.joined(separator: ",")
+        let stringFinalTestPurchased = "finalTestPurchased," + finalTestPurchased.map { String($0) }.joined(separator: ",")
+        do {
+            let csvTestPurchasePath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvTestPurchaseDocumentsDirectory = csvTestPurchasePath
+            print("CSV Test Purchase DocumentsDirectory: \(csvTestPurchaseDocumentsDirectory)")
+            let csvTestPurchaseFilePath = csvTestPurchaseDocumentsDirectory.appendingPathComponent(testPurchasedCSVName)
+            print(csvTestPurchaseFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvTestPurchaseFilePath, append: false)
+            try writerSetup.write(row: [stringFinalPurchasedEHATestUUID])
+            try writerSetup.write(row: [stringFinalPurchasedEPTATestUUID])
+            try writerSetup.write(row: [stringFinalPurchasedTestTolken])
+            try writerSetup.write(row: [stringFinalTestPurchased])
+            print("CVS Test Purchase Writer Success")
+        } catch {
+            print("CVSWriter Test Purchase Error or Error Finding File for Test Purchase CSV \(error.localizedDescription)")
+        }
+    }
+    
+    func writeInputTestPurchaseToCSV() async {
+        print("writeInputTestSelectionToCSV Start")
+        let stringFinalPurchasedEHATestUUID = finalPurchasedEHATestUUID.map { String($0) }.joined(separator: ",")
+        let stringFinalPurchasedEPTATestUUID = finalPurchasedEPTATestUUID.map { String($0) }.joined(separator: ",")
+        let stringFinalPurchasedTestTolken = finalPurchasedTestTolken.map { String($0) }.joined(separator: ",")
+        let stringFinalTestPurchased = finalTestPurchased.map { String($0) }.joined(separator: ",")
+        do {
+            let csvInputTestPurchasePath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvInputTestPurchaseDocumentsDirectory = csvInputTestPurchasePath
+            print("CSV Input Test Purchase DocumentsDirectory: \(csvInputTestPurchaseDocumentsDirectory)")
+            let csvInputTestPurchaseFilePath = csvInputTestPurchaseDocumentsDirectory.appendingPathComponent(inputTestPurchasedCSVName)
+            print(csvInputTestPurchaseFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvInputTestPurchaseFilePath, append: false)
+            try writerSetup.write(row: [stringFinalPurchasedEHATestUUID])
+            try writerSetup.write(row: [stringFinalPurchasedEPTATestUUID])
+            try writerSetup.write(row: [stringFinalPurchasedTestTolken])
+            try writerSetup.write(row: [stringFinalTestPurchased])
+            print("CVS Input Test Purchase Writer Success")
+        } catch {
+            print("CVSWriter Input Test Purchase Error or Error Finding File for Input Test Purchase CSV \(error.localizedDescription)")
+        }
     }
 }
 

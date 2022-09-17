@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7C125E3328B2236E00109CE5 /* SetupDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C125E3228B2236E00109CE5 /* SetupDataModel.swift */; };
 		7C14A7F728ACA77900601602 /* SummaryResults.json in Resources */ = {isa = PBXBuildFile; fileRef = 7C14A7F628ACA77900601602 /* SummaryResults.json */; };
 		7C179FDD28B7DDBD00964AAC /* TestSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C179FDC28B7DDBD00964AAC /* TestSelectionView.swift */; };
 		7C179FDF28B7DE2F00964AAC /* TestIDInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C179FDE28B7DE2F00964AAC /* TestIDInputView.swift */; };
@@ -83,25 +82,14 @@
 		7C4CDB8328CEEE060051B9EE /* Sample51.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7C4CDB5828CEEE060051B9EE /* Sample51.wav */; };
 		7C4CDB8428CEEE060051B9EE /* Sample55.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7C4CDB5928CEEE060051B9EE /* Sample55.wav */; };
 		7C4CDB8528CEEE060051B9EE /* Sample41.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7C4CDB5A28CEEE060051B9EE /* Sample41.wav */; };
-		7C4D017828C002F800361559 /* TestSelectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D017728C002F800361559 /* TestSelectionModel.swift */; };
-		7C4D017A28C00A4A00361559 /* DeviceSelectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D017928C00A4A00361559 /* DeviceSelectionModel.swift */; };
-		7C4D017C28C0182C00361559 /* SystemSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D017B28C0182C00361559 /* SystemSettingsModel.swift */; };
-		7C4D017E28C01CC400361559 /* SurveyAssessmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D017D28C01CC400361559 /* SurveyAssessmentModel.swift */; };
-		7C4D018028C1068800361559 /* ManualDeviceSelectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D017F28C1068800361559 /* ManualDeviceSelectionModel.swift */; };
-		7C4D018228C110BC00361559 /* ManualDisclaimerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D018128C110BC00361559 /* ManualDisclaimerModel.swift */; };
 		7C4D018428C1311F00361559 /* JSONPaserCombineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D018328C1311F00361559 /* JSONPaserCombineViewModel.swift */; };
-		7C4D018828C1528300361559 /* TestSelectLinkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D018728C1528300361559 /* TestSelectLinkModel.swift */; };
 		7C4D018A28C1724100361559 /* EHATTSTestPart1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D018928C1724100361559 /* EHATTSTestPart1View.swift */; };
 		7C4D018C28C1728D00361559 /* SimpleTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D018B28C1728D00361559 /* SimpleTestView.swift */; };
 		7C4D018E28C17FB900361559 /* SetupResults.json in Resources */ = {isa = PBXBuildFile; fileRef = 7C4D018D28C17FB900361559 /* SetupResults.json */; };
 		7C4D019128C262CD00361559 /* EHAP1DataObjectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D019028C262CD00361559 /* EHAP1DataObjectModel.swift */; };
 		7C4D019328C2631000361559 /* SimpleDataObjectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D019228C2631000361559 /* SimpleDataObjectModel.swift */; };
-		7C4D019628C2635900361559 /* InAppPurchaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D019528C2635900361559 /* InAppPurchaseModel.swift */; };
 		7C4D019828C283AE00361559 /* HoldingCSVInputModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D019728C283AE00361559 /* HoldingCSVInputModel.swift */; };
-		7C4D019A28C285AF00361559 /* SystemSettingsEndEPTASimpleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D019928C285AF00361559 /* SystemSettingsEndEPTASimpleModel.swift */; };
-		7C4D019C28C28A4000361559 /* SystemSettingsInterimEHAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D019B28C28A4000361559 /* SystemSettingsInterimEHAModel.swift */; };
 		7C4D019E28C28E1100361559 /* SystemSettingsEndEHAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D019D28C28E1100361559 /* SystemSettingsEndEHAModel.swift */; };
-		7C4D01A028C2D49200361559 /* SystemSettingsInterimStartEHAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D019F28C2D49200361559 /* SystemSettingsInterimStartEHAModel.swift */; };
 		7C4EF1BB28B3D7CF008C81D6 /* ConditionalNavigation.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7C4EF1BA28B3D7CF008C81D6 /* ConditionalNavigation.txt */; };
 		7C51F16428C81FAC00FF5F0F /* Sample13.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7C51F15628C81FAB00FF5F0F /* Sample13.wav */; };
 		7C51F16528C81FAC00FF5F0F /* Sample8.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7C51F15728C81FAB00FF5F0F /* Sample8.wav */; };
@@ -921,46 +909,36 @@
 				7C24C1F028BF0886006E77DD /* StorageManager.swift in Sources */,
 				7C179FEF28B852CA00964AAC /* CalibrationIssueSplashView.swift in Sources */,
 				7C179FED28B81B7500964AAC /* InAppPurchaseView.swift in Sources */,
-				7C125E3328B2236E00109CE5 /* SetupDataModel.swift in Sources */,
 				7C901FBD28B98517007E1336 /* ManualDeviceEntryView.swift in Sources */,
 				7C95E37128D18B5700163DCC /* GainReferenceModel.swift in Sources */,
 				7C76D5F428B18BA30044958B /* PurchaseView.swift in Sources */,
 				7C901FC028B9A359007E1336 /* SetupListActionView.swift in Sources */,
 				7C76D5EA28B189090044958B /* InstructionsForTakingTest.swift in Sources */,
 				7C4CDB2F28CE6CED0051B9EE /* ManualDeviceEntryIssueSplashView.swift in Sources */,
-				7C4D019A28C285AF00361559 /* SystemSettingsEndEPTASimpleModel.swift in Sources */,
 				7C7A94F428B6F43200DD8FAC /* CorrectiveFiltersExplanationView.swift in Sources */,
 				7C76D5F228B18AE50044958B /* ClosingView.swift in Sources */,
 				7CECF1EC28C9859900B5A99E /* TrainingTestView.swift in Sources */,
-				7C4D018028C1068800361559 /* ManualDeviceSelectionModel.swift in Sources */,
 				7C8CAE1528B035F800E9F2EF /* ManualSetupView.swift in Sources */,
 				7C901FC428B9AFF5007E1336 /* UserLoginView.swift in Sources */,
 				7C179FDF28B7DE2F00964AAC /* TestIDInputView.swift in Sources */,
 				7C3D20BD289DB1BA0039EDA6 /* AudioSessionModel.swift in Sources */,
 				7C4D018428C1311F00361559 /* JSONPaserCombineViewModel.swift in Sources */,
 				7C666DAC28B6930E007707AC /* EHATTSTestPart2View.swift in Sources */,
-				7C4D019628C2635900361559 /* InAppPurchaseModel.swift in Sources */,
 				7C901FCA28B9BAC9007E1336 /* SilentModeSetupView.swift in Sources */,
 				7C179FE328B7F34100964AAC /* TestSelectionLandingView.swift in Sources */,
 				7C3E16BC28BC2AE4003A0DA9 /* PreTestView.swift in Sources */,
 				7C24C1EC28BEE0A1006E77DD /* PostTestDirectorSplashView.swift in Sources */,
 				7C24C1EE28BF01D8006E77DD /* SurveyErrorView.swift in Sources */,
-				7C4D019C28C28A4000361559 /* SystemSettingsInterimEHAModel.swift in Sources */,
-				7C4D01A028C2D49200361559 /* SystemSettingsInterimStartEHAModel.swift in Sources */,
 				7C901FB928B97182007E1336 /* ManualDeviceDisclaimerView.swift in Sources */,
 				7C76D5E128B183420044958B /* UserWrittenHearingAssessmentView.swift in Sources */,
 				7C179FF528B8848900964AAC /* ColorModel.swift in Sources */,
-				7C4D018228C110BC00361559 /* ManualDisclaimerModel.swift in Sources */,
-				7C4D017828C002F800361559 /* TestSelectionModel.swift in Sources */,
 				7C666D9E28B67584007707AC /* DisclaimerView.swift in Sources */,
 				7C901FC628B9B980007E1336 /* SystemVolumeView.swift in Sources */,
-				7C4D017C28C0182C00361559 /* SystemSettingsModel.swift in Sources */,
 				7C7986E528AF038200888A74 /* TestDeviceSetupView.swift in Sources */,
 				7C3D20C1289DD1A60039EDA6 /* EnvDataObjectModel.swift in Sources */,
 				7C179FE928B8114200964AAC /* TestSelectionSplashView.swift in Sources */,
 				7CAC41CC28B5B60100AE72F6 /* EHAInterimPostEPTAView.swift in Sources */,
 				7C179FDD28B7DDBD00964AAC /* TestSelectionView.swift in Sources */,
-				7C4D018828C1528300361559 /* TestSelectLinkModel.swift in Sources */,
 				7C76D5EC28B1895B0044958B /* TrainingTestHoldingPlace.swift in Sources */,
 				7C76D5DF28B1328D0044958B /* SiriSetupView.swift in Sources */,
 				7C76E42528BBFB5A009BC082 /* SimpleVideoPlayer.swift in Sources */,
@@ -968,13 +946,11 @@
 				7C76D5E428B184ED0044958B /* LandingView.swift in Sources */,
 				7CDB3E1328A20DB300CB4DB1 /* EPTATTSTESTV4List.swift in Sources */,
 				7C3316EF28D2515100721935 /* BetaTestingLandingView.swift in Sources */,
-				7C4D017A28C00A4A00361559 /* DeviceSelectionModel.swift in Sources */,
 				7C99A16E28C95DFA00E46C65 /* Bilateral1kHzTestView.swift in Sources */,
 				7C179FE528B805DB00964AAC /* SimpleTrialDescriptionView.swift in Sources */,
 				7C4D019128C262CD00361559 /* EHAP1DataObjectModel.swift in Sources */,
 				7C666DA028B676B1007707AC /* ExplanationView.swift in Sources */,
 				7C4D018A28C1724100361559 /* EHATTSTestPart1View.swift in Sources */,
-				7C4D017E28C01CC400361559 /* SurveyAssessmentModel.swift in Sources */,
 				7C666DA428B67841007707AC /* CalibrationSplashView.swift in Sources */,
 				7C24C1E228BEC419006E77DD /* PostEPTATestView.swift in Sources */,
 				7C7A94FC28B7009300DD8FAC /* EPTADescription.swift in Sources */,

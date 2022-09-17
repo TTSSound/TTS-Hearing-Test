@@ -34,7 +34,7 @@ struct EPTATTSTestV4App: App {
 //            SiriSetupView()
 //            CalibrationAssessmentView()
 //            CalibrationSplashView()
-            LandingView()
+//            LandingView()
 //            UserWrittenHearingAssessmentView()
 //            ManualDeviceEntryInformationView()
 //            ManualDeviceEntryView()
@@ -49,7 +49,7 @@ struct EPTATTSTestV4App: App {
 //            EHATTSTestPart1View()
 //            SimpleTestView()
 //            EHATTSTestView()
-//            PostBilateral1kHzTestView()
+            PostBilateral1kHzTestView()
 //            EHATTSTestPart2View()
             
         }

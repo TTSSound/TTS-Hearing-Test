@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct PostSimpleTestView: View {
-    @ObservedObject var audioSessionModel = AudioSessionModel()
+    var audioSessionModel = AudioSessionModel()
     @StateObject var colorModel: ColorModel = ColorModel()
-//    @EnvironmentObject var systemSettingsModel: SystemSettingsModel
+
     @State var volumePostSimpleTest = Float()
     
     

@@ -74,6 +74,5 @@ struct VideoInstructionView: UIViewRepresentable {
 //struct InstructionsForTakingTest_Previews: PreviewProvider {
 //    static var previews: some View {
 //        InstructionsForTakingTest()
-//            .environmentObject(SystemSettingsModel())
 //    }
 //}

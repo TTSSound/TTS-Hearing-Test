@@ -10,8 +10,6 @@ import SwiftUI
 struct PreTestView: View {
 
     @StateObject var colorModel: ColorModel = ColorModel()
-//    @EnvironmentObject var testSelectionModel: TestSelectionModel
-    @ObservedObject var testSelectLinkModel: TestSelectLinkModel = TestSelectLinkModel()
 
     @State var ehaLinkExists = Bool()
     @State var eptaLinkExists = Bool()
@@ -25,9 +23,9 @@ struct PreTestView: View {
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack{
                 Spacer()
-                Text(" Pre Test View for a break and to get user's phon and reference curve data/funtions")
+                Text(" Pre Test View for a break and to get user's phon and reference curve data/funtions. Then Start Practice Test")
                     .foregroundColor(.white)
-                Spacer()
+                
                 Button {
                     Task {
 //                        await getTestLinkPath()
@@ -43,13 +41,26 @@ struct PreTestView: View {
                 Spacer()
                 Text("TestReturned: \(returnedTestSelected)")
                     .foregroundColor(.white)
-                
+                Spacer()
                 NavigationLink {
-                    Bilateral1kHzTestView()
+//                    Bilateral1kHzTestView()
 //                   TrainingTestHoldingPlace()
+                    TrainingTestView()
                 } label: {
-                    Text("We are Now Ready To Start The Test.\nClick Continue to Get Started!")
-                        .foregroundColor(.green)
+                    VStack{
+                        Text("We are Now Ready To Take a Practice Test.")
+                            .foregroundColor(.white)
+                        Text("Continue")
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(300)
+
+                    }
+                    .padding(.top, 40)
+                    .padding(.bottom, 20)
+                
                 }
                 
                 

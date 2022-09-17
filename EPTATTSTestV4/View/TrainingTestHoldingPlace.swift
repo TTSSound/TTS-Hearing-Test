@@ -10,7 +10,7 @@ import SwiftUI
 struct TrainingTestHoldingPlace: View {
     
     @StateObject var colorModel: ColorModel = ColorModel()
-    @ObservedObject var testSelectLinkModel: TestSelectLinkModel = TestSelectLinkModel()
+    
     @State var ttLinkColors: [Color] = [Color.clear, Color.green]
     @State var ttLinkColorIndex = Int()
 

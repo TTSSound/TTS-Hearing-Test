@@ -52,8 +52,8 @@ struct LandingView: View {
     @StateObject var colorModel = ColorModel()
     @State var selectedTabe = 1
     @State var selectedTab: Int = 0
-    @StateObject var setupDataModel: SetupDataModel = SetupDataModel()
-    @StateObject var manualDeviceSelectionModel: ManualDeviceSelectionModel = ManualDeviceSelectionModel()
+    
+    
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -101,7 +101,6 @@ struct LandingView: View {
             }
             .tag(2)
         }
-        .environmentObject(setupDataModel)
     }
 }
           
@@ -112,7 +111,6 @@ struct LandingView_Previews: PreviewProvider {
     
     static var previews: some View {
         LandingView()
-            .environmentObject(SetupDataModel())
-            .environmentObject(ManualDeviceSelectionModel())
+            
     }
 }

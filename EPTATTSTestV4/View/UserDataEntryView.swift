@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import CoreData
+import CodableCSV
+//import Alamofire
 
 
 //@State var genderList: [String] = [
@@ -52,10 +55,6 @@ import SwiftUI
 //    ]
 
 struct SaveFinalSetupResults: Codable {
-    var id = Int()
-    var jsonUserAgreementAgreed = [Int]()
-    var jsonStringUserAgreementAgreedDate = String()
-    var jsonUserAgreementAgreedDate = [Date]()
     var jsonFinalFirstName = [String]()
     var jsonFinalLastName = [String]()
     var jsonFinalEmail = [String]()
@@ -67,10 +66,6 @@ struct SaveFinalSetupResults: Codable {
     var jsonUserUUID = [String]()
     
     enum CodingKeys: String, CodingKey {
-        case id
-        case jsonUserAgreementAgreed
-        case jsonStringUserAgreementAgreedDate
-        case jsonUserAgreementAgreedDate
         case jsonFinalFirstName
         case jsonFinalLastName
         case jsonFinalEmail
@@ -80,6 +75,7 @@ struct SaveFinalSetupResults: Codable {
         case jsonFinalGenderIndex
         case jsonFinalSex
         case jsonUserUUID
+    }
 }
 
 
@@ -100,9 +96,9 @@ struct UserDataEntryView: View {
 
     @StateObject var colorModel: ColorModel = ColorModel()
     @Environment(\.presentationMode) var presentationMode
-//    @StateObject var setupDataModel: SetupDataModel = SetupDataModel()
-    @EnvironmentObject var setupDataModel: SetupDataModel
-    @EnvironmentObject var manualDeviceSelectionModel: ManualDeviceSelectionModel
+
+    
+    
     
     @ObservedObject var whyWeAskModel: WhyWeAskModel = WhyWeAskModel()
     @State var showWhyDoWeAskSheet: Bool = false
@@ -150,37 +146,33 @@ struct UserDataEntryView: View {
     ]
     @State private var selectedGender = ""
     
-    @Published var userFirstName = [String]()
-    @Published var userLastName = [String]()
-    @Published var userEmail = [String]()
-    @Published var userPassword = [String]()
-    @Published var userAge = [Int]()
-    @Published var userBirthDate = [Date]()
-    @Published var userGender = [String]()
-    @Published var userGenderIndex = [Int]()
-    @Published var userSex = [Int]()
-    @Published var userUUIDString = [String]()
-    @Published var userAgreement = [Bool]()
-    @Published var finalUserAgreementAgreed: [Int] = [Int]()
-    @Published var finalUserAgreementAgreedDate: [Date] = [Date]()
+    @State var userFirstName = [String]()
+    @State var userLastName = [String]()
+    @State var userEmail = [String]()
+    @State var userPassword = [String]()
+    @State var userAge = [Int]()
+    @State var userBirthDate = [Date]()
+    @State var userGender = [String]()
+    @State var userGenderIndex = [Int]()
+    @State var userSex = [Int]()
+    @State var userUUIDString = [String]()
+
     // Demo Variables
-    @Published var finalFirstName: [String] = [String]()
-    @Published var finalLastName: [String] = [String]()
-    @Published var finalEmail: [String] = [String]()
-    @Published var finalPassword: [String] = [String]()
-    @Published var finalAge: [Int] = [Int]()
-    @Published var finalGender: [String] = [String]()
-    @Published var finalGenderIndex: [Int] = [Int]()
-    @Published var finalSex: [Int] = [Int]()
-    @Published var finalUserUUIDString: [String] = [String]()
-    @Published var stringJsonFUAADate = String()
-    @Published var stringFUAADate = String()
-    @Published var stringInputFUAADate = String()
+    @State var finalFirstName: [String] = [String]()
+    @State var finalLastName: [String] = [String]()
+    @State var finalEmail: [String] = [String]()
+    @State var finalPassword: [String] = [String]()
+    @State var finalAge: [Int] = [Int]()
+    @State var finalGender: [String] = [String]()
+    @State var finalGenderIndex: [Int] = [Int]()
+    @State var finalSex: [Int] = [Int]()
+    @State var finalUserUUIDString: [String] = [String]()
+    
     let fileSetupName = ["SetupResults.json"]
     let setupCSVName = "SetupResultsCSV.csv"
     let inputSetupCSVName = "InputSetupResultsCSV.csv"
     
-    @Published var saveFinalSetupResults: SaveFinalSetupResults? = nil
+    @State var saveFinalSetupResults: SaveFinalSetupResults? = nil
     
     var body: some View {
         
@@ -430,7 +422,6 @@ struct UserDataEntryView: View {
             .padding(.leading)
             .padding(.trailing)
         }
-        .environmentObject(setupDataModel)
     }
     
     func loadWhyWeAsk() {
@@ -472,15 +463,15 @@ struct UserDataEntryView: View {
     func saveDemographicData() async {
         let adjustedAge = age + 6
         selectedGender = gender[genderIdx]
-        setupDataModel.userFirstName.append(firtsName)
-        setupDataModel.userLastName.append(lastName)
-        setupDataModel.userEmail.append(email)
-        setupDataModel.userPassword.append(password)
-        setupDataModel.userAge.append(adjustedAge)
-        setupDataModel.userGender.append(gender[genderIdx])
-        setupDataModel.userGenderIndex.append(genderIdx)
-        setupDataModel.userSex.append(contentsOf: sex)
-        setupDataModel.userUUIDString.append(userUUID)
+        userFirstName.append(firtsName)
+        userLastName.append(lastName)
+        userEmail.append(email)
+        userPassword.append(password)
+        userAge.append(adjustedAge)
+        userGender.append(gender[genderIdx])
+        userGenderIndex.append(genderIdx)
+        userSex.append(contentsOf: sex)
+        userUUIDString.append(userUUID)
         print("selected gender: \(selectedGender)")
         print("firstName: \(firtsName)")
         print("lastName: \(lastName)")
@@ -491,50 +482,178 @@ struct UserDataEntryView: View {
         print("genderIdx: \(genderIdx)")
         print("sex: \(sex)")
         print("userUUID: \(userUUID)")
-        print("SetupModel firstName: \(setupDataModel.userFirstName)")
-        print("SetupModel lastName: \(setupDataModel.userLastName)")
-        print("SetupModel email: \(setupDataModel.userEmail)")
-        print("SetupModel password: \(setupDataModel.userPassword)")
-        print("SetupModel age: \(setupDataModel.userAge)")
-        print("SetupModel gender: \(setupDataModel.userGender)")
-        print("SetupModel genderIdx: \(setupDataModel.userGenderIndex)")
-        print("SetupModel sex: \(setupDataModel.userSex)")
-        print("SetupModel userUUIDString: \(setupDataModel.userUUIDString)")
+        print("SetupModel firstName: \(userFirstName)")
+        print("SetupModel lastName: \(userLastName)")
+        print("SetupModel email: \(userEmail)")
+        print("SetupModel password: \(userPassword)")
+        print("SetupModel age: \(userAge)")
+        print("SetupModel gender: \(userGender)")
+        print("SetupModel genderIdx: \(userGenderIndex)")
+        print("SetupModel sex: \(userSex)")
+        print("SetupModel userUUIDString: \(userUUIDString)")
       }
     
     
     func concatenateDemoFinalArrays() async {
-        setupDataModel.finalFirstName.append(contentsOf: setupDataModel.userFirstName)
-        setupDataModel.finalLastName.append(contentsOf: setupDataModel.userLastName)
-        setupDataModel.finalEmail.append(contentsOf: setupDataModel.userEmail)
-        setupDataModel.finalPassword.append(contentsOf: setupDataModel.userPassword)
-        setupDataModel.finalAge.append(contentsOf: setupDataModel.userAge)
-        setupDataModel.finalGender.append(contentsOf: setupDataModel.userGender)
-        setupDataModel.finalGenderIndex.append(contentsOf: setupDataModel.userGenderIndex)
-        setupDataModel.finalSex.append(contentsOf: setupDataModel.userSex)
-        setupDataModel.finalUserUUIDString.append(userUUID)
+        finalFirstName.append(contentsOf: userFirstName)
+        finalLastName.append(contentsOf: userLastName)
+        finalEmail.append(contentsOf: userEmail)
+        finalPassword.append(contentsOf: userPassword)
+        finalAge.append(contentsOf: userAge)
+        finalGender.append(contentsOf: userGender)
+        finalGenderIndex.append(contentsOf: userGenderIndex)
+        finalSex.append(contentsOf: userSex)
+        finalUserUUIDString.append(userUUID)
     }
     
     func printFinalDemoArrays() async {
         
-        print("finalFirstName: \(setupDataModel.finalFirstName)")
-        print("finalLastName: \(setupDataModel.finalLastName)")
-        print("finalEmail: \(setupDataModel.finalEmail)")
-        print("finalPassword: \(setupDataModel.finalPassword)")
-        print("finalAge: \(setupDataModel.finalAge)")
-        print("finalGender: \(setupDataModel.finalGender)")
-        print("finalGenderIndex: \(setupDataModel.finalGenderIndex)")
-        print("finalSex: \(setupDataModel.finalSex)")
-        print("finalUserUUIDString: \(setupDataModel.finalUserUUIDString)")
+        print("finalFirstName: \(finalFirstName)")
+        print("finalLastName: \(finalLastName)")
+        print("finalEmail: \(finalEmail)")
+        print("finalPassword: \(finalPassword)")
+        print("finalAge: \(finalAge)")
+        print("finalGender: \(finalGender)")
+        print("finalGenderIndex: \(finalGenderIndex)")
+        print("finalSex: \(finalSex)")
+        print("finalUserUUIDString: \(finalUserUUIDString)")
     }
     
     func saveUserDataEntry() async {
-        await setupDataModel.getSetupData()
-        await setupDataModel.saveSetupToJSON()
-        await setupDataModel.writeSetupResultsToCSV()
-        await setupDataModel.writeInputSetupResultsToCSV()
+        await getSetupData()
+        await saveSetupToJSON()
+        await writeSetupResultsToCSV()
+        await writeInputSetupResultsToCSV()
     }
     
+    func getSetupData() async {
+        guard let setupData = await self.getDemoJSONData() else { return }
+        print("Json Setup Data:")
+        print(setupData)
+        let jsonSetupString = String(data: setupData, encoding: .utf8)
+        print(jsonSetupString!)
+        do {
+            self.saveFinalSetupResults = try JSONDecoder().decode(SaveFinalSetupResults.self, from: setupData)
+            print("JSON GetData Run")
+            print("data: \(setupData)")
+        } catch let error {
+            print("!!!Error decoding setup json data: \(error)")
+        }
+    }
+    
+
+    
+    func getDemoJSONData() async -> Data? {
+        
+        let saveFinalSetupResults = SaveFinalSetupResults (
+            jsonFinalFirstName: finalFirstName,
+            jsonFinalLastName: finalLastName,
+            jsonFinalEmail: finalEmail,
+            jsonFinalPassword: finalPassword,
+            jsonFinalAge: finalAge,
+            jsonFinalGender: finalGender,
+            jsonFinalGenderIndex: finalGenderIndex,
+            jsonFinalSex: finalSex,
+            jsonUserUUID: finalUserUUIDString)
+        
+        let jsonSetupData = try? JSONEncoder().encode(saveFinalSetupResults)
+        print("saveFinalResults: \(saveFinalSetupResults)")
+        print("Json Encoded \(jsonSetupData!)")
+        return jsonSetupData
+
+    }
+    
+    func saveSetupToJSON() async {
+    // !!!This saves to device directory, whish is likely what is desired
+        let setupPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = setupPaths[0]
+        print("DocumentsDirectory: \(documentsDirectory)")
+        let setupFilePaths = documentsDirectory.appendingPathComponent(fileSetupName[0])
+        print(setupFilePaths)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        do {
+            let jsonSetupData = try encoder.encode(saveFinalSetupResults)
+            print(jsonSetupData)
+          
+            try jsonSetupData.write(to: setupFilePaths)
+        } catch {
+            print("Error writing to JSON Setup file: \(error)")
+        }
+    }
+
+    
+    func writeSetupResultsToCSV() async {
+        print("writeSetupResultsToCSV Start")
+        
+        let stringFinalFirstName = "finalFirstName," + finalFirstName.map { String($0) }.joined(separator: ",")
+        let stringFinalLastName = "finalLastName," + finalLastName.map { String($0) }.joined(separator: ",")
+        let stringFinalEmail = "finalEmail," + finalEmail.map { String($0) }.joined(separator: ",")
+        let stringFinalPassword = "finalPassword," + finalPassword.map { String($0) }.joined(separator: ",")
+        let stringFinalAge = "finalAge," + finalAge.map { String($0) }.joined(separator: ",")
+        let stringFinalGender = "finalGender," + finalGender.map { String($0) }.joined(separator: ",")
+        let stringFinalGenderIndex = "finalGenderIndex," + finalGenderIndex.map { String($0) }.joined(separator: ",")
+        let stringFinalSex = "finalSex," + finalSex.map { String($0) }.joined(separator: ",")
+        let stringFinalUserUUIDString = "finalUserUUIDString," + finalUserUUIDString.map { String($0) }.joined(separator: ",")
+        
+        do {
+            let csvSetupPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvSetupDocumentsDirectory = csvSetupPath
+            print("CSV Setup DocumentsDirectory: \(csvSetupDocumentsDirectory)")
+            let csvSetupFilePath = csvSetupDocumentsDirectory.appendingPathComponent(setupCSVName)
+            print(csvSetupFilePath)
+            
+            let writerSetup = try CSVWriter(fileURL: csvSetupFilePath, append: false)
+        
+            try writerSetup.write(row: [stringFinalFirstName])
+            try writerSetup.write(row: [stringFinalLastName])
+            try writerSetup.write(row: [stringFinalEmail])
+            try writerSetup.write(row: [stringFinalPassword])
+            try writerSetup.write(row: [stringFinalAge])
+            try writerSetup.write(row: [stringFinalGender])
+            try writerSetup.write(row: [stringFinalGenderIndex])
+            try writerSetup.write(row: [stringFinalSex])
+            try writerSetup.write(row: [stringFinalUserUUIDString])
+        
+            print("CVS Setup Writer Success")
+        } catch {
+            print("CVSWriter Setup Error or Error Finding File for Setup CSV \(error.localizedDescription)")
+        }
+    }
+    
+    func writeInputSetupResultsToCSV() async {
+        print("writeInputSetupResultsToCSV Start")
+        
+        let stringFinalFirstName = finalFirstName.map { String($0) }.joined(separator: ",")
+        let stringFinalLastName = finalLastName.map { String($0) }.joined(separator: ",")
+        let stringFinalEmail = finalEmail.map { String($0) }.joined(separator: ",")
+        let stringFinalPassword = finalPassword.map { String($0) }.joined(separator: ",")
+        let stringFinalAge = finalAge.map { String($0) }.joined(separator: ",")
+        let stringFinalGender = finalGender.map { String($0) }.joined(separator: ",")
+        let stringFinalGenderIndex = finalGenderIndex.map { String($0) }.joined(separator: ",")
+        let stringFinalSex = finalSex.map { String($0) }.joined(separator: ",")
+        let stringFinalUserUUIDString = finalUserUUIDString.map { String($0) }.joined(separator: ",")
+        do {
+            let csvInputSetupPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvInputSetupDocumentsDirectory = csvInputSetupPath
+            print("CSV Input Setup DocumentsDirectory: \(csvInputSetupDocumentsDirectory)")
+            let csvInputSetupFilePath = csvInputSetupDocumentsDirectory.appendingPathComponent(inputSetupCSVName)
+            print(csvInputSetupFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvInputSetupFilePath, append: false)
+            try writerSetup.write(row: [stringFinalFirstName])
+            try writerSetup.write(row: [stringFinalLastName])
+            try writerSetup.write(row: [stringFinalEmail])
+            try writerSetup.write(row: [stringFinalPassword])
+            try writerSetup.write(row: [stringFinalAge])
+            try writerSetup.write(row: [stringFinalGender])
+            try writerSetup.write(row: [stringFinalGenderIndex])
+            try writerSetup.write(row: [stringFinalSex])
+            try writerSetup.write(row: [stringFinalUserUUIDString])
+            print("CVS Input Setup Writer Success")
+        } catch {
+            print("CVSWriter Input Setup Error or Error Finding File for Input Setup CSV \(error.localizedDescription)")
+        }
+    }
 }
 
 
@@ -597,13 +716,13 @@ class WhyWeAskModel: ObservableObject {
 //                        Task(priority: .userInitiated, operation: {
 //                            gender.append(self.genderList[index].gender)
 //                            genderIdx.append(index)
-//                            setupDataModel.userGender.append(self.genderList[index].gender)
-//                            setupDataModel.userGenderIndex.append(index)
+//                            userGender.append(self.genderList[index].gender)
+//                            userGenderIndex.append(index)
 //                            print(index)
 //                            print(genderIndex)
 //                            print(self.genderList[index].gender)
-//                            print(setupDataModel.userGender)
-//                            print(setupDataModel.userGenderIndex)
+//                            print(userGender)
+//                            print(userGenderIndex)
 //                        })
 //                    }
 //                }
@@ -616,7 +735,6 @@ class WhyWeAskModel: ObservableObject {
 //struct TestUserDataEntryView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        UserDataEntryView()
-//            .environmentObject(SetupDataModel())
 //    }
 //}
 

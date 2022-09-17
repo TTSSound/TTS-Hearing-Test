@@ -59,6 +59,8 @@ struct PostBilateral1kHzTestView: View {
     
     @State var dataFileURL13Beta = URL(fileURLWithPath: "")
     
+    @State var userSubmittedSettings = Bool()
+    
     let betaInputOnekHzSummaryCSVName = "InputSummaryOnekHzResultsCSV.csv"
     
     let inputBetaEHACSVName = "EHA.csv"
@@ -68,9 +70,16 @@ struct PostBilateral1kHzTestView: View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack{
-                
+                Spacer()
                 // Add in code to determine phone curve here or in each test. Maybe test it here
-                
+                Text("Test Selected: \(betaTestsArray[betaTestSelectedIdx])")
+                    .foregroundColor(.white)
+                    .padding(.top, 60)
+                    .padding(.bottom, 10)
+                Text("Gain Curve: \(finalUserGainSetting)")
+                    .foregroundColor(.white)
+                    .padding(.top, 10)
+                    .padding(.bottom, 20)
                 
                 //Check Test Selection
                 Button {
@@ -91,29 +100,111 @@ struct PostBilateral1kHzTestView: View {
                         await betaReviewWriteGainSetting()
                     }
                 } label: {
-                    Text("Check Test Selection and Determine Gain Curve")
-                        .foregroundColor(.green)
+                    Text("Analyze Results From The Last Test")
+                        .padding()
+                        .font(.subheadline)
+                        .frame(width: 300, height: 50, alignment: .center)
+                        .background(.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(300)
                 }
-                .padding(.top, 40)
+                .padding(.top, 60)
                 .padding(.bottom, 20)
                 
-                Text("Test Selected: \(betaTestsArray[betaTestSelectedIdx])")
-                    .foregroundColor(.white)
-                    .padding(.top, 5)
-                    .padding(.bottom, 5)
-                Text("Gain Curve: \(finalUserGainSetting)")
-                    .foregroundColor(.white)
-                    .padding(.top, 5)
-                    .padding(.bottom, 5)
-                
+               
+
+                if phonGain != 0 && ehaBetaLinkExists == false && eptaBetaLinkExists == true {
+//                    NavigationLink("EPTA Test", destination: EHATTSTestPart1View())
+                    Text("Now We're Ready To Start The Main Test Phases")
+                        .font(.title)
+                        .foregroundColor(.green)
+                        .padding()
+                        .padding(.top, 20)
+                    Spacer()
+                    NavigationLink(destination: {
+                        EHATTSTestPart1View()
+                    }, label: {
+                        Text("1. EPTA Test")
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(300)
+                    })
+                    .padding(.top, 40)
+                    .padding(.bottom, 20)
+
+                } else if phonGain != 0 && ehaBetaLinkExists == true && eptaBetaLinkExists == false {
+//                    NavigationLink("EHATTSTestPart1", destination: EHATTSTestPart1View()).foregroundColor(betaTestColorArray[betaEHAP1TestSelectedIdx])
+                    Text("Now We're Ready To Start The Main Test Phases")
+                        .font(.title)
+                        .foregroundColor(.green)
+                        .padding()
+                        .padding(.top, 20)
+                    Spacer()
+                    NavigationLink(destination: {
+                        EHATTSTestPart1View()
+                    }, label: {
+                        Text("2. EHA Full Test")
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(300)
+                    })
+                    .padding(.top, 40)
+                    .padding(.bottom, 20)
+
+                } else if userSubmittedSettings == true && ehaBetaLinkExists == false && eptaBetaLinkExists == false {
+                    Text("Now We're Ready To Start The Main Test Phases")
+                        .font(.title)
+                        .foregroundColor(.green)
+                        .padding()
+                        .padding(.top, 20)
+                    Spacer()
+                    VStack{
+                        NavigationLink(destination: {
+                            EHATTSTestPart1View()
+                        }, label: {
+                            Text("1. EPTA Short Test")
+                                .padding()
+                                .frame(width: 200, height: 50, alignment: .center)
+                                .background(colorModel.darkNeonGreen)
+                                .foregroundColor(.white)
+                                .cornerRadius(300)
+                        })
+                        .padding(.top, 10)
+                        .padding(.bottom, 10)
+                        
+                        NavigationLink(destination: {
+                            EHATTSTestPart1View()
+                        }, label: {
+                            Text("2. EHA Full Test")
+                                .padding()
+                                .frame(width: 200, height: 50, alignment: .center)
+                                .background(colorModel.tiffanyBlue)
+                                .foregroundColor(.white)
+                                .cornerRadius(300)
+                        })
+                        .padding(.top, 10)
+                        .padding(.bottom, 10)
+                        
+                        NavigationLink(destination: {
+                            EHATTSTestPart2View()
+                        }, label: {
+                            Text("3. EHA Part 2")
+                                .padding()
+                                .frame(width: 200, height: 50, alignment: .center)
+                                .background(.gray)
+                                .foregroundColor(.white)
+                                .cornerRadius(300)
+                        })
+                        .padding(.top, 10)
+                        .padding(.bottom, 60)
+                    }
+    
+                }
                 Spacer()
-                NavigationLink("EPTA Test", destination: EHATTSTestPart1View()).foregroundColor(betaTestColorArray[betaEPTATestSelectedIdx])
-                Spacer()
-                NavigationLink("EHATTSTestPart1", destination: EHATTSTestPart1View()).foregroundColor(betaTestColorArray[betaEHAP1TestSelectedIdx])
-                Spacer()
-                NavigationLink("EHATTSTestPart2", destination: EHATTSTestPart2View()).foregroundColor(betaTestColorArray[betaEHAP2TestSelectedIdx])
-                Spacer()
-                
             }
         }
     }
@@ -284,18 +375,21 @@ struct PostBilateral1kHzTestView: View {
             betaEHAP1TestSelectedIdx = 2
             betaEHAP2TestSelectedIdx = 2
             print("EPTA Test Link Exists")
+            userSubmittedSettings = true
         } else if eptaBetaLinkExists == false && ehaBetaLinkExists == true {
-            betaTestSelectedIdx = 1
+            betaTestSelectedIdx = 2
             betaEPTATestSelectedIdx = 2
             betaEHAP1TestSelectedIdx = 1
             betaEHAP2TestSelectedIdx = 2
             print("EHA Link Exist")
+            userSubmittedSettings = true
         } else {
-            betaTestSelectedIdx = 2
+            betaTestSelectedIdx = 3
             betaEPTATestSelectedIdx = 2
             betaEHAP1TestSelectedIdx = 2
             betaEHAP2TestSelectedIdx = 2
             print("Error in test index")
+            userSubmittedSettings = true
         }
     }
     

@@ -13,8 +13,8 @@ import SwiftUI
 struct CalibrationSplashView: View {
     
     @StateObject var colorModel: ColorModel = ColorModel()
-    @EnvironmentObject var deviceSelectionModel: DeviceSelectionModel
-    @EnvironmentObject var manualDeviceSelectionModel: ManualDeviceSelectionModel
+//    @EnvironmentObject var deviceSelectionModel: DeviceSelectionModel
+    
     
     
     var body: some View {
@@ -74,7 +74,6 @@ struct CalibrationSplashView: View {
 //struct CalibrationSplashView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        CalibrationSplashView()
-//            .environmentObject(DeviceSelectionModel())
-//            .environmentObject(ManualDeviceSelectionModel())
+//  //            .environmentObject(DeviceSelectionModel())
 //    }
 //}

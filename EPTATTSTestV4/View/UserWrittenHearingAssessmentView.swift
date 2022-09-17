@@ -18,6 +18,7 @@
 //10. Does a hearing problem cause you difficulty when in a restaurant with relatives or friends?
 
 import SwiftUI
+import CodableCSV
 
 
 //struct HHISurveryModel: Identifiable, Hashable {
@@ -42,10 +43,45 @@ import SwiftUI
 // final yes score """
 // final sum score """"
 
+
+struct SaveSurveyAssessmentResults: Codable {  // This is a model
+    var jsonFinalQuestion1responses = [Int]()
+    var jsonFinalQuestion2responses = [Int]()
+    var jsonFinalQuestion3responses = [Int]()
+    var jsonFinalQuestion4responses = [Int]()
+    var jsonFinalQuestion5responses = [Int]()
+    var jsonFinalQuestion6responses = [Int]()
+    var jsonFinalQuestion7responses = [Int]()
+    var jsonFinalQuestion8responses = [Int]()
+    var jsonFinalQuestion9responses = [Int]()
+    var jsonFinalQuestion10responses = [Int]()
+    var jsonFinalNoResponses = [Int]()
+    var jsonFinalSometimesResponses = [Int]()
+    var jsonFinalYesResponses = [Int]()
+    var jsonFinalSummaryResponseScore = [Int]()
+    
+    enum CodingKeys: String, CodingKey {
+        case jsonFinalQuestion1responses
+        case jsonFinalQuestion2responses
+        case jsonFinalQuestion3responses
+        case jsonFinalQuestion4responses
+        case jsonFinalQuestion5responses
+        case jsonFinalQuestion6responses
+        case jsonFinalQuestion7responses
+        case jsonFinalQuestion8responses
+        case jsonFinalQuestion9responses
+        case jsonFinalQuestion10responses
+        case jsonFinalNoResponses
+        case jsonFinalSometimesResponses
+        case jsonFinalYesResponses
+        case jsonFinalSummaryResponseScore
+    }
+}
+
+
 struct UserWrittenHearingAssessmentView: View {
     
     @StateObject var colorModel: ColorModel = ColorModel()
-    @StateObject var surveyAssessmentModel: SurveyAssessmentModel = SurveyAssessmentModel()
     
     @State var noResponses = [Int]()
     @State var sometimesResponses = [Int]()
@@ -96,6 +132,32 @@ struct UserWrittenHearingAssessmentView: View {
     @State var surveySubmitted = [0]
     
     @State var continueColor: [Color] = [Color.clear, Color.green]
+    
+    
+    @State var hhsiNoResponses = [Int]()
+    @State var hhsiSometimesResponses = [Int]()
+    @State var hhsiYesResponses = [Int]()
+    @State var hhsiScore = [Int]()
+    @State var finalQuestion1responses: [Int] = [Int]()
+    @State var finalQuestion2responses: [Int] = [Int]()
+    @State var finalQuestion3responses: [Int] = [Int]()
+    @State var finalQuestion4responses: [Int] = [Int]()
+    @State var finalQuestion5responses: [Int] = [Int]()
+    @State var finalQuestion6responses: [Int] = [Int]()
+    @State var finalQuestion7responses: [Int] = [Int]()
+    @State var finalQuestion8responses: [Int] = [Int]()
+    @State var finalQuestion9responses: [Int] = [Int]()
+    @State var finalQuestion10responses: [Int] = [Int]()
+    @State var finalNoResponses: [Int] = [Int]()
+    @State var finalSometimesResponses: [Int] = [Int]()
+    @State var finalYesResponses: [Int] = [Int]()
+    @State var finalSummaryResponseScore: [Int] = [Int]()
+
+    let fileSurveyName = ["SurveyResults.json"]
+    let surveyCSVName = "SurveyResultsCSV.csv"
+    let inputSurveyCSVName = "InputSurveyResultsCSV.csv"
+    
+    @State var saveSurveyAssessmentResults: SaveSurveyAssessmentResults? = nil
 
     var body: some View {
         ZStack {
@@ -108,13 +170,10 @@ struct UserWrittenHearingAssessmentView: View {
                 .frame(height: 2.0)
                 .foregroundColor(colorModel.tiffanyBlue)
                 .background(colorModel.tiffanyBlue)
-                
                 ScrollView {
-                 
                     VStack{
                         Text ("1. Does a hearing problem cause you to feel embarrassed when you meet new people?")
                             .foregroundColor(.white)
-                    
                             .multilineTextAlignment(.leading)
                             .padding(.top)
                         HStack{
@@ -495,7 +554,6 @@ struct UserWrittenHearingAssessmentView: View {
                                 .font(.headline)
                                 .foregroundColor(.green)
                             HStack{
-                             
                                 Toggle("Yes, Submit", isOn: $submitSurvey)
                                     .foregroundColor(.green)
                                     .font(.headline)
@@ -505,7 +563,6 @@ struct UserWrittenHearingAssessmentView: View {
                                             surveySubmitted.replaceSubrange(0..<1, with: [1])
                                         }
                                     }
-                              
                             }
                         }
                         .padding(.top)
@@ -528,20 +585,15 @@ struct UserWrittenHearingAssessmentView: View {
                                 await saveWrittenHearingTest()
                             })
                         }
-                        
                     }
                     .padding(.bottom)
                     .background(.black)
-       
-                
                 }
                 Divider()
                     .padding()
                     .frame(height: 2.0)
                     .foregroundColor(colorModel.tiffanyBlue)
                     .background(colorModel.tiffanyBlue)
-                    
-
                 NavigationLink(destination:
                                 surveySubmitted.first == 1 ? AnyView(PreTestView())
                                : surveySubmitted.first != 1 ? AnyView(SurveyErrorView())
@@ -553,10 +605,8 @@ struct UserWrittenHearingAssessmentView: View {
                         .foregroundColor(continueColor[surveySubmitted[0]])
                         .padding()
                 }
-              
             }
         }
-        .environmentObject(surveyAssessmentModel)
     }
     
     func calculateSurveryResponses() async {
@@ -564,19 +614,19 @@ struct UserWrittenHearingAssessmentView: View {
         let sometimesSum = sometimesResponses.reduce(0,+)
         let yesSum = yesResponses.reduce(0,+)
         let score = noSum + sometimesSum + yesSum
-        surveyAssessmentModel.hhsiNoResponses.append(contentsOf: noResponses)
-        surveyAssessmentModel.hhsiSometimesResponses.append(contentsOf: sometimesResponses)
-        surveyAssessmentModel.hhsiYesResponses.append(contentsOf: yesResponses)
-        surveyAssessmentModel.hhsiScore.append(score)
+        hhsiNoResponses.append(contentsOf: noResponses)
+        hhsiSometimesResponses.append(contentsOf: sometimesResponses)
+        hhsiYesResponses.append(contentsOf: yesResponses)
+        hhsiScore.append(score)
         
        
         
         print("noResponses: \(noResponses)")
         print("sometimesResponses: \(sometimesResponses)")
         print("yesResponses: \(yesResponses)")
-        print("setupModel NoResponses: \(surveyAssessmentModel.hhsiNoResponses)")
-        print("setupModel SometimesResponses: \(surveyAssessmentModel.hhsiSometimesResponses)")
-        print("setupModel YesResponses: \(surveyAssessmentModel.hhsiYesResponses)")
+        print("setupModel NoResponses: \(hhsiNoResponses)")
+        print("setupModel SometimesResponses: \(hhsiSometimesResponses)")
+        print("setupModel YesResponses: \(hhsiYesResponses)")
         print("noSum: \(noSum) sometimesSum: \(sometimesSum) yesSum: \(yesSum)")
         print("hhsi Score: \(score)")
     }
@@ -585,23 +635,23 @@ struct UserWrittenHearingAssessmentView: View {
     func finalQuestion1Array() async {
         //Question 1 Responses
         if question1No == false {
-            surveyAssessmentModel.finalQuestion1responses.append(-1)
+            finalQuestion1responses.append(-1)
         } else if question1No == true {
-            surveyAssessmentModel.finalQuestion1responses.append(0)
+            finalQuestion1responses.append(0)
         } else {
             print("Error in question1No Logic")
         }
         if question1Sometimes == false {
-            surveyAssessmentModel.finalQuestion1responses.append(0)
+            finalQuestion1responses.append(0)
         } else if question1Sometimes == true {
-            surveyAssessmentModel.finalQuestion1responses.append(2)
+            finalQuestion1responses.append(2)
         } else {
             print("Error in question1Sometimes Logic")
         }
         if question1Yes == false {
-            surveyAssessmentModel.finalQuestion1responses.append(0)
+            finalQuestion1responses.append(0)
         } else if question1Yes == true {
-            surveyAssessmentModel.finalQuestion1responses.append(4)
+            finalQuestion1responses.append(4)
         } else {
             print("Error in question1Yes Logic")
         }
@@ -610,23 +660,23 @@ struct UserWrittenHearingAssessmentView: View {
     func finalQuestion2Array() async {
         //Question 2 Responses
         if question2No == false {
-            surveyAssessmentModel.finalQuestion2responses.append(-1)
+            finalQuestion2responses.append(-1)
         } else if question2No == true {
-            surveyAssessmentModel.finalQuestion2responses.append(0)
+            finalQuestion2responses.append(0)
         } else {
             print("Error in question2No Logic")
         }
         if question2Sometimes == false {
-            surveyAssessmentModel.finalQuestion2responses.append(0)
+            finalQuestion2responses.append(0)
         } else if question2Sometimes == true {
-            surveyAssessmentModel.finalQuestion2responses.append(2)
+            finalQuestion2responses.append(2)
         } else {
             print("Error in question2Sometimes Logic")
         }
         if question2Yes == false {
-            surveyAssessmentModel.finalQuestion2responses.append(0)
+            finalQuestion2responses.append(0)
         } else if question2Yes == true {
-            surveyAssessmentModel.finalQuestion2responses.append(4)
+            finalQuestion2responses.append(4)
         } else {
             print("Error in questio2Yes Logic")
         }
@@ -635,23 +685,23 @@ struct UserWrittenHearingAssessmentView: View {
     func finalQuestion3Array() async {
         //Question 3 Responses
         if question3No == false {
-            surveyAssessmentModel.finalQuestion3responses.append(-1)
+            finalQuestion3responses.append(-1)
         } else if question3No == true {
-            surveyAssessmentModel.finalQuestion3responses.append(0)
+            finalQuestion3responses.append(0)
         } else {
             print("Error in question3No Logic")
         }
         if question3Sometimes == false {
-            surveyAssessmentModel.finalQuestion3responses.append(0)
+            finalQuestion3responses.append(0)
         } else if question3Sometimes == true {
-            surveyAssessmentModel.finalQuestion3responses.append(2)
+            finalQuestion3responses.append(2)
         } else {
             print("Error in question3Sometimes Logic")
         }
         if question3Yes == false {
-            surveyAssessmentModel.finalQuestion3responses.append(0)
+            finalQuestion3responses.append(0)
         } else if question3Yes == true {
-            surveyAssessmentModel.finalQuestion3responses.append(4)
+            finalQuestion3responses.append(4)
         } else {
             print("Error in questio3Yes Logic")
         }
@@ -660,23 +710,23 @@ struct UserWrittenHearingAssessmentView: View {
     func finalQuestion4Array() async {
         //Question 4 Responses
         if question4No == false {
-            surveyAssessmentModel.finalQuestion4responses.append(-1)
+            finalQuestion4responses.append(-1)
         } else if question4No == true {
-            surveyAssessmentModel.finalQuestion4responses.append(0)
+            finalQuestion4responses.append(0)
         } else {
             print("Error in question4No Logic")
         }
         if question4Sometimes == false {
-            surveyAssessmentModel.finalQuestion4responses.append(0)
+            finalQuestion4responses.append(0)
         } else if question4Sometimes == true {
-            surveyAssessmentModel.finalQuestion4responses.append(2)
+            finalQuestion4responses.append(2)
         } else {
             print("Error in question4Sometimes Logic")
         }
         if question4Yes == false {
-            surveyAssessmentModel.finalQuestion4responses.append(0)
+            finalQuestion4responses.append(0)
         } else if question4Yes == true {
-            surveyAssessmentModel.finalQuestion4responses.append(4)
+            finalQuestion4responses.append(4)
         } else {
             print("Error in questio4Yes Logic")
         }
@@ -685,23 +735,23 @@ struct UserWrittenHearingAssessmentView: View {
     func finalQuestion5Array() async {
         //Question 5 Responses
         if question5No == false {
-            surveyAssessmentModel.finalQuestion5responses.append(-1)
+            finalQuestion5responses.append(-1)
         } else if question5No == true {
-            surveyAssessmentModel.finalQuestion5responses.append(0)
+            finalQuestion5responses.append(0)
         } else {
             print("Error in question5No Logic")
         }
         if question5Sometimes == false {
-            surveyAssessmentModel.finalQuestion5responses.append(0)
+            finalQuestion5responses.append(0)
         } else if question5Sometimes == true {
-            surveyAssessmentModel.finalQuestion5responses.append(2)
+            finalQuestion5responses.append(2)
         } else {
             print("Error in question5Sometimes Logic")
         }
         if question5Yes == false {
-            surveyAssessmentModel.finalQuestion5responses.append(0)
+            finalQuestion5responses.append(0)
         } else if question5Yes == true {
-            surveyAssessmentModel.finalQuestion5responses.append(4)
+            finalQuestion5responses.append(4)
         } else {
             print("Error in questio5Yes Logic")
         }
@@ -711,23 +761,23 @@ struct UserWrittenHearingAssessmentView: View {
     func finalQuestion6Array() async {
         //Question 6 Responses
         if question6No == false {
-            surveyAssessmentModel.finalQuestion6responses.append(-1)
+            finalQuestion6responses.append(-1)
         } else if question6No == true {
-            surveyAssessmentModel.finalQuestion6responses.append(0)
+            finalQuestion6responses.append(0)
         } else {
             print("Error in question6No Logic")
         }
         if question6Sometimes == false {
-            surveyAssessmentModel.finalQuestion6responses.append(0)
+            finalQuestion6responses.append(0)
         } else if question6Sometimes == true {
-            surveyAssessmentModel.finalQuestion6responses.append(2)
+            finalQuestion6responses.append(2)
         } else {
             print("Error in question6Sometimes Logic")
         }
         if question6Yes == false {
-            surveyAssessmentModel.finalQuestion6responses.append(0)
+            finalQuestion6responses.append(0)
         } else if question6Yes == true {
-            surveyAssessmentModel.finalQuestion6responses.append(4)
+            finalQuestion6responses.append(4)
         } else {
             print("Error in questio6Yes Logic")
         }
@@ -736,23 +786,23 @@ struct UserWrittenHearingAssessmentView: View {
     func finalQuestion7Array() async {
         //Question 7 Responses
         if question7No == false {
-            surveyAssessmentModel.finalQuestion7responses.append(-1)
+            finalQuestion7responses.append(-1)
         } else if question7No == true {
-            surveyAssessmentModel.finalQuestion7responses.append(0)
+            finalQuestion7responses.append(0)
         } else {
             print("Error in question7No Logic")
         }
         if question7Sometimes == false {
-            surveyAssessmentModel.finalQuestion7responses.append(0)
+            finalQuestion7responses.append(0)
         } else if question7Sometimes == true {
-            surveyAssessmentModel.finalQuestion7responses.append(2)
+            finalQuestion7responses.append(2)
         } else {
             print("Error in question7Sometimes Logic")
         }
         if question7Yes == false {
-            surveyAssessmentModel.finalQuestion7responses.append(0)
+            finalQuestion7responses.append(0)
         } else if question7Yes == true {
-            surveyAssessmentModel.finalQuestion7responses.append(4)
+            finalQuestion7responses.append(4)
         } else {
             print("Error in questio7Yes Logic")
         }
@@ -762,23 +812,23 @@ struct UserWrittenHearingAssessmentView: View {
     func finalQuestion8Array() async {
         //Question 8 Responses
         if question8No == false {
-            surveyAssessmentModel.finalQuestion8responses.append(-1)
+            finalQuestion8responses.append(-1)
         } else if question8No == true {
-            surveyAssessmentModel.finalQuestion8responses.append(0)
+            finalQuestion8responses.append(0)
         } else {
             print("Error in question8No Logic")
         }
         if question8Sometimes == false {
-            surveyAssessmentModel.finalQuestion8responses.append(0)
+            finalQuestion8responses.append(0)
         } else if question8Sometimes == true {
-            surveyAssessmentModel.finalQuestion8responses.append(2)
+            finalQuestion8responses.append(2)
         } else {
             print("Error in question8Sometimes Logic")
         }
         if question8Yes == false {
-            surveyAssessmentModel.finalQuestion8responses.append(0)
+            finalQuestion8responses.append(0)
         } else if question8Yes == true {
-            surveyAssessmentModel.finalQuestion8responses.append(4)
+            finalQuestion8responses.append(4)
         } else {
             print("Error in questio8Yes Logic")
         }
@@ -788,23 +838,23 @@ struct UserWrittenHearingAssessmentView: View {
     func finalQuestion9Array() async {
         //Question 9 Responses
         if question9No == false {
-            surveyAssessmentModel.finalQuestion9responses.append(-1)
+            finalQuestion9responses.append(-1)
         } else if question9No == true {
-            surveyAssessmentModel.finalQuestion9responses.append(0)
+            finalQuestion9responses.append(0)
         } else {
             print("Error in question9No Logic")
         }
         if question9Sometimes == false {
-            surveyAssessmentModel.finalQuestion9responses.append(0)
+            finalQuestion9responses.append(0)
         } else if question9Sometimes == true {
-            surveyAssessmentModel.finalQuestion9responses.append(2)
+            finalQuestion9responses.append(2)
         } else {
             print("Error in question9Sometimes Logic")
         }
         if question9Yes == false {
-            surveyAssessmentModel.finalQuestion9responses.append(0)
+            finalQuestion9responses.append(0)
         } else if question9Yes == true {
-            surveyAssessmentModel.finalQuestion9responses.append(4)
+            finalQuestion9responses.append(4)
         } else {
             print("Error in questio9Yes Logic")
         }
@@ -814,23 +864,23 @@ struct UserWrittenHearingAssessmentView: View {
     func finalQuestion10Array() async {
         //Question 10 Responses
         if question10No == false {
-            surveyAssessmentModel.finalQuestion10responses.append(-1)
+            finalQuestion10responses.append(-1)
         } else if question10No == true {
-            surveyAssessmentModel.finalQuestion10responses.append(0)
+            finalQuestion10responses.append(0)
         } else {
             print("Error in question10No Logic")
         }
         if question10Sometimes == false {
-            surveyAssessmentModel.finalQuestion10responses.append(0)
+            finalQuestion10responses.append(0)
         } else if question10Sometimes == true {
-            surveyAssessmentModel.finalQuestion10responses.append(2)
+            finalQuestion10responses.append(2)
         } else {
             print("Error in question10Sometimes Logic")
         }
         if question10Yes == false {
-            surveyAssessmentModel.finalQuestion10responses.append(0)
+            finalQuestion10responses.append(0)
         } else if question10Yes == true {
-            surveyAssessmentModel.finalQuestion10responses.append(4)
+            finalQuestion10responses.append(4)
         } else {
             print("Error in questio10Yes Logic")
         }
@@ -838,62 +888,204 @@ struct UserWrittenHearingAssessmentView: View {
     
     func concantenateFinalSurveyResponseArrays() async {
         // Summary HHSI Score
-        surveyAssessmentModel.finalSummaryResponseScore.append(contentsOf: surveyAssessmentModel.hhsiScore)
+        finalSummaryResponseScore.append(contentsOf: hhsiScore)
         
         //Final No Responses
-        surveyAssessmentModel.finalNoResponses.append(surveyAssessmentModel.finalQuestion1responses[0])
-        surveyAssessmentModel.finalNoResponses.append(surveyAssessmentModel.finalQuestion2responses[0])
-        surveyAssessmentModel.finalNoResponses.append(surveyAssessmentModel.finalQuestion3responses[0])
-        surveyAssessmentModel.finalNoResponses.append(surveyAssessmentModel.finalQuestion4responses[0])
-        surveyAssessmentModel.finalNoResponses.append(surveyAssessmentModel.finalQuestion5responses[0])
-        surveyAssessmentModel.finalNoResponses.append(surveyAssessmentModel.finalQuestion6responses[0])
-        surveyAssessmentModel.finalNoResponses.append(surveyAssessmentModel.finalQuestion7responses[0])
-        surveyAssessmentModel.finalNoResponses.append(surveyAssessmentModel.finalQuestion8responses[0])
-        surveyAssessmentModel.finalNoResponses.append(surveyAssessmentModel.finalQuestion9responses[0])
-        surveyAssessmentModel.finalNoResponses.append(surveyAssessmentModel.finalQuestion10responses[0])
+        finalNoResponses.append(finalQuestion1responses[0])
+        finalNoResponses.append(finalQuestion2responses[0])
+        finalNoResponses.append(finalQuestion3responses[0])
+        finalNoResponses.append(finalQuestion4responses[0])
+        finalNoResponses.append(finalQuestion5responses[0])
+        finalNoResponses.append(finalQuestion6responses[0])
+        finalNoResponses.append(finalQuestion7responses[0])
+        finalNoResponses.append(finalQuestion8responses[0])
+        finalNoResponses.append(finalQuestion9responses[0])
+        finalNoResponses.append(finalQuestion10responses[0])
     
         // Final Sometimes Responses
-        surveyAssessmentModel.finalSometimesResponses.append(surveyAssessmentModel.finalQuestion1responses[1])
-        surveyAssessmentModel.finalSometimesResponses.append(surveyAssessmentModel.finalQuestion2responses[1])
-        surveyAssessmentModel.finalSometimesResponses.append(surveyAssessmentModel.finalQuestion3responses[1])
-        surveyAssessmentModel.finalSometimesResponses.append(surveyAssessmentModel.finalQuestion4responses[1])
-        surveyAssessmentModel.finalSometimesResponses.append(surveyAssessmentModel.finalQuestion5responses[1])
-        surveyAssessmentModel.finalSometimesResponses.append(surveyAssessmentModel.finalQuestion6responses[1])
-        surveyAssessmentModel.finalSometimesResponses.append(surveyAssessmentModel.finalQuestion7responses[1])
-        surveyAssessmentModel.finalSometimesResponses.append(surveyAssessmentModel.finalQuestion8responses[1])
-        surveyAssessmentModel.finalSometimesResponses.append(surveyAssessmentModel.finalQuestion9responses[1])
-        surveyAssessmentModel.finalSometimesResponses.append(surveyAssessmentModel.finalQuestion10responses[1])
+        finalSometimesResponses.append(finalQuestion1responses[1])
+        finalSometimesResponses.append(finalQuestion2responses[1])
+        finalSometimesResponses.append(finalQuestion3responses[1])
+        finalSometimesResponses.append(finalQuestion4responses[1])
+        finalSometimesResponses.append(finalQuestion5responses[1])
+        finalSometimesResponses.append(finalQuestion6responses[1])
+        finalSometimesResponses.append(finalQuestion7responses[1])
+        finalSometimesResponses.append(finalQuestion8responses[1])
+        finalSometimesResponses.append(finalQuestion9responses[1])
+        finalSometimesResponses.append(finalQuestion10responses[1])
         
         //Final Yes Responses
-        surveyAssessmentModel.finalYesResponses.append(surveyAssessmentModel.finalQuestion1responses[2])
-        surveyAssessmentModel.finalYesResponses.append(surveyAssessmentModel.finalQuestion2responses[2])
-        surveyAssessmentModel.finalYesResponses.append(surveyAssessmentModel.finalQuestion3responses[2])
-        surveyAssessmentModel.finalYesResponses.append(surveyAssessmentModel.finalQuestion4responses[2])
-        surveyAssessmentModel.finalYesResponses.append(surveyAssessmentModel.finalQuestion4responses[2])
-        surveyAssessmentModel.finalYesResponses.append(surveyAssessmentModel.finalQuestion6responses[2])
-        surveyAssessmentModel.finalYesResponses.append(surveyAssessmentModel.finalQuestion7responses[2])
-        surveyAssessmentModel.finalYesResponses.append(surveyAssessmentModel.finalQuestion8responses[2])
-        surveyAssessmentModel.finalYesResponses.append(surveyAssessmentModel.finalQuestion9responses[2])
-        surveyAssessmentModel.finalYesResponses.append(surveyAssessmentModel.finalQuestion10responses[2])
+        finalYesResponses.append(finalQuestion1responses[2])
+        finalYesResponses.append(finalQuestion2responses[2])
+        finalYesResponses.append(finalQuestion3responses[2])
+        finalYesResponses.append(finalQuestion4responses[2])
+        finalYesResponses.append(finalQuestion4responses[2])
+        finalYesResponses.append(finalQuestion6responses[2])
+        finalYesResponses.append(finalQuestion7responses[2])
+        finalYesResponses.append(finalQuestion8responses[2])
+        finalYesResponses.append(finalQuestion9responses[2])
+        finalYesResponses.append(finalQuestion10responses[2])
         
-        print("surveyAssessmentModel finalSummaryResponseScore: \(surveyAssessmentModel.finalSummaryResponseScore)")
-        print("surveyAssessmentModel finalNoResponseArray: \(surveyAssessmentModel.finalNoResponses)")
-        print("surveyAssessmentModel finalSometimesResponseArray: \(surveyAssessmentModel.finalSometimesResponses)")
-        print("surveyAssessmentModel finalYesResponseArray: \(surveyAssessmentModel.finalYesResponses)")
+        print("finalSummaryResponseScore: \(finalSummaryResponseScore)")
+        print("finalNoResponseArray: \(finalNoResponses)")
+        print("finalSometimesResponseArray: \(finalSometimesResponses)")
+        print("finalYesResponseArray: \(finalYesResponses)")
     }
     
     func saveWrittenHearingTest() async {
-        await surveyAssessmentModel.getSurveyData()
-        await surveyAssessmentModel.saveSurveyToJSON()
-        await surveyAssessmentModel.writeSurveyResultsToCSV()
-        await surveyAssessmentModel.writeInputSurveyResultsToCSV()
+        await getSurveyData()
+        await saveSurveyToJSON()
+        await writeSurveyResultsToCSV()
+        await writeInputSurveyResultsToCSV()
     }
     
+    func getSurveyData() async {
+        DispatchQueue.main.async {
+            Task {
+                
+                guard let surveyData = await self.getSurveyJSONData() else { return }
+                print("Json Survey Data:")
+                print(surveyData)
+                let jsonSurveyString = String(data: surveyData, encoding: .utf8)
+                print(jsonSurveyString!)
+                do {
+                    self.saveSurveyAssessmentResults = try JSONDecoder().decode(SaveSurveyAssessmentResults.self, from: surveyData)
+                    print("JSON Get Survey Data Run")
+                    print("data: \(surveyData)")
+                } catch let error {
+                    print("!!!Error decoding survey json data: \(error)")
+                }
+            }
+        }
+    }
     
+    func getSurveyJSONData() async -> Data? {
+        let saveSurveyAssessmentResults = SaveSurveyAssessmentResults (
+            jsonFinalQuestion1responses: finalQuestion1responses,
+            jsonFinalQuestion2responses: finalQuestion2responses,
+            jsonFinalQuestion3responses: finalQuestion3responses,
+            jsonFinalQuestion4responses: finalQuestion4responses,
+            jsonFinalQuestion5responses: finalQuestion5responses,
+            jsonFinalQuestion6responses: finalQuestion6responses,
+            jsonFinalQuestion7responses: finalQuestion7responses,
+            jsonFinalQuestion8responses: finalQuestion8responses,
+            jsonFinalQuestion9responses: finalQuestion9responses,
+            jsonFinalQuestion10responses: finalQuestion10responses,
+            jsonFinalNoResponses: finalNoResponses,
+            jsonFinalSometimesResponses: finalSometimesResponses,
+            jsonFinalYesResponses: finalYesResponses,
+            jsonFinalSummaryResponseScore: finalSummaryResponseScore)
+        let jsonSurveyData = try? JSONEncoder().encode(saveSurveyAssessmentResults)
+        print("saveSurveyResults: \(saveSurveyAssessmentResults)")
+        print("Json Encoded \(jsonSurveyData!)")
+        return jsonSurveyData
+    }
+        
     
+    func saveSurveyToJSON() async {
+    // !!!This saves to device directory, whish is likely what is desired
+        let surveyPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = surveyPaths[0]
+        print("DocumentsDirectory: \(documentsDirectory)")
+        let surveyFilePaths = documentsDirectory.appendingPathComponent(fileSurveyName[0])
+        print(surveyFilePaths)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        do {
+            let jsonSurveyData = try encoder.encode(saveSurveyAssessmentResults)
+            print(jsonSurveyData)
+          
+            try jsonSurveyData.write(to: surveyFilePaths)
+        } catch {
+            print("Error writing to JSON Survey file: \(error)")
+        }
+    }
     
+    func writeSurveyResultsToCSV() async {
+        print("writeSurveyResultsToCSV Start")
+        let stringFinalQuestion1responses = "finalQuestion1responses," + finalQuestion1responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion2responses = "finalQuestion2responses," + finalQuestion2responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion3responses = "finalQuestion3responses," + finalQuestion3responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion4responses = "finalQuestion4responses," + finalQuestion4responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion5responses = "finalQuestion5responses," + finalQuestion5responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion6responses = "finalQuestion6responses," + finalQuestion6responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion7responses = "finalQuestion7responses," + finalQuestion7responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion8responses = "finalQuestion8responses," + finalQuestion8responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion9responses = "finalQuestion9responses," + finalQuestion9responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion10responses = "finalQuestion10responses," + finalQuestion10responses.map { String($0) }.joined(separator: ",")
+        let stringFinalNoResponses = "finalNoResponses," + finalNoResponses.map { String($0) }.joined(separator: ",")
+        let stringFinalSometimesResponses = "finalSometimesResponses," + finalSometimesResponses.map { String($0) }.joined(separator: ",")
+        let stringFinalYesResponses = "finalYesResponses," + finalYesResponses.map { String($0) }.joined(separator: ",")
+        let stringFinalSummaryResponseScore = "finalSummaryResponseScore," + finalSummaryResponseScore.map { String($0) }.joined(separator: ",")
+        do {
+            let csvSurveyPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvSurveyDocumentsDirectory = csvSurveyPath
+            print("CSV Survey DocumentsDirectory: \(csvSurveyDocumentsDirectory)")
+            let csvSurveyFilePath = csvSurveyDocumentsDirectory.appendingPathComponent(surveyCSVName)
+            print(csvSurveyFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvSurveyFilePath, append: false)
+            try writerSetup.write(row: [stringFinalQuestion1responses])
+            try writerSetup.write(row: [stringFinalQuestion2responses])
+            try writerSetup.write(row: [stringFinalQuestion3responses])
+            try writerSetup.write(row: [stringFinalQuestion4responses])
+            try writerSetup.write(row: [stringFinalQuestion5responses])
+            try writerSetup.write(row: [stringFinalQuestion6responses])
+            try writerSetup.write(row: [stringFinalQuestion7responses])
+            try writerSetup.write(row: [stringFinalQuestion8responses])
+            try writerSetup.write(row: [stringFinalQuestion9responses])
+            try writerSetup.write(row: [stringFinalQuestion10responses])
+            try writerSetup.write(row: [stringFinalNoResponses])
+            try writerSetup.write(row: [stringFinalSometimesResponses])
+            try writerSetup.write(row: [stringFinalYesResponses])
+            try writerSetup.write(row: [stringFinalSummaryResponseScore])
+            print("CVS Survey Writer Success")
+        } catch {
+            print("CVSWriter Survey Error or Error Finding File for Survey CSV \(error.localizedDescription)")
+        }
+    }
     
-    
+    func writeInputSurveyResultsToCSV() async {
+        print("writeInputSurveyResultsToCSV Start")
+        let stringFinalQuestion1responses = finalQuestion1responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion2responses = finalQuestion2responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion3responses = finalQuestion3responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion4responses = finalQuestion4responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion5responses = finalQuestion5responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion6responses = finalQuestion6responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion7responses = finalQuestion7responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion8responses = finalQuestion8responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion9responses = finalQuestion9responses.map { String($0) }.joined(separator: ",")
+        let stringFinalQuestion10responses = finalQuestion10responses.map { String($0) }.joined(separator: ",")
+        let stringFinalNoResponses = finalNoResponses.map { String($0) }.joined(separator: ",")
+        let stringFinalSometimesResponses = finalSometimesResponses.map { String($0) }.joined(separator: ",")
+        let stringFinalYesResponses = finalYesResponses.map { String($0) }.joined(separator: ",")
+        let stringFinalSummaryResponseScore = finalSummaryResponseScore.map { String($0) }.joined(separator: ",")
+        do {
+            let csvInputSurveyPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvInputSurveyDocumentsDirectory = csvInputSurveyPath
+            print("CSV Input Survey DocumentsDirectory: \(csvInputSurveyDocumentsDirectory)")
+            let csvInputSurveyFilePath = csvInputSurveyDocumentsDirectory.appendingPathComponent(inputSurveyCSVName)
+            print(csvInputSurveyFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvInputSurveyFilePath, append: false)
+            try writerSetup.write(row: [stringFinalQuestion1responses])
+            try writerSetup.write(row: [stringFinalQuestion2responses])
+            try writerSetup.write(row: [stringFinalQuestion3responses])
+            try writerSetup.write(row: [stringFinalQuestion4responses])
+            try writerSetup.write(row: [stringFinalQuestion5responses])
+            try writerSetup.write(row: [stringFinalQuestion6responses])
+            try writerSetup.write(row: [stringFinalQuestion7responses])
+            try writerSetup.write(row: [stringFinalQuestion8responses])
+            try writerSetup.write(row: [stringFinalQuestion9responses])
+            try writerSetup.write(row: [stringFinalQuestion10responses])
+            try writerSetup.write(row: [stringFinalNoResponses])
+            try writerSetup.write(row: [stringFinalSometimesResponses])
+            try writerSetup.write(row: [stringFinalYesResponses])
+            try writerSetup.write(row: [stringFinalSummaryResponseScore])
+            print("CVS Input Survey Writer Success")
+        } catch {
+            print("CVSWriter Input Survey Error or Error Finding File for Input Survey CSV \(error.localizedDescription)")
+        }
+    }
 }
 
 //struct SurveyErrorView: View {

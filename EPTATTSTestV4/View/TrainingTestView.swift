@@ -292,6 +292,9 @@ struct TrainingTestView: View {
 
             Spacer()
             }
+            .onAppear(perform: {
+                trainingshowTestCompletionSheet = true
+            })
             .fullScreenCover(isPresented: $trainingshowTestCompletionSheet, content: {
                 ZStack{
                     colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
@@ -317,9 +320,12 @@ struct TrainingTestView: View {
                                 .foregroundColor(.green)
                                 .font(.title)
                                 .padding()
+                                .onTapGesture {
+                                    trainingshowTestCompletionSheet.toggle()
+                                }
                         } else if trainingfullTestCompleted == true {
                             Spacer()
-                            Text("Hopefully, you now have an idea of what you will hear and how to respond when you hear a tone playing.")
+                            Text("Hopefully, you now have an idea of what you will hear and how to respond.")
                                 .foregroundColor(.white)
                                 .font(.title)
                                 .padding()

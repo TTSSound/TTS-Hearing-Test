@@ -10,10 +10,8 @@ import SwiftUI
 struct ManualDeviceEntryInformationView: View {
     
     @Environment(\.presentationMode) var presentationMode
-//    @StateObject var colorModel: ColorModel = ColorModel()
     @StateObject var colorModel: ColorModel = ColorModel()
-//    @EnvironmentObject var deviceSelectionModel: DeviceSelectionModel
-//    @EnvironmentObject var manualDeviceSelectionModel: ManualDeviceSelectionModel
+
 
   
     
@@ -80,7 +78,5 @@ struct ManualDeviceEntryInformationView: View {
 //struct ManualDeviceEntryInformationView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        ManualDeviceEntryInformationView()
-////            .environmentObject(DeviceSelectionModel())
-////            .environmentObject(ManualDeviceSelectionModel())
 //    }
 //}

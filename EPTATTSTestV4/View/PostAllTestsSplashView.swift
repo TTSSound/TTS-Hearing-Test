@@ -6,14 +6,32 @@
 //
 
 import SwiftUI
+import CodableCSV
+
+
+struct SaveSystemSettingsInterimEHA: Codable {
+    var jsonFinalInterimEndingEHASystemVolume = [Float]()
+
+    enum CodingKeys: String, CodingKey {
+        case jsonFinalInterimEndingEHASystemVolume
+    }
+}
+
+
+struct SaveSystemSettingsEndEPTASimple: Codable {
+    
+    var jsonFinalEndingSystemVolume = [Float]()
+
+    enum CodingKeys: String, CodingKey {
+        case jsonFinalEndingSystemVolume
+    }
+}
 
 struct PostAllTestsSplashView: View {
     
     
     @StateObject var colorModel: ColorModel = ColorModel()
-    @StateObject var systemSettingsEndEPTASimpleModel: SystemSettingsEndEPTASimpleModel =  SystemSettingsEndEPTASimpleModel()
-    @StateObject var systemSettingsInterimEHAModel: SystemSettingsInterimEHAModel = SystemSettingsInterimEHAModel()
-    @StateObject var audioSessionModel: AudioSessionModel = AudioSessionModel()
+    var audioSessionModel: AudioSessionModel = AudioSessionModel()
     
     @State var pavolume = Float()
     @State var pavolumeCorrect = Int()
@@ -26,6 +44,23 @@ struct PostAllTestsSplashView: View {
     @State var eptaPostLinkExists = Bool()
     @State var simplePostLinkExists = Bool()
     @State var testTakenDirector = Int()
+    
+    @State var finalEndingSystemVolume: [Float] = [Float]()
+    
+    let fileSystemSettingsEndName = ["EndEPTASimpleSystemSettings.json"]
+    let systemSettingsEndCSVName = "EndEPTASimpleSystemSettingsCSV.csv"
+    let inputSystemSettingsEndCSVName = "InputEndEPTASimpleSystemSettingsCSV.csv"
+    
+    @State var saveSystemSettingsEndEPTASimple: SaveSystemSettingsEndEPTASimple? = nil
+    
+    @State var finalInterimEndingEHASystemVolume: [Float] = [Float]()
+    @State var finalInterimStartingEHASystemVolume: [Float] = [Float]()
+    
+    let fileSystemInterimEHAName = ["SystemSettingsInterimEHA.json"]
+    let systemInterimEHACSVName = "SystemSettingsInterimEHACSV.csv"
+    let inputSystemInterimEHACSVName = "InputSystemSettingsInterimEHACSV.csv"
+    
+    @State var saveSystemSettingsInterimEHA: SaveSystemSettingsInterimEHA? = nil
 
     var body: some View {
         ZStack{
@@ -41,15 +76,12 @@ struct PostAllTestsSplashView: View {
                         await checkPostEPTATestLik()
                         await checkPostSimpleTestLik()
                         await returnPostTestSelected()
-                        
-                        // Get system volume?
                     }
                 } label: {
                     Text("Check Test Selection")
                         .foregroundColor(.blue)
                 }
                 Spacer()
-                
                 NavigationLink(destination:
                                 testTakenDirector == 1 ? AnyView(EHAInterimPostEPTAView())
                                 : testTakenDirector == 2 ? AnyView(PostEPTATestView())
@@ -74,9 +106,7 @@ struct PostAllTestsSplashView: View {
                     audioSessionModel.cancelAudioSession()
                 }
             }
-            
         }
-       
     }
     
     func recheckVolue() {
@@ -182,26 +212,23 @@ struct PostAllTestsSplashView: View {
     
 
     func concantenateFinalSystemVolumeArray() async {
-        systemSettingsEndEPTASimpleModel.finalEndingSystemVolume.removeAll()
-        systemSettingsEndEPTASimpleModel.finalEndingSystemVolume.append(pavolume)
-        
-        systemSettingsInterimEHAModel.finalInterimEndingEHASystemVolume.removeAll()
-        systemSettingsInterimEHAModel.finalInterimEndingEHASystemVolume.append(pavolume)
-        
-        print("systemSettingsModel finalStartingSystemVolume: \(pavolume)")
-        print("systemSettingsInterimEHAModel finalInterimEndingEHASystemVolume: \(pavolume)")
+        finalEndingSystemVolume.removeAll()
+        finalEndingSystemVolume.append(pavolume)
+        finalInterimEndingEHASystemVolume.removeAll()
+        finalInterimEndingEHASystemVolume.append(pavolume)
+        print("finalStartingSystemVolume: \(pavolume)")
+        print("finalInterimEndingEHASystemVolume: \(pavolume)")
     }
     
     func saveTestSystemSettings() async {
-        await systemSettingsEndEPTASimpleModel.getSystemEndData()
-        await systemSettingsEndEPTASimpleModel.saveSystemEndToJSON()
-        await systemSettingsEndEPTASimpleModel.writeSystemEndResultsToCSV()
-        await systemSettingsEndEPTASimpleModel.writeInputSystemEndResultsToCSV()
-    
-        await systemSettingsInterimEHAModel.getInterimEndData()
-        await systemSettingsInterimEHAModel.saveSystemInterimToJSON()
-        await systemSettingsInterimEHAModel.writeSystemInterimResultsToCSV()
-        await systemSettingsInterimEHAModel.writeInputSystemInterimResultsToCSV()
+        await getSystemEndData()
+        await saveSystemEndToJSON()
+        await writeSystemEndResultsToCSV()
+        await writeInputSystemEndResultsToCSV()
+        await getInterimEndData()
+        await saveSystemInterimToJSON()
+        await writeSystemInterimResultsToCSV()
+        await writeInputSystemInterimResultsToCSV()
     }
 }
 
@@ -211,3 +238,166 @@ struct PostAllTestsSplashView: View {
 //        PostAllTestsSplashView()
 //    }
 //}
+
+extension PostAllTestsSplashView {
+//MAKR: -SystemSettingsEndEPTASimpleModel
+    
+    func getSystemEndData() async {
+        guard let systemSettingsEndData = await getSystemEndJSONData() else { return }
+        print("Json System Settings End Data:")
+        print(systemSettingsEndData)
+        let jsonSystemSettingsEndString = String(data: systemSettingsEndData, encoding: .utf8)
+        print(jsonSystemSettingsEndString!)
+        do {
+        self.saveSystemSettingsEndEPTASimple = try JSONDecoder().decode(SaveSystemSettingsEndEPTASimple.self, from: systemSettingsEndData)
+            print("JSON Get System End Settings Run")
+            print("data: \(systemSettingsEndData)")
+        } catch let error {
+            print("!!!Error decoding system Settings End json data: \(error)")
+        }
+    }
+    
+    func getSystemEndJSONData() async -> Data? {
+        let saveSystemSettingsEndEPTASimple = SaveSystemSettingsEndEPTASimple (
+        jsonFinalEndingSystemVolume: finalEndingSystemVolume)
+        let jsonSystemSettingsEndData = try? JSONEncoder().encode(saveSystemSettingsEndEPTASimple)
+        print("saveFinalResults: \(saveSystemSettingsEndEPTASimple)")
+        print("Json Encoded \(jsonSystemSettingsEndData!)")
+        return jsonSystemSettingsEndData
+    }
+    
+    func saveSystemEndToJSON() async {
+    // !!!This saves to device directory, whish is likely what is desired
+        let systemEndPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let endDocumentsDirectory = systemEndPaths[0]
+        print("endDocumentsDirectory: \(endDocumentsDirectory)")
+        let systemEndFilePaths = endDocumentsDirectory.appendingPathComponent(fileSystemSettingsEndName[0])
+        print(systemEndFilePaths)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        do {
+            let jsonSystemEndData = try encoder.encode(saveSystemSettingsEndEPTASimple)
+            print(jsonSystemEndData)
+          
+            try jsonSystemEndData.write(to: systemEndFilePaths)
+        } catch {
+            print("Error writing to JSON System End Settings file: \(error)")
+        }
+    }
+
+    func writeSystemEndResultsToCSV() async {
+        print("writeSystemEndResultsToCSV Start")
+        let stringFinalEndingSystemVolume = "finalEndingSystemVolume," + finalEndingSystemVolume.map { String($0) }.joined(separator: ",")
+        do {
+            let csvSystemEndPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvSystemEndDocumentsDirectory = csvSystemEndPath
+            print("CSV System End Settings DocumentsDirectory: \(csvSystemEndDocumentsDirectory)")
+            let csvSystemEndFilePath = csvSystemEndDocumentsDirectory.appendingPathComponent(systemSettingsEndCSVName)
+            print(csvSystemEndFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvSystemEndFilePath, append: false)
+            try writerSetup.write(row: [stringFinalEndingSystemVolume])
+            print("CVS System End Settings Writer Success")
+        } catch {
+            print("CVSWriter System End Settings Error or Error Finding File for System End Settings CSV \(error.localizedDescription)")
+        }
+    }
+    
+    func writeInputSystemEndResultsToCSV() async {
+        print("writeInputSystemEndResultsToCSV Start")
+        let stringFinalEndingSystemVolume = finalEndingSystemVolume.map { String($0) }.joined(separator: ",")
+        do {
+            let csvInputSystemEndPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvInputSystemEndDocumentsDirectory = csvInputSystemEndPath
+            print("CSV Input System End Settings DocumentsDirectory: \(csvInputSystemEndDocumentsDirectory)")
+            let csvInputSystemEndFilePath = csvInputSystemEndDocumentsDirectory.appendingPathComponent(inputSystemSettingsEndCSVName)
+            print(csvInputSystemEndFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvInputSystemEndFilePath, append: false)
+            try writerSetup.write(row: [stringFinalEndingSystemVolume])
+            print("CVS Input System End Settings Writer Success")
+        } catch {
+            print("CVSWriter Input System End Settings Error or Error Finding File for Input System End Settings CSV \(error.localizedDescription)")
+        }
+    }
+}
+
+extension PostAllTestsSplashView {
+//MARK: -SystemSettingsInterimEHAModel
+    
+    func getInterimEndData() async {
+        guard let systemSettingsInterimData = await getSystemInterimJSONData() else { return }
+        print("Json System Settings Interim Data:")
+        print(systemSettingsInterimData)
+        let jsonSystemSettingsInterimString = String(data: systemSettingsInterimData, encoding: .utf8)
+        print(jsonSystemSettingsInterimString!)
+        do {
+        self.saveSystemSettingsInterimEHA = try JSONDecoder().decode(SaveSystemSettingsInterimEHA.self, from: systemSettingsInterimData)
+            print("JSON Get System Interim Settings Run")
+            print("data: \(systemSettingsInterimData)")
+        } catch let error {
+            print("!!!Error decoding system Settings Interim json data: \(error)")
+        }
+    }
+    
+    func getSystemInterimJSONData() async -> Data? {
+        let saveSystemSettingsInterimEHA = SaveSystemSettingsInterimEHA (
+        jsonFinalInterimEndingEHASystemVolume: finalInterimEndingEHASystemVolume)
+        let jsonSystemInterimSettingsData = try? JSONEncoder().encode(saveSystemSettingsInterimEHA)
+        print("saveFinalResults: \(saveSystemSettingsInterimEHA)")
+        print("Json Encoded \(jsonSystemInterimSettingsData!)")
+        return jsonSystemInterimSettingsData
+    }
+    
+    func saveSystemInterimToJSON() async {
+    // !!!This saves to device directory, whish is likely what is desired
+        let systemInterimPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let interimDocumentsDirectory = systemInterimPaths[0]
+        print("interimDocumentsDirectory: \(interimDocumentsDirectory)")
+        let systemInterimFilePaths = interimDocumentsDirectory.appendingPathComponent(fileSystemInterimEHAName[0])
+        print(systemInterimFilePaths)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        do {
+            let jsonSystemInterimData = try encoder.encode(saveSystemSettingsInterimEHA)
+            print(jsonSystemInterimData)
+            try jsonSystemInterimData.write(to: systemInterimFilePaths)
+        } catch {
+            print("Error writing to JSON System Interim Settings file: \(error)")
+        }
+    }
+
+    func writeSystemInterimResultsToCSV() async {
+        print("writeSystemInterimResultsToCSV Start")
+        let stringFinalInterimEndingEHASystemVolume = "finalInterimEndingEHASystemVolume," + finalInterimEndingEHASystemVolume.map { String($0) }.joined(separator: ",")
+        do {
+            let csvSystemInterimPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvSystemInterimDocumentsDirectory = csvSystemInterimPath
+            print("CSV System Interim Settings DocumentsDirectory: \(csvSystemInterimDocumentsDirectory)")
+            let csvSystemInterimFilePath = csvSystemInterimDocumentsDirectory.appendingPathComponent(systemInterimEHACSVName)
+            print(csvSystemInterimFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvSystemInterimFilePath, append: false)
+            try writerSetup.write(row: [stringFinalInterimEndingEHASystemVolume])
+            print("CVS System Settings Writer Success")
+        } catch {
+            print("CVSWriter System Settings Error or Error Finding File for System Settings CSV \(error.localizedDescription)")
+        }
+    }
+    
+    func writeInputSystemInterimResultsToCSV() async {
+        print("writeInputSystemInterimResultsToCSV Start")
+        let stringFinalInterimEndingEHASystemVolume = finalInterimEndingEHASystemVolume.map { String($0) }.joined(separator: ",")
+        do {
+            let csvInputSystemInterimPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvInputSystemInterimDocumentsDirectory = csvInputSystemInterimPath
+            print("CSV Input System Interim Settings DocumentsDirectory: \(csvInputSystemInterimDocumentsDirectory)")
+            let csvInputSystemInterimFilePath = csvInputSystemInterimDocumentsDirectory.appendingPathComponent(inputSystemInterimEHACSVName)
+            print(csvInputSystemInterimFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvInputSystemInterimFilePath, append: false)
+            try writerSetup.write(row: [stringFinalInterimEndingEHASystemVolume])
+            print("CVS Input System Interim Settings Writer Success")
+        } catch {
+            print("CVSWriter Input System Interim Settings Error or Error Finding File for Input System Settings CSV \(error.localizedDescription)")
+        }
+    }
+    
+    
+}

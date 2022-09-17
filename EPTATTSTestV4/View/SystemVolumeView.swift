@@ -62,6 +62,5 @@ struct SystemVolumeView: View {
 //struct SystemVolumeView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        SystemVolumeView()
-//            .environmentObject(SystemSettingsModel())
 //    }
 //}

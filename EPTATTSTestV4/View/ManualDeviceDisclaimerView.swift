@@ -6,18 +6,30 @@
 //
 
 import SwiftUI
+import CodableCSV
 
 
 // Add in user agreed store variable and time of agreement CMseconds and Date
+
+struct SaveFinalManualDisclaimerAgreement: Codable {  // This is a model
+    var jsonFinalUncalibratedUserAgreementAgreed = [Bool]()
+    var jsonStringFinalUncalibratedUserAgreementAgreedDate = String()
+    var jsonFinalUncalibratedUserAgreementAgreedDate = [Date]()
+
+    enum CodingKeys: String, CodingKey {
+        case jsonFinalUncalibratedUserAgreementAgreed
+        case jsonStringFinalUncalibratedUserAgreementAgreedDate
+        case jsonFinalUncalibratedUserAgreementAgreedDate
+    }
+}
+
+
 
 struct ManualDeviceDisclaimerView: View {
     
     @StateObject var colorModel: ColorModel = ColorModel()
     @State var uncalibratedAgreementModel: UncalibratedAgreementModel = UncalibratedAgreementModel()
-//    @EnvironmentObject var deviceSelectionModel: DeviceSelectionModel
-//    @StateObject var manualDeviceSelectionModel: ManualDeviceSelectionModel
-//    @EnvironmentObject var manualDeviceSelectionModel: ManualDeviceSelectionModel
-    @StateObject var manualDisclaimerModel: ManualDisclaimerModel = ManualDisclaimerModel()
+
     @State var uncalDisclaimerSetting = Bool()
     @State var uncalDisclaimerAgreement = Int()
     @State var unLinkColors: [Color] = [Color.clear, Color.green]
@@ -25,6 +37,20 @@ struct ManualDeviceDisclaimerView: View {
     @State var uncalUserAgreed: Bool = false
     @State var uncalUserAgreedDate: Date = Date()
     var urlFile: URL = URL(fileURLWithPath: "uncalibratedAgreementText.txt")
+    
+    
+    @State var uncalibratedUserAgreement = [Bool]()
+    @State var finalUncalibratedUserAgreementAgreed: [Bool] = [Bool]()
+    @State var finalUncalibratedUserAgreementAgreedDate: [Date] = [Date]()
+    @State var stringJsonFUUAADate = String()
+    @State var stringFUUAADate = String()
+    @State var stringInputFUUAADate = String()
+    
+    let fileManualDisclaimerName = ["ManualDisclaimerAgreement.json"]
+    let manuaDisclaimerCSVName = "ManualDisclaimerAgreementCSV.csv"
+    let inputManuaDisclaimerCSVName = "InputManualDisclaimerAgreementCSV.csv"
+    
+    @State var saveFinalManualDisclaimerAgreement: SaveFinalManualDisclaimerAgreement? = nil
     
     var body: some View {
 
@@ -89,7 +115,6 @@ struct ManualDeviceDisclaimerView: View {
                 .padding(.bottom, 40)
                 Spacer()
             }
-            .environmentObject(manualDisclaimerModel)
         }
     }
 
@@ -114,36 +139,153 @@ struct ManualDeviceDisclaimerView: View {
 
     func uncalDisclaimerResponse() async {
         uncalDisclaimerSetting = true
-        if manualDisclaimerModel.uncalibratedUserAgreement.count < 1 || manualDisclaimerModel.uncalibratedUserAgreement.count > 1{
-            manualDisclaimerModel.uncalibratedUserAgreement.append(uncalDisclaimerSetting)
-            print(manualDisclaimerModel.uncalibratedUserAgreement)
+        if uncalibratedUserAgreement.count < 1 || uncalibratedUserAgreement.count > 1{
+            uncalibratedUserAgreement.append(uncalDisclaimerSetting)
+            print(uncalibratedUserAgreement)
         } else if uncalDisclaimerSetting == false {
-            manualDisclaimerModel.uncalibratedUserAgreement.removeAll()
-            manualDisclaimerModel.uncalibratedUserAgreement.append(uncalDisclaimerSetting)
-            print(manualDisclaimerModel.uncalibratedUserAgreement)
+            uncalibratedUserAgreement.removeAll()
+            uncalibratedUserAgreement.append(uncalDisclaimerSetting)
+            print(uncalibratedUserAgreement)
         } else {
             print("disclaimer error")
         }
     }
     
     func concentenateFinalUncalDisclaimerArrays() async {
-        manualDisclaimerModel.finalUncalibratedUserAgreementAgreed.append(contentsOf: manualDisclaimerModel.uncalibratedUserAgreement)
-        manualDisclaimerModel.finalUncalibratedUserAgreementAgreedDate.append(uncalUserAgreedDate)
-        print("manualDisclaimerModel finalUncalibratedUserAgreementAgreed: \(manualDisclaimerModel.finalUncalibratedUserAgreementAgreed)")
-        print("manualDisclaimerModel finalUncalibratedUserAgreementAgreedDate: \(manualDisclaimerModel.finalUncalibratedUserAgreementAgreedDate)")
+        finalUncalibratedUserAgreementAgreed.append(contentsOf: uncalibratedUserAgreement)
+        finalUncalibratedUserAgreementAgreedDate.append(uncalUserAgreedDate)
+        print("finalUncalibratedUserAgreementAgreed: \(finalUncalibratedUserAgreementAgreed)")
+        print("finalUncalibratedUserAgreementAgreedDate: \(finalUncalibratedUserAgreementAgreedDate)")
     }
     
     func saveManualDeviceDisclaimer() async {
-        await manualDisclaimerModel.getManualDisclaimerData()
-        await manualDisclaimerModel.saveManualDisclaimerToJSON()
-        await manualDisclaimerModel.writeManualDisclaimerToCSV()
-        await manualDisclaimerModel.writeInputManualDisclaimerToCSV()
+        await getManualDisclaimerData()
+        await saveManualDisclaimerToJSON()
+        await writeManualDisclaimerToCSV()
+        await writeInputManualDisclaimerToCSV()
     }
+    
+    
+    func getManualDisclaimerData() async {
+        guard let manualDisclaimerAgreementData = await getManualDisclaimerJSONData() else { return }
+        print("Json Manual Device Selection Data:")
+        print(manualDisclaimerAgreementData)
+        let jsonManualDisclaimerAgreementString = String(data: manualDisclaimerAgreementData, encoding: .utf8)
+        print(jsonManualDisclaimerAgreementString!)
+        do {
+        self.saveFinalManualDisclaimerAgreement = try JSONDecoder().decode(SaveFinalManualDisclaimerAgreement.self, from: manualDisclaimerAgreementData)
+            print("JSON GetManualDisclaimerAgreementData Run")
+            print("data: \(manualDisclaimerAgreementData)")
+        } catch let error {
+            print("!!!Error decoding Manual Disclaimer Agreement json data: \(error)")
+        }
+    }
+    
+    func getManualDisclaimerJSONData() async -> Data? {
+        let formatter3D = DateFormatter()
+        formatter3D.dateFormat = "HH:mm E, d MMM y"
+        if finalUncalibratedUserAgreementAgreedDate.count != 0 {
+            stringJsonFUUAADate = formatter3D.string(from: finalUncalibratedUserAgreementAgreedDate[0])
+        } else {
+            print("finaluncalibrateduseragreementdata is nil")
+        }
+        let saveFinalManualDisclaimerAgreement = SaveFinalManualDisclaimerAgreement (
+            jsonFinalUncalibratedUserAgreementAgreed: finalUncalibratedUserAgreementAgreed,
+            jsonStringFinalUncalibratedUserAgreementAgreedDate: stringJsonFUUAADate,
+            jsonFinalUncalibratedUserAgreementAgreedDate: finalUncalibratedUserAgreementAgreedDate)
+
+            let jsonManDisclaimerData = try? JSONEncoder().encode(saveFinalManualDisclaimerAgreement)
+            print("saveFinalManualDeviceSelection: \(saveFinalManualDisclaimerAgreement)")
+            print("Json Manual Device Encoded \(jsonManDisclaimerData!)")
+            return jsonManDisclaimerData
+    }
+
+    func saveManualDisclaimerToJSON() async {
+    // !!!This saves to device directory, whish is likely what is desired
+        let manualDisclaimerPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = manualDisclaimerPaths[0]
+        print("DocumentsDirectory: \(documentsDirectory)")
+        let manualDisclaimerFilePaths = documentsDirectory.appendingPathComponent(fileManualDisclaimerName[0])
+        print(manualDisclaimerFilePaths)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+            do {
+                let jsonManDisclaimerData = try encoder.encode(saveFinalManualDisclaimerAgreement)
+                print(jsonManDisclaimerData)
+              
+                try jsonManDisclaimerData.write(to: manualDisclaimerFilePaths)
+            } catch {
+                print("Error writing to JSON Manual Disclaimer Agreement file: \(error)")
+            }
+        }
+
+    func writeManualDisclaimerToCSV() async {
+        print("writeManualDisclaimerSelectionToCSV Start")
+        let formatter3 = DateFormatter()
+        formatter3.dateFormat = "HH:mm E, d MMM y"
+
+        if finalUncalibratedUserAgreementAgreedDate.count != 0 {
+            stringFUUAADate = formatter3.string(from: finalUncalibratedUserAgreementAgreedDate[0])
+        } else {
+            print("finaluncalibrateduseragreementdata is nil")
+        }
+
+        let stringFinalUncalibratedUserAgreementAgreed = "finalUncalibratedUserAgreementAgreed," + finalUncalibratedUserAgreementAgreed.map { String($0) }.joined(separator: ",")
+        let stringFinalUncalibratedUserAgreementAgreedDate = "stringFinalUncalibratedUserAgreementAgreedDate," + stringFUUAADate
+        let stringMapFinalUncalibratedUserAgreementAgreedDate = "finalUncalibratedUserAgreementAgreedDate," + stringFUUAADate.map { String($0) }.joined(separator: ",")
+    
+        do {
+            let csvManualDisclaimerPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvManualDisclaimerDocumentsDirectory = csvManualDisclaimerPath
+            print("CSV Device Selection DocumentsDirectory: \(csvManualDisclaimerDocumentsDirectory)")
+            let csvManualDisclaimerFilePath = csvManualDisclaimerDocumentsDirectory.appendingPathComponent(manuaDisclaimerCSVName)
+            print(csvManualDisclaimerFilePath)
+            
+            let writerSetup = try CSVWriter(fileURL: csvManualDisclaimerFilePath, append: false)
+            try writerSetup.write(row: [stringFinalUncalibratedUserAgreementAgreed])
+            try writerSetup.write(row: [stringFinalUncalibratedUserAgreementAgreedDate])
+            try writerSetup.write(row: [stringMapFinalUncalibratedUserAgreementAgreedDate])
+
+            print("CVS Manual Disclaimer Writer Success")
+        } catch {
+            print("CVSWriter Manual Disclaimer Error or Error Finding File for Manual Disclaimer CSV \(error.localizedDescription)")
+        }
+    }
+    
+    func writeInputManualDisclaimerToCSV() async {
+        print("writeInputManualDisclaimerSelectionToCSV Start")
+        let formatter3 = DateFormatter()
+        formatter3.dateFormat = "HH:mm E, d MMM y"
+        if finalUncalibratedUserAgreementAgreedDate.count != 0 {
+            stringInputFUUAADate = formatter3.string(from: finalUncalibratedUserAgreementAgreedDate[0])
+        } else {
+            print("finaluncalibrateduseragreementdata is nil")
+        }
+        let stringFinalUncalibratedUserAgreementAgreed = finalUncalibratedUserAgreementAgreed.map { String($0) }.joined(separator: ",")
+        let stringFinalUncalibratedUserAgreementAgreedDate = stringFUUAADate
+        let stringMapFinalUncalibratedUserAgreementAgreedDate = stringFUUAADate.map { String($0) }.joined(separator: ",")
+        do {
+            let csvInputManualDisclaimerPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvInputManualDisclaimerDocumentsDirectory = csvInputManualDisclaimerPath
+            print("CSV Input Device Selection DocumentsDirectory: \(csvInputManualDisclaimerDocumentsDirectory)")
+            let csvInputManualDisclaimerFilePath = csvInputManualDisclaimerDocumentsDirectory.appendingPathComponent(inputManuaDisclaimerCSVName)
+            print(csvInputManualDisclaimerFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvInputManualDisclaimerFilePath, append: false)
+            try writerSetup.write(row: [stringFinalUncalibratedUserAgreementAgreed])
+            try writerSetup.write(row: [stringFinalUncalibratedUserAgreementAgreedDate])
+            try writerSetup.write(row: [stringMapFinalUncalibratedUserAgreementAgreedDate])
+
+            print("CVS Input Manual Disclaimer Writer Success")
+        } catch {
+            print("CVSWriter Input Manual Disclaimer Error or Error Finding File for Input Manual Disclaimer CSV \(error.localizedDescription)")
+        }
+    }
+    
 }
 
 
 class UncalibratedAgreementModel: ObservableObject {
-    @EnvironmentObject var manualDisclaimerModel: ManualDisclaimerModel
+    
     @Published var uncalibratedAgreementText: String = ""
         init() { self.load(file: "uncalibratedAgreementText") }
         func load(file: String) {
@@ -165,7 +307,5 @@ class UncalibratedAgreementModel: ObservableObject {
 //struct ManualDeviceDisclaimerView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        ManualDeviceDisclaimerView()
-//            .environmentObject(DeviceSelectionModel())
-//            .environmentObject(ManualDisclaimerModel())
 //    }
 //}

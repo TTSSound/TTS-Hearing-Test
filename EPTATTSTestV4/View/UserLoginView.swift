@@ -10,8 +10,7 @@ import SwiftUI
 struct UserLoginView: View {
     
     @StateObject var colorModel: ColorModel = ColorModel()
-    @EnvironmentObject var setupDataModel: SetupDataModel
-    @EnvironmentObject var manualDeviceSelectionModel: ManualDeviceSelectionModel
+
     
     var body: some View {
         
@@ -26,21 +25,13 @@ struct UserLoginView: View {
             }
             .foregroundColor(.pink)
         }
-        .environmentObject(setupDataModel)
     }
 // !!!!!! WILL NEED TO ADD VARIABLES FOR THIS ACTION INTO SETUPDATAMODEL, JSONS AND CSV WRITERS
-    func saveLoginInformation() async {
-        await setupDataModel.getSetupData()
-        await setupDataModel.saveSetupToJSON()
-        await setupDataModel.writeSetupResultsToCSV()
-        await setupDataModel.writeInputSetupResultsToCSV()
 
-    }
 }
 
 //struct UserLoginView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        UserLoginView()
-//            .environmentObject(SetupDataModel())
 //    }
 //}

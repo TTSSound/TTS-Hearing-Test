@@ -11,8 +11,7 @@ struct ManualDeviceEntryIssueSplashView: View {
     
     
     @StateObject var colorModel: ColorModel = ColorModel()
-//    @EnvironmentObject var deviceSelectionModel: DeviceSelectionModel
-//    @EnvironmentObject var manualDeviceSelectionModel: ManualDeviceSelectionModel
+
     
     var body: some View {
         ZStack{
@@ -70,6 +69,5 @@ struct ManualDeviceEntryIssueSplashView: View {
 //struct ManualDeviceEntryIssueSplashView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        ManualDeviceEntryIssueSplashView()
-//            .environmentObject(ManualDeviceSelectionModel())
 //    }
 //}
