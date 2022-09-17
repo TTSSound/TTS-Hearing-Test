@@ -176,9 +176,12 @@ struct TrainingTestView: View {
                         .padding(.top, 40)
                         .padding(.bottom, 20)
                 } else if trainingfullTestCompleted == true {
-                    NavigationLink("Training Complete, Press To Continue & Start Testing", destination: Bilateral1kHzTestView(), isActive: $trainingTestCompleted)
+                    NavigationLink("Training Complete. Continue", destination: Bilateral1kHzTestView(), isActive: $trainingTestCompleted)
                         .padding()
+                        .frame(width: 200, height: 50, alignment: .center)
+                        .background(.green)
                         .foregroundColor(.white)
+                        .cornerRadius(300)
                         .padding(.top, 40)
                         .padding(.bottom, 20)
                 }
@@ -272,9 +275,6 @@ struct TrainingTestView: View {
                     .padding(.bottom, 40)
                 }
 
-     
-            
-//            Spacer()
                 Button {
                     trainingheardThread.async{ self.traininglocalHeard = 1
                     }

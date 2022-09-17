@@ -69,20 +69,14 @@ struct TestSelectionSplashView: View {
                     HStack{
                         Spacer()
                         Text("Return To Test Selection")
-                            .foregroundColor(.blue)
-                            .font(.title)
-                            .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                            .hoverEffect(/*@START_MENU_TOKEN@*/.highlight/*@END_MENU_TOKEN@*/)
-                            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                         Spacer()
                         Image(systemName: "arrowshape.turn.up.backward.2")
-                            .foregroundColor(.blue)
-                            .font(.title)
-                            .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                            .hoverEffect(/*@START_MENU_TOKEN@*/.highlight/*@END_MENU_TOKEN@*/)
-                            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                         Spacer()
                     }
+                    .frame(width: 200, height: 50, alignment: .center)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(300)
                 }
                 .padding(.bottom, 60)
               

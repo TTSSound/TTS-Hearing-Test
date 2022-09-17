@@ -60,6 +60,7 @@ struct EHATTSTestPart2View: View {
     }
     
     var audioSessionModel = AudioSessionModel()
+    var colorModel: ColorModel = ColorModel()
     @StateObject var gainReferenceModel: GainReferenceModel = GainReferenceModel()
 
     @State var ehaP2localHeard = 0
@@ -305,6 +306,9 @@ struct EHATTSTestPart2View: View {
     @State var ehaP2testIsPlaying: Bool = false
     @State var ehaP2playingString: [String] = ["", "Start or Restart Test", "Great Job, You've Completed This Test Segment"]
     @State var ehaP2playingStringColor: [Color] = [Color.clear, Color.yellow, Color.green]
+    
+    @State var ehaP2playingAlternateStringColor: [Color] = [Color.clear, Color(red: 0.06666666666666667, green: 0.6549019607843137, blue: 0.7333333333333333), Color.white, Color.green]
+    
     @State var ehaP2playingStringColorIndex = 0
     @State var ehaP2playingStringColorIndex2 = 0
     @State var ehaP2userPausedTest: Bool = false
@@ -380,11 +384,13 @@ struct EHATTSTestPart2View: View {
     var body: some View {
 
        ZStack{
-           RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
+           colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+//           RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
            VStack {
                Spacer()
                if ehaP2fullTestCompleted == false {
                    Text("EHA Part 2 Test")
+                       .font(.title)
                        .fontWeight(.bold)
                        .padding()
                        .foregroundColor(.white)
@@ -393,23 +399,14 @@ struct EHATTSTestPart2View: View {
                } else if ehaP2fullTestCompleted == true {
                    NavigationLink("Test Phase Complete, Press To Continue", destination: PostEHATestView(), isActive: $ehaP2EPTATestCompleted)
                        .padding()
-                       .foregroundColor(.green)
+                       .frame(width: 200, height: 50, alignment: .center)
+                       .background(.green)
+                       .foregroundColor(.white)
+                       .cornerRadius(300)
                        .padding(.top, 40)
                        .padding(.bottom, 20)
                }
-               HStack {
-                   Spacer()
-                   Text("Gain Setting: \(ehaP2_testGain)")
-                       .foregroundColor(.white)
-                       .font(.caption)
-                   Spacer()
-                   Text("Pan: \(ehaP2_pan)")
-                       .foregroundColor(.white)
-                       .font(.caption)
-                   Spacer()
-               }
-               .padding(.top, 5)
-               .padding(.bottom, 10)
+ 
                
                HStack {
                    Spacer()
@@ -432,8 +429,8 @@ struct EHATTSTestPart2View: View {
                    }
                    Spacer()
                }
-               .padding(.top, 20)
-               .padding(.bottom, 20)
+               .padding(.top, 5)
+               .padding(.bottom, 5)
                
                .onChange(of: ehaP2MonoRightTest, perform: { rightValue in
                    if rightValue == true {
@@ -517,23 +514,50 @@ struct EHATTSTestPart2View: View {
 //                   }
 //               }
                
+               Text("Gain Setting: \(ehaP2_testGain) | Pan: \(ehaP2_pan)")
+                   .fontWeight(.bold)
+                   .padding()
+                   .frame(width: 200, height: 50, alignment: .center)
+                   .background(Color .black)
+                   .foregroundColor(.white)
+                   .cornerRadius(300)
+                   .padding(.top, 5)
+                   .padding(.bottom, 5)
+               
+               
                Spacer()
                if ehaP2TestStarted == false {
-                   Text("Click to Stat Test")
+                   Button {
+                       Task(priority: .userInitiated) {
+                           audioSessionModel.setAudioSession()
+                           ehaP2setDualMonoVariables()
+                           ehaP2localPlaying = 1
+                           ehaP2endTestSeriesValue = false
+                           print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
+                       }
+                   } label: {
+                       Text("Click to Start")
+                           .fontWeight(.bold)
+                           .padding()
+                           .frame(width: 200, height: 50, alignment: .center)
+                           .background(colorModel.tiffanyBlue)
+                           .foregroundColor(.white)
+                           .cornerRadius(300)
+                   }
+                   .padding(.top, 20)
+                   .padding(.bottom, 20)
+                   
+                   Text("")
                        .fontWeight(.bold)
                        .padding()
-                       .foregroundColor(.blue)
-                       .onTapGesture {
-                           Task(priority: .userInitiated) {
-                               audioSessionModel.setAudioSession()
-                               ehaP2setDualMonoVariables()
-                               ehaP2localPlaying = 1
-                               ehaP2endTestSeriesValue = false
-                               print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
-                           }
-                       }
+                       .frame(width: 200, height: 50, alignment: .center)
+                       .background(Color .clear)
+                       .foregroundColor(.clear)
+                       .cornerRadius(300)
                        .padding(.top, 20)
-                       .padding(.bottom, 20)
+                       .padding(.bottom, 40)
+
+
                } else if ehaP2TestStarted == true {
                    Button {
                        ehaP2localPlaying = 0
@@ -560,7 +584,13 @@ struct EHATTSTestPart2View: View {
                        }
                    } label: {
                        Text("Pause Test")
-                           .foregroundColor(.yellow)
+                           .fontWeight(.semibold)
+                           .padding()
+                           .frame(width: 200, height: 50, alignment: .center)
+                           .background(Color .yellow)
+                           .foregroundColor(.black)
+                           .cornerRadius(300)
+                       
                    }
                    .padding(.top, 20)
                    .padding(.bottom, 20)
@@ -577,30 +607,38 @@ struct EHATTSTestPart2View: View {
                        print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
                    } label: {
                        Text(ehaP2playingString[ehaP2playingStringColorIndex])
-                           .foregroundColor(ehaP2playingStringColor[ehaP2playingStringColorIndex])
+                           .foregroundColor(ehaP2playingAlternateStringColor[ehaP2playingStringColorIndex+1])
+                           .fontWeight(.semibold)
+                           .padding()
+                           .frame(width: 200, height: 50, alignment: .center)
+                           .background(ehaP2playingAlternateStringColor[ehaP2playingStringColorIndex])
+                           .cornerRadius(300)
                    }
                    .padding(.top, 20)
-                   .padding(.bottom, 60)
+                   .padding(.bottom, 40)
                }
                
-               Spacer()
-               Text("Press if You Hear The Tone")
-                   .fontWeight(.semibold)
-                   .padding()
-                   .frame(width: 300, height: 100, alignment: .center)
-                   .background(Color .green)
-                   .foregroundColor(.black)
-                   .cornerRadius(300)
-                   .onTapGesture(count: 1) {
-                       ehaP2heardThread.async{ self.ehaP2localHeard = 1
-                       }
+               Button {
+                   ehaP2heardThread.async{ self.ehaP2localHeard = 1
                    }
-                   .padding(.top, 20)
+               } label: {
+                   Text("Press if You Hear The Tone")
+                       .fontWeight(.semibold)
+                       .padding()
+                       .frame(width: 300, height: 100, alignment: .center)
+                       .background(Color .green)
+                       .foregroundColor(.black)
+                       .cornerRadius(300)
+               }
+               .padding(.top, 20)
+               .padding(.bottom, 80)
+               
                Spacer()
                }
                .fullScreenCover(isPresented: $ehaP2showTestCompletionSheet, content: {
                    ZStack{
-                       RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
+                       colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+//                       RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
                        
                        VStack(alignment: .leading) {
                            
@@ -625,39 +663,61 @@ struct EHATTSTestPart2View: View {
                                    .padding(10)
                                    .foregroundColor(.red)
                            })
-                           Spacer()
-                           Text("Take a moment for a break before exiting to continue with the next test segment")
-                               .foregroundColor(.white)
-                               .font(.title3)
-                               .padding()
-                           Spacer()
                            if ehaP2fullTestCompleted == false {
-                               Button(action: {
-                                   if ehaP2fullTestCompleted == true {
-                                       ehaP2showTestCompletionSheet.toggle()
-                                   } else if ehaP2fullTestCompleted == false {
-                                       DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
-                                           Task(priority: .userInitiated) {
-                                               await ehaP2combinedPauseRestartAndStartNexTestCycle()
+                               Spacer()
+                               Text("Take a moment for a break before exiting to continue with the next test segment")
+                                   .foregroundColor(.white)
+                                   .font(.title)
+                                   .padding()
+                               Spacer()
+                               HStack{
+                                   Spacer()
+                                   Button(action: {
+                                       if ehaP2fullTestCompleted == true {
+                                           ehaP2showTestCompletionSheet.toggle()
+                                       } else if ehaP2fullTestCompleted == false {
+                                           DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
+                                               Task(priority: .userInitiated) {
+                                                   await ehaP2combinedPauseRestartAndStartNexTestCycle()
+                                               }
                                            }
                                        }
-                                   }
-                               }, label: {
-                                   Text("Start The Next Cycle")
-                                       .foregroundColor(.green)
-                                       .font(.title)
-                                       .padding()
-                               })
-                           } else if ehaP2fullTestCompleted == true {
-                               Button {
-                                   self.ehaP2EPTATestCompleted = true
-                                   ehaP2showTestCompletionSheet.toggle()
-                               } label: {
-                                   Text("Test Phase Complete, Press To Continue")
-                                       .foregroundColor(.green)
-                                       .font(.title)
-                                       .padding()
+                                   }, label: {
+                                       Text("Start The Next Cycle")
+                                           .fontWeight(.bold)
+                                           .padding()
+                                           .frame(width: 200, height: 50, alignment: .center)
+                                           .background(colorModel.tiffanyBlue)
+                                           .foregroundColor(.white)
+                                           .cornerRadius(300)
+                                   })
+                               Spacer()
                                }
+                           } else if ehaP2fullTestCompleted == true {
+                               Text("Test Phase Complete, Let's Proceed.")
+                                   .foregroundColor(.green)
+                                   .font(.title)
+                                   .padding()
+                                   .padding(.bottom, 20)
+                               HStack{
+                                   Spacer()
+                                   
+                                   Button {
+                                       self.ehaP2EPTATestCompleted = true
+                                       ehaP2showTestCompletionSheet.toggle()
+                                   } label: {
+                                       Text("Continue")
+                                           .fontWeight(.semibold)
+                                           .padding()
+                                           .frame(width: 200, height: 50, alignment: .center)
+                                           .background(Color .green)
+                                           .foregroundColor(.white)
+                                           .cornerRadius(300)
+                                   }
+                                   Spacer()
+                               }
+                               .padding(.top, 20)
+                               .padding(.bottom, 40)
                            }
                            Spacer()
                        }

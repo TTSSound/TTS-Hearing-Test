@@ -512,24 +512,23 @@ struct UserWrittenHearingAssessmentView: View {
                         .padding(.bottom)
                         .background(.black)
                         .onChange(of: submitSurvey) { _ in
-                                DispatchQueue.main.async(group: .none, qos: .userInitiated) {
-                                    Task(priority: .userInitiated, operation: {
-                                    await calculateSurveryResponses()
-                                    await finalQuestion1Array()
-                                    await finalQuestion2Array()
-                                    await finalQuestion3Array()
-                                    await finalQuestion4Array()
-                                    await finalQuestion5Array()
-                                    await finalQuestion6Array()
-                                    await finalQuestion7Array()
-                                    await finalQuestion8Array()
-                                    await finalQuestion9Array()
-                                    await finalQuestion10Array()
-                                    await concantenateFinalSurveyResponseArrays()
-                                    await saveWrittenHearingTest()
-                                })
-                            }
+                            Task(priority: .userInitiated, operation: {
+                                await calculateSurveryResponses()
+                                await finalQuestion1Array()
+                                await finalQuestion2Array()
+                                await finalQuestion3Array()
+                                await finalQuestion4Array()
+                                await finalQuestion5Array()
+                                await finalQuestion6Array()
+                                await finalQuestion7Array()
+                                await finalQuestion8Array()
+                                await finalQuestion9Array()
+                                await finalQuestion10Array()
+                                await concantenateFinalSurveyResponseArrays()
+                                await saveWrittenHearingTest()
+                            })
                         }
+                        
                     }
                     .padding(.bottom)
                     .background(.black)
@@ -889,6 +888,11 @@ struct UserWrittenHearingAssessmentView: View {
         await surveyAssessmentModel.writeSurveyResultsToCSV()
         await surveyAssessmentModel.writeInputSurveyResultsToCSV()
     }
+    
+    
+    
+    
+    
     
 }
 

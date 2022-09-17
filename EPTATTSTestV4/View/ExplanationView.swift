@@ -47,13 +47,19 @@ struct ExplanationView: View {
                 NavigationLink {
                     TestSelectionLandingView()
                 } label: {
-                    VStack{
-                       Image(systemName: "arrowshape.bounce.right")
-                       Text("Proceed When Ready")
-                   }
+                    HStack{
+                        Spacer()
+                        Text("Now Let's Contine!")
+                        Spacer()
+                        Image(systemName: "arrowshape.bounce.right")
+                        Spacer()
+                    }
+                    .frame(width: 200, height: 50, alignment: .center)
+                    .background(Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(300)
                 }
-                .foregroundColor(.green)
-                .font(.title2)
+                .padding(.bottom, 40)
                 Spacer()
             }
         }

@@ -85,6 +85,7 @@ struct CalibrationAssessmentView: View {
     @State var isOkayToProceed = Bool()
     @State var isSubmitted: Bool = false
     @State private var linkColors: [Color] = [Color.clear, Color.green]
+    @State private var linkColors2: [Color] = [Color.clear, Color.white]
     @State private var linkColorIndex = 0
     
     @State var headphones = [
@@ -255,11 +256,17 @@ struct CalibrationAssessmentView: View {
                                     : AnyView(InstructionsForTakingTest())
                     ){
                         HStack{
-                           Image(systemName: "arrowshape.bounce.right")
-                           Text("Now Let's Contine!")
+                            Spacer()
+                            Text("Now Let's Contine!")
+                            Spacer()
+                            Image(systemName: "arrowshape.bounce.right")
+                            Spacer()
                        }
+                        .frame(width: 200, height: 50, alignment: .center)
+                        .background(linkColors[linkColorIndex])
+                        .foregroundColor(linkColors2[linkColorIndex])
+                        .cornerRadius(300)
                     }
-                    .foregroundColor(linkColors[linkColorIndex])
                     Spacer()
                 }
             Spacer()

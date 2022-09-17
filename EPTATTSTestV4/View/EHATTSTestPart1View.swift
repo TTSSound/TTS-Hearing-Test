@@ -65,6 +65,7 @@ struct EHATTSTestPart1View: View {
     }
     
     var audioSessionModel = AudioSessionModel()
+    var colorModel: ColorModel = ColorModel()
     @StateObject var gainReferenceModel: GainReferenceModel = GainReferenceModel()
     
     @State var localHeard = 0
@@ -194,6 +195,9 @@ struct EHATTSTestPart1View: View {
     @State var testIsPlaying: Bool = false
     @State var playingString: [String] = ["", "Restart Test", "Great Job, You've Completed This Test Segment"]
     @State var playingStringColor: [Color] = [Color.clear, Color.yellow, Color.green]
+    
+    @State var ehaP1playingAlternateStringColor: [Color] = [Color.clear, Color(red: 0.06666666666666667, green: 0.6549019607843137, blue: 0.7333333333333333), Color.white, Color.green]
+    
     @State var playingStringColorIndex = 0
     @State var playingStringColorIndex2 = 0
     @State var userPausedTest: Bool = false
@@ -248,53 +252,59 @@ struct EHATTSTestPart1View: View {
     var body: some View {
         
         ZStack{
-            RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
+            colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+//            RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
             VStack {
                 Spacer()
                 if ehaP1fullTestCompleted == false {
                     Text("EHA Part 1 / EPTA Test")
+                        .font(.title)
                         .fontWeight(.bold)
                         .padding()
                         .foregroundColor(.white)
                         .padding(.top, 40)
-                        .padding(.bottom, 5)
+                        .padding(.bottom, 20)
                 } else if ehaP1EPTATestCompleted == true {
-                    NavigationLink("Test Phase Complete, Press To Continue", destination: PostAllTestsSplashView(), isActive: $ehaP1EPTATestCompleted)
+                    NavigationLink("Test Phase Complete. Continue", destination: PostAllTestsSplashView(), isActive: $ehaP1EPTATestCompleted)
                         .padding()
-                        .foregroundColor(.green)
+                        .frame(width: 200, height: 50, alignment: .center)
+                        .background(.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(300)
                         .padding(.top, 40)
-                        .padding(.bottom, 5)
+                        .padding(.bottom, 20)
                 }
-           
-                Text("Gain Setting: \(envDataObjectModel_testGain)")
-                    .foregroundColor(.white)
-                    .font(.caption)
-                    .padding(.top, 5)
-                    .padding(.bottom, 10)
-                
-//                NavigationLink("Test Phase Complete, Press To Continue", destination: PostAllTestsSplashView())
-//                    .padding()
-//                    .foregroundColor(.green)
-//                    .font(.caption)
-//                    .padding(.bottom, 5)
                 
                 Spacer()
                 if ehaP1TestStarted == false {
-                    Text("Click to Stat Test")
-                        .fontWeight(.bold)
-                        .font(.title)
-                        .padding()
-                        .foregroundColor(.green)
-                        .onTapGesture {
-                            Task(priority: .userInitiated) {
-                                audioSessionModel.setAudioSession()
-                                localPlaying = 1
-                                endTestSeriesValue = false
-                                print("Start Button Clicked. Playing = \(localPlaying)")
-                            }
+                    Button {
+                        Task(priority: .userInitiated) {
+                            audioSessionModel.setAudioSession()
+                            localPlaying = 1
+                            endTestSeriesValue = false
+                            print("Start Button Clicked. Playing = \(localPlaying)")
                         }
+                    } label: {
+                        Text("Click to Start")
+                            .fontWeight(.bold)
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(colorModel.tiffanyBlue)
+                            .foregroundColor(.white)
+                            .cornerRadius(300)
+                    }
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
+                    
+                    Text("Gain Setting: \(envDataObjectModel_testGain)")
+                        .padding()
+                        .font(.caption)
+                        .frame(width: 200, height: 50, alignment: .center)
+                        .background(Color .black)
+                        .foregroundColor(.white)
+                        .cornerRadius(300)
                         .padding(.top, 20)
-                        .padding(.bottom, 20)
+                        .padding(.bottom, 40)
                 } else if ehaP1TestStarted == true {
                     Button {
                         localPlaying = 0
@@ -321,7 +331,12 @@ struct EHATTSTestPart1View: View {
                         }
                     } label: {
                         Text("Pause Test")
-                            .foregroundColor(.yellow)
+                            .fontWeight(.semibold)
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(Color .yellow)
+                            .foregroundColor(.black)
+                            .cornerRadius(300)
                     }
                     .padding(.top, 20)
                     .padding(.bottom, 20)
@@ -337,31 +352,38 @@ struct EHATTSTestPart1View: View {
                         print("Restart After Pause Button Clicked. Playing = \(localPlaying)")
                     } label: {
                         Text(playingString[playingStringColorIndex])
-                            .foregroundColor(playingStringColor[playingStringColorIndex])
+                            .foregroundColor(ehaP1playingAlternateStringColor[playingStringColorIndex+1])
+                            .fontWeight(.semibold)
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(ehaP1playingAlternateStringColor[playingStringColorIndex])
+                            .cornerRadius(300)
                     }
                     .padding(.top, 20)
-                    .padding(.bottom, 60)
+                    .padding(.bottom, 40)
                 }
             
-            Spacer()
-            Text("Press if You Hear The Tone")
-                .fontWeight(.semibold)
-                .padding()
-                .frame(width: 300, height: 100, alignment: .center)
-                .background(Color .green)
-                .foregroundColor(.black)
-                .cornerRadius(300)
-                .onTapGesture(count: 1) {
+                Button {
                     heardThread.async{ self.localHeard = 1
                     }
+                } label: {
+                    Text("Press if You Hear The Tone")
+                        .fontWeight(.semibold)
+                        .padding()
+                        .frame(width: 300, height: 100, alignment: .center)
+                        .background(Color .green)
+                        .foregroundColor(.black)
+                        .cornerRadius(300)
                 }
                 .padding(.top, 20)
+                .padding(.bottom, 80)
             
             Spacer()
             }
             .fullScreenCover(isPresented: $showTestCompletionSheet, content: {
                 ZStack{
-                    RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
+                    colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+//                    RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
                 
                     VStack(alignment: .leading) {
         
@@ -384,39 +406,63 @@ struct EHATTSTestPart1View: View {
                                 .padding(10)
                                 .foregroundColor(.red)
                         })
-                        Spacer()
-                        Text("Take a moment for a break before exiting to continue with the next test segment")
-                            .foregroundColor(.white)
-                            .font(.title3)
-                            .padding()
-                        Spacer()
+                        
                         if ehaP1fullTestCompleted == false {
-                            Button(action: {
-                                if ehaP1fullTestCompleted == true {
-                                    showTestCompletionSheet.toggle()
-                                } else if ehaP1fullTestCompleted == false {
-                                    DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
-                                        Task(priority: .userInitiated) {
-                                            await combinedPauseRestartAndStartNexTestCycle()
+                            Text("Take a moment for a break before exiting to continue with the next test segment")
+                                .foregroundColor(.white)
+                                .font(.title)
+                                .padding()
+                            Spacer()
+                            HStack {
+                                Spacer()
+                                Button(action: {
+                                    if ehaP1fullTestCompleted == true {
+                                        showTestCompletionSheet.toggle()
+                                    } else if ehaP1fullTestCompleted == false {
+                                        DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
+                                            Task(priority: .userInitiated) {
+                                                await combinedPauseRestartAndStartNexTestCycle()
+                                            }
                                         }
                                     }
-                                }
-                            }, label: {
-                                Text("Start The Next Cycle")
-                                    .foregroundColor(.blue)
-                                    .font(.title)
-                                    .padding()
-                            })
-                        } else if ehaP1fullTestCompleted == true {
-                            Button {
-                                self.ehaP1EPTATestCompleted = true
-                                showTestCompletionSheet.toggle()
-                            } label: {
-                                Text("Test Phase Complete, Press To Continue")
-                                    .foregroundColor(.green)
-                                    .font(.title)
-                                    .padding()
+                                }, label: {
+                                    Text("Start The Next Cycle")
+                                        .fontWeight(.bold)
+                                        .padding()
+                                        .frame(width: 200, height: 50, alignment: .center)
+                                        .background(colorModel.tiffanyBlue)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(300)
+                                })
+                                Spacer()
                             }
+                            .padding(.top, 20)
+                            .padding(.bottom, 40)
+                            
+                        } else if ehaP1fullTestCompleted == true {
+                            Text("Test Phase Complete, Let's Proceed.")
+                                .foregroundColor(.green)
+                                .font(.title)
+                                .padding()
+                                .padding(.bottom, 20)
+                            HStack{
+                                Spacer()
+                                Button {
+                                    self.ehaP1EPTATestCompleted = true
+                                    showTestCompletionSheet.toggle()
+                                } label: {
+                                    Text("Continue")
+                                        .fontWeight(.semibold)
+                                        .padding()
+                                        .frame(width: 200, height: 50, alignment: .center)
+                                        .background(Color .green)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(300)
+                                }
+                                Spacer()
+                            }
+                            .padding(.top, 20)
+                            .padding(.bottom, 40)
                         }
                         Spacer()
                     }

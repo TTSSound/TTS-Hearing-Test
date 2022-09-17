@@ -263,23 +263,28 @@ class SetupDataModel: ObservableObject {
 // Original JSON Functions that Overwrite data at each call with only data in that view. Seems like class variables are not persisting across views in this class
     // JSON Variables
     func getSetupData() async {
-        guard let setupData = await getDemoJSONData() else { return }
-        print("Json Setup Data:")
-        print(setupData)
-        let jsonSetupString = String(data: setupData, encoding: .utf8)
-        print(jsonSetupString!)
-        do {
-        self.saveFinalSetupResults = try JSONDecoder().decode(SaveFinalSetupResults.self, from: setupData)
-            print("JSON GetData Run")
-            print("data: \(setupData)")
-        } catch let error {
-            print("!!!Error decoding setup json data: \(error)")
+        DispatchQueue.main.async {
+            Task(priority: .background) {
+                guard let setupData = await self.getDemoJSONData() else { return }
+                print("Json Setup Data:")
+                print(setupData)
+                let jsonSetupString = String(data: setupData, encoding: .utf8)
+                print(jsonSetupString!)
+                do {
+                    self.saveFinalSetupResults = try JSONDecoder().decode(SaveFinalSetupResults.self, from: setupData)
+                    print("JSON GetData Run")
+                    print("data: \(setupData)")
+                } catch let error {
+                    print("!!!Error decoding setup json data: \(error)")
+                }
+            }
         }
     }
     
 
     
     func getDemoJSONData() async -> Data? {
+
         let formatter3J = DateFormatter()
         formatter3J.dateFormat = "HH:mm E, d MMM y"
         if finalUserAgreementAgreedDate.count != 0 {
@@ -287,16 +292,16 @@ class SetupDataModel: ObservableObject {
         } else {
             print("finaluseragreementagreeddate is nil")
         }
-//        if finalUncalibratedUserAgreementAgreedDate.count != 0 {
-//            stringJsonFUUAADate = formatter3J.string(from: finalUncalibratedUserAgreementAgreedDate[0])
-//        } else {
-//            print("finaluncalibrateduseragreementdata is nil")
-//        }
-//        if finalDeviceSelectionUUID.count != 0 {
-//            stringJsonFDSUUID = finalDeviceSelectionUUID.map { ($0).uuidString }
-//        } else {
-//            print("finalDeviceSelectionUUID is nil")
-//        }
+        //        if finalUncalibratedUserAgreementAgreedDate.count != 0 {
+        //            stringJsonFUUAADate = formatter3J.string(from: finalUncalibratedUserAgreementAgreedDate[0])
+        //        } else {
+        //            print("finaluncalibrateduseragreementdata is nil")
+        //        }
+        //        if finalDeviceSelectionUUID.count != 0 {
+        //            stringJsonFDSUUID = finalDeviceSelectionUUID.map { ($0).uuidString }
+        //        } else {
+        //            print("finalDeviceSelectionUUID is nil")
+        //        }
         
         let saveFinalSetupResults = SaveFinalSetupResults (
             id: 11111,
@@ -312,48 +317,49 @@ class SetupDataModel: ObservableObject {
             jsonFinalGenderIndex: finalGenderIndex,
             jsonFinalSex: finalSex,
             jsonUserUUID: finalUserUUIDString)
-//            jsonFinalSelectedEHATest: finalSelectedEHATest,
-//            jsonFinalSelectedEPTATest: finalSelectedEPTATest,
-//            jsonFinalSelectedSimpleTest: finalSelectedSimpleTest,
-//            jsonSelectedEHATestUUID: finalPurchasedEHATestUUID,
-//            jsonSelectedEPTATestUUID: finalPurchasedEPTATestUUID,
-//            jsonSelectedSimpleTestUUID: finalSelectedSimpleTestUUID,
-//            jsonFinalTestTolken: finalTestTolken,
-//            jsonFinalTestSelected: finalTestSelected,
-//            jsonFinalDevicSelectionName: finalDevicSelectionName,
-//            jsonFinalDeviceSelectionIndex: finalDeviceSelectionIndex,
-//            jsonStringFinalDeviceSelectionUUID: stringJsonFDSUUID,
-//            jsonFinalDeviceSelectionUUID: finalDeviceSelectionUUID,
-//            jsonFinalHeadphoneModelIsUnknownIndex: finalHeadphoneModelIsUnknownIndex,
-//            jsonFinalUncalibratedUserAgreementAgreed: finalUncalibratedUserAgreementAgreed,
-//            jsonStringFinalUncalibratedUserAgreementAgreedDate: stringJsonFUUAADate,
-//            jsonFinalUncalibratedUserAgreementAgreedDate: finalUncalibratedUserAgreementAgreedDate,
-//            jsonFinalManualDeviceBrand: finalManualDeviceBrand,
-//            jsonFinalManualDeviceModel: finalManualDeviceBrand,
-//            jsonFinalStartingSystemVolume: finalStartingSystemVolume,
-//            jsonFinalQuestion1responses: finalQuestion1responses,
-//            jsonFinalQuestion2responses: finalQuestion2responses,
-//            jsonFinalQuestion3responses: finalQuestion3responses,
-//            jsonFinalQuestion4responses: finalQuestion4responses,
-//            jsonFinalQuestion5responses: finalQuestion5responses,
-//            jsonFinalQuestion6responses: finalQuestion6responses,
-//            jsonFinalQuestion7responses: finalQuestion7responses,
-//            jsonFinalQuestion8responses: finalQuestion8responses,
-//            jsonFinalQuestion9responses: finalQuestion9responses,
-//            jsonFinalQuestion10responses: finalQuestion10responses,
-//            jsonFinalNoResponses: finalNoResponses,
-//            jsonFinalSometimesResponses: finalSometimesResponses,
-//            jsonFinalYesResponses: finalYesResponses,
-//            jsonFinalSummaryResponseScore: finalSummaryResponseScore,
-//            jsonFinalEndingSystemVolume: finalEndingSystemVolume,
-//            jsonFinalInterimEndingEHASystemVolume: finalInterimEndingEHASystemVolume,
-//            jsonFinalInterimStartingEHASystemVolume: finalInterimStartingEHASystemVolume,
-//            jsonFinalEndingEHASystemVolume: finalEndingEHASystemVolume)
-
+        //            jsonFinalSelectedEHATest: finalSelectedEHATest,
+        //            jsonFinalSelectedEPTATest: finalSelectedEPTATest,
+        //            jsonFinalSelectedSimpleTest: finalSelectedSimpleTest,
+        //            jsonSelectedEHATestUUID: finalPurchasedEHATestUUID,
+        //            jsonSelectedEPTATestUUID: finalPurchasedEPTATestUUID,
+        //            jsonSelectedSimpleTestUUID: finalSelectedSimpleTestUUID,
+        //            jsonFinalTestTolken: finalTestTolken,
+        //            jsonFinalTestSelected: finalTestSelected,
+        //            jsonFinalDevicSelectionName: finalDevicSelectionName,
+        //            jsonFinalDeviceSelectionIndex: finalDeviceSelectionIndex,
+        //            jsonStringFinalDeviceSelectionUUID: stringJsonFDSUUID,
+        //            jsonFinalDeviceSelectionUUID: finalDeviceSelectionUUID,
+        //            jsonFinalHeadphoneModelIsUnknownIndex: finalHeadphoneModelIsUnknownIndex,
+        //            jsonFinalUncalibratedUserAgreementAgreed: finalUncalibratedUserAgreementAgreed,
+        //            jsonStringFinalUncalibratedUserAgreementAgreedDate: stringJsonFUUAADate,
+        //            jsonFinalUncalibratedUserAgreementAgreedDate: finalUncalibratedUserAgreementAgreedDate,
+        //            jsonFinalManualDeviceBrand: finalManualDeviceBrand,
+        //            jsonFinalManualDeviceModel: finalManualDeviceBrand,
+        //            jsonFinalStartingSystemVolume: finalStartingSystemVolume,
+        //            jsonFinalQuestion1responses: finalQuestion1responses,
+        //            jsonFinalQuestion2responses: finalQuestion2responses,
+        //            jsonFinalQuestion3responses: finalQuestion3responses,
+        //            jsonFinalQuestion4responses: finalQuestion4responses,
+        //            jsonFinalQuestion5responses: finalQuestion5responses,
+        //            jsonFinalQuestion6responses: finalQuestion6responses,
+        //            jsonFinalQuestion7responses: finalQuestion7responses,
+        //            jsonFinalQuestion8responses: finalQuestion8responses,
+        //            jsonFinalQuestion9responses: finalQuestion9responses,
+        //            jsonFinalQuestion10responses: finalQuestion10responses,
+        //            jsonFinalNoResponses: finalNoResponses,
+        //            jsonFinalSometimesResponses: finalSometimesResponses,
+        //            jsonFinalYesResponses: finalYesResponses,
+        //            jsonFinalSummaryResponseScore: finalSummaryResponseScore,
+        //            jsonFinalEndingSystemVolume: finalEndingSystemVolume,
+        //            jsonFinalInterimEndingEHASystemVolume: finalInterimEndingEHASystemVolume,
+        //            jsonFinalInterimStartingEHASystemVolume: finalInterimStartingEHASystemVolume,
+        //            jsonFinalEndingEHASystemVolume: finalEndingEHASystemVolume)
+        
         let jsonSetupData = try? JSONEncoder().encode(saveFinalSetupResults)
         print("saveFinalResults: \(saveFinalSetupResults)")
         print("Json Encoded \(jsonSetupData!)")
         return jsonSetupData
+
     }
     
     func saveSetupToJSON() async {

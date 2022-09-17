@@ -37,7 +37,12 @@ struct PostEHATestView: View {
                     EHAResultsDisplayView()
                 } label: {
                     Text("Continue To See Results")
-                        .foregroundColor(.green)
+                        .fontWeight(.semibold)
+                        .padding()
+                        .frame(width: 200, height: 50, alignment: .center)
+                        .background(Color .green)
+                        .foregroundColor(.white)
+                        .cornerRadius(300)
                 }
                 Spacer()
             }

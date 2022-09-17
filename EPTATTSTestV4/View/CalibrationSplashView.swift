@@ -51,7 +51,7 @@ struct CalibrationSplashView: View {
                         CalibrationAssessmentView()
                     } label: {
                         HStack {
-                            Text("Return to\nDevice Selection")
+                            Text("Return to Device Selection")
                             Image(systemName: "arrowshape.turn.up.backward.2")
                         }
                     }

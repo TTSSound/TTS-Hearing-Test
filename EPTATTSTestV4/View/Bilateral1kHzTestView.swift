@@ -57,6 +57,7 @@ struct Bilateral1kHzTestView: View {
     }
     
     var audioSessionModel = AudioSessionModel()
+    var colorModel: ColorModel = ColorModel()
 
     @State var onekHzlocalHeard = 0
     @State var onekHzlocalPlaying = Int()    // Playing = 1. Stopped = -1
@@ -228,8 +229,11 @@ struct Bilateral1kHzTestView: View {
     @State var onekHzisCountSame = Int()
     @State var onekHzheardArrayIdxAfnet1 = Int()
     @State var onekHztestIsPlaying: Bool = false
-    @State var onekHzplayingString: [String] = ["", "Start or Restart Test", "Great Job, You've\nCompleted This Test Segment"]
+    @State var onekHzplayingString: [String] = ["", "Restart Test", "Great Job, You've\nCompleted This Test Segment"]
     @State var onekHzplayingStringColor: [Color] = [Color.clear, Color.yellow, Color.green]
+    
+    @State var onekHzplayingAlternateStringColor: [Color] = [Color.clear, Color(red: 0.06666666666666667, green: 0.6549019607843137, blue: 0.7333333333333333), Color.white, Color.green]
+    
     @State var onekHzplayingStringColorIndex = 0
     @State var onekHzuserPausedTest: Bool = false
     
@@ -275,29 +279,47 @@ struct Bilateral1kHzTestView: View {
                         .padding(.top, 40)
                         .padding(.bottom, 20)
                 } else if bilateral1kHzTestCompleted == true {
-                    NavigationLink("Test Phase Complete, Press To Continue", destination: PostBilateral1kHzTestView(), isActive: $continuePastBilateralTest)//", label: [])
+                    NavigationLink("Test Phase Complete. Continue.", destination: PostBilateral1kHzTestView(), isActive: $continuePastBilateralTest)//", label: [])
     //                NavigationLink("Test Phase Complete, Press To Continue", destination: PostBilateral1kHzTestView())
                         .padding()
-                        .foregroundColor(.green)
-                        .font(.title)
+                        .frame(width: 200, height: 50, alignment: .center)
+                        .background(.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(300)
                         .padding(.top, 40)
                         .padding(.bottom, 20)
                 }
-         
+                
+                Spacer()
                 if onekHzTestStarted == false {
-                    Text("Click to Stat Test")
+                    Button {
+                        Task(priority: .userInitiated) {
+                            audioSessionModel.setAudioSession()
+                            onekHzlocalPlaying = 1
+                            print("Start Button Clicked. Playing = \(onekHzlocalPlaying)")
+                        }
+                    } label: {
+                        Text("Click to Start")
+                            .fontWeight(.bold)
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(colorModel.tiffanyBlue)
+                            .foregroundColor(.white)
+                            .cornerRadius(300)
+                    }
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
+                    
+                    Text("")
                         .fontWeight(.bold)
                         .padding()
-                        .foregroundColor(.blue)
-                        .onTapGesture {
-                            Task(priority: .userInitiated) {
-                                audioSessionModel.setAudioSession()
-                                onekHzlocalPlaying = 1
-                                print("Start Button Clicked. Playing = \(onekHzlocalPlaying)")
-                            }
-                        }
+                        .frame(width: 200, height: 50, alignment: .center)
+                        .background(Color .clear)
+                        .foregroundColor(.clear)
+                        .cornerRadius(300)
                         .padding(.top, 20)
-                        .padding(.bottom, 20)
+                        .padding(.bottom, 40)
+         
                 } else if onekHzTestStarted == true {
                     Button {
                         onekHzlocalPlaying = 0
@@ -324,7 +346,12 @@ struct Bilateral1kHzTestView: View {
                         }
                     } label: {
                         Text("Pause Test")
-                            .foregroundColor(.yellow)
+                            .fontWeight(.semibold)
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(Color .yellow)
+                            .foregroundColor(.black)
+                            .cornerRadius(300)
                     }
                     .padding(.top, 20)
                     .padding(.bottom, 20)
@@ -339,31 +366,38 @@ struct Bilateral1kHzTestView: View {
                         print("Start Button Clicked. Playing = \(onekHzlocalPlaying)")
                     } label: {
                         Text(onekHzplayingString[onekHzplayingStringColorIndex])
-                            .foregroundColor(onekHzplayingStringColor[onekHzplayingStringColorIndex])
+                            .foregroundColor(onekHzplayingAlternateStringColor[onekHzplayingStringColorIndex+1])
+                            .fontWeight(.semibold)
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(onekHzplayingAlternateStringColor[onekHzplayingStringColorIndex])
+                            .cornerRadius(300)
                     }
                     .padding(.top, 20)
-                    .padding(.bottom, 60)
+                    .padding(.bottom, 40)
                 }
      
-                
-            Text("Press if You Hear The Tone")
-                .fontWeight(.semibold)
-                .padding()
-                .frame(width: 300, height: 100, alignment: .center)
-                .background(Color .green)
-                .foregroundColor(.black)
-                .cornerRadius(300)
-                .onTapGesture(count: 1) {
+                Button {
                     onekHzheardThread.async{ self.onekHzlocalHeard = 1
                     }
+                } label: {
+                    Text("Press if You Hear The Tone")
+                        .fontWeight(.semibold)
+                        .padding()
+                        .frame(width: 300, height: 100, alignment: .center)
+                        .background(Color .green)
+                        .foregroundColor(.black)
+                        .cornerRadius(300)
                 }
                 .padding(.top, 20)
-                
+                .padding(.bottom, 80)
+            
             Spacer()
             }
             .fullScreenCover(isPresented: $onekHzshowTestCompletionSheet, content: {
                 ZStack{
-                    RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
+                    colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+//                    RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
                     VStack(alignment: .leading) {
                         
                         Button(action: {
@@ -376,18 +410,33 @@ struct Bilateral1kHzTestView: View {
                         })
                         Spacer()
                         Text("Take a moment for a break before exiting to continue with the next test segment")
-                        
+                            .foregroundColor(.white)
+                            .font(.title)
+                            .padding()
                         Spacer()
-                        Button {
-                            continuePastBilateralTest = true
-                            onekHzshowTestCompletionSheet.toggle()
-                        } label: {
-                            Text("Test Phase Complete, Press To Continue")
-                                .foregroundColor(.green)
-                                .font(.title)
-                                .padding()
+                        Text("Let's proceed with the test.")
+                            .foregroundColor(.green)
+                            .font(.title)
+                            .padding()
+                            .padding(.bottom, 20)
+                        HStack{
+                            Spacer()
+                            Button {
+                                continuePastBilateralTest = true
+                                onekHzshowTestCompletionSheet.toggle()
+                            } label: {
+                                Text("Continue")
+                                    .fontWeight(.semibold)
+                                    .padding()
+                                    .frame(width: 200, height: 50, alignment: .center)
+                                    .background(Color .green)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(300)
+                            }
+                            Spacer()
                         }
-
+                        .padding(.top, 20)
+                        .padding(.bottom, 40)
                         Spacer()
                     }
                 }

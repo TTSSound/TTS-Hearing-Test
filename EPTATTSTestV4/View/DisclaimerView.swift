@@ -28,6 +28,7 @@ struct DisclaimerView: View {
     @State var disclaimerSetting = Bool()
     @State var disclaimerAgreement = Int()
     @State var dLinkColors: [Color] = [Color.clear, Color.green]
+    @State var dLinkColors2: [Color] = [Color.clear, Color.white]
     @State var dLinkColorIndex = Int()
    
     @State var userAgreed: Bool = false
@@ -59,17 +60,19 @@ struct DisclaimerView: View {
                             loadUserAgreement()
                         })
                         .onChange(of: userAgreed) { _ in
-                            Task {
-                                dLinkColorIndex = 1
-                                disclaimerSetting = userAgreed
-                                await compareDisclaimerAgreement()
-                                await disclaimerResponse()
-                                await agreementDate()
-                                await concatenateFinalUserAgreementArrays()
-                                await finalUserAgreementArrays()
-                                await saveDisclaimerData()
-                                print(disclaimerSetting)
-                                print(disclaimerAgreement)
+                            DispatchQueue.main.async(group: .none, qos: .userInitiated) {
+                                Task(priority: .userInitiated, operation: {
+                                    dLinkColorIndex = 1
+                                    disclaimerSetting = userAgreed
+                                    await compareDisclaimerAgreement()
+                                    await disclaimerResponse()
+                                    await agreementDate()
+                                    await concatenateFinalUserAgreementArrays()
+                                    await finalUserAgreementArrays()
+                                    await saveDisclaimerData()
+                                    print(disclaimerSetting)
+                                    print(disclaimerAgreement)
+                                })
                             }
                         }
                     Spacer()
@@ -77,13 +80,22 @@ struct DisclaimerView: View {
                                     userAgreed == true ? AnyView(UserDataEntryView())
                                     : userAgreed == false ? AnyView(LandingView())
                                     : AnyView(LandingView())
-                    ){  VStack{
-                        Image(systemName: "arrowshape.bounce.right")
-                        Text("Now Let's Contine!")
+                    ){  HStack {
+                            Spacer()
+                            Text("Now Let's Contine!")
+                            Spacer()
+                            Image(systemName: "arrowshape.bounce.right")
+                            Spacer()
                         }
+                        .frame(width: 200, height: 50, alignment: .center)
+                        .background(dLinkColors[dLinkColorIndex])
+                        .foregroundColor(dLinkColors2[dLinkColorIndex])
+                        .cornerRadius(300)
+                        
                     }
-                    .foregroundColor(dLinkColors[dLinkColorIndex])
-                    .onTapGesture {
+                    .padding(.bottom, 40)
+                    Spacer()
+//                    .onTapGesture {
 //                        Task(priority: .userInitiated, operation: {
 //                            await compareDisclaimerAgreement()
 //                            await disclaimerResponse()
@@ -94,9 +106,9 @@ struct DisclaimerView: View {
 //                            print(disclaimerSetting)
 //                            print(disclaimerAgreement)
 //                        })
-                    }
-                    .padding(.bottom, 40)
-                    Spacer()
+//                    }
+//                    .padding(.bottom, 40)
+//                    Spacer()
                 }
             }
         }

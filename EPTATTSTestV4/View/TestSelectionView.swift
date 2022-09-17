@@ -129,51 +129,65 @@ struct TestSelectionView: View {
                     .background(.gray)
                     .foregroundColor(.gray)
                 
-               VStack{
-                   Spacer()
-                   Button {
-                       Task(priority: .userInitiated, operation: {
-                           await singleSelection()
-                           await checkMultipleSelections()
-                           await isSelectionSuccessful()
-                           print("button clicked")
-//                           await assignIntToAllTests()
-//                           await assignTempTestSelection()
-                           await finalTestSelectionArrays()
-                           await saveTestSelection()
-                           await saveTestLinkFile()
-                       })
-                   } label: {
-                       VStack {
-                           Image(systemName: "arrow.up.doc.fill")
-                           Text("Submit Selection")
+//!!!! Need to setup logic to catch mismatches, nonpurchased but selected EHA and dual or no selection and send user to a splash screen notifying to check selections again, run reset arrays function, and return user to selection screen. NOTE need to account for payment of EHA if it already went through so user does not double pay on second try at selection.
+//possibly use non standard if else navigation link results
+                
+                if isOkayToContinue == false {
+               
+                    Button {
+                        Task(priority: .userInitiated, operation: {
+                            await singleSelection()
+                            await checkMultipleSelections()
+                            await isSelectionSuccessful()
+                            print("button clicked")
+                            //                           await assignIntToAllTests()
+                            //                           await assignTempTestSelection()
+                            await finalTestSelectionArrays()
+                            await saveTestSelection()
+                            await saveTestLinkFile()
+                        })
+                    } label: {
+                        HStack{
+                            Spacer()
+                            Text("Submit Selection")
+                            Spacer()
+                            Image(systemName: "arrow.up.doc.fill")
+                            Spacer()
                         }
-                       .foregroundColor(.green)
-                   }
-                   .padding(.trailing)
-                   .padding(.leading)
-                   .foregroundColor(.green)
-                   Spacer()
+                        .frame(width: 200, height: 50, alignment: .center)
+                        .background(Color.blue)
+                        .foregroundColor(.green)
+                        .cornerRadius(300)
+                    }
+                    .padding(.bottom, 40)
+                    Spacer()
+               
+                } else if isOkayToContinue == true {
+                    
 
-    //!!!! Need to setup logic to catch mismatches, nonpurchased but selected EHA and dual or no selection and send user to a splash screen notifying to check selections again, run reset arrays function, and return user to selection screen. NOTE need to account for payment of EHA if it already went through so user does not double pay on second try at selection.
-                    //possibly use non standard if else navigation link results
+                    
+                    NavigationLink(destination:
+                                    isOkayToContinue == true ? AnyView(CalibrationAssessmentView())
+                                   : isOkayToContinue == false ? AnyView(TestSelectionSplashView())
+                                   : AnyView(TestSelectionView())
+                    ){
+                        HStack{
+                            Spacer()
+                            Text("Continue To Setup")
+                            Spacer()
+                            Image(systemName: "arrowshape.bounce.right")
+                            Spacer()
+                        }
+                        .frame(width: 200, height: 50, alignment: .center)
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(300)
+                    }
+                    .padding(.bottom, 40)
+                    Spacer()
 
-               NavigationLink(destination:
-                                isOkayToContinue == true ? AnyView(CalibrationAssessmentView())
-                                : isOkayToContinue == false ? AnyView(TestSelectionSplashView())
-                                : AnyView(TestSelectionView())
-               ){
-                   VStack{
-                       Image(systemName: "arrowshape.bounce.right")
-                       Text("Continue To Setup")
-                   }
-               }
-               .foregroundColor(tsLinkColors[tsLinkColorIndex])
-               .font(.title2)
-                Spacer()
-               }
-                .padding(.top, 40)
-                .padding(.bottom, 40)
+                }
+
             }
             .environmentObject(testSelectionModel)
         }

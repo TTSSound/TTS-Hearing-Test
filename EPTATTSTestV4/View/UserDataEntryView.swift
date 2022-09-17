@@ -51,6 +51,41 @@ import SwiftUI
 //    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 92, 94, 95, 99, 100
 //    ]
 
+struct SaveFinalSetupResults: Codable {
+    var id = Int()
+    var jsonUserAgreementAgreed = [Int]()
+    var jsonStringUserAgreementAgreedDate = String()
+    var jsonUserAgreementAgreedDate = [Date]()
+    var jsonFinalFirstName = [String]()
+    var jsonFinalLastName = [String]()
+    var jsonFinalEmail = [String]()
+    var jsonFinalPassword = [String]()
+    var jsonFinalAge = [Int]()
+    var jsonFinalGender = [String]()
+    var jsonFinalGenderIndex = [Int]()
+    var jsonFinalSex = [Int]()
+    var jsonUserUUID = [String]()
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case jsonUserAgreementAgreed
+        case jsonStringUserAgreementAgreedDate
+        case jsonUserAgreementAgreedDate
+        case jsonFinalFirstName
+        case jsonFinalLastName
+        case jsonFinalEmail
+        case jsonFinalPassword
+        case jsonFinalAge
+        case jsonFinalGender
+        case jsonFinalGenderIndex
+        case jsonFinalSex
+        case jsonUserUUID
+}
+
+
+
+
+
 struct GenderModel: Identifiable, Hashable {
     let gender: String
     let id = UUID()
@@ -72,9 +107,11 @@ struct UserDataEntryView: View {
     @ObservedObject var whyWeAskModel: WhyWeAskModel = WhyWeAskModel()
     @State var showWhyDoWeAskSheet: Bool = false
     @State var uLinkColors: [Color] = [Color.clear, Color.green]
+    @State var uLinkColors2: [Color] = [Color.clear, Color.white]
     @State var uLinkColorIndex = Int()
     @State var userDataSubmitted = Bool()
     @State var udLinkColors: [Color] = [Color.clear, Color.green]
+    @State var udLinkColors2: [Color] = [Color.clear, Color.white]
     @State var udLinkColorIndex = Int()
     
     @State var firtsName: String = ""
@@ -113,6 +150,37 @@ struct UserDataEntryView: View {
     ]
     @State private var selectedGender = ""
     
+    @Published var userFirstName = [String]()
+    @Published var userLastName = [String]()
+    @Published var userEmail = [String]()
+    @Published var userPassword = [String]()
+    @Published var userAge = [Int]()
+    @Published var userBirthDate = [Date]()
+    @Published var userGender = [String]()
+    @Published var userGenderIndex = [Int]()
+    @Published var userSex = [Int]()
+    @Published var userUUIDString = [String]()
+    @Published var userAgreement = [Bool]()
+    @Published var finalUserAgreementAgreed: [Int] = [Int]()
+    @Published var finalUserAgreementAgreedDate: [Date] = [Date]()
+    // Demo Variables
+    @Published var finalFirstName: [String] = [String]()
+    @Published var finalLastName: [String] = [String]()
+    @Published var finalEmail: [String] = [String]()
+    @Published var finalPassword: [String] = [String]()
+    @Published var finalAge: [Int] = [Int]()
+    @Published var finalGender: [String] = [String]()
+    @Published var finalGenderIndex: [Int] = [Int]()
+    @Published var finalSex: [Int] = [Int]()
+    @Published var finalUserUUIDString: [String] = [String]()
+    @Published var stringJsonFUAADate = String()
+    @Published var stringFUAADate = String()
+    @Published var stringInputFUAADate = String()
+    let fileSetupName = ["SetupResults.json"]
+    let setupCSVName = "SetupResultsCSV.csv"
+    let inputSetupCSVName = "InputSetupResultsCSV.csv"
+    
+    @Published var saveFinalSetupResults: SaveFinalSetupResults? = nil
     
     var body: some View {
         
@@ -298,42 +366,62 @@ struct UserDataEntryView: View {
                 .padding(.leading)
                 Spacer()
 
-                HStack{
-                    Spacer()
-                    Button {
-                        Task(priority: .userInitiated, operation: {
-                            await assignSex()
-                            await areDemoFieldsEmpty()
-                            await saveDemographicData()
-                            await generateUserUUID()
-                            await concatenateDemoFinalArrays()
-                            await printFinalDemoArrays()
-                            await saveUserDataEntry()
-                            print("Data Submission Pressed. Function Need to be created")
-                        })
-                    } label: {
-                        VStack{
-                            Image(systemName: "arrow.up.doc.fill")
-                            Text("Submit Your Data")
-                                .font(.title3)
+                if userDataSubmitted == false {
+                    HStack{
+                        Spacer()
+                        Button {
+                            DispatchQueue.main.async(group: .none, qos: .userInitiated) {
+                                Task(priority: .userInitiated, operation: {
+                                    await assignSex()
+                                    await areDemoFieldsEmpty()
+                                    await saveDemographicData()
+                                    await generateUserUUID()
+                                    await concatenateDemoFinalArrays()
+                                    await printFinalDemoArrays()
+                                    await saveUserDataEntry()
+                                    print("Data Submission Pressed. Function Need to be created")
+                                })
+                            }
+                        } label: {
+                            HStack{
+                                Spacer()
+                                Text("Submit Selection")
+                                Spacer()
+                                Image(systemName: "arrow.up.doc.fill")
+                                Spacer()
+                            }
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(Color.blue)
+                            .foregroundColor(.green)
+                            .cornerRadius(300)
                         }
+                        Spacer()
                     }
-                    .foregroundColor(.green)
-                    Spacer()
-                    NavigationLink {
-                        userDataSubmitted == false ? AnyView(UserDataEntrySplashView())
-                        : userDataSubmitted == true ? AnyView(ExplanationView())
-                        : AnyView(UserDataEntrySplashView())
-                    } label: {
-                        VStack{
-                           Image(systemName: "arrowshape.bounce.right")
-                           Text("Now Let's Contine!")
-                       }
+                    .padding(.bottom, 40)
+                } else if  userDataSubmitted == true {
+                    HStack{
+                        Spacer()
+                        NavigationLink {
+                            userDataSubmitted == false ? AnyView(UserDataEntrySplashView())
+                            : userDataSubmitted == true ? AnyView(ExplanationView())
+                            : AnyView(UserDataEntrySplashView())
+                        } label: {
+                            HStack{
+                                Spacer()
+                                Text("Now Let's Contine!")
+                                Spacer()
+                                Image(systemName: "arrowshape.bounce.right")
+                                Spacer()
+                            }
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(300)
+                        }
+                        Spacer()
                     }
-                    .foregroundColor(udLinkColors[udLinkColorIndex])
-                    Spacer()
+                    .padding(.bottom, 40)
                 }
-                .padding(.bottom, 40)
             }
             .onAppear(perform: {
                 uLinkColorIndex = 0
