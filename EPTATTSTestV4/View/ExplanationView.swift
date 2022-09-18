@@ -49,7 +49,7 @@ struct ExplanationView: View {
                 } label: {
                     HStack{
                         Spacer()
-                        Text("Now Let's Contine!")
+                        Text("Continue")
                         Spacer()
                         Image(systemName: "arrowshape.bounce.right")
                         Spacer()

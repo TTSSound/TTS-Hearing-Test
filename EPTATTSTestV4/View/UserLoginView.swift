@@ -7,11 +7,34 @@
 
 import SwiftUI
 
-struct UserLoginView: View {
+
+struct UserLoginView<Link: View>: View {
+    var setup: Setup?
+    var relatedLink: (Setup) -> Link
+    
+    var body: some View {
+        
+        ZStack{
+            if let setup = setup {
+                UserLoginContent(setup: setup, relatedLink: relatedLink)
+            } else {
+                Text("Error Loading User Login View")
+                    .navigationTitle("")
+            }
+        }
+    }
+}
+
+
+
+struct UserLoginContent<Link: View>: View {
+    var setup: Setup
+    var dataModel = DataModel.shared
+    var relatedLink: (Setup) -> Link
+    
     
     @StateObject var colorModel: ColorModel = ColorModel()
 
-    
     var body: some View {
         
         ZStack{
@@ -25,13 +48,17 @@ struct UserLoginView: View {
             }
             .foregroundColor(.pink)
         }
+        .navigationTitle(setup.name)
     }
 // !!!!!! WILL NEED TO ADD VARIABLES FOR THIS ACTION INTO SETUPDATAMODEL, JSONS AND CSV WRITERS
-
 }
 
-//struct UserLoginView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        UserLoginView()
-//    }
-//}
+struct UserLoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        UserLoginView(setup: nil, relatedLink: link)
+    }
+    
+    static func link(setup: Setup) -> some View {
+        EmptyView()
+    }
+}

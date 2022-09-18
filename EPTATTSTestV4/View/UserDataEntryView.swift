@@ -174,6 +174,11 @@ struct UserDataEntryView: View {
     
     @State var saveFinalSetupResults: SaveFinalSetupResults? = nil
     
+    
+//    var setup: Setup
+//    var dataModel = DataModel.shared
+//    var relatedLink: (Setup) -> Link
+    
     var body: some View {
         
         ZStack {
@@ -195,7 +200,7 @@ struct UserDataEntryView: View {
                             .foregroundColor(.white)
                         Spacer()
                         NavigationLink {
-                            UserLoginView()
+//                            UserLoginView(setup: nil, relatedLink: relatedLink)
                         } label: {
                             Image(systemName: "person.crop.circle.badge.checkmark")
                                 .foregroundColor(.blue)
@@ -384,7 +389,7 @@ struct UserDataEntryView: View {
                             }
                             .frame(width: 200, height: 50, alignment: .center)
                             .background(Color.blue)
-                            .foregroundColor(.green)
+                            .foregroundColor(.white)
                             .cornerRadius(300)
                         }
                         Spacer()
@@ -421,7 +426,8 @@ struct UserDataEntryView: View {
             })
             .padding(.leading)
             .padding(.trailing)
-        }
+        }.navigationTitle("User Setup")
+        
     }
     
     func loadWhyWeAsk() {

@@ -22,7 +22,7 @@ struct TrainingTestHoldingPlace: View {
     var body: some View {
         
 
-        NavigationView{
+//        NavigationView{
             ZStack{
                 colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
                 VStack{
@@ -104,7 +104,7 @@ struct TrainingTestHoldingPlace: View {
             // this then links to EPTATTSTestV4List
             }
         }
-    }
+//    }
     
     func returnTrainTestSelected() async {
         if ehaTrainLinkExists == true {

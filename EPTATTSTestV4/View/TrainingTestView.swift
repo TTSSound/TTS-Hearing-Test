@@ -176,6 +176,7 @@ struct TrainingTestView: View {
                         .padding(.top, 40)
                         .padding(.bottom, 20)
                 } else if trainingfullTestCompleted == true {
+             
                     NavigationLink("Training Complete. Continue", destination: Bilateral1kHzTestView(), isActive: $trainingTestCompleted)
                         .padding()
                         .frame(width: 200, height: 50, alignment: .center)

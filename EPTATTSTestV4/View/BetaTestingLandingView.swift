@@ -53,7 +53,7 @@ struct BetaTestingLandingView: View {
     var body: some View {
         
         
-        NavigationView{
+        NavigationStack{
             ZStack{
                 colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
                 VStack{

@@ -155,6 +155,8 @@
 		7CAC41CC28B5B60100AE72F6 /* EHAInterimPostEPTAView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAC41CB28B5B60100AE72F6 /* EHAInterimPostEPTAView.swift */; };
 		7CB202BC28BD5D240058C752 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB202BB28BD5D240058C752 /* Alamofire */; };
 		7CB202BE28BD90C30058C752 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7CB202BD28BD90C30058C752 /* GoogleService-Info.plist */; };
+		7CC4CCF128D6387F00E6203B /* ButtonViewTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC4CCF028D6387F00E6203B /* ButtonViewTemplates.swift */; };
+		7CC4CCF528D654B300E6203B /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC4CCF428D654B300E6203B /* NavigationView.swift */; };
 		7CD23A6E28ADAA9300AEBB02 /* DetailedResultsCSV.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7CD23A6D28ADAA9300AEBB02 /* DetailedResultsCSV.csv */; };
 		7CDB3E1328A20DB300CB4DB1 /* EPTATTSTESTV4List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDB3E1228A20DB300CB4DB1 /* EPTATTSTESTV4List.swift */; };
 		7CECF1EC28C9859900B5A99E /* TrainingTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CECF1EB28C9859900B5A99E /* TrainingTestView.swift */; };
@@ -359,6 +361,8 @@
 		7CB202BD28BD90C30058C752 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7CB876F228A1FF2200528455 /* AudioSessionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionModel.swift; sourceTree = "<group>"; };
 		7CB876F328A1FF6300528455 /* EnvDataObjectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvDataObjectModel.swift; sourceTree = "<group>"; };
+		7CC4CCF028D6387F00E6203B /* ButtonViewTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonViewTemplates.swift; sourceTree = "<group>"; };
+		7CC4CCF428D654B300E6203B /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
 		7CC6C32428A34C06007AA9CA /* FailedEnvDataObjectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailedEnvDataObjectModel.swift; sourceTree = "<group>"; };
 		7CC6C32628A34C47007AA9CA /* FailedEPTATTSTestV4List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailedEPTATTSTestV4List.swift; sourceTree = "<group>"; };
 		7CCB2B2C28D4C5CD00056C49 /* DONOTChangeReferenceEHAP2TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DONOTChangeReferenceEHAP2TestView.swift; sourceTree = "<group>"; };
@@ -560,7 +564,9 @@
 		7C99C86E28A6FEE000170AD7 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				7CC4CCF028D6387F00E6203B /* ButtonViewTemplates.swift */,
 				7C76D5E328B184ED0044958B /* LandingView.swift */,
+				7CC4CCF428D654B300E6203B /* NavigationView.swift */,
 				7C76D5E528B1878F0044958B /* DisclaimerView.swift */,
 				7C666D9B28B5D00E007707AC /* UserDataEntryView.swift */,
 				7C901FC328B9AFF5007E1336 /* UserLoginView.swift */,
@@ -932,10 +938,12 @@
 				7C901FB928B97182007E1336 /* ManualDeviceDisclaimerView.swift in Sources */,
 				7C76D5E128B183420044958B /* UserWrittenHearingAssessmentView.swift in Sources */,
 				7C179FF528B8848900964AAC /* ColorModel.swift in Sources */,
+				7CC4CCF128D6387F00E6203B /* ButtonViewTemplates.swift in Sources */,
 				7C666D9E28B67584007707AC /* DisclaimerView.swift in Sources */,
 				7C901FC628B9B980007E1336 /* SystemVolumeView.swift in Sources */,
 				7C7986E528AF038200888A74 /* TestDeviceSetupView.swift in Sources */,
 				7C3D20C1289DD1A60039EDA6 /* EnvDataObjectModel.swift in Sources */,
+				7CC4CCF528D654B300E6203B /* NavigationView.swift in Sources */,
 				7C179FE928B8114200964AAC /* TestSelectionSplashView.swift in Sources */,
 				7CAC41CC28B5B60100AE72F6 /* EHAInterimPostEPTAView.swift in Sources */,
 				7C179FDD28B7DDBD00964AAC /* TestSelectionView.swift in Sources */,
@@ -1019,7 +1027,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1073,7 +1081,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

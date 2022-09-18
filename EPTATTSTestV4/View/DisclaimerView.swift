@@ -32,7 +32,6 @@ struct DisclaimerView: View {
     
     @Binding var selectedTab: Int
 
-    
         
     
     @ObservedObject var userAgreementModel: UserAgreementModel = UserAgreementModel()
@@ -64,7 +63,8 @@ struct DisclaimerView: View {
     @State var saveFinalDisclaimerResults: SaveFinalDisclaimerResults? = nil
     
     var body: some View {
-        NavigationView{
+        NavigationStack{
+//        NavigationView(path: ["Disclaimer"])
             ZStack{
                 colorModel.colorBackgroundTopTiffanyBlue .ignoresSafeArea(.all, edges: .top)
                 VStack {
@@ -109,7 +109,7 @@ struct DisclaimerView: View {
                                     : AnyView(LandingView())
                     ){  HStack {
                             Spacer()
-                            Text("Now Let's Contine!")
+                            Text("Continue")
                             Spacer()
                             Image(systemName: "arrowshape.bounce.right")
                             Spacer()
@@ -138,10 +138,13 @@ struct DisclaimerView: View {
 //                    Spacer()
                 }
             }
+            .onAppear {
+                dLinkColorIndex = 0
+            }
+            
+         
         }
-        .onAppear {
-            dLinkColorIndex = 0
-        }
+
     }
     
     func loadUserAgreement() {
@@ -340,8 +343,9 @@ class UserAgreementModel: ObservableObject {
 
 
 //struct DisclaimerView_Previews: PreviewProvider {
-//    
-//    @Binding var selectedTab: Int
+//
+////    @Binding var selectedTab: Int
+////    @Binding var path: [Double]
 //    static var previews: some View {
 //        DisclaimerView()
 //    }

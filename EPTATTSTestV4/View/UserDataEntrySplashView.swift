@@ -36,19 +36,17 @@ struct UserDataEntrySplashView: View {
                     UserDataEntryView()
                 } label: {
                     
-                    VStack {
-                        Text("Return to User Information Entry &/or Login")
-                            .foregroundColor(.blue)
-                            .font(.title)
-                            .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                            .hoverEffect(/*@START_MENU_TOKEN@*/.highlight/*@END_MENU_TOKEN@*/)
-                            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                    HStack {
+                        Spacer()
+                        Text("Return to User Sign-up or Login")
+                        Spacer()
                         Image(systemName: "arrowshape.turn.up.backward.2")
-                            .foregroundColor(.blue)
-                            .font(.title)
-                            .hoverEffect(/*@START_MENU_TOKEN@*/.highlight/*@END_MENU_TOKEN@*/)
-                            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                        Spacer()
                     }
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .frame(width: 300, height: 50, alignment: .center)
+                    .cornerRadius(300)
                     .padding(.bottom, 20)
                 }
                 Spacer()
