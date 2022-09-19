@@ -258,7 +258,7 @@ private let builtInTestings: [Testing] = {
 
 private let builtInEHATestings: [EHATesting] = {
     var ehaTestings = [
-        "EHA Interim Post Test Holding": EHATesting(id: 14.1, name: "EHA Interim Post Test Holding", related: []),
+        "EHA Interim Pre Part 2 Test": EHATesting(id: 14.1, name: "EHA Interim Pre Part 2 Test", related: []),
         "EHA Part 2 Test": EHATesting(id: 14.1, name: "EHA Part 2 Test", related: []),
         "Post EHA Part 2 Test": EHATesting(id: 14.2, name: "Post EHA Part 2 Test", related: [])
     ]
@@ -375,6 +375,46 @@ struct NavigationView: View {
             }
             .tag(0)
             
+            LandingView()
+            .tabItem {
+                Image(systemName: "ear.badge.checkmark")
+                    .foregroundColor(.blue)
+                    .background(Color.blue)
+                Text("Results")
+                    .foregroundColor(.blue)
+                    .background(Color.blue)
+            }
+            .tag(1)
+            
+            NavigationStack(path: $navigationModel.ehaTestingPath) {
+                ZStack{
+                    colorModel.colorBackgroundTopTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+                    NavigationLink("Let's Begin The Full EHA Test!", value: EPTATTSTestV4.EHATesting(id: 14.1, name: "EHA Interim Pre Part 2 Test", related: []))
+                        .font(.title)
+                        .padding()
+                        .frame(width: 300, height: 100, alignment: .center)
+                        .background(colorModel.tiffanyBlue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .hoverEffect()
+                        .navigationDestination(for: EHATesting.self) { ehaTesting in
+                            EHAInterimPreEHAP2View(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
+                        }
+                }
+            }
+            .tabItem {
+                Image(systemName: "ear.and.waveform")
+                    .accentColor(colorModel.tiffanyBlue)
+                Text("Testing Part 2")
+                    .foregroundColor(colorModel.proceedColor)
+                    .background(colorModel.proceedColor)
+                    .font(.caption)
+                
+            }
+            .tag(2)
+          
+            
+            
             NavigationStack(path: $navigationModel.testingPath) {
                 ZStack{
                     colorModel.colorBackgroundTopTiffanyBlue.ignoresSafeArea(.all, edges: .top)
@@ -394,12 +434,13 @@ struct NavigationView: View {
             .tabItem {
                 Image(systemName: "ear.fill")
                     .accentColor(colorModel.tiffanyBlue)
-                Text("Start")
+                Text("Testing Part 1")
                     .foregroundColor(colorModel.proceedColor)
                     .background(colorModel.proceedColor)
+                    .font(.caption)
                 
             }
-            .tag(1)
+            .tag(3)
             
             NavigationStack(path: $navigationModel.setupPath) {
                 ZStack{
@@ -423,7 +464,7 @@ struct NavigationView: View {
                 Text("setup")
                     .foregroundColor(.blue)
             }
-            .tag(2)
+            .tag(4)
             
     
 
@@ -503,6 +544,9 @@ struct NavigationView: View {
             NavigationLink(testing.name, value: testing)
         }
         print(dataModel.testings)
+        ForEach(dataModel.ehaTestings, id: \.self) { ehaTesting in
+            NavigationLink(ehaTesting.name, value: ehaTesting)
+        }
     }
     
     private func link(setup: Setup) -> some View {
@@ -510,6 +554,10 @@ struct NavigationView: View {
     }
     
     private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+    
+    private func linkEHATesting(ehaTesting: EHATesting) -> some View {
         EmptyView()
     }
     

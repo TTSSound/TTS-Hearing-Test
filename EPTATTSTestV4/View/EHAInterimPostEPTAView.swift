@@ -21,7 +21,7 @@ struct SaveSystemSettingsInterimStartEHA: Codable {
 struct EHAInterimPostEPTAView: View {
     
     var audioSessionModel = AudioSessionModel()
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var colorModel: ColorModel = ColorModel()
     
     @State var volumeInterimEHATest = Float()
     @State var volumeEHAStartingTest = Float()
@@ -151,7 +151,7 @@ struct EHAInterimPostEPTAView: View {
                             } label: {
                                 Text("Submit Results")
                                     .padding()
-                                    .frame(width: 200, height: 50, alignment: .center)
+                                    .frame(width: 300, height: 50, alignment: .center)
                                     .background(.blue)
                                     .foregroundColor(.white)
                                     .cornerRadius(300)
@@ -164,11 +164,12 @@ struct EHAInterimPostEPTAView: View {
                         HStack{
                             Spacer()
                             NavigationLink {
-                                EHATTSTestPart2View()
+//                                EHATTSTestPart2View()
+                                NavigationView()
                             } label: {
-                                Text("Continue")
+                                Text("Return Home To See Results and Continue")
                                     .padding()
-                                    .frame(width: 200, height: 50, alignment: .center)
+                                    .frame(width: 300, height: 50, alignment: .center)
                                     .background(.green)
                                     .foregroundColor(.white)
                                     .cornerRadius(300)

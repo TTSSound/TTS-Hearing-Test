@@ -28,6 +28,7 @@
 		7C24C1F028BF0886006E77DD /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C24C1EF28BF0886006E77DD /* StorageManager.swift */; };
 		7C3316EF28D2515100721935 /* BetaTestingLandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3316EE28D2515100721935 /* BetaTestingLandingView.swift */; };
 		7C3316F128D25D2700721935 /* PostBilateral1kHzTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3316F028D25D2700721935 /* PostBilateral1kHzTestView.swift */; };
+		7C33E33428D82C2900435AE9 /* EHAInterimPreEHAP2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33E33328D82C2900435AE9 /* EHAInterimPreEHAP2View.swift */; };
 		7C3D20AD289DADCB0039EDA6 /* EPTATTSTestV4App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3D20AC289DADCB0039EDA6 /* EPTATTSTestV4App.swift */; };
 		7C3D20AF289DADCB0039EDA6 /* EPTATTSTestV4List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3D20AE289DADCB0039EDA6 /* EPTATTSTestV4List.swift */; };
 		7C3D20B1289DADCC0039EDA6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C3D20B0289DADCC0039EDA6 /* Assets.xcassets */; };
@@ -201,6 +202,7 @@
 		7C24C1F128BF26BD006E77DD /* ConditionalButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionalButton.swift; sourceTree = "<group>"; };
 		7C3316EE28D2515100721935 /* BetaTestingLandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetaTestingLandingView.swift; sourceTree = "<group>"; };
 		7C3316F028D25D2700721935 /* PostBilateral1kHzTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostBilateral1kHzTestView.swift; sourceTree = "<group>"; };
+		7C33E33328D82C2900435AE9 /* EHAInterimPreEHAP2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EHAInterimPreEHAP2View.swift; sourceTree = "<group>"; };
 		7C3D20A9289DADCB0039EDA6 /* EPTATTSTestV4.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EPTATTSTestV4.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C3D20AC289DADCB0039EDA6 /* EPTATTSTestV4App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPTATTSTestV4App.swift; sourceTree = "<group>"; };
 		7C3D20AE289DADCB0039EDA6 /* EPTATTSTestV4List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPTATTSTestV4List.swift; sourceTree = "<group>"; };
@@ -612,6 +614,7 @@
 				7C24C1E128BEC419006E77DD /* PostEPTATestView.swift */,
 				7C24C1E328BEC718006E77DD /* PostSimpleTestView.swift */,
 				7CAC41CB28B5B60100AE72F6 /* EHAInterimPostEPTAView.swift */,
+				7C33E33328D82C2900435AE9 /* EHAInterimPreEHAP2View.swift */,
 				7C666DAB28B6930E007707AC /* EHATTSTestPart2View.swift */,
 				7C24C1E928BECCDD006E77DD /* PostEHATestView.swift */,
 				7C666DA928B69299007707AC /* EPTAResultsDisplayView.swift */,
@@ -953,6 +956,7 @@
 				7C3D20AD289DADCB0039EDA6 /* EPTATTSTestV4App.swift in Sources */,
 				7C76D5E428B184ED0044958B /* LandingView.swift in Sources */,
 				7CDB3E1328A20DB300CB4DB1 /* EPTATTSTESTV4List.swift in Sources */,
+				7C33E33428D82C2900435AE9 /* EHAInterimPreEHAP2View.swift in Sources */,
 				7C3316EF28D2515100721935 /* BetaTestingLandingView.swift in Sources */,
 				7C99A16E28C95DFA00E46C65 /* Bilateral1kHzTestView.swift in Sources */,
 				7C179FE528B805DB00964AAC /* SimpleTrialDescriptionView.swift in Sources */,
