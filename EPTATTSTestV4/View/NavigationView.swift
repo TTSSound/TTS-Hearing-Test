@@ -268,18 +268,19 @@ private let builtInEHATestings: [EHATesting] = {
     
 private let builtInClosings: [Closing] = {
     var closings = [
-        "EPTA Test Results": Closing(id: 15.0, name: "EPTA Test Results", related: []),
-        "EHA Test Results": Closing(id: 15.1, name: "EHA Test Results", related: []),
-        "Simple Test Results": Closing(id: 13.3, name: "Simple Test Results", related: []),
-        "Test Results Holding 1": Closing(id: 13.4, name: "Test Results Holding 1", related: []),
-        "Test Results Holding 2": Closing(id: 13.5, name: "Test Results Holding 2", related: []),
-        "Test Results Holding 3": Closing(id: 13.6, name: "Test Results Holding 3", related: []),
-        "Post Test Purchse": Closing(id: 14.0, name: "Post Test Purchse", related: []),
-        "Post Test Purchse Holding 1": Closing(id: 14.1, name: "Post Test Purchse Holding 1", related: []),
-        "Post Test Purchse Holding 2": Closing(id: 14.1, name: "Post Test Purchse Holding 2", related: []),
-        "Closing": Closing(id: 15.0, name: "Closing", related: []),
-        "Closing Holding 1": Closing(id: 15.1, name: "Closing Holding 1", related: []),
-        "Closing Holding 2": Closing(id: 15.1, name: "Closing Holding 2", related: [])
+        "Test Results Landing": Closing(id: 15.0, name: "Test Results Landing", related: []),
+        "EPTA Test Results": Closing(id: 15.1, name: "EPTA Test Results", related: []),
+        "EHA Test Results": Closing(id: 15.2, name: "EHA Test Results", related: []),
+        "Simple Test Results": Closing(id: 15.3, name: "Simple Test Results", related: []),
+        "Test Results Holding 1": Closing(id: 15.4, name: "Test Results Holding 1", related: []),
+        "Test Results Holding 2": Closing(id: 15.5, name: "Test Results Holding 2", related: []),
+        "Test Results Holding 3": Closing(id: 15.6, name: "Test Results Holding 3", related: []),
+        "Post Test Purchse": Closing(id: 16.0, name: "Post Test Purchse", related: []),
+        "Post Test Purchse Holding 1": Closing(id: 16.1, name: "Post Test Purchse Holding 1", related: []),
+        "Post Test Purchse Holding 2": Closing(id: 16.1, name: "Post Test Purchse Holding 2", related: []),
+        "Closing": Closing(id: 17.0, name: "Closing", related: []),
+        "Closing Holding 1": Closing(id: 17.1, name: "Closing Holding 1", related: []),
+        "Closing Holding 2": Closing(id: 17.2, name: "Closing Holding 2", related: [])
     ]
     
     return Array(closings.values)
@@ -320,10 +321,20 @@ struct NavigationView: View {
     
     var colorModel = ColorModel()
     @State var selectedTab: Int = 0
+    
+    @State var firstTestingTabEnabled: Bool = false
+    @State var firstTestingTabValueArray = [nil, EPTATTSTestV4.Testing(id: 8.0, name: "Beta Testing Home", related: [])]
+    @State var firstTestingTabValue = EPTATTSTestV4.Testing(id: 0.0, name: "", related: [])
+    
+    @State var secondTestingTabEnabled: Bool = false
+    @State var secondTestingTabValueArray = [nil, EPTATTSTestV4.EHATesting(id: 14.1, name: "EHA Interim Pre Part 2 Test", related: [])]
+    @State var secondTestingTabValue = EPTATTSTestV4.EHATesting(id: 0.0, name: "", related: [])
+    
+    @State var closingTabEnabled: Bool = false
+    @State var closingTabValueArray = [nil, EPTATTSTestV4.Closing(id: 15.0, name: "Results Landing View", related: [])]
+    @State var closingTabValue = EPTATTSTestV4.Closing(id: 0.0, name: "", related: [])
 
     var body: some View {
-        
-        
         //        NavigationStack(path: $navigationModel.setupPath) {
         //
         //            NavigationLink("User Login", value: dataModel.setups[2])
@@ -344,21 +355,103 @@ struct NavigationView: View {
         //                    }
         //            }
         //        }
-        
-        
-        
+
         TabView(selection: $selectedTab) {
             ZStack{
                 colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
-                VStack(alignment: .leading, spacing: 20) {
-                    Text("-------------------------------------------")
-                        .foregroundColor(colorModel.textMain)
-                    Text("Replace This Text With Small Opening")
-                        .foregroundColor(colorModel.textMain)
-                    Text("Thank you for trusting TTS to deliver valid, proven, and superior hearing tests and innovative corrective hearing filtes (need new name)")
-                        .foregroundColor(colorModel.textMain)
-                    Text("Before we go any further, we need to gather some basic information and discuss a few things about the TTS hearing test and advanced corrective filters")
-                        .foregroundColor(colorModel.textMain)
+                VStack(alignment: .leading) {
+                    Spacer()
+                    HStack{
+                        Text("PROCESS FLOW OF APP FOR ALPHA USE.\n\nCOMPLETE TABS IN THIS ORDER")
+                            .foregroundColor(.white)
+                            .font(.title3)
+                            .padding(.leading)
+                            .padding(.trailing)
+                    }
+                    .padding(.bottom, 20)
+                    Text("1. Setup Tab\n2. 1st Testing Tab\n3. 2nd Testing Tab\n4. Results Tab")
+                        .foregroundColor(.green)
+                        .padding(.bottom, 20)
+                    Text("2nd, 3rd, & 4th tab disabled as default, enable them as prior tab is completed")
+                        .foregroundColor(.white)
+                        .padding(.bottom, 20)
+                    Spacer()
+                    
+                    HStack{
+                        Spacer()
+                        Button {
+                            firstTestingTabEnabled.toggle()
+                        } label: {
+                            Text("Enable 1st Testing")
+                        }
+                        .frame(width: 200, height: 50, alignment: .center)
+                        .background(colorModel.tiffanyBlue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .onChange(of: firstTestingTabEnabled) { newValue in
+                            firstTestingTabValue = firstTestingTabValueArray[1] ?? EPTATTSTestV4.Testing(id: 8.0, name: "Beta Testing Home", related: [])
+                        }
+                        Spacer()
+                        Toggle("Enable 1st Testing", isOn: $firstTestingTabEnabled)
+                            .foregroundColor(.clear)
+                            .onChange(of: firstTestingTabEnabled) { newValue in
+                                if newValue == true {
+                                    firstTestingTabValue = firstTestingTabValueArray[1] ?? EPTATTSTestV4.Testing(id: 8.0, name: "Beta Testing Home", related: [])
+                                }
+                            }
+                        Spacer()
+                    }
+                    .padding(.bottom, 20)
+                    
+                    HStack{
+                        Spacer()
+                        Button {
+                            secondTestingTabEnabled.toggle()
+                        } label: {
+                            Text("Enable 2nd Testing")
+                        }
+                        .frame(width: 200, height: 50, alignment: .center)
+                        .background(colorModel.tiffanyBlue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .onChange(of: secondTestingTabEnabled) { newValue in
+                            secondTestingTabValue = secondTestingTabValueArray[1] ?? EPTATTSTestV4.EHATesting(id: 14.1, name: "EHA Interim Pre Part 2 Test", related: [])
+                        }
+                        Spacer()
+                        Toggle("Enable 2nd Testing", isOn: $secondTestingTabEnabled)
+                            .onChange(of: secondTestingTabEnabled) { newValue in
+                                if newValue == true {
+                                    secondTestingTabValue = secondTestingTabValueArray[1] ?? EPTATTSTestV4.EHATesting(id: 14.1, name: "EHA Interim Pre Part 2 Test", related: [])
+                                }
+                            }
+                        Spacer()
+                    }
+                    .padding(.bottom, 20)
+                    
+                    HStack{
+                        Spacer()
+                        Button {
+                            closingTabEnabled.toggle()
+                        } label: {
+                            Text("Enable Results")
+                        }
+                        .frame(width: 200, height: 50, alignment: .center)
+                        .background(colorModel.tiffanyBlue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .onChange(of: closingTabEnabled) { newValue in
+                            closingTabValue = closingTabValueArray[1] ?? EPTATTSTestV4.Closing(id: 15.0, name: "Results Landing View", related: [])
+                        }
+                        Spacer()
+                        Toggle("Enable Results", isOn: $closingTabEnabled)
+                            .onChange(of: closingTabEnabled) { newValue in
+                                if newValue == true {
+                                    closingTabValue = closingTabValueArray[1] ?? EPTATTSTestV4.Closing(id: 15.0, name: "Results Landing View", related: [])
+                                }
+                            }
+                        Spacer()
+                    }
+                    .padding(.bottom, 20)
                     Spacer()
                 }
                 .padding()
@@ -366,6 +459,7 @@ struct NavigationView: View {
             .environmentObject(navigationModel)
             .onAppear {
                 getLinks()
+                firstTestingTabValue = EPTATTSTestV4.Testing(id: 0.0, name: "", related: [])
             }
             .tabItem {
                 Image(systemName: "house")
@@ -375,76 +469,9 @@ struct NavigationView: View {
             }
             .tag(0)
             
-            LandingView()
-            .tabItem {
-                Image(systemName: "ear.badge.checkmark")
-                    .foregroundColor(.blue)
-                    .background(Color.blue)
-                Text("Results")
-                    .foregroundColor(.blue)
-                    .background(Color.blue)
-            }
-            .tag(1)
-            
-            NavigationStack(path: $navigationModel.ehaTestingPath) {
-                ZStack{
-                    colorModel.colorBackgroundTopTiffanyBlue.ignoresSafeArea(.all, edges: .top)
-                    NavigationLink("Let's Begin The Full EHA Test!", value: EPTATTSTestV4.EHATesting(id: 14.1, name: "EHA Interim Pre Part 2 Test", related: []))
-                        .font(.title)
-                        .padding()
-                        .frame(width: 300, height: 100, alignment: .center)
-                        .background(colorModel.tiffanyBlue)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                        .hoverEffect()
-                        .navigationDestination(for: EHATesting.self) { ehaTesting in
-                            EHAInterimPreEHAP2View(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
-                        }
-                }
-            }
-            .tabItem {
-                Image(systemName: "ear.and.waveform")
-                    .accentColor(colorModel.tiffanyBlue)
-                Text("Testing Part 2")
-                    .foregroundColor(colorModel.proceedColor)
-                    .background(colorModel.proceedColor)
-                    .font(.caption)
-                
-            }
-            .tag(2)
-          
-            
-            
-            NavigationStack(path: $navigationModel.testingPath) {
-                ZStack{
-                    colorModel.colorBackgroundTopTiffanyBlue.ignoresSafeArea(.all, edges: .top)
-                        NavigationLink("Let's Begin Testing!", value: EPTATTSTestV4.Testing(id: 8.0, name: "Beta Testing Home", related: []))
-                        .font(.title)
-                        .padding()
-                        .frame(width: 300, height: 100, alignment: .center)
-                        .background(colorModel.tiffanyBlue)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                        .hoverEffect()
-                        .navigationDestination(for: Testing.self) { testing in
-                            BetaTestingLandingView(testing: testing, relatedLinkTesting: linkTesting)
-                        }
-                }
-            }
-            .tabItem {
-                Image(systemName: "ear.fill")
-                    .accentColor(colorModel.tiffanyBlue)
-                Text("Testing Part 1")
-                    .foregroundColor(colorModel.proceedColor)
-                    .background(colorModel.proceedColor)
-                    .font(.caption)
-                
-            }
-            .tag(3)
-            
             NavigationStack(path: $navigationModel.setupPath) {
                 ZStack{
-                    colorModel.colorBackgroundTopTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+                    colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
                     NavigationLink("Let's Begin The Setup Process", value: EPTATTSTestV4.Setup(id: 1.0, name: "Disclaimer", related: []))
                         .font(.title)
                         .padding()
@@ -461,21 +488,116 @@ struct NavigationView: View {
             .tabItem {
                 Image(systemName: "arrowshape.zigzag.right.fill")
                     .accentColor(.blue)
-                Text("setup")
+                Text("1. Setup")
                     .foregroundColor(.blue)
             }
+            .tag(1)
+            
+            
+            NavigationStack(path: $navigationModel.testingPath) {
+                ZStack{
+                    colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+//                    NavigationLink("Let's Begin Testing!", value: EPTATTSTestV4.Testing(id: 8.0, name: "Beta Testing Home", related: []))
+                    if firstTestingTabEnabled == true {
+                        NavigationLink("Let's Begin Testing!", value: firstTestingTabEnabled)
+                            .font(.title)
+                            .padding()
+                            .frame(width: 300, height: 100, alignment: .center)
+                            .background(colorModel.tiffanyBlue)
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
+                            .hoverEffect()
+                            .navigationDestination(for: Testing.self) { testing in
+                                BetaTestingLandingView(testing: testing, relatedLinkTesting: linkTesting)
+                            }
+                    } else {
+                        Text("Please complete the setup tab first")
+                            .foregroundColor(.red)
+                            .font(.title)
+                    }
+                }
+            }
+            .tabItem {
+                Image(systemName: "ear.fill")
+                    .accentColor(colorModel.tiffanyBlue)
+                Text("2. 1st Testing")
+                    .foregroundColor(colorModel.proceedColor)
+                    .background(colorModel.proceedColor)
+                    .font(.caption)
+                
+            }
+            .tag(2)
+            
+            NavigationStack(path: $navigationModel.ehaTestingPath) {
+                ZStack{
+                    colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+                    if secondTestingTabEnabled == true {
+                        NavigationLink("Let's Begin The Full EHA Test!", value: EPTATTSTestV4.EHATesting(id: 14.1, name: "EHA Interim Pre Part 2 Test", related: []))
+                            .font(.title)
+                            .padding()
+                            .frame(width: 300, height: 100, alignment: .center)
+                            .background(colorModel.tiffanyBlue)
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
+                            .hoverEffect()
+                            .navigationDestination(for: EHATesting.self) { ehaTesting in
+                                EHAInterimPreEHAP2View(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
+                            }
+                    } else {
+                        Text("Please complete the Setup Tab & the First Test Tab before trying the second test phase")
+                            .foregroundColor(.red)
+                            .font(.title)
+                    }
+                }
+            }
+            .tabItem {
+                Image(systemName: "ear.and.waveform")
+                    .accentColor(colorModel.tiffanyBlue)
+                Text("3. 2nd Testing")
+                    .foregroundColor(colorModel.proceedColor)
+                    .background(colorModel.proceedColor)
+                    .font(.caption)
+                
+            }
+            .tag(3)
+            
+            NavigationStack(path: $navigationModel.closingPath) {
+                ZStack{
+                    colorModel.colorBackgroundBottomDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+//                    NavigationLink("Let's Go View Your Results!", value: EPTATTSTestV4.Closing(id: 15.0, name: "Results Landing View", related: []))
+                    if closingTabEnabled == true {
+                        NavigationLink("Let's Go View Your Results!", value: EPTATTSTestV4.Closing(id: 15.0, name: "Results Landing View", related: []))
+                            .font(.title)
+                            .padding()
+                            .frame(width: 300, height: 100, alignment: .center)
+                            .background(colorModel.tiffanyBlue)
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
+                            .hoverEffect()
+                            .navigationDestination(for: Closing.self) { closing in
+                                ResultsLandingView(closing: closing, relatedLinkClosing: linkClosing)
+                            }
+                    } else {
+                        Text("Please complete the Setup Tab & the First Test Tab & the Second Test Tab before reviewing results")
+                        .foregroundColor(.red)
+                        .font(.title)
+                    }
+                }
+            }
+            .tabItem {
+                Image(systemName: "list.bullet.clipboard.fill")
+                    .foregroundColor(.blue)
+                    .background(Color.blue)
+                Text("4. Results")
+                    .foregroundColor(.blue)
+                    .background(Color.blue)
+            }
             .tag(4)
-            
-    
-
-            
+        }
+    }
 
 
-            
-            
-            
-            
-            
+
             //            HStack{
             //                NavigationLink("User Login", value: dataModel.setups[2])
             //                    .foregroundColor(.green)
@@ -489,18 +611,6 @@ struct NavigationView: View {
 //                    .navigationDestination(for: Setup.self) { setup in
 //                        DisclaimerView(setup: setup, relatedLink: link)
 //                    }
-                
-
-
-
-        }
-
-    }
-
-
-    
-                
-                
                 //            List{
                 //                ForEach(dataModel.setups, id: \.self) { setup in
                 //                    NavigationLink(setup.name, value: setup)
@@ -511,9 +621,6 @@ struct NavigationView: View {
                 //
                 //                DisclaimerView(setup: setup2, relatedLink: link)
                 //            })
-                
-
-
 //
 //                    NavigationLink("Login View", value: Setup(id: 2.01, name: "User Login"))
 //
@@ -539,14 +646,16 @@ struct NavigationView: View {
         ForEach(dataModel.setups, id: \.self) { setup in
             NavigationLink(setup.name, value: setup)
         }
-        print(dataModel.setups)
         ForEach(dataModel.testings, id: \.self) { testing in
             NavigationLink(testing.name, value: testing)
         }
-        print(dataModel.testings)
         ForEach(dataModel.ehaTestings, id: \.self) { ehaTesting in
             NavigationLink(ehaTesting.name, value: ehaTesting)
         }
+        ForEach(dataModel.closings, id: \.self) { closing in
+            NavigationLink(closing.name, value: closing)
+        }
+        print(dataModel.setups)
     }
     
     private func link(setup: Setup) -> some View {
@@ -561,6 +670,9 @@ struct NavigationView: View {
         EmptyView()
     }
     
+    private func linkClosing(closing: Closing) -> some View {
+        EmptyView()
+    }
 }
 
 struct NavigationView_Previews: PreviewProvider {

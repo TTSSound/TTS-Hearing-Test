@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PostEHATestView: View {
     @ObservedObject var audioSessionModel = AudioSessionModel()
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var colorModel: ColorModel = ColorModel()
     @StateObject var systemSettingsEndEHAModel: SystemSettingsEndEHAModel = SystemSettingsEndEHAModel()
     @State var volumeEHAPostTest = Float()
     

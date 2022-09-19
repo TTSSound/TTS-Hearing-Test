@@ -18,6 +18,8 @@
 		7C179FED28B81B7500964AAC /* InAppPurchaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C179FEC28B81B7500964AAC /* InAppPurchaseView.swift */; };
 		7C179FEF28B852CA00964AAC /* CalibrationIssueSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C179FEE28B852CA00964AAC /* CalibrationIssueSplashView.swift */; };
 		7C179FF528B8848900964AAC /* ColorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C179FF428B8848900964AAC /* ColorModel.swift */; };
+		7C1F1E3128D8C0CC00B672B1 /* ResultsLandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F1E3028D8C0CC00B672B1 /* ResultsLandingView.swift */; };
+		7C1F1E3328D8C2AD00B672B1 /* ResultsSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1F1E3228D8C2AD00B672B1 /* ResultsSplashView.swift */; };
 		7C24C1E228BEC419006E77DD /* PostEPTATestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C24C1E128BEC419006E77DD /* PostEPTATestView.swift */; };
 		7C24C1E428BEC718006E77DD /* PostSimpleTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C24C1E328BEC718006E77DD /* PostSimpleTestView.swift */; };
 		7C24C1E628BEC8F1006E77DD /* PostAllTestsSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C24C1E528BEC8F1006E77DD /* PostAllTestsSplashView.swift */; };
@@ -191,6 +193,8 @@
 		7C179FEE28B852CA00964AAC /* CalibrationIssueSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationIssueSplashView.swift; sourceTree = "<group>"; };
 		7C179FF028B859BC00964AAC /* ReadyForSiriSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadyForSiriSetup.swift; sourceTree = "<group>"; };
 		7C179FF428B8848900964AAC /* ColorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorModel.swift; sourceTree = "<group>"; };
+		7C1F1E3028D8C0CC00B672B1 /* ResultsLandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsLandingView.swift; sourceTree = "<group>"; };
+		7C1F1E3228D8C2AD00B672B1 /* ResultsSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsSplashView.swift; sourceTree = "<group>"; };
 		7C24C1E128BEC419006E77DD /* PostEPTATestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostEPTATestView.swift; sourceTree = "<group>"; };
 		7C24C1E328BEC718006E77DD /* PostSimpleTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSimpleTestView.swift; sourceTree = "<group>"; };
 		7C24C1E528BEC8F1006E77DD /* PostAllTestsSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostAllTestsSplashView.swift; sourceTree = "<group>"; };
@@ -617,9 +621,11 @@
 				7C33E33328D82C2900435AE9 /* EHAInterimPreEHAP2View.swift */,
 				7C666DAB28B6930E007707AC /* EHATTSTestPart2View.swift */,
 				7C24C1E928BECCDD006E77DD /* PostEHATestView.swift */,
+				7C1F1E3028D8C0CC00B672B1 /* ResultsLandingView.swift */,
 				7C666DA928B69299007707AC /* EPTAResultsDisplayView.swift */,
 				7C24C1E728BEC9B1006E77DD /* EHAResultsDisplayView.swift */,
 				7C76D5EF28B18A9B0044958B /* SimpleResultsDisplayView.swift */,
+				7C1F1E3228D8C2AD00B672B1 /* ResultsSplashView.swift */,
 				7C76D5F328B18BA30044958B /* PurchaseView.swift */,
 				7C76D5F128B18AE50044958B /* ClosingView.swift */,
 				7C179FEC28B81B7500964AAC /* InAppPurchaseView.swift */,
@@ -962,6 +968,7 @@
 				7C179FE528B805DB00964AAC /* SimpleTrialDescriptionView.swift in Sources */,
 				7C4D019128C262CD00361559 /* EHAP1DataObjectModel.swift in Sources */,
 				7C666DA028B676B1007707AC /* ExplanationView.swift in Sources */,
+				7C1F1E3328D8C2AD00B672B1 /* ResultsSplashView.swift in Sources */,
 				7C4D018A28C1724100361559 /* EHATTSTestPart1View.swift in Sources */,
 				7C666DA428B67841007707AC /* CalibrationSplashView.swift in Sources */,
 				7C24C1E228BEC419006E77DD /* PostEPTATestView.swift in Sources */,
@@ -973,6 +980,7 @@
 				7C24C1E828BEC9B1006E77DD /* EHAResultsDisplayView.swift in Sources */,
 				7C901FC228B9A8AA007E1336 /* UserDataEntrySplashView.swift in Sources */,
 				7C24C1E428BEC718006E77DD /* PostSimpleTestView.swift in Sources */,
+				7C1F1E3128D8C0CC00B672B1 /* ResultsLandingView.swift in Sources */,
 				7C901FC828B9BA1E007E1336 /* DNDSiriSetupView.swift in Sources */,
 				7C666D9D28B67505007707AC /* CalibrationAssessmentView.swift in Sources */,
 			);
