@@ -7,13 +7,27 @@
 
 import SwiftUI
 import Combine
+//import Firebase
 
 class DataModel: ObservableObject {
     @Published var setups: [Setup] = []
+    @Published var testings: [Testing] = []
+    @Published var ehaTestings: [EHATesting] = []
+    @Published var closings: [Closing] = []
+    
     
     private var setupsById: [Setup.ID: Setup]? = nil
     private var cancellables: [AnyCancellable] = []
     
+    private var testingsById: [Testing.ID: Testing]? = nil
+    private var testingsCancellables: [AnyCancellable] = []
+
+    private var ehaTestingsById: [EHATesting.ID: EHATesting]? = nil
+    private var ehaTestingsCancellables: [AnyCancellable] = []
+
+    private var closingsById: [Closing.ID: Closing]? = nil
+    private var closingsCancellables: [AnyCancellable] = []
+
     static let shared: DataModel = DataModel()
     
     private init() {
@@ -23,6 +37,27 @@ class DataModel: ObservableObject {
                 self?.setupsById = nil
             }
             .store(in: &cancellables)
+        
+        testings = builtInTestings
+        $testings
+            .sink { [weak self] _ in
+                self?.testingsById = nil
+            }
+            .store(in: &testingsCancellables)
+        
+        ehaTestings = builtInEHATestings
+        $ehaTestings
+            .sink { [weak self] _ in
+                self?.ehaTestingsById = nil
+            }
+            .store(in: &ehaTestingsCancellables)
+        
+        closings = builtInClosings
+        $closings
+            .sink { [weak self] _ in
+                self?.closingsById = nil
+            }
+            .store(in: &closingsCancellables)
     }
     
     func setups(relatedTo setup: Setup) -> [Setup] {
@@ -38,6 +73,50 @@ class DataModel: ObservableObject {
         }
         return setupsById![setupId]
     }
+    
+    func testings(relatedTo testing: Testing) -> [Testing] {
+        testings
+            .filter { testing.related.contains($0.id) }
+            .sorted { $0.name < $1.name }
+    }
+    
+    subscript(testingId: Testing.ID) -> Testing? {
+        if testingsById == nil {
+            testingsById = Dictionary(
+                uniqueKeysWithValues: testings.map { ($0.id, $0) })
+        }
+        return testingsById![testingId]
+    }
+    
+    func ehaTestings(relatedTo ehaTesting: EHATesting) -> [EHATesting] {
+        ehaTestings
+            .filter { ehaTesting.related.contains($0.id) }
+            .sorted { $0.name < $1.name }
+    }
+    
+    subscript(ehaTestingId: EHATesting.ID) -> EHATesting? {
+        if ehaTestingsById == nil {
+            ehaTestingsById = Dictionary(
+                uniqueKeysWithValues: ehaTestings.map { ($0.id, $0) })
+        }
+        return ehaTestingsById![ehaTestingId]
+    }
+    
+    func closings(relatedTo closing: Closing) -> [Closing] {
+        closings
+            .filter { closing.related.contains($0.id) }
+            .sorted { $0.name < $1.name }
+    }
+    
+    subscript(closingId: Closing.ID) -> Closing? {
+        if closingsById == nil {
+            closingsById = Dictionary(
+                uniqueKeysWithValues: closings.map { ($0.id, $0) })
+        }
+        return closingsById![closingId]
+    }
+    
+    
 }
     
 private let builtInSetups: [Setup] = {
@@ -72,87 +151,140 @@ private let builtInSetups: [Setup] = {
         "In App Purchase": Setup(id: 4.1, name: "In App Purchase", related: [])
     ]
     
-    setups["User Setup"]!.related = [
-        setups["User Login"]!.id,
-        setups["UserDataSplash"]!.id
-    ]
-    
-    setups["User Login"]!.related = [setups["UserDataSplash"]!.id]
-    setups["UserDataSplash"]!.related = [setups["User Login"]!.id]
-    
-    
-    setups["Test Selection Home"]!.related = [
-        setups["Test Selection"]!.id,
-        //        setups["TestSelectionSplash"]!.id,
-        setups["EHA Description"]!.id,
-        setups["Corrective Filters"]!.id,
-        setups["EPTA Description"]!.id,
-        setups["Simple Trial Description"]!.id,
-        setups["In App Purchase"]!.id,
-        //        setups["Calibrated Devices"]!.id
-    ]
-    
-    setups["Test Selection"]!.related = [setups["Test Selection Home"]!.id]
-    
-    //    setups["Test Selection Home"]!.related = [setups["EHA Description"]!.id]
-    setups["EHA Description"]!.related = [setups["Test Selection Home"]!.id]
-    setups["EHA Description"]!.related = [setups["In App Purchase"]!.id]
-    setups["In App Purchase"]!.related = [setups["EHA Description"]!.id]
-    
-    //    setups["Test Selection Home"]!.related = [setups["Corrective Filters"]!.id]
-    setups["Corrective Filters"]!.related = [setups["Test Selection Home"]!.id]
-    setups["Corrective Filters"]!.related = [setups["In App Purchase"]!.id]
-    setups["In App Purchase"]!.related = [setups["Corrective Filters"]!.id]
-    
-    //    setups["Test Selection Home"]!.related = [setups["EPTA Description"]!.id]
-    setups["EPTA Description"]!.related = [setups["Test Selection Home"]!.id]
-    setups["EPTA Description"]!.related = [setups["In App Purchase"]!.id]
-    setups["In App Purchase"]!.related = [setups["EPTA Description"]!.id]
-    
-    //    setups["Test Selection Home"]!.related = [setups["Simple Trial Description"]!.id]
-    setups["Simple Trial Description"]!.related = [setups["Test Selection Home"]!.id]
-    setups["Simple Trial Description"]!.related = [setups["In App Purchase"]!.id]
-    setups["In App Purchase"]!.related = [setups["Simple Trial Description"]!.id]
-    
-    
-    setups["Test Selection"]!.related = [
-        setups["TestSelectionSplash"]!.id,
-        //        setups["EHA Description"]!.id,
-        //        setups["Corrective Filters"]!.id,
-        //        setups["EPTA Description"]!.id,
-        //        setups["Simple Trial Description"]!.id,
-        //        setups["In App Purchase"]!.id,
-        setups["Calibrated Devices"]!.id
-    ]
-    
-    setups["TestSelectionSplash"]!.related = [setups["Test Selection"]!.id]
-    setups["Calibrated Devices"]!.related = [setups["Test Selection"]!.id]
-    
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //Stopping Here for Relationships to Test Navigation Thus Far
-    
-    
-    setups["Calibrated Devices"]!.related = [
-        setups["CalibratedDevicesSplash"]!.id,
-        setups["CalibratedDevicesIssue"]!.id,
-        setups["Manual Device Information"]!.id,
-        setups["Disclaimer Manual Device"]!.id,
-        setups["Manual Device Entry"]!.id,
-        setups["ManualDeviceEntrySplash"]!.id
-    ]
-    
-    setups["Siri Setup"]!.related = [
-        setups["Silent Mode"]!.id,
-        setups["Do Not Disturb Mode"]!.id,
-        setups["System Volume Mode"]!.id,
-        setups["Manual System Setup"]!.id,
-        setups["Manual Setup Instructions"]!.id
-    ]
+//    setups["User Setup"]!.related = [
+  //        setups["User Login"]!.id,
+  //        setups["UserDataSplash"]!.id
+  //    ]
+  //
+  //    setups["User Login"]!.related = [setups["UserDataSplash"]!.id]
+  //    setups["UserDataSplash"]!.related = [setups["User Login"]!.id]
+  //
+  //
+  //    setups["Test Selection Home"]!.related = [
+  //        setups["Test Selection"]!.id,
+  //        //        setups["TestSelectionSplash"]!.id,
+  //        setups["EHA Description"]!.id,
+  //        setups["Corrective Filters"]!.id,
+  //        setups["EPTA Description"]!.id,
+  //        setups["Simple Trial Description"]!.id,
+  //        setups["In App Purchase"]!.id,
+  //        //        setups["Calibrated Devices"]!.id
+  //    ]
+  //
+  //    setups["Test Selection"]!.related = [setups["Test Selection Home"]!.id]
+  //
+  //    //    setups["Test Selection Home"]!.related = [setups["EHA Description"]!.id]
+  //    setups["EHA Description"]!.related = [setups["Test Selection Home"]!.id]
+  //    setups["EHA Description"]!.related = [setups["In App Purchase"]!.id]
+  //    setups["In App Purchase"]!.related = [setups["EHA Description"]!.id]
+  //
+  //    //    setups["Test Selection Home"]!.related = [setups["Corrective Filters"]!.id]
+  //    setups["Corrective Filters"]!.related = [setups["Test Selection Home"]!.id]
+  //    setups["Corrective Filters"]!.related = [setups["In App Purchase"]!.id]
+  //    setups["In App Purchase"]!.related = [setups["Corrective Filters"]!.id]
+  //
+  //    //    setups["Test Selection Home"]!.related = [setups["EPTA Description"]!.id]
+  //    setups["EPTA Description"]!.related = [setups["Test Selection Home"]!.id]
+  //    setups["EPTA Description"]!.related = [setups["In App Purchase"]!.id]
+  //    setups["In App Purchase"]!.related = [setups["EPTA Description"]!.id]
+  //
+  //    //    setups["Test Selection Home"]!.related = [setups["Simple Trial Description"]!.id]
+  //    setups["Simple Trial Description"]!.related = [setups["Test Selection Home"]!.id]
+  //    setups["Simple Trial Description"]!.related = [setups["In App Purchase"]!.id]
+  //    setups["In App Purchase"]!.related = [setups["Simple Trial Description"]!.id]
+  //
+  //
+  //    setups["Test Selection"]!.related = [
+  //        setups["TestSelectionSplash"]!.id,
+  //        //        setups["EHA Description"]!.id,
+  //        //        setups["Corrective Filters"]!.id,
+  //        //        setups["EPTA Description"]!.id,
+  //        //        setups["Simple Trial Description"]!.id,
+  //        //        setups["In App Purchase"]!.id,
+  //        setups["Calibrated Devices"]!.id
+  //    ]
+  //
+  //    setups["TestSelectionSplash"]!.related = [setups["Test Selection"]!.id]
+  //    setups["Calibrated Devices"]!.related = [setups["Test Selection"]!.id]
+  //
+  //    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //    //Stopping Here for Relationships to Test Navigation Thus Far
+  //
+  //
+  //    setups["Calibrated Devices"]!.related = [
+  //        setups["CalibratedDevicesSplash"]!.id,
+  //        setups["CalibratedDevicesIssue"]!.id,
+  //        setups["Manual Device Information"]!.id,
+  //        setups["Disclaimer Manual Device"]!.id,
+  //        setups["Manual Device Entry"]!.id,
+  //        setups["ManualDeviceEntrySplash"]!.id
+  //    ]
+  //
+  //    setups["Siri Setup"]!.related = [
+  //        setups["Silent Mode"]!.id,
+  //        setups["Do Not Disturb Mode"]!.id,
+  //        setups["System Volume Mode"]!.id,
+  //        setups["Manual System Setup"]!.id,
+  //        setups["Manual Setup Instructions"]!.id
+  //    ]
     
     return Array(setups.values)
+    
+}()
+        
+        
+private let builtInTestings: [Testing] = {
+    var testings = [
+        "Beta Testing Home": Testing(id: 8.0, name: "Beta Testing Home", related: []),
+        "Test ID Entry": Testing(id: 9.0, name: "Test ID Entry", related: []),
+        "Hearing Survey": Testing(id: 10.0, name: "Hearing Survey", related: []),
+        "SurveyErrorView": Testing(id: 10.01, name: "SurveyErrorView", related: []),
+        "Pre Test Landing": Testing(id: 11, name: "Pre Test Landing", related: []),
+        "Training Test": Testing(id: 11.1, name: "Training Test", related: []),
+        "Training Test Holding": Testing(id: 11.11, name: "Training Test Holding", related: []),
+        "1kHz Test": Testing(id: 11.2, name: "1kHz Test", related: []),
+        "Post 1kHz Test": Testing(id: 11.21, name: "Post 1kHz Test", related: []),
+        "EPTA EHA Part 1 Test": Testing(id: 12.0, name: "EPTA EHAP1 Test", related: []),
+        "Simple Test": Testing(id: 12.1, name: "Simple Test", related: []),
+        "Post All Test Landing": Testing(id: 13.0, name: "Post All Test Landing", related:[]),
+        "Post Test Director": Testing(id: 13.1, name: "Post Test Director", related: []),
+        "Post EPTA Test": Testing(id: 13.2, name: "Post EPTA Test", related: []),
+        "Post Simple Test": Testing(id: 13.3, name: "Post Simple Test", related: []),
+        "EHA Interim Post Test": Testing(id: 14.0, name: "EHA Interim Post Test", related: [])
+    ]
+    
+    return Array(testings.values)
 }()
 
-
+private let builtInEHATestings: [EHATesting] = {
+    var ehaTestings = [
+        "EHA Interim Post Test Holding": EHATesting(id: 14.1, name: "EHA Interim Post Test Holding", related: []),
+        "EHA Part 2 Test": EHATesting(id: 14.1, name: "EHA Part 2 Test", related: []),
+        "Post EHA Part 2 Test": EHATesting(id: 14.2, name: "Post EHA Part 2 Test", related: [])
+    ]
+    
+    return Array(ehaTestings.values)
+}()
+    
+private let builtInClosings: [Closing] = {
+    var closings = [
+        "EPTA Test Results": Closing(id: 15.0, name: "EPTA Test Results", related: []),
+        "EHA Test Results": Closing(id: 15.1, name: "EHA Test Results", related: []),
+        "Simple Test Results": Closing(id: 13.3, name: "Simple Test Results", related: []),
+        "Test Results Holding 1": Closing(id: 13.4, name: "Test Results Holding 1", related: []),
+        "Test Results Holding 2": Closing(id: 13.5, name: "Test Results Holding 2", related: []),
+        "Test Results Holding 3": Closing(id: 13.6, name: "Test Results Holding 3", related: []),
+        "Post Test Purchse": Closing(id: 14.0, name: "Post Test Purchse", related: []),
+        "Post Test Purchse Holding 1": Closing(id: 14.1, name: "Post Test Purchse Holding 1", related: []),
+        "Post Test Purchse Holding 2": Closing(id: 14.1, name: "Post Test Purchse Holding 2", related: []),
+        "Closing": Closing(id: 15.0, name: "Closing", related: []),
+        "Closing Holding 1": Closing(id: 15.1, name: "Closing Holding 1", related: []),
+        "Closing Holding 2": Closing(id: 15.1, name: "Closing Holding 2", related: [])
+    ]
+    
+    return Array(closings.values)
+}()
+    
 
 struct Setup: Hashable, Identifiable {
     let id: Double
@@ -160,78 +292,317 @@ struct Setup: Hashable, Identifiable {
     var related: [Setup.ID] = []
 }
 
+struct Testing: Hashable, Identifiable {
+    let id: Double
+    var name: String
+    var related: [Testing.ID] = []
+}
+
+struct EHATesting: Hashable, Identifiable {
+    let id: Double
+    var name: String
+    var related: [EHATesting.ID] = []
+}
+
+struct Closing: Hashable, Identifiable {
+    let id: Double
+    var name: String
+    var related: [Closing.ID] = []
+}
+
 
 
 // StructContentView in Apple Sample Project
 struct NavigationView: View {
-    
-    @StateObject private var navigationModel = NavigationModel()
+
     var dataModel = DataModel.shared
-    @State var userLogInSetup: Setup = Setup(id: 2.01, name: "User Login")
-    @State var userLoginName: String = String()
+    @StateObject private var navigationModel = NavigationModel()
     
-    
+    var colorModel = ColorModel()
+    @State var selectedTab: Int = 0
+
     var body: some View {
-        NavigationStack(path: $navigationModel.setupPath) {
-            
-            NavigationLink("User Login", value: dataModel.setups[2])
-                .foregroundColor(.green)
-            
-            List{
-//                ForEach(dataModel.setups, id: \.self) { setup in
-//                    NavigationLink(setup.name, value: setup)
-//                }
+        
+        
+        //        NavigationStack(path: $navigationModel.setupPath) {
+        //
+        //            NavigationLink("User Login", value: dataModel.setups[2])
+        //                .foregroundColor(.green)
+        //
+        //            List{
+        //                ForEach(dataModel.setups, id: \.self) { setup in
+        //                    NavigationLink(setup.name, value: setup)
+        //                }
+        //            }
+        //            .navigationDestination(for: Setup.self) { setup in
+        //                UserLoginView(setup: setup, relatedLink: link)
+        //            }
+        //            .environmentObject(navigationModel)
+        //                .onAppear {
+        //                    ForEach(dataModel.setups, id: \.self) { setup in
+        //                        NavigationLink(setup.name, value: setup)
+        //                    }
+        //            }
+        //        }
+        
+        
+        
+        TabView(selection: $selectedTab) {
+            ZStack{
+                colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+                VStack(alignment: .leading, spacing: 20) {
+                    Text("-------------------------------------------")
+                        .foregroundColor(colorModel.textMain)
+                    Text("Replace This Text With Small Opening")
+                        .foregroundColor(colorModel.textMain)
+                    Text("Thank you for trusting TTS to deliver valid, proven, and superior hearing tests and innovative corrective hearing filtes (need new name)")
+                        .foregroundColor(colorModel.textMain)
+                    Text("Before we go any further, we need to gather some basic information and discuss a few things about the TTS hearing test and advanced corrective filters")
+                        .foregroundColor(colorModel.textMain)
+                    Spacer()
+                }
+                .padding()
             }
-            .navigationDestination(for: Setup.self) { setup in
-                UserLoginView(setup: setup, relatedLink: link)
-            }
+            .environmentObject(navigationModel)
             .onAppear {
-//                getLinks()
-//                ForEach(dataModel.setups, id: \.self) { setup in
-//                    NavigationLink(setup.name, value: setup)
-//                }
+                getLinks()
             }
+            .tabItem {
+                Image(systemName: "house")
+                    .foregroundColor(colorModel.tabColorMain)
+                Text("Home")
+                    .foregroundColor(colorModel.tabColorMain)
+            }
+            .tag(0)
+            
+            NavigationStack(path: $navigationModel.testingPath) {
+                ZStack{
+                    colorModel.colorBackgroundTopTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+                        NavigationLink("Let's Begin Testing!", value: EPTATTSTestV4.Testing(id: 8.0, name: "Beta Testing Home", related: []))
+                        .font(.title)
+                        .padding()
+                        .frame(width: 300, height: 100, alignment: .center)
+                        .background(colorModel.tiffanyBlue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .hoverEffect()
+                        .navigationDestination(for: Testing.self) { testing in
+                            BetaTestingLandingView(testing: testing, relatedLinkTesting: linkTesting)
+                        }
+                }
+            }
+            .tabItem {
+                Image(systemName: "ear.fill")
+                    .accentColor(colorModel.tiffanyBlue)
+                Text("Start")
+                    .foregroundColor(colorModel.proceedColor)
+                    .background(colorModel.proceedColor)
+                
+            }
+            .tag(1)
+            
+            NavigationStack(path: $navigationModel.setupPath) {
+                ZStack{
+                    colorModel.colorBackgroundTopTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+                    NavigationLink("Let's Begin The Setup Process", value: EPTATTSTestV4.Setup(id: 1.0, name: "Disclaimer", related: []))
+                        .font(.title)
+                        .padding()
+                        .frame(width: 300, height: 100, alignment: .center)
+                        .background(colorModel.tiffanyBlue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .hoverEffect()
+                        .navigationDestination(for: Setup.self) { setup in
+                            DisclaimerView(setup: setup, relatedLink: link)
+                        }
+                }
+            }
+            .tabItem {
+                Image(systemName: "arrowshape.zigzag.right.fill")
+                    .accentColor(.blue)
+                Text("setup")
+                    .foregroundColor(.blue)
+            }
+            .tag(2)
+            
+    
+
+            
+
+
+            
+            
+            
+            
+            
+            //            HStack{
+            //                NavigationLink("User Login", value: dataModel.setups[2])
+            //                    .foregroundColor(.green)
+            //            }
+            //            .navigationDestination(for: Setup.self) { setup in
+            //                UserLoginView(setup: setup, relatedLink: link)
+            //            }
+//            NavigationStack(path: $navigationModel.setupPath) {
+//                NavigationLink("Disclaimer", value: EPTATTSTestV4.Setup(id: 1.0, name: "Disclaimer", related: []))
+//                    .foregroundColor(.blue)
+//                    .navigationDestination(for: Setup.self) { setup in
+//                        DisclaimerView(setup: setup, relatedLink: link)
+//                    }
+                
+
+
+
         }
 
     }
-    func link(setup: Setup) -> some View {
+
+
+    
+                
+                
+                //            List{
+                //                ForEach(dataModel.setups, id: \.self) { setup in
+                //                    NavigationLink(setup.name, value: setup)
+                //                }
+                //            }
+                
+                //            .navigationDestination(for: Setup.self, destination: { setup2 in
+                //
+                //                DisclaimerView(setup: setup2, relatedLink: link)
+                //            })
+                
+
+
+//
+//                    NavigationLink("Login View", value: Setup(id: 2.01, name: "User Login"))
+//
+//                }
+//                .navigationDestination(for: Setup.self) { setup in
+//                    DisclaimerView(setup: setup, relatedLink: link)
+//                }
+//                .navigationDestination(for: Setup.self, destination: { setup in
+//                    UserLoginView(setup: setup, relatedLink: link)
+//                })
+//
+//                .environmentObject(navigationModel)
+//                .onAppear {
+//                    getLinks()
+//                }
+////            }
+
+
+
+
+    
+    func getLinks() {
+        ForEach(dataModel.setups, id: \.self) { setup in
+            NavigationLink(setup.name, value: setup)
+        }
+        print(dataModel.setups)
+        ForEach(dataModel.testings, id: \.self) { testing in
+            NavigationLink(testing.name, value: testing)
+        }
+        print(dataModel.testings)
+    }
+    
+    private func link(setup: Setup) -> some View {
         EmptyView()
     }
     
-//    func getLinks() {
-//        userLogInSetup = dataModel.setups[2]
-//        userLoginName = userLogInSetup.name
-////        NavigationLink(userLogInSetup.name, value: userLogInSetup)
-//        print(userLogInSetup)
-//        print(dataModel.setups)
-//        
-//    }
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+    
 }
 
-//struct NavigationView_Previews: PreviewProvider {
-//    
-//    static var previews: some View {
-//        NavigationView()
-//    }
-//}
+struct NavigationView_Previews: PreviewProvider {
+    
+    static var previews: some View {
+        NavigationView()
+    }
+}
+
+
+//====================================================
+//*************SAVE THIS *****************************
+// Original Functional New Nav Links Approach
+//
+            //NavigationStack(path: $navigationModel.setupPath) {
+            //
+            //    NavigationLink("User Login", value: dataModel.setups[2])
+            //        .foregroundColor(.green)
+            //
+            //    List{
+            //        ForEach(dataModel.setups, id: \.self) { setup in
+            //            NavigationLink(setup.name, value: setup)
+            //        }
+            //    }
+            //    .navigationDestination(for: Setup.self) { setup in
+            //        UserLoginView(setup: setup, relatedLink: link)
+            //    }
+            //    .environmentObject(navigationModel)
+//                .onAppear {
+//                    ForEach(dataModel.setups, id: \.self) { setup in
+//                        NavigationLink(setup.name, value: setup)
+//                    }
+            //    }
+            //}
+//
+// Original Functional New Nav Links Approach
+//*************SAVE THIS *****************************
+//====================================================
+
+
+
 
 
 final class NavigationModel: ObservableObject, Codable {
     
     @Published var setupPath: [Setup]
+    @Published var testingPath: [Testing]
+    @Published var ehaTestingPath: [EHATesting]
+    @Published var closingPath: [Closing]
     
     private lazy var decoder = JSONDecoder()
     private lazy var encoder = JSONEncoder()
     
-    init(setupPath: [Setup] = []
+    private lazy var decoderTesting = JSONDecoder()
+    private lazy var encoderTesting = JSONEncoder()
+    
+    private lazy var decoderEHATesting = JSONDecoder()
+    private lazy var encoderEHATesting = JSONEncoder()
+    
+    private lazy var decoderClosing = JSONDecoder()
+    private lazy var encoderClosing = JSONEncoder()
+    
+    init(setupPath: [Setup] = [], testingPath: [Testing] = [], ehaTestingPath: [EHATesting] = [], closingPath: [Closing] = []
     ) {
         self.setupPath = setupPath
+        self.testingPath = testingPath
+        self.ehaTestingPath = ehaTestingPath
+        self.closingPath = closingPath
     }
     
     var selectedSetup: Setup? {
         get { setupPath.first }
         set { setupPath = [newValue].compactMap { $0 } }
     }
+    
+    var selectedTesting: Testing? {
+        get { testingPath.first }
+        set { testingPath = [newValue].compactMap { $0 } }
+    }
+    
+    var selectedEHATesting: EHATesting? {
+        get { ehaTestingPath.first }
+        set { ehaTestingPath = [newValue].compactMap { $0 } }
+    }
+    
+    var selectedClosing: Closing? {
+        get { closingPath.first }
+        set { closingPath = [newValue].compactMap { $0 } }
+    }
+    
     
     
     var jsonData: Data? {
@@ -243,7 +614,40 @@ final class NavigationModel: ObservableObject, Codable {
             setupPath = model.setupPath
         }
     }
+    
+    
+    var jsonDataTesting: Data? {
+        get { try? encoder.encode(self) }
+        set {
+            guard let dataTesting = newValue,
+                  let model = try? decoder.decode(Self.self, from: dataTesting)
+            else { return }
+            testingPath = model.testingPath
+        }
+    }
 
+    var jsonDataEHATesting: Data? {
+        get { try? encoder.encode(self) }
+        set {
+            guard let dataEHATesting = newValue,
+                  let model = try? decoder.decode(Self.self, from: dataEHATesting)
+            else { return }
+            ehaTestingPath = model.ehaTestingPath
+        }
+    }
+    
+    
+    var jsonDataClosing: Data? {
+        get { try? encoder.encode(self) }
+        set {
+            guard let dataClosing = newValue,
+                  let model = try? decoder.decode(Self.self, from: dataClosing)
+            else { return }
+            closingPath = model.closingPath
+        }
+    }
+    
+    
     var objectWillChangeSequence: AsyncPublisher<Publishers.Buffer<ObservableObjectPublisher>> {
         objectWillChange
             .buffer(size: 1, prefetch: .byRequest, whenFull: .dropOldest)
@@ -252,17 +656,35 @@ final class NavigationModel: ObservableObject, Codable {
 
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
         let setupPathIds = try container.decode(
             [Setup.ID].self, forKey: .setupPathIds)
+        let testingPathIds = try container.decode(
+            [Testing.ID].self, forKey: .testingPathIds)
+        let ehaTestingPathIds = try container.decode(
+            [EHATesting.ID].self, forKey: .ehaTestingPathIds)
+        let closingPathIds = try container.decode(
+            [Closing.ID].self, forKey: .closingPathIds)
+        
         self.setupPath = setupPathIds.compactMap { DataModel.shared[$0] }
+        self.testingPath = testingPathIds.compactMap { DataModel.shared[$0] }
+        self.ehaTestingPath = ehaTestingPathIds.compactMap { DataModel.shared[$0] }
+        self.closingPath = closingPathIds.compactMap { DataModel.shared[$0] }
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(setupPath.map(\.id), forKey: .setupPathIds)
+        try container.encode(testingPath.map(\.id), forKey: .testingPathIds)
+        try container.encode(ehaTestingPath.map(\.id), forKey: .ehaTestingPathIds)
+        try container.encode(closingPath.map(\.id), forKey: .closingPathIds)
     }
 
     enum CodingKeys: String, CodingKey {
         case setupPathIds
+        case testingPathIds
+        case ehaTestingPathIds
+        case closingPathIds
     }
+    
 }

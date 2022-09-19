@@ -27,7 +27,7 @@ struct InstructionsForTakingTest: View {
             Spacer()
             
                 
-                VideoView(videoID: videoInstructionLink)
+                VideoInstructionView(videoInstructionID: videoInstructionLink)
                     .frame(minHeight: 0, maxHeight:
                             UIScreen.main.bounds.height * 0.3)
                     .cornerRadius(12)

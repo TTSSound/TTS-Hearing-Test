@@ -7,9 +7,32 @@
 
 import SwiftUI
 
-struct UserDataEntrySplashView: View {
+struct UserDataEntrySplashView<Link: View>: View {
+    var setup: Setup?
+    var relatedLink: (Setup) -> Link
     
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var body: some View {
+        
+        ZStack{
+            if let setup = setup {
+                UserDataEntrySplashContent(setup: setup, relatedLink: relatedLink)
+            } else {
+                Text("Error Loading UserDataEntrySplashView")
+                    .navigationTitle("")
+            }
+        }
+        
+    }
+}
+
+struct UserDataEntrySplashContent<Link: View>: View {
+    
+    var setup: Setup
+    var dataModel = DataModel.shared
+    var relatedLink: (Setup) -> Link
+    @EnvironmentObject private var navigationModel: NavigationModel
+    
+    var colorModel: ColorModel = ColorModel()
     
     var body: some View {
         ZStack{
@@ -33,7 +56,7 @@ struct UserDataEntrySplashView: View {
             
                 Spacer()
                 NavigationLink {
-                    UserDataEntryView()
+                    UserDataEntryView(setup: setup, relatedLink: link)
                 } label: {
                     
                     HStack {
@@ -53,10 +76,18 @@ struct UserDataEntrySplashView: View {
             }
         }
     }
+    
+    private func link(setup: Setup) -> some View {
+        EmptyView()
+    }
 }
 
-//struct UserDataEntrySplashView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        UserDataEntrySplashView()
-//    }
-//}
+struct UserDataEntrySplashView_Previews: PreviewProvider {
+    static var previews: some View {
+        UserDataEntrySplashView(setup: nil, relatedLink: link)
+    }
+    
+    static func link(setup: Setup) -> some View {
+        EmptyView()
+    }
+}

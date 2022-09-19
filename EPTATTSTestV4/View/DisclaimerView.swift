@@ -24,13 +24,31 @@ struct SaveFinalDisclaimerResults: Codable {
     }
 }
 
+struct DisclaimerView<Link: View>: View {
+    
+    var setup: Setup?
+    var relatedLink: (Setup) -> Link
+    
+    var body: some View{
+        if let setup = setup {
+            DisclaimerContent(setup: setup, relatedLink: relatedLink)
+        } else {
+            Text("Error Loading User Login View")
+                .navigationTitle("")
+        }
+    }
+}
 
-// Add in user agreed store variable and time of agreement CMseconds and Date
-struct DisclaimerView: View {
+
+struct DisclaimerContent<Link: View>: View {
+    var setup: Setup
+    var dataModel = DataModel.shared
+    var relatedLink: (Setup) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
     
-    @StateObject var colorModel = ColorModel()
+    var colorModel = ColorModel()
     
-    @Binding var selectedTab: Int
+//    @Binding var selectedTab: Int
 
         
     
@@ -63,8 +81,6 @@ struct DisclaimerView: View {
     @State var saveFinalDisclaimerResults: SaveFinalDisclaimerResults? = nil
     
     var body: some View {
-        NavigationStack{
-//        NavigationView(path: ["Disclaimer"])
             ZStack{
                 colorModel.colorBackgroundTopTiffanyBlue .ignoresSafeArea(.all, edges: .top)
                 VStack {
@@ -104,7 +120,7 @@ struct DisclaimerView: View {
                         }
                     Spacer()
                     NavigationLink(destination:
-                                    userAgreed == true ? AnyView(UserDataEntryView())
+                                    userAgreed == true ? AnyView(UserDataEntryView(setup: setup, relatedLink: link))
                                     : userAgreed == false ? AnyView(LandingView())
                                     : AnyView(LandingView())
                     ){  HStack {
@@ -122,29 +138,11 @@ struct DisclaimerView: View {
                     }
                     .padding(.bottom, 40)
                     Spacer()
-//                    .onTapGesture {
-//                        Task(priority: .userInitiated, operation: {
-//                            await compareDisclaimerAgreement()
-//                            await disclaimerResponse()
-//                            await agreementDate()
-//                            await concatenateFinalUserAgreementArrays()
-//                            await finalUserAgreementArrays()
-//                            await saveDisclaimerData()
-//                            print(disclaimerSetting)
-//                            print(disclaimerAgreement)
-//                        })
-//                    }
-//                    .padding(.bottom, 40)
-//                    Spacer()
-                }
             }
             .onAppear {
                 dLinkColorIndex = 0
             }
-            
-         
         }
-
     }
     
     func loadUserAgreement() {
@@ -318,6 +316,9 @@ struct DisclaimerView: View {
         }
     }
     
+    private func link(setup: Setup) -> some View {
+        EmptyView()
+    }
     
 }
 
@@ -342,11 +343,12 @@ class UserAgreementModel: ObservableObject {
 }
 
 
-//struct DisclaimerView_Previews: PreviewProvider {
-//
-////    @Binding var selectedTab: Int
-////    @Binding var path: [Double]
-//    static var previews: some View {
-//        DisclaimerView()
-//    }
-//}
+struct DisclaimerView_Previews: PreviewProvider {
+    static var previews: some View {
+        DisclaimerView(setup: nil, relatedLink: link)
+    }
+    
+    static func link(setup: Setup) -> some View {
+        EmptyView()
+    }
+}

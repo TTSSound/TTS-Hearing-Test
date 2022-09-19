@@ -279,7 +279,7 @@ struct Bilateral1kHzTestView: View {
                         .padding(.top, 40)
                         .padding(.bottom, 20)
                 } else if bilateral1kHzTestCompleted == true {
-                    NavigationLink("Test Phase Complete. Continue.", destination: PostBilateral1kHzTestView(), isActive: $continuePastBilateralTest)//", label: [])
+                    NavigationLink("Test Phase Complete. Continue.", destination: PostBilateral1kHzTestView())// isActive: $continuePastBilateralTest)//", label: [])
     //                NavigationLink("Test Phase Complete, Press To Continue", destination: PostBilateral1kHzTestView())
                         .padding()
                         .frame(width: 200, height: 50, alignment: .center)

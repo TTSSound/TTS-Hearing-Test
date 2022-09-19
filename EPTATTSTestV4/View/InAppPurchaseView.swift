@@ -50,6 +50,8 @@ struct InAppPurchaseView: View {
     
     @State var saveFinalTestPurchase: SaveFinalTestPurchase? = nil
     
+    @State var testPurchased: Bool = false
+    
     var body: some View {
         ZStack{
             colorModel.colorBackgroundBottomDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
@@ -102,24 +104,47 @@ struct InAppPurchaseView: View {
                     .background(.gray)
                     .foregroundColor(.gray)
                 Spacer()
-                HStack{
-                    Spacer()
-                    Button {
-                        Task {
-                            await completePurchase()
-                            await saveTestSelectionTolkens()
+                if testPurchased == false {
+                    HStack{
+                        Spacer()
+                        Button {
+                            Task {
+                                await completePurchase()
+                                await saveTestSelectionTolkens()
+                            }
+                        } label: {
+                            HStack{
+                                Spacer()
+                                Text("Submit & Complete Purchase")
+                                    .font(.title3)
+                                Spacer()
+                                Image(systemName: "arrow.up.doc.fill")
+                                    .font(.title)
+                                Spacer()
+                            }
+                            .frame(width: 350, height: 50, alignment: .center)
+                            .foregroundColor(.white)
+                            .background(Color.blue)
+                            .cornerRadius(12)
                         }
-                    } label: {
-                        VStack{
-                            Image(systemName: "arrow.up.doc.fill")
-                                .foregroundColor(.blue)
-                                .font(.title)
-                            Text("Submit & Complete Purchase")
-                                .foregroundColor(.white)
-                                .font(.title3)
-                        }
+                        Spacer()
                     }
-                    Spacer()
+                } else if testPurchased == true {
+                    NavigationLink(destination: CalibrationAssessmentView()) {
+                        HStack{
+                            Spacer()
+                            Text("Continue To Calibrated Devices")
+                                .font(.title3)
+                            Spacer()
+                            Image(systemName: "arrowshape.bounce.right")
+                                .font(.title)
+                            Spacer()
+                        }
+                        .frame(width: 350, height: 50, alignment: .center)
+                        .foregroundColor(.white)
+                        .background(Color.green)
+                        .cornerRadius(12)
+                    }
                 }
                 Spacer()
             }
@@ -140,7 +165,7 @@ struct InAppPurchaseView: View {
             print("EHA testSelectionModel finalPurchasedEHATestUUID: \(finalPurchasedEHATestUUID)")
             finalPurchasedTestTolken.append(userPurchasedEHAUUIDString)
             finalTestPurchased.append(selectedTest)
-            
+            testPurchased = true
             //Making holding false values for EPTA
             let noEPTA = "NoEPTAPruchased"
             userPurchasedEPTAUUIDString.append(noEPTA)
@@ -161,6 +186,7 @@ struct InAppPurchaseView: View {
             print("EPTA testSelectionModel finalPurchasedEPTATestUUID: \(finalPurchasedEPTATestUUID)")
             finalPurchasedTestTolken.append(userPurchasedEPTAUUIDString)
             finalTestPurchased.append(selectedTest)
+            testPurchased = true
             
             let noEHA = "NoEHAPurchased"
             userPurchasedEHAUUIDString.append(noEHA)
@@ -170,6 +196,7 @@ struct InAppPurchaseView: View {
             print("EPTA PURCHASED!")
         } else {
             print("!!! Error in complete Purchase Logic")
+            testPurchased = false
         }
     }
     
@@ -317,8 +344,8 @@ struct InAppPurchaseView: View {
 }
 
 
-//struct InAppPurchaseView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        InAppPurchaseView()
-//    }
-//}
+struct InAppPurchaseView_Previews: PreviewProvider {
+    static var previews: some View {
+        InAppPurchaseView()
+    }
+}

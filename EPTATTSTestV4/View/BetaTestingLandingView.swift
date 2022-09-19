@@ -9,7 +9,27 @@ import SwiftUI
 import CodableCSV
 
 
-struct BetaTestingLandingView: View {
+struct BetaTestingLandingView<Link: View>: View {
+    
+    var testing: Testing?
+    var relatedLinkTesting: (Testing) -> Link
+    
+    var body: some View {
+        if let testing = testing {
+            BetaTestingLandingContent(testing: testing, relatedLinkTesting: relatedLinkTesting)
+        } else {
+            Text("Error Loading BetaTestingLanding View")
+                .navigationTitle("")
+        }
+    }
+}
+
+
+struct BetaTestingLandingContent<Link: View>: View {
+    var testing: Testing
+    var dataModel = DataModel.shared
+    var relatedLinkTesting: (Testing) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
     
     @StateObject var colorModel: ColorModel = ColorModel()
     
@@ -52,8 +72,7 @@ struct BetaTestingLandingView: View {
     
     var body: some View {
         
-        
-        NavigationStack{
+
             ZStack{
                 colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
                 VStack{
@@ -148,7 +167,7 @@ struct BetaTestingLandingView: View {
                 }
             }
         }
-    }
+
     // <= 27").tag(10)   age0.csv
     // 28-39").tag(11)   age1.csv
     // 40-49").tag(12)   age2.csv
@@ -419,11 +438,18 @@ struct BetaTestingLandingView: View {
         }
     }
     
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
     
 }
 
-//struct BetaTestingLandingView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        BetaTestingLandingView()
-//    }
-//}
+struct BetaTestingLandingView_Previews: PreviewProvider {
+    static var previews: some View {
+        BetaTestingLandingView(testing: nil, relatedLinkTesting: linkTesting)
+    }
+    
+    static func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+}

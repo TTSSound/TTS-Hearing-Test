@@ -397,7 +397,7 @@ struct EHATTSTestPart2View: View {
                        .padding(.top, 40)
                        .padding(.bottom, 20)
                } else if ehaP2fullTestCompleted == true {
-                   NavigationLink("Test Phase Complete, Press To Continue", destination: PostEHATestView(), isActive: $ehaP2EPTATestCompleted)
+                   NavigationLink("Test Phase Complete, Press To Continue", destination: PostEHATestView())//, isActive: $ehaP2EPTATestCompleted)
                        .padding()
                        .frame(width: 200, height: 50, alignment: .center)
                        .background(.green)

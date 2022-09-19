@@ -72,34 +72,34 @@ struct LandingView: View {
                     }
                     .padding()
             }
-            .tabItem {
-                Image(systemName: "house")
-                    .foregroundColor(colorModel.tabColorMain)
-                Text("Home")
-                    .foregroundColor(colorModel.tabColorMain)
-            }
-            .tag(0)
-            
-            BetaTestingLandingView()
-            .tabItem {
-                Image(systemName: "ear.fill")
-                    .accentColor(colorModel.tiffanyBlue)
-                Text("Start")
-                    .foregroundColor(colorModel.proceedColor)
-                    .background(colorModel.proceedColor)
-                
-            }
-            .tag(1)
-            
-            DisclaimerView(selectedTab: $selectedTab)
-            .tabItem {
-                Image(systemName: "arrowshape.zigzag.right.fill")
-                    .accentColor(/*@START_MENU_TOKEN@*/.green/*@END_MENU_TOKEN@*/)
-                Text("Start")
-                    .foregroundColor(colorModel.proceedColor)
-                    .background(colorModel.proceedColor)
-            }
-            .tag(2)
+//            .tabItem {
+//                Image(systemName: "house")
+//                    .foregroundColor(colorModel.tabColorMain)
+//                Text("Home")
+//                    .foregroundColor(colorModel.tabColorMain)
+//            }
+//            .tag(0)
+//            
+//            BetaTestingLandingView()
+//            .tabItem {
+//                Image(systemName: "ear.fill")
+//                    .accentColor(colorModel.tiffanyBlue)
+//                Text("Start")
+//                    .foregroundColor(colorModel.proceedColor)
+//                    .background(colorModel.proceedColor)
+//                
+//            }
+//            .tag(1)
+//            
+//            DisclaimerView(selectedTab: $selectedTab)
+//            .tabItem {
+//                Image(systemName: "arrowshape.zigzag.right.fill")
+//                    .accentColor(/*@START_MENU_TOKEN@*/.green/*@END_MENU_TOKEN@*/)
+//                Text("Start")
+//                    .foregroundColor(colorModel.proceedColor)
+//                    .background(colorModel.proceedColor)
+//            }
+//            .tag(2)
         }
     }
 }

@@ -78,10 +78,6 @@ struct SaveFinalSetupResults: Codable {
     }
 }
 
-
-
-
-
 struct GenderModel: Identifiable, Hashable {
     let gender: String
     let id = UUID()
@@ -91,12 +87,32 @@ struct GenderModel: Identifiable, Hashable {
     }
 }
 
-struct UserDataEntryView: View {
+struct UserDataEntryView<Link: View>:View {
+    var setup: Setup?
+    var relatedLink: (Setup) -> Link
     
+    
+    var body: some View {
+        ZStack{
+            if let setup = setup {
+                UserDataEntryContent(setup: setup, relatedLink: relatedLink)
+            } else {
+                Text("Error Loading User Login View")
+                    .navigationTitle("")
+            }
+        }
+    }
+}
 
+struct UserDataEntryContent<Link: View>:View {
+    var setup: Setup
+    var dataModel = DataModel.shared
+    var relatedLink: (Setup) -> Link
+    @EnvironmentObject private var navigationModel: NavigationModel
+    
     @StateObject var colorModel: ColorModel = ColorModel()
     @Environment(\.presentationMode) var presentationMode
-
+    
     
     
     
@@ -156,7 +172,7 @@ struct UserDataEntryView: View {
     @State var userGenderIndex = [Int]()
     @State var userSex = [Int]()
     @State var userUUIDString = [String]()
-
+    
     // Demo Variables
     @State var finalFirstName: [String] = [String]()
     @State var finalLastName: [String] = [String]()
@@ -174,17 +190,12 @@ struct UserDataEntryView: View {
     
     @State var saveFinalSetupResults: SaveFinalSetupResults? = nil
     
-    
-//    var setup: Setup
-//    var dataModel = DataModel.shared
-//    var relatedLink: (Setup) -> Link
-    
     var body: some View {
         
         ZStack {
             colorModel.colorBackgroundTopTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack(alignment: .leading, spacing: 10) {
-
+                
                 VStack{
                     HStack{
                         Spacer()
@@ -200,7 +211,7 @@ struct UserDataEntryView: View {
                             .foregroundColor(.white)
                         Spacer()
                         NavigationLink {
-//                            UserLoginView(setup: nil, relatedLink: relatedLink)
+                            UserLoginView(setup: setup, relatedLink: relatedLink)
                         } label: {
                             Image(systemName: "person.crop.circle.badge.checkmark")
                                 .foregroundColor(.blue)
@@ -210,7 +221,7 @@ struct UserDataEntryView: View {
                     .padding(.top, 10)
                     .padding(.bottom, 20)
                 }
-
+                
                 HStack() {
                     Spacer()
                     Text("First Name")
@@ -223,7 +234,7 @@ struct UserDataEntryView: View {
                         .foregroundColor(.blue)
                     Spacer()
                 }
-                 
+                
                 HStack{
                     Spacer()
                     Text("Last Name")
@@ -235,8 +246,8 @@ struct UserDataEntryView: View {
                         .disableAutocorrection(true)
                         .foregroundColor(.blue)
                     Spacer()
-                    }
-                    
+                }
+                
                 HStack{
                     Spacer()
                     Text("Email")
@@ -263,7 +274,7 @@ struct UserDataEntryView: View {
                     Spacer()
                 }
                 
-
+                
                 HStack {
                     Spacer()
                     Text("Select Your Age in Years")
@@ -273,7 +284,7 @@ struct UserDataEntryView: View {
                 .padding(.top)
                 .padding(.top)
                 
-    // GENDER SELECTION
+                // GENDER SELECTION
                 VStack{
                     HStack{
                         Picker(
@@ -286,18 +297,18 @@ struct UserDataEntryView: View {
                                         .foregroundColor(.black)
                                         .tag("\(number)")
                                 }
-                        })
+                            })
                     }
-     
+                    
                     HStack{
-                       Spacer()
+                        Spacer()
                         Text("Select Your Gender")
                             .foregroundColor(.white)
                         Spacer()
-
+                        
                         Button(action: {
                             showWhyDoWeAskSheet.toggle()
-
+                            
                         }, label: {
                             Image(systemName: "person.fill.questionmark")
                                 .foregroundColor(.purple)
@@ -308,7 +319,7 @@ struct UserDataEntryView: View {
                         ZStack {
                             colorModel.colorBackgroundBottomTiffanyBlue.ignoresSafeArea()
                             VStack(alignment: .leading) {
-
+                                
                                 Button(action: {
                                     showWhyDoWeAskSheet.toggle()
                                 }, label: {
@@ -319,9 +330,9 @@ struct UserDataEntryView: View {
                                 })
                                 .padding(.top, 40)
                                 .padding(.leading, 20)
-                           
-                            GroupBox(label:
-                                        Label("Why Do We Ask", systemImage: "person.fill.questionmark").foregroundColor(.purple)
+                                
+                                GroupBox(label:
+                                            Label("Why Do We Ask", systemImage: "person.fill.questionmark").foregroundColor(.purple)
                                 ) {
                                     ScrollView(.vertical, showsIndicators: true) {
                                         Text(whyWeAskModel.whyDoWeAskForThisText)
@@ -342,7 +353,7 @@ struct UserDataEntryView: View {
                 .foregroundColor(.purple)
                 .padding(.leading)
                 .padding(.bottom)
-
+                
                 HStack{
                     Spacer()
                     Picker("Gender", selection: $genderIdx) {
@@ -361,8 +372,8 @@ struct UserDataEntryView: View {
                     Spacer()
                 }
                 .padding(.leading)
-                Spacer()
-
+                .padding(.bottom, 60)
+                
                 if userDataSubmitted == false {
                     HStack{
                         Spacer()
@@ -394,14 +405,14 @@ struct UserDataEntryView: View {
                         }
                         Spacer()
                     }
-                    .padding(.bottom, 40)
+                    .padding(.bottom, 80)
                 } else if  userDataSubmitted == true {
                     HStack{
                         Spacer()
                         NavigationLink {
-                            userDataSubmitted == false ? AnyView(UserDataEntrySplashView())
+                            userDataSubmitted == false ? AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
                             : userDataSubmitted == true ? AnyView(ExplanationView())
-                            : AnyView(UserDataEntrySplashView())
+                            : AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
                         } label: {
                             HStack{
                                 Spacer()
@@ -417,7 +428,7 @@ struct UserDataEntryView: View {
                         }
                         Spacer()
                     }
-                    .padding(.bottom, 40)
+                    .padding(.bottom, 80)
                 }
             }
             .onAppear(perform: {
@@ -429,6 +440,10 @@ struct UserDataEntryView: View {
         }.navigationTitle("User Setup")
         
     }
+    
+}
+
+extension UserDataEntryContent {
     
     func loadWhyWeAsk() {
         whyWeAskModel.load(file: whyWeAskModel.whyDoWeAskForThisText)
@@ -660,6 +675,10 @@ struct UserDataEntryView: View {
             print("CVSWriter Input Setup Error or Error Finding File for Input Setup CSV \(error.localizedDescription)")
         }
     }
+    
+    private func link(setup: Setup) -> some View {
+        EmptyView()
+    }
 }
 
 
@@ -684,63 +703,13 @@ class WhyWeAskModel: ObservableObject {
 
 
 
-//struct GenderListView: View {
-//
-//    @StateObject var setupDataModel: SetupDataModel = SetupDataModel()
-//
-//    @State var gender = [String]()
-//    @State var genderIdx = [Int]()
-//    @State var sex = [Int]()
-//    @State var genderList = [
-//        GenderModel(gender: "Female"),
-//        GenderModel(gender: "Male"),
-//        GenderModel(gender: "Cisgender Female"),
-//        GenderModel(gender: "Cisgender Male"),
-//        GenderModel(gender: "Agender"),
-//        GenderModel(gender: "Bigender"),
-//        GenderModel(gender: "Gender Fluid"),
-//        GenderModel(gender: "Gender Non-Conforming"),
-//        GenderModel(gender: "Genderqueer"),
-//        GenderModel(gender: "Intersex"),
-//        GenderModel(gender: "Third Sex"),
-//        GenderModel(gender: "Transgender"),
-//        GenderModel(gender: "Two-Spirit"),
-//        GenderModel(gender: "Prefer Not To Identify")
-//    ]
-//    @State private var selectedGender = ""
-//
-//    var body: some View {
-//
-//        List {
-//            ForEach(genderList.indices, id: \.self) {index in
-//            HStack {
-//                Text("\(self.genderList[index].gender)")
-//                    .foregroundColor(.blue)
-//                Toggle("", isOn: self.$genderList[index].isToggled)
-//                    .foregroundColor(.blue)
-//                    .onChange(of: self.genderList[index].isToggled) { genderIndex in
-//                        Task(priority: .userInitiated, operation: {
-//                            gender.append(self.genderList[index].gender)
-//                            genderIdx.append(index)
-//                            userGender.append(self.genderList[index].gender)
-//                            userGenderIndex.append(index)
-//                            print(index)
-//                            print(genderIndex)
-//                            print(self.genderList[index].gender)
-//                            print(userGender)
-//                            print(userGenderIndex)
-//                        })
-//                    }
-//                }
-//            }
-//
-//        }
-//    }
-//}
-
-//struct TestUserDataEntryView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        UserDataEntryView()
-//    }
-//}
+struct TestUserDataEntryView_Previews: PreviewProvider {
+    static var previews: some View {
+        UserDataEntryView(setup: nil, relatedLink: link)
+    }
+    
+    static func link(setup: Setup) -> some View {
+        EmptyView()
+    }
+}
 

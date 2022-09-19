@@ -21,8 +21,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct EPTATTSTestV4App: App {
     
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-
+//    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
     
     var body: some Scene {
         WindowGroup {
@@ -52,7 +52,7 @@ struct EPTATTSTestV4App: App {
 //            PostBilateral1kHzTestView()
 //            EHATTSTestPart2View()
             NavigationView()
-            
+
         }
     }
 }

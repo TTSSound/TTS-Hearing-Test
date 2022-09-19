@@ -75,16 +75,20 @@ struct TestSelectionView: View {
                Spacer()
                 Text("Test Selection")
                     .foregroundColor(.white)
+                    .font(.title)
                     .padding(.top, 40)
                     .padding(.bottom, 40)
                 Divider()
                     .frame(width: 400, height: 3)
                     .background(.blue)
-                    .foregroundColor(.blue)
-                Toggle("I Want the Gold Standard! Give Me The EHA!", isOn: $selectedEHA)
+                    .foregroundColor(.gray)
+                Toggle(isOn: $selectedEHA) {
+                    Text("I Want the Gold Standard! Give Me The EHA!")
+                        .frame(width: 200, height: 50, alignment: .center)
+
+                }
+//                Toggle("I Want the Gold Standard! Give Me The EHA!", isOn: $selectedEHA)
                     .foregroundColor(colorModel.neonGreen)
-//                    .foregroundColor(Color(red: 0.8313725490196079, green: 0.6862745098039216, blue: 0.21568627450980393)) // Gold
-    //                    .foregroundColor(Color(red: 0.8980392156862745, green: 0.8941176470588236, blue: 0.8862745098039215)) // Platinum
                     .padding(.leading)
                     .padding(.leading)
                     .padding(.trailing)
@@ -106,7 +110,11 @@ struct TestSelectionView: View {
                     .frame(width: 400, height: 3)
                     .background(.gray)
                     .foregroundColor(.gray)
-                Toggle("I'm Only Interested In Assessing My Hearing. Give me the EPTA", isOn: $selectedEPTA)
+                Toggle(isOn: $selectedEPTA) {
+                    Text("I Want The Shorter Test. Give Me The EPTA")
+                        .frame(width: 200, height: 50, alignment: .center)
+                }
+//                Toggle("I'm Only Interested In Assessing My Hearing. Give me the EPTA", isOn: $selectedEPTA)
                     .padding(.leading)
                     .padding(.leading)
                     .padding(.trailing)
@@ -130,7 +138,11 @@ struct TestSelectionView: View {
                     .frame(width: 400, height: 3)
                     .background(.gray)
                     .foregroundColor(.gray)
-                Toggle("I'd Like To Trial The Simple Hearing Test.", isOn: $selectedSimple)
+                Toggle(isOn: $selectedSimple) {
+                    Text("I Only Want A Trial. Give me the Simple Test.")
+                        .frame(width: 200, height: 50, alignment: .center)
+                }
+//                Toggle("I'd Like To Trial The Simple Hearing Test.", isOn: $selectedSimple)
                     .padding(.leading)
                     .padding(.leading)
                     .padding(.trailing)
@@ -166,8 +178,6 @@ struct TestSelectionView: View {
                                 await checkMultipleSelections()
                                 await isSelectionSuccessful()
                                 print("button clicked")
-                                //                           await assignIntToAllTests()
-                                //                           await assignTempTestSelection()
                                 await finalTestSelectionArrays()
                                 await saveTestSelection()
                                 await saveTestLinkFile()
@@ -182,15 +192,16 @@ struct TestSelectionView: View {
                             }
                             .frame(width: 200, height: 50, alignment: .center)
                             .background(Color.blue)
-                            .foregroundColor(.green)
+                            .foregroundColor(.white)
                             .cornerRadius(300)
                         }
                     Spacer()
                     }
+                    .padding(.top, 120)
                     .padding(.bottom, 40)
                     Spacer()
                
-                } else if isOkayToContinue == true {
+                } else if isOkayToContinue == true && selectedSimple == true {
                     HStack{
                         Spacer()
                         NavigationLink(destination:
@@ -212,8 +223,33 @@ struct TestSelectionView: View {
                         }
                         Spacer()
                     }
+                    .padding(.top, 120)
                     .padding(.bottom, 40)
-                    Spacer()
+//                    Spacer()
+                } else if isOkayToContinue == true && selectedEHA == true || selectedEPTA == true {
+                    HStack{
+                        Spacer()
+                        NavigationLink(destination:
+                                        isOkayToContinue == true ? AnyView(InAppPurchaseView())
+                                       : isOkayToContinue == false ? AnyView(TestSelectionSplashView())
+                                       : AnyView(TestSelectionView())
+                        ){
+                            HStack{
+                                Spacer()
+                                Text("Continue To Purchase")
+                                Spacer()
+                                Image(systemName: "purchased.circle")
+                                Spacer()
+                            }
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(300)
+                        }
+                        Spacer()
+                    }
+                    .padding(.top, 120)
+                    .padding(.bottom, 40)
                 }
             }
         }
@@ -297,51 +333,10 @@ struct TestSelectionView: View {
         }
     }
     
-//    func assignIntToAllTests() async {
-//        if selectedEHA == true {
-//            singleEHA = 1
-//            singleEPTA = -1
-//            singleSimple = -1
-//            print("SingleEHA Assigned")
-//        }
-//        if selectedEPTA == true {
-//            singleEPTA = 1
-//            singleEHA = -1
-//            singleSimple = -1
-//            print("SingleEPTA Assigned")
-//        }
-//        if selectedSimple == true {
-//            singleSimple = 1
-//            singleEHA = -1
-//            singleEPTA = -1
-//            print("Simple Assigned")
-//        }
-//    }
-    
-//    func assignTempTestSelection() async {
-//
-//        if selectedEHA == true {
-//            finalTestSelected.append(1)
-//        } else {
-//            print("Error in EHA assign temp")
-//        }
-//        if selectedEPTA == true {
-//            finalTestSelected.append(2)
-//        } else {
-//            print("Error in EPTA assign temp")
-//        }
-//        if selectedSimple == true {
-//            finalTestSelected.append(3)
-//        } else {
-//            print("Error in Simple assign temp")
-//        }
-//    }
-    
     func finalTestSelectionArrays() async {
         finalSelectedEHATest.append(contentsOf: singleEHAArray)
         finalSelectedEPTATest.append(contentsOf: singleEPTAArray)
         finalSelectedSimpleTest.append(contentsOf: singleSimpleArray)
-//        simpleTestUUIDString = UUID().uuidString
         finalSelectedSimpleTestUUID.append(simpleTestUUIDString)
         print("testSelectionModel finalSelectedEHATest: \(finalSelectedEHATest)")
         print("testSelectionModel finalSelectedEPTATest: \(finalSelectedEPTATest)")
@@ -417,15 +412,15 @@ struct TestSelectionView: View {
         print(testSelectionFilePaths)
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
-            do {
-                let jsonTestSelectionData = try encoder.encode(saveFinalTestSelection)
-                print(jsonTestSelectionData)
-              
-                try jsonTestSelectionData.write(to: testSelectionFilePaths)
-            } catch {
-                print("Error writing to JSON Test Selection file: \(error)")
-            }
+        do {
+            let jsonTestSelectionData = try encoder.encode(saveFinalTestSelection)
+            print(jsonTestSelectionData)
+          
+            try jsonTestSelectionData.write(to: testSelectionFilePaths)
+        } catch {
+            print("Error writing to JSON Test Selection file: \(error)")
         }
+    }
 
     
     func writeTestSelectionToCSV() async {
@@ -477,7 +472,6 @@ struct TestSelectionView: View {
             print("CVSWriter Input Test Selection Error or Error Finding File for Input Test Selection CSV \(error.localizedDescription)")
         }
     }
-    
     
     
 //MARK: -TestSelectionLinkModel Funcs
@@ -534,9 +528,8 @@ struct TestSelectionView: View {
 }
 
 
-//struct TestSelectionView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TestSelectionView()
-//            .environmentObject(TestSelectionModel())
-//    }
-//}
+struct TestSelectionView_Previews: PreviewProvider {
+    static var previews: some View {
+        TestSelectionView()
+    }
+}
