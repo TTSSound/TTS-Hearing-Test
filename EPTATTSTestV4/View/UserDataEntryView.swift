@@ -8,6 +8,9 @@
 import SwiftUI
 import CoreData
 import CodableCSV
+import FirebaseCore
+import FirebaseFirestore
+import FirebaseAuth
 //import Alamofire
 
 
@@ -126,12 +129,13 @@ struct UserDataEntryContent<Link: View>:View {
     @State var udLinkColors2: [Color] = [Color.clear, Color.white]
     @State var udLinkColorIndex = Int()
     
-    @State var firtsName: String = ""
-    @State var lastName: String = ""
-    @State var email: String = ""
-    @State var password: String = ""
-    @State var age: Int = Int()
-    @State var gender = [
+    @State private var isLogin = false
+    @State private var firtsName: String = ""
+    @State private var lastName: String = ""
+    @State private var email: String = ""
+    @State private var password: String = ""
+    @State private var age: Int = Int()
+    @State private var gender = [
         "Female or Cisgender Female",
         "Male or Cisgender Male",
         "Agender",
@@ -144,11 +148,11 @@ struct UserDataEntryContent<Link: View>:View {
         "Prefer Not To Identify"
     ]
     
-    @State var genderIdx = Int()
-    @State var sex = [Int]()
-    @State var userUUID = String()
+    @State private var genderIdx = Int()
+    @State private var sex = [Int]()
+    @State private var userUUID = String()
     
-    @State var genderList = [
+    @State private var genderList = [
         GenderModel(gender: "Female or Cisgender Female"),
         GenderModel(gender: "Male or Cisgender Male"),
         GenderModel(gender: "Agender"),
@@ -162,27 +166,27 @@ struct UserDataEntryContent<Link: View>:View {
     ]
     @State private var selectedGender = ""
     
-    @State var userFirstName = [String]()
-    @State var userLastName = [String]()
-    @State var userEmail = [String]()
-    @State var userPassword = [String]()
-    @State var userAge = [Int]()
-    @State var userBirthDate = [Date]()
-    @State var userGender = [String]()
-    @State var userGenderIndex = [Int]()
-    @State var userSex = [Int]()
-    @State var userUUIDString = [String]()
+    @State private var userFirstName = [String]()
+    @State private var userLastName = [String]()
+    @State private var userEmail = [String]()
+    @State private var userPassword = [String]()
+    @State private var userAge = [Int]()
+    @State private var userBirthDate = [Date]()
+    @State private var userGender = [String]()
+    @State private var userGenderIndex = [Int]()
+    @State private var userSex = [Int]()
+    @State private var userUUIDString = [String]()
     
     // Demo Variables
-    @State var finalFirstName: [String] = [String]()
-    @State var finalLastName: [String] = [String]()
-    @State var finalEmail: [String] = [String]()
-    @State var finalPassword: [String] = [String]()
-    @State var finalAge: [Int] = [Int]()
-    @State var finalGender: [String] = [String]()
-    @State var finalGenderIndex: [Int] = [Int]()
-    @State var finalSex: [Int] = [Int]()
-    @State var finalUserUUIDString: [String] = [String]()
+    @State private var finalFirstName: [String] = [String]()
+    @State private var finalLastName: [String] = [String]()
+    @State private var finalEmail: [String] = [String]()
+    @State private var finalPassword: [String] = [String]()
+    @State private var finalAge: [Int] = [Int]()
+    @State private var finalGender: [String] = [String]()
+    @State private var finalGenderIndex: [Int] = [Int]()
+    @State private var finalSex: [Int] = [Int]()
+    @State private var finalUserUUIDString: [String] = [String]()
     
     let fileSetupName = ["SetupResults.json"]
     let setupCSVName = "SetupResultsCSV.csv"
@@ -220,6 +224,9 @@ struct UserDataEntryContent<Link: View>:View {
                     }
                     .padding(.top, 10)
                     .padding(.bottom, 20)
+                    .onTapGesture {
+                        isLogin = true
+                    }
                 }
                 
                 HStack() {
@@ -387,13 +394,14 @@ struct UserDataEntryContent<Link: View>:View {
                                     await concatenateDemoFinalArrays()
                                     await printFinalDemoArrays()
                                     await saveUserDataEntry()
+                                    createUser()
                                     print("Data Submission Pressed. Function Need to be created")
                                 })
                             }
                         } label: {
                             HStack{
                                 Spacer()
-                                Text("Submit Information")
+                                Text("Create You Account")
                                 Spacer()
                                 Image(systemName: "arrow.up.doc.fill")
                                 Spacer()
@@ -444,6 +452,26 @@ struct UserDataEntryContent<Link: View>:View {
 }
 
 extension UserDataEntryContent {
+    
+    private func loginUser() {
+            Auth.auth().signIn(withEmail: email, password: password) { result, err in
+                if let err = err {
+                    print("Failed due to error:", err)
+                    return
+                }
+                print("Successfully logged in with ID: \(result?.user.uid ?? "")")
+            }
+        }
+        
+    private func createUser() {
+        Auth.auth().createUser(withEmail: email, password: password, completion: { result, err in
+            if let err = err {
+                print("Failed due to error:", err)
+                return
+            }
+            print("Successfully created account with ID: \(result?.user.uid ?? "")")
+        })
+    }
     
     func loadWhyWeAsk() {
         whyWeAskModel.load(file: whyWeAskModel.whyDoWeAskForThisText)

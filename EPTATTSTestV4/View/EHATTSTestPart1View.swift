@@ -625,7 +625,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
             if reversalValue == 1 {
                 DispatchQueue.global(qos: .background).async {
                     Task(priority: .userInitiated) {
-//                        await createReversalHeardArray()
+//                        await createReversalHeardArray()≠
 //                        await createReversalGainArray()
 //                        await checkHeardReversalArrays()
                         await reversalDirection()
