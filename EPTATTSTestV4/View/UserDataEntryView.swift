@@ -419,7 +419,7 @@ struct UserDataEntryContent<Link: View>:View {
                         Spacer()
                         NavigationLink {
                             userDataSubmitted == false ? AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
-                            : userDataSubmitted == true ? AnyView(ExplanationView())
+                            : userDataSubmitted == true ? AnyView(ExplanationView(setup: nil, relatedLink: link))
                             : AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
                         } label: {
                             HStack{

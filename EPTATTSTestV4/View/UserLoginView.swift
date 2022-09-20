@@ -77,14 +77,18 @@ struct UserLoginContent<Link: View>: View {
     
     var colorModel: ColorModel = ColorModel()
     
-    @State private var isLogin = false
+    @State private var isLogin = true
     
+    @State var userDataSubmitted = false
+    @State var userLoggedInSuccessful: Bool = false
+    @State var userLoggedInAndSubmitted: Bool = false
+    @State var userLogInError: Bool = false
     @State var presentLoginFullScreen: Bool = false
     
     @State var uLinkColors: [Color] = [Color.clear, Color.green]
     @State var uLinkColors2: [Color] = [Color.clear, Color.white]
     @State var uLinkColorIndex = Int()
-    @State var userDataSubmitted = Bool()
+    
     @State var udLinkColors: [Color] = [Color.clear, Color.green]
     @State var udLinkColors2: [Color] = [Color.clear, Color.white]
     @State var udLinkColorIndex = Int()
@@ -155,10 +159,10 @@ struct UserLoginContent<Link: View>: View {
     @State var saveFinalSetupResults2: SaveFinalSetupResults2? = nil
     
     var body: some View {
-        
         ZStack{
             colorModel.colorBackgroundBottomTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack(alignment: .leading, spacing: 10) {
+                Spacer()
                 Text("User Login Screen")
                     .padding(.top, 20)
                     .padding(.bottom, 20)
@@ -190,71 +194,60 @@ struct UserLoginContent<Link: View>: View {
                     Spacer()
                 }
                 Spacer()
-//                if userDataSubmitted == false {
-                    HStack{
-                        Spacer()
-                        Button {
-                            DispatchQueue.main.async(group: .none, qos: .userInitiated) {
-                                Task(priority: .userInitiated, operation: {
-//                                    await assignSex2()
-//                                    await areDemoFieldsEmpty2()
-//                                    await saveDemographicData2()
-//                                    await generateUserUUID2()
-//                                    await concatenateDemoFinalArrays2()
-//                                    await printFinalDemoArrays2()
-//                                    await saveUserDataEntry2()
-//                                    createUser()
-                                    loginUser2()
-                                    presentLoginFullScreen = true
-                                    print("Data Submission Pressed. Function Need to be created")
-                                })
-                            }
-                        } label: {
-                            HStack{
-                                Spacer()
-                                Text("Login")
-                                Spacer()
-                                Image(systemName: "arrow.up.doc.fill")
-                                Spacer()
+                    if userDataSubmitted == false && userLoggedInSuccessful == false {
+                        HStack{
+                            Spacer()
+                            Button {
+                                loginUser2()
+                                presentLoginFullScreen = true
+                                print("Data Submission Pressed. Function Need to be created")
+                            } label: {
+                                HStack{
+                                    Spacer()
+                                    Text("Login")
+                                    Spacer()
+                                    Image(systemName: "arrow.up.doc.fill")
+                                    Spacer()
+                                }
+                                .frame(width: 300, height: 50, alignment: .center)
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
                             }
                             .frame(width: 300, height: 50, alignment: .center)
-                            .background(Color.blue)
-                            .foregroundColor(.white)
                             .cornerRadius(24)
+                            Spacer()
                         }
-                        Spacer()
-                    }
-                    .padding(.bottom, 60)
-                    
-                    
-                    
-// Change This Logig to trigger after popup screen is completed
-//                } else if  userDataSubmitted == true {
-                if userDataSubmitted == true {
-                    HStack{
-                        Spacer()
-                        NavigationLink {
-                            userDataSubmitted == false ? AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
-                            : userDataSubmitted == true ? AnyView(ExplanationView())
-                            : AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
-                        } label: {
-                            HStack{
-                                Spacer()
-                                Text("Now Let's Contine!")
-                                Spacer()
-                                Image(systemName: "arrowshape.bounce.right")
-                                Spacer()
+                        .padding(.bottom, 60)
+                        
+                    } else if userDataSubmitted == true || userLoggedInSuccessful == true  {
+                        HStack{
+                            Spacer()
+                            NavigationLink {
+                                userLoggedInAndSubmitted == false && userDataSubmitted == false ? AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
+                                : userLoggedInAndSubmitted == true && userDataSubmitted == true ? AnyView(ExplanationView(setup: setup, relatedLink: link))
+                                : AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
+                            } label: {
+                                HStack{
+                                    Spacer()
+                                    Text("Check Profile and Continue")
+                                    Spacer()
+                                    Image(systemName: "arrowshape.bounce.right")
+                                    Spacer()
+                                }
+                                .frame(width: 300, height: 50, alignment: .center)
+                                .background(Color.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
                             }
                             .frame(width: 300, height: 50, alignment: .center)
-                            .background(Color.green)
-                            .foregroundColor(.white)
                             .cornerRadius(24)
+                            Spacer()
                         }
-                        Spacer()
+                        .padding(.bottom, 60)
                     }
-                    .padding(.bottom, 60)
-                }
                 Spacer()
+
                 
             }
             .fullScreenCover(isPresented: $presentLoginFullScreen) {
@@ -288,6 +281,13 @@ struct UserLoginContent<Link: View>: View {
                         }
                         VStack{
                             HStack{
+                                Spacer()
+                                Text("Select Your Age")
+                                    .foregroundColor(.white)
+                                Spacer()
+                            }
+                            .padding(.bottom, 5)
+                            HStack{
                                 Picker(
                                     selection: $age,
                                     label: Text("Age in Years").foregroundColor(.blue),
@@ -300,7 +300,7 @@ struct UserLoginContent<Link: View>: View {
                                         }
                                     })
                             }
-                            
+                            .padding(.bottom, 5)
                             HStack{
                                 Spacer()
                                 Text("Select Your Gender")
@@ -308,9 +308,9 @@ struct UserLoginContent<Link: View>: View {
                                 Spacer()
                             }
                         }
+                        .padding(.top, 20)
                         .padding(.leading)
                         .padding(.bottom)
-                        
                         HStack{
                             Spacer()
                             Picker("Gender", selection: $genderIdx) {
@@ -330,8 +330,6 @@ struct UserLoginContent<Link: View>: View {
                         }
                         .padding(.leading)
                         .padding(.bottom, 60)
-                        
-                        
                         // Need to add trigger variable to this function series to trigger navigation to the next screen
                         if userDataSubmitted == false {
                             HStack{
@@ -346,10 +344,9 @@ struct UserLoginContent<Link: View>: View {
                                             await concatenateDemoFinalArrays2()
                                             await printFinalDemoArrays2()
                                             await saveUserDataEntry2()
-                                            //                                    createUser()
-                                            //                                    loginUser2()
+                                            await loginAndDataSuccessful()
+                                            userDataSubmitted = true
                                             print("Data Submission Pressed. Function Need to be created")
-                                        
                                         })
                                     }
                                 } label: {
@@ -369,13 +366,11 @@ struct UserLoginContent<Link: View>: View {
                             }
                             .padding(.bottom, 60)
                         } else if userDataSubmitted == true {
-                            // else if
                             HStack{
                                 Spacer()
-                                NavigationLink {
-                                    userDataSubmitted == false ? AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
-                                    : userDataSubmitted == true ? AnyView(ExplanationView())
-                                    : AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
+                                Button {
+                                    self.userDataSubmitted = true
+                                    presentLoginFullScreen.toggle()
                                 } label: {
                                     HStack{
                                         Spacer()
@@ -396,10 +391,26 @@ struct UserLoginContent<Link: View>: View {
                     }
                 }
             }
+            .navigationTitle("")
         }
-        .navigationTitle("")
     }
     // !!!!!! WILL NEED TO ADD VARIABLES FOR THIS ACTION INTO SETUPDATAMODEL, JSONS AND CSV WRITERS
+    
+    func loginAndDataSuccessful() async {
+        if userLoggedInSuccessful == true && userDataSubmitted == true {
+            userLoggedInAndSubmitted = true
+            print("userLoggedInAndSubmitted: \(userLoggedInAndSubmitted)")
+        } else if userLoggedInSuccessful == false || userDataSubmitted == false {
+            userLoggedInAndSubmitted = false
+            userLogInError = true
+            print("userLoggedInAndSubmitted: \(userLoggedInAndSubmitted)")
+            print("userLoggedInSuccessful: \(userLoggedInSuccessful)")
+            print("userDataSubmitted: \(userDataSubmitted)")
+        } else {
+            userLogInError = true
+            print("!!Fatal error in loginAndDataSuccessful() Logic")
+        }
+    }
     
     
     private func loginUser2() {
@@ -409,6 +420,7 @@ struct UserLoginContent<Link: View>: View {
                     return
                 }
                 print("Successfully logged in with ID: \(result?.user.uid ?? "")")
+                userLoggedInSuccessful = true
             }
         }
         

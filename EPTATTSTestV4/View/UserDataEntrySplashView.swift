@@ -63,13 +63,16 @@ struct UserDataEntrySplashContent<Link: View>: View {
                         Image(systemName: "arrowshape.turn.up.backward.2")
                         Spacer()
                     }
+                    .frame(width: 300, height: 50, alignment: .center)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(24)
 
                 }
+                .frame(width: 300, height: 50, alignment: .center)
                 .background(Color.blue)
                 .foregroundColor(.white)
-                .frame(width: 300, height: 50, alignment: .center)
                 .cornerRadius(24)
-                .padding(.bottom, 20)
                 Spacer()
             }
         }
