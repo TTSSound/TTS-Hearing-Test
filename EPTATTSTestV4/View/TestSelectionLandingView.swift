@@ -116,20 +116,20 @@ struct TestSelectionLandingView: View {
                     } label: {
                         HStack{
                             Spacer()
-                            Text("Continue")
+                            Text("Now Let's Contine!")
                             Spacer()
                             Image(systemName: "arrowshape.bounce.right")
                             Spacer()
                         }
-                        .frame(width: 200, height: 50, alignment: .center)
+                        .frame(width: 300, height: 50, alignment: .center)
                         .background(Color.green)
                         .foregroundColor(.white)
-                        .cornerRadius(300)
+                        .cornerRadius(24)
                     }
                     Spacer()
                 }
                 .padding(.top, 10)
-                .padding(.bottom, 40)
+                .padding(.bottom, 20)
             Spacer()
             }
             .padding(.leading, 5)

@@ -76,9 +76,9 @@ struct TestSelectionSplashView: View {
                     .frame(width: 200, height: 50, alignment: .center)
                     .background(Color.blue)
                     .foregroundColor(.white)
-                    .cornerRadius(300)
+                    .cornerRadius(24)
                 }
-                .padding(.bottom, 60)
+                .padding(.bottom, 20)
               
             }
         }

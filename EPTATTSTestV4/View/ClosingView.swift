@@ -121,19 +121,23 @@ struct ClosingView: View {
             colorModel.colorBackgroundBottomDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
             VStack{
                 Spacer()
-                Text("Closing View & End of First Test")
+                Text("Closing View & End of Test Protocol / Results / App")
                     .foregroundColor(.white)
                 Spacer()
-                Button {
-                    Task {
-//                        await checkSetupDataLink()
-                        await inAppPurchaseCSVReader()
-                    }
-                } label: {
-                    Text("Try CSV Reader")
-                        .foregroundColor(.green)
-                }
+                Text("Return Home At This Time")
+                    .font(.title)
+                    .foregroundColor(.red)
                 Spacer()
+//                Button {
+//                    Task {
+////                        await checkSetupDataLink()
+//                        await inAppPurchaseCSVReader()
+//                    }
+//                } label: {
+//                    Text("Try CSV Reader")
+//                        .foregroundColor(.green)
+//                }
+//                Spacer()
                 
                 // We are done with testing (for now if EHA)
                 

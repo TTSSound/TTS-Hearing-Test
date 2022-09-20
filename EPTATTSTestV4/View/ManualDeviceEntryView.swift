@@ -43,7 +43,7 @@ struct ManualDeviceEntryView: View {
     var body: some View {
     
         ZStack{
-            colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea()
+            colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack(alignment: .leading) {
                 
                 HStack{
@@ -110,39 +110,54 @@ struct ManualDeviceEntryView: View {
                
                 
                 Spacer()
-                HStack{
-                    Button {
-                        Task(priority: .userInitiated, operation: {
-                            await areDMFieldsEmpty()
-                            await appendManualDeviceData()
-                            await concantenateFinalManualDeviceArrays()
-                            await saveManualDeviceData()
-//                            await transmitManualDeviceData()
-                            print("FIGURE OUT HOW TO EMAIL RESULTS")
-                        })
-                    } label: {
-                        VStack{
-                            Text("Submit Email Transmit Data Append Data")
-                                .foregroundColor(.green)
-                                .padding()
-                            Image(systemName: "arrow.up.doc.on.clipboard")
-                                .foregroundColor(.green)
+                if manualUserDataSubmitted == false {
+                    HStack{
+                        Spacer()
+                        Button {
+                            Task(priority: .userInitiated, operation: {
+                                await areDMFieldsEmpty()
+                                await appendManualDeviceData()
+                                await concantenateFinalManualDeviceArrays()
+                                await saveManualDeviceData()
+                                //                            await transmitManualDeviceData()
+                                print("FIGURE OUT HOW TO EMAIL RESULTS")
+                            })
+                        } label: {
+                            HStack{
+                                Spacer()
+                                Text("Submit Data")
+                                Spacer()
+                                Image(systemName: "arrow.up.doc.on.clipboard")
+                                Spacer()
+                            }
+                            .frame(width: 300, height: 50, alignment: .center)
+                            .foregroundColor(.white)
+                            .background(Color.blue)
+                            .cornerRadius(24)
                         }
+                    Spacer()
                     }
-
-                    NavigationLink(destination:
-                                    manualUserDataSubmitted == true ? AnyView(InstructionsForTakingTest())
-                                    : manualUserDataSubmitted == false ? AnyView(ManualDeviceEntryIssueSplashView())
-                                    : AnyView(ManualDeviceEntryIssueSplashView())
-
-                    ){  VStack{
-                        Text("Continue to\nDevice Setup")
-                            .foregroundColor(manColors[manLinkColorIndex])
-                            .padding()
-                        Image(systemName: "arrowshape.bounce.right")
-                            .foregroundColor(manColors[manLinkColorIndex])
+                } else if manualUserDataSubmitted == true {
+                    HStack{
+                        Spacer()
+                        NavigationLink(destination:
+                                        manualUserDataSubmitted == true ? AnyView(InstructionsForTakingTest())
+                                       : manualUserDataSubmitted == false ? AnyView(ManualDeviceEntryIssueSplashView())
+                                       : AnyView(ManualDeviceEntryIssueSplashView())
+                                       
+                        ){  HStack{
+                            Spacer()
+                            Text("Continue to Device Setup")
+                            Spacer()
+                            Image(systemName: "arrowshape.bounce.right")
+                            Spacer()
                         }
-                    .padding()
+                        .frame(width: 300, height: 50, alignment: .center)
+                        .foregroundColor(.white)
+                        .background(Color.green)
+                        .cornerRadius(24)
+                        }
+                    Spacer()
                     }
                 }
                 Spacer()

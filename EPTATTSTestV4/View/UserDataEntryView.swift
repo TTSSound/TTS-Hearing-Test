@@ -393,19 +393,19 @@ struct UserDataEntryContent<Link: View>:View {
                         } label: {
                             HStack{
                                 Spacer()
-                                Text("Submit Selection")
+                                Text("Submit Information")
                                 Spacer()
                                 Image(systemName: "arrow.up.doc.fill")
                                 Spacer()
                             }
-                            .frame(width: 200, height: 50, alignment: .center)
+                            .frame(width: 300, height: 50, alignment: .center)
                             .background(Color.blue)
                             .foregroundColor(.white)
-                            .cornerRadius(300)
+                            .cornerRadius(24)
                         }
                         Spacer()
                     }
-                    .padding(.bottom, 80)
+                    .padding(.bottom, 60)
                 } else if  userDataSubmitted == true {
                     HStack{
                         Spacer()
@@ -421,14 +421,14 @@ struct UserDataEntryContent<Link: View>:View {
                                 Image(systemName: "arrowshape.bounce.right")
                                 Spacer()
                             }
-                            .frame(width: 200, height: 50, alignment: .center)
+                            .frame(width: 300, height: 50, alignment: .center)
                             .background(Color.green)
                             .foregroundColor(.white)
-                            .cornerRadius(300)
+                            .cornerRadius(24)
                         }
                         Spacer()
                     }
-                    .padding(.bottom, 80)
+                    .padding(.bottom, 60)
                 }
             }
             .onAppear(perform: {
@@ -437,7 +437,7 @@ struct UserDataEntryContent<Link: View>:View {
             })
             .padding(.leading)
             .padding(.trailing)
-        }.navigationTitle("User Setup")
+        }.navigationTitle("")
         
     }
     

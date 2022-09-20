@@ -48,7 +48,28 @@ struct ehaP2SaveFinalResults: Codable {  // This is a model
     var jsonStoredAverageGain: [Float]
 }
 
-struct EHATTSTestPart2View: View {
+struct EHATTSTestPart2View<Link: View>: View {
+    
+    var ehaTesting: EHATesting?
+    var relatedLinkEHATesting: (EHATesting) -> Link
+//    @State var saveSystemSettingsInterimPreEHAP2: SaveSystemSettingsInterimPreEHAP2? = nil
+    
+    var body: some View {
+        if let ehaTesting = ehaTesting {
+            EHATTSTestPart2Content(ehaTesting: ehaTesting, relatedLinkEHATesting: relatedLinkEHATesting)
+        } else {
+            Text("Error Loading EHATTSTestPart2 View")
+                .navigationTitle("")
+        }
+    }
+}
+    
+
+struct EHATTSTestPart2Content<Link: View>: View {
+    var ehaTesting: EHATesting
+    var dataModel = DataModel.shared
+    var relatedLinkEHATesting: (EHATesting) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
     
     enum ehaP2SampleErrors: Error {
         case ehaP2notFound
@@ -276,7 +297,7 @@ struct EHATTSTestPart2View: View {
 
     @State var ehaP2_averageGain = Float()
 
-    @State var ehaP2_eptaSamplesCount = 2 //8 //17
+    @State var ehaP2_eptaSamplesCount = 86 //8 //17
 //    @State var ehaP2_eptaSamplesCountArray = [2, 2, 2]
     @State var ehaP2_eptaSamplesCountArray = [8, 8, 8, 8, 8, 8, 8, 8, 8, 17, 17, 17, 17, 17, 17, 17, 17, 17, 26, 26, 26, 26, 26, 26, 26, 26, 26, 35, 35, 35, 35, 35, 35, 35, 35, 35, 44, 44, 44, 44, 44, 44, 44, 44, 44, 53, 53, 53, 53, 53, 53, 53, 53, 53, 62, 62, 62, 62, 62, 62, 62, 62, 62, 71, 71, 71, 71, 71, 71, 71, 71, 71, 78, 78, 78, 78, 78, 78, 78, 85, 85, 85, 85, 85, 85, 85]
     @State var ehaP2_eptaSamplesCountArrayIdx = 0  //[0, 1, 2, 3]
@@ -316,21 +337,21 @@ struct EHATTSTestPart2View: View {
                 @State var ehaP2fullTestCompleted: Bool = false
     @State var ehaP2fullTestCompletedHoldingArray: [Bool] = [Bool]()
     @State var ehaP2fullTestCompletedLR: [Bool] = [false, false, false, false, false, false, false, false, false,
-                                                          false, false, false, false, false, false, false, false, false,
-                                                          false, false, false, false, false, false, false, false, false,
-                                                          false, false, false, false, false, false, false, false, false,
-                                                          false, false, false, false, false, false, false, false, false,
-                                                          false, false, false, false, false, false, false, false, false,
-                                                          false, false, false, false, false, false, false, false, false,
-                                                          false, false, false, false, false, false, false, false, false,
-                                                          false, false, false, false, false, false, false,
-                                                          false, false, false, false, false, false, true]
+                                                  false, false, false, false, false, false, false, false, false,
+                                                  false, false, false, false, false, false, false, false, false,
+                                                  false, false, false, false, false, false, false, false, false,
+                                                  false, false, false, false, false, false, false, false, false,
+                                                  false, false, false, false, false, false, false, false, false,
+                                                  false, false, false, false, false, false, false, false, false,
+                                                  false, false, false, false, false, false, false, false, false,
+                                                  false, false, false, false, false, false, false,
+                                                  false, false, false, false, false, false, false, true]   // Adding one false here
     
     @State var ehaP2fullTestCompletedMono: [Bool] = [false, false, false, false, false, false, false, false, false,
                                                      false, false, false, false, false, false, false, false, false,
                                                      false, false, false, false, false, false, false, false, false,
                                                      false, false, false, false, false, false, false, false, false,
-                                                     false, false, false, false, false, false, true]
+                                                     false, false, false, false, false, false, false, true]     // adding one false here
     
     
     @State var ehaP2fullTestCompletedTestingArray: [Bool] = [false, false, true]
@@ -387,27 +408,30 @@ struct EHATTSTestPart2View: View {
            colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
 //           RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
            VStack {
-               Spacer()
-               if ehaP2fullTestCompleted == false {
-                   Text("EHA Part 2 Test")
-                       .font(.title)
-                       .fontWeight(.bold)
-                       .padding()
-                       .foregroundColor(.white)
-                       .padding(.top, 40)
-                       .padding(.bottom, 20)
-               } else if ehaP2fullTestCompleted == true {
-                   NavigationLink("Test Phase Complete, Press To Continue", destination: PostEHATestView())//, isActive: $ehaP2EPTATestCompleted)
-                       .padding()
-                       .frame(width: 200, height: 50, alignment: .center)
-                       .background(.green)
-                       .foregroundColor(.white)
-                       .cornerRadius(300)
-                       .padding(.top, 40)
-                       .padding(.bottom, 20)
-               }
- 
+               HStack{
+                   if ehaP2fullTestCompleted == false {
+                       Text("EHA Part 2 Test")
+                           .font(.title)
+                           .fontWeight(.bold)
+                           .padding()
+                           .foregroundColor(.white)
+
+                   } else if ehaP2fullTestCompleted == true {
+                       NavigationLink("Test Phase Complete, Press To Continue", destination: PostEHATestView(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting))
+                           .padding()
+                           .frame(width: 200, height: 50, alignment: .center)
+                           .background(.green)
+                           .foregroundColor(.white)
+                           .cornerRadius(24)
                
+                   }
+               }
+               .navigationDestination(isPresented: $ehaP2fullTestCompleted) {
+                   PostEHATestView(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
+               }
+               .padding(.top, 20)
+               .padding(.bottom, 10)
+            
                HStack {
                    Spacer()
                    Toggle("MonoTest", isOn: $ehaP2MonoTest)
@@ -513,16 +537,22 @@ struct EHATTSTestPart2View: View {
 //                       ehaP2_samples = ehaP2_dualSamples
 //                   }
 //               }
-               
-               Text("Gain Setting: \(ehaP2_testGain) | Pan: \(ehaP2_pan)")
-                   .fontWeight(.bold)
-                   .padding()
-                   .frame(width: 200, height: 50, alignment: .center)
-                   .background(Color .black)
-                   .foregroundColor(.white)
-                   .cornerRadius(300)
-                   .padding(.top, 5)
-                   .padding(.bottom, 5)
+               HStack{
+                   Spacer()
+                   Text("Gain: \(ehaP2_testGain)")
+                   Spacer()
+                   Text("Pan: \(ehaP2_pan)")
+                   Spacer()
+                   Text("phon: \(gainEHAP2SettingArrayLink)")
+                   Spacer()
+               }
+               .font(.caption)
+               .frame(width: 380, height: 50, alignment: .center)
+               .background(Color .clear)
+               .foregroundColor(.white)
+//               .cornerRadius(24)
+               .padding(.top, 5)
+               .padding(.bottom, 5)
                
                
                Spacer()
@@ -542,10 +572,10 @@ struct EHATTSTestPart2View: View {
                            .frame(width: 200, height: 50, alignment: .center)
                            .background(colorModel.tiffanyBlue)
                            .foregroundColor(.white)
-                           .cornerRadius(300)
+                           .cornerRadius(24)
                    }
-                   .padding(.top, 20)
-                   .padding(.bottom, 20)
+                   .padding(.top, 10)
+                   .padding(.bottom, 10)
                    
                    Text("")
                        .fontWeight(.bold)
@@ -553,7 +583,7 @@ struct EHATTSTestPart2View: View {
                        .frame(width: 200, height: 50, alignment: .center)
                        .background(Color .clear)
                        .foregroundColor(.clear)
-                       .cornerRadius(300)
+                       .cornerRadius(24)
                        .padding(.top, 20)
                        .padding(.bottom, 40)
 
@@ -589,11 +619,11 @@ struct EHATTSTestPart2View: View {
                            .frame(width: 200, height: 50, alignment: .center)
                            .background(Color .yellow)
                            .foregroundColor(.black)
-                           .cornerRadius(300)
+                           .cornerRadius(24)
                        
                    }
-                   .padding(.top, 20)
-                   .padding(.bottom, 20)
+                   .padding(.top, 10)
+                   .padding(.bottom, 10)
                    
                    Button {
                        ehaP2_heardArray.removeAll()
@@ -612,10 +642,10 @@ struct EHATTSTestPart2View: View {
                            .padding()
                            .frame(width: 200, height: 50, alignment: .center)
                            .background(ehaP2playingAlternateStringColor[ehaP2playingStringColorIndex])
-                           .cornerRadius(300)
+                           .cornerRadius(24)
                    }
                    .padding(.top, 20)
-                   .padding(.bottom, 40)
+                   .padding(.bottom, 20)
                }
                
                Button {
@@ -628,12 +658,12 @@ struct EHATTSTestPart2View: View {
                        .frame(width: 300, height: 100, alignment: .center)
                        .background(Color .green)
                        .foregroundColor(.black)
-                       .cornerRadius(300)
+                       .cornerRadius(24)
                }
-               .padding(.top, 20)
+               .padding(.top, 10)
                .padding(.bottom, 80)
                
-               Spacer()
+//               Spacer()
                }
                .fullScreenCover(isPresented: $ehaP2showTestCompletionSheet, content: {
                    ZStack{
@@ -1169,13 +1199,7 @@ struct EHATTSTestPart2View: View {
 }
 
 
-//struct EHATTSTestPart2View_Previews: PreviewProvider {
-//    static var previews: some View {
-//        EHATTSTestPart2View()
-//    }
-//}
-
-extension EHATTSTestPart2View {
+extension EHATTSTestPart2Content {
     enum ehaP2LastErrors: Error {
         case ehaP2lastError
         case ehaP2lastUnexpected(code: Int)
@@ -3184,7 +3208,7 @@ extension EHATTSTestPart2View {
     
 }
 
-extension EHATTSTestPart2View {
+extension EHATTSTestPart2Content {
 //MARK: Extension for Gain Link File Checking
     
     
@@ -3495,7 +3519,18 @@ extension EHATTSTestPart2View {
         }
     }
     
-    
-    
+    private func linkEHATesting(ehaTesting: EHATesting) -> some View {
+        EmptyView()
+    }
 }
 
+
+struct EHATTSTestPart2View_Previews: PreviewProvider {
+    static var previews: some View {
+        EHATTSTestPart2View(ehaTesting: nil, relatedLinkEHATesting: linkEHATesting)
+    }
+    
+    static func linkEHATesting(ehaTesting: EHATesting) -> some View {
+        EmptyView()
+    }
+}

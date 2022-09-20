@@ -8,7 +8,26 @@
 import SwiftUI
 import CodableCSV
 
-struct PostBilateral1kHzTestView: View {
+struct PostBilateral1kHzTestView<Link: View>: View {
+    var testing: Testing?
+    var relatedLinkTesting: (Testing) -> Link
+    
+    var body: some View {
+        if let testing = testing {
+            PostBilateral1kHzTestContent(testing: testing, relatedLinkTesting: relatedLinkTesting)
+        } else {
+            Text("Error Loading PostBilateral1kHzTest View")
+                .navigationTitle("")
+        }
+    }
+}
+
+struct PostBilateral1kHzTestContent<Link: View>: View {
+    var testing: Testing
+    var dataModel = DataModel.shared
+    var relatedLinkTesting: (Testing) -> Link
+
+    @EnvironmentObject private var naviationModel: NavigationModel
     
     @StateObject var colorModel: ColorModel = ColorModel()
     
@@ -106,15 +125,13 @@ struct PostBilateral1kHzTestView: View {
                         .frame(width: 300, height: 50, alignment: .center)
                         .background(.blue)
                         .foregroundColor(.white)
-                        .cornerRadius(300)
+                        .hoverEffect()
+                        .cornerRadius(24)
                 }
                 .padding(.top, 60)
                 .padding(.bottom, 20)
                 
-               
-
                 if phonGain != 0 && ehaBetaLinkExists == false && eptaBetaLinkExists == true {
-//                    NavigationLink("EPTA Test", destination: EHATTSTestPart1View())
                     Text("Now We're Ready To Start The Main Test Phases")
                         .font(.title)
                         .foregroundColor(.green)
@@ -122,20 +139,23 @@ struct PostBilateral1kHzTestView: View {
                         .padding(.top, 20)
                     Spacer()
                     NavigationLink(destination: {
-                        EHATTSTestPart1View()
+                        EHATTSTestPart1View(testing: testing, relatedLinkTesting: linkTesting)
                     }, label: {
-                        Text("1. EPTA Test")
-                            .padding()
-                            .frame(width: 200, height: 50, alignment: .center)
-                            .background(.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(300)
+                        VStack{
+                            Text("Test Selected: EPTA Short Test")
+                                .foregroundColor(.white)
+                            Text("Continue to Start Test")
+                                .padding()
+                                .frame(width: 300, height: 50, alignment: .center)
+                                .background(.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
+                        }
                     })
                     .padding(.top, 40)
                     .padding(.bottom, 20)
 
                 } else if phonGain != 0 && ehaBetaLinkExists == true && eptaBetaLinkExists == false {
-//                    NavigationLink("EHATTSTestPart1", destination: EHATTSTestPart1View()).foregroundColor(betaTestColorArray[betaEHAP1TestSelectedIdx])
                     Text("Now We're Ready To Start The Main Test Phases")
                         .font(.title)
                         .foregroundColor(.green)
@@ -143,14 +163,18 @@ struct PostBilateral1kHzTestView: View {
                         .padding(.top, 20)
                     Spacer()
                     NavigationLink(destination: {
-                        EHATTSTestPart1View()
+                        EHATTSTestPart1View(testing: testing, relatedLinkTesting: linkTesting)
                     }, label: {
-                        Text("2. EHA Full Test")
-                            .padding()
-                            .frame(width: 200, height: 50, alignment: .center)
-                            .background(.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(300)
+                        VStack{
+                            Text("Test Selected: EHA Full Test")
+                                .foregroundColor(.white)
+                            Text("Continue to Start Test")
+                                .padding()
+                                .frame(width: 300, height: 50, alignment: .center)
+                                .background(.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
+                        }
                     })
                     .padding(.top, 40)
                     .padding(.bottom, 20)
@@ -164,43 +188,43 @@ struct PostBilateral1kHzTestView: View {
                     Spacer()
                     VStack{
                         NavigationLink(destination: {
-                            EHATTSTestPart1View()
+                            EHATTSTestPart1View(testing: testing, relatedLinkTesting: linkTesting)
                         }, label: {
                             Text("1. EPTA Short Test")
                                 .padding()
-                                .frame(width: 200, height: 50, alignment: .center)
+                                .frame(width: 300, height: 50, alignment: .center)
                                 .background(colorModel.darkNeonGreen)
                                 .foregroundColor(.white)
-                                .cornerRadius(300)
+                                .cornerRadius(24)
                         })
                         .padding(.top, 10)
                         .padding(.bottom, 10)
                         
                         NavigationLink(destination: {
-                            EHATTSTestPart1View()
+                            EHATTSTestPart1View(testing: testing, relatedLinkTesting: linkTesting)
                         }, label: {
                             Text("2. EHA Full Test")
                                 .padding()
-                                .frame(width: 200, height: 50, alignment: .center)
+                                .frame(width: 300, height: 50, alignment: .center)
                                 .background(colorModel.tiffanyBlue)
                                 .foregroundColor(.white)
-                                .cornerRadius(300)
+                                .cornerRadius(24)
                         })
                         .padding(.top, 10)
                         .padding(.bottom, 10)
-                        
-                        NavigationLink(destination: {
-                            EHATTSTestPart2View()
-                        }, label: {
-                            Text("3. EHA Part 2")
-                                .padding()
-                                .frame(width: 200, height: 50, alignment: .center)
-                                .background(.gray)
-                                .foregroundColor(.white)
-                                .cornerRadius(300)
-                        })
-                        .padding(.top, 10)
-                        .padding(.bottom, 60)
+//                        
+//                        NavigationLink(destination: {
+//                            EHATTSTestPart2View(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
+//                        }, label: {
+//                            Text("3. EHA Part 2")
+//                                .padding()
+//                                .frame(width: 300, height: 50, alignment: .center)
+//                                .background(.gray)
+//                                .foregroundColor(.white)
+//                                .cornerRadius(24)
+//                        })
+//                        .padding(.top, 10)
+//                        .padding(.bottom, 60)
                     }
     
                 }
@@ -682,10 +706,18 @@ struct PostBilateral1kHzTestView: View {
             print("CVSWriter BetaBetaFinalGainSetting Error or Error Finding File for BetaBetaFinalGainSetting CSV \(error.localizedDescription)")
         }
     }
+    
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
 }
 
 struct PostBilateral1kHzTestView_Previews: PreviewProvider {
     static var previews: some View {
-        PostBilateral1kHzTestView()
+        PostBilateral1kHzTestView(testing: nil, relatedLinkTesting: linkTesting)
+    }
+    
+    static func linkTesting(testing: Testing) -> some View {
+        EmptyView()
     }
 }

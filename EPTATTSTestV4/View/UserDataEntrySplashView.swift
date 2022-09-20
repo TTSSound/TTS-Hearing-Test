@@ -50,9 +50,6 @@ struct UserDataEntrySplashContent<Link: View>: View {
                     .padding(.leading)
                     .padding(.trailing)
                     .padding(.top, 20)
-//                    .padding(.bottom, 20)
-                
-                
             
                 Spacer()
                 NavigationLink {
@@ -69,7 +66,7 @@ struct UserDataEntrySplashContent<Link: View>: View {
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .frame(width: 300, height: 50, alignment: .center)
-                    .cornerRadius(300)
+                    .cornerRadius(24)
                     .padding(.bottom, 20)
                 }
                 Spacer()

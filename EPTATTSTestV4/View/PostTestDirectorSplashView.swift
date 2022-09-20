@@ -7,7 +7,26 @@
 
 import SwiftUI
 
-struct PostTestDirectorSplashView: View {
+struct PostTestDirectorSplashView<Link: View>: View {
+    var testing: Testing?
+    var relatedLinkTesting: (Testing) -> Link
+    
+    var body: some View {
+        if let testing = testing {
+            PostTestDirectorSplashContent(testing: testing, relatedLinkTesting: relatedLinkTesting)
+        } else {
+            Text("Error Loading TrainingTest View")
+                .navigationTitle("")
+        }
+    }
+}
+
+
+struct PostTestDirectorSplashContent<Link: View>: View {
+    var testing: Testing
+    var dataModel = DataModel.shared
+    var relatedLinkTesting: (Testing) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
     
     @StateObject var colorModel: ColorModel = ColorModel()
     
@@ -16,7 +35,6 @@ struct PostTestDirectorSplashView: View {
             colorModel.colorBackgroundRed.ignoresSafeArea(.all, edges: .top)
             VStack{
                 Spacer()
-           
                 Text("There Was An Issue Identifying The Test Type Take and Directing You To Those Results")
                     .foregroundColor(.white)
                     .font(.title)
@@ -26,38 +44,50 @@ struct PostTestDirectorSplashView: View {
                     .padding(.leading)
                     .padding(.trailing)
                     .padding(.top, 20)
-//                    .padding(.bottom, 20)
-                
-                
             
                 Spacer()
                 NavigationLink {
-                    PostAllTestsSplashView()
+                    PostAllTestsSplashView(testing: testing, relatedLinkTesting: linkTesting)
                 } label: {
-                    
-                    VStack {
+                    HStack {
+                        Spacer()
                         Text("Return to Post Test Screen")
-                            .foregroundColor(.blue)
-                            .font(.title)
-                            .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                            .hoverEffect(/*@START_MENU_TOKEN@*/.highlight/*@END_MENU_TOKEN@*/)
-                            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+//                            .foregroundColor(.blue)
+//                            .font(.title)
+//                            .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+//                            .hoverEffect(/*@START_MENU_TOKEN@*/.highlight/*@END_MENU_TOKEN@*/)
+//                            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                        Spacer()
                         Image(systemName: "arrowshape.turn.up.backward.2")
-                            .foregroundColor(.blue)
-                            .font(.title)
-                            .hoverEffect(/*@START_MENU_TOKEN@*/.highlight/*@END_MENU_TOKEN@*/)
-                            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+//                            .foregroundColor(.blue)
+//                            .font(.title)
+//                            .hoverEffect(/*@START_MENU_TOKEN@*/.highlight/*@END_MENU_TOKEN@*/)
+//                            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                        Spacer()
                     }
+                    .frame(width: 300, height: 50, alignment: .center)
+                    .cornerRadius(24)
+                    .foregroundColor(.white)
+                    .background(Color.blue)
                     .padding(.bottom, 20)
                 }
                 Spacer()
             }
         }
     }
+    
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
 }
 
-//struct PostTestDirectorSplashView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PostTestDirectorSplashView()
-//    }
-//}
+struct PostTestDirectorSplashView_Previews: PreviewProvider {
+    static var previews: some View {
+        PostTestDirectorSplashView(testing: nil, relatedLinkTesting: linkTesting)
+    }
+
+    static func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+    
+}

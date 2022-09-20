@@ -63,34 +63,47 @@ struct TestDeviceSetupView: View {
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack{
                 Spacer()
-// !!!! Figure out how to deinit audiosession and then reset on next screen !!!!!
+
                 VStack{
                     HStack{
+                        Spacer()
                         Text("System Volume is Set To: ")
                             .foregroundColor(.white)
+                        Spacer()
                         Text(String(volume))
                             .foregroundColor(.white)
+                        Spacer()
                     }
+                    .padding(.leading)
+                    .padding(.trailing)
+                    .padding(.top, 40)
+                    .padding(.bottom, 20)
                     HStack{
-                        Text("Is Volume Set Correctly?")
+                        Spacer()
+                        Text("Is Volume Set\nCorrectly?")
                             .foregroundColor(.white)
+                        Spacer()
                         Text(volumeSettingString[volumeSettingIndex])
                             .foregroundColor(.white)
                             .font(.caption)
-                            .padding()
+                        Spacer()
                     }
-                    Text("Volume Is Set Correctly")
+                    .padding(.leading)
+                    .padding(.trailing)
+                    Text("Volume Is Set\nCorrectly")
                         .foregroundColor(tdColors[tdLinkColorIndex])
                 }
                 Spacer()
                 VStack{
                     HStack{
-                        Text("Is Silent Mode Turned Off?")
+                        Text("Is Silent Mode\nTurned Off?")
                             .foregroundColor(.white)
                         Text(silentModeSettingString[silentModeSettingIndex])
                             .foregroundColor(.white)
                     }
-                    Text("Silent Mode Is Off")
+                    .padding(.leading)
+                    .padding(.trailing)
+                    Text("Silent Mode\nIs Off")
                         .foregroundColor(silColors[silLinkColorIndex])
                         .padding()
                 }
@@ -104,26 +117,44 @@ struct TestDeviceSetupView: View {
                         await saveTestSystemSettings()
                     }
                 } label: {
-                    VStack{
-                        Text(String(volume))
+                    HStack{
+                        Spacer()
                         Text("Recheck Volume And System Settings")
-                        Text(String(audioSessionModel.successfulStartToAudioSession))
-                        Text("Silent Mode Off Int: \(silentModeOff)")
+                        Spacer()
                     }
+                    .frame(width: 300, height: 50, alignment: .center)
+                    .foregroundColor(.white)
+                    .background(Color.blue)
+                    .cornerRadius(24)
                 }
                 Spacer()
                 // Below Works To Display Update from Button Above
-                Text(String(audioSessionModel.audioSession.outputVolume))
-                    .foregroundColor(.white)
-                    .font(.caption)
-                    .padding()
+//                Text(String(audioSessionModel.audioSession.outputVolume))
+//                    .foregroundColor(.white)
+//                    .font(.caption)
+//                    .padding()
                 Spacer()
-                Text("Return Home and Select The Testing Tab to Start The Hearing Test")
-//                    Text("Continue to Start The Hearing Test")
-                    .fontWeight(.bold)
-                    .font(.title)
-                    .padding()
-                    .foregroundColor(.red)
+                if volumeCorrect >= 1 {
+                    HStack{
+                        Text("Return Home and Select The Testing Tab to Start The Hearing Test")
+                            .padding(.leading)
+                            .padding(.trailing)
+                            .fontWeight(.bold)
+                            .font(.title)
+                            .foregroundColor(.red)
+                        //                    Text("Continue to Start The Hearing Test")
+                    }
+                } else {
+                    HStack{
+                        Text("Return Home and Select The Testing Tab to Start The Hearing Test")
+                            .padding(.leading)
+                            .padding(.trailing)
+                            .fontWeight(.bold)
+                            .font(.title)
+                            .foregroundColor(.clear)
+                    }
+                }
+
 
 //                NavigationLink(
 //                    destination: LandingView(),

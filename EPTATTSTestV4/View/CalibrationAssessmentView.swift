@@ -153,6 +153,7 @@ struct CalibrationAssessmentView: View {
                     Text("Select The Type of Ear/Headphones You Are Using or Select The Most Appropriate Option Available.")
                         .padding()
                         .foregroundColor(.white)
+                        .font(.title3)
                     
                     Text("ONLY SELECT ONE ITEM!")
                         .font(.title)
@@ -302,10 +303,10 @@ struct CalibrationAssessmentView: View {
                             Image(systemName: "arrowshape.bounce.right")
                             Spacer()
                        }
-                        .frame(width: 200, height: 50, alignment: .center)
+                        .frame(width: 300, height: 50, alignment: .center)
                         .background(linkColors[linkColorIndex])
                         .foregroundColor(linkColors2[linkColorIndex])
-                        .cornerRadius(300)
+                        .cornerRadius(24)
                     }
                     Spacer()
                 }

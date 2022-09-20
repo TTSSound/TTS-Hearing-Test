@@ -7,7 +7,25 @@
 
 import SwiftUI
 
-struct TestIDInputView: View {
+struct TestIDInputView<Link: View>: View {
+    var testing: Testing?
+    var relatedLinkTesting: (Testing) -> Link
+    
+    var body: some View {
+        if let testing = testing {
+            TestIDInputContent(testing: testing, relatedLinkTesting: relatedLinkTesting)
+        } else {
+            Text("Error Loading TestIDInput View")
+                .navigationTitle("")
+        }
+    }
+}
+
+struct TestIDInputContent<Link: View>: View {
+    var testing: Testing
+    var dataModel = DataModel.shared
+    var relatedLinkTesting: (Testing) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
     
     @StateObject var colorModel: ColorModel = ColorModel()
     @State var testIDKey: String = ""
@@ -50,21 +68,33 @@ struct TestIDInputView: View {
                 
           Spacer()
                 NavigationLink {
-                    UserWrittenHearingAssessmentView()
+                    UserWrittenHearingAssessmentView(testing: testing, relatedLinkTesting: linkTesting)
                 } label: {
                     Text("Continue To Start Hering Assessment")
-                        .foregroundColor(.green)
+                        .padding()
+                        .frame(width: 300, height: 50, alignment: .center)
+                        .foregroundColor(.white)
+                        .background(Color.green)
+                        .cornerRadius(24)
                 }
             Spacer()
             }
         }
     }
     
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
     
 }
 
-//struct TestIDInputView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TestIDInputView()
-//    }
-//}
+struct TestIDInputView_Previews: PreviewProvider {
+    static var previews: some View {
+        TestIDInputView(testing: nil, relatedLinkTesting: linkTesting)
+    }
+    
+    static func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+    
+}

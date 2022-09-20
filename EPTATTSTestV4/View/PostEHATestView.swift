@@ -7,15 +7,36 @@
 
 import SwiftUI
 
-struct PostEHATestView: View {
-    @ObservedObject var audioSessionModel = AudioSessionModel()
+
+struct PostEHATestView<Link: View>: View {
+    var ehaTesting: EHATesting?
+    var relatedLinkEHATesting: (EHATesting) -> Link
+    
+    var body: some View {
+        if let ehaTesting = ehaTesting {
+            PostEHATestContent(ehaTesting: ehaTesting, relatedLinkEHATesting: relatedLinkEHATesting)
+        } else {
+            Text("Error Loading EHAInterimPreEHAP2 View")
+                .navigationTitle("")
+        }
+    }
+}
+
+
+struct PostEHATestContent<Link: View>: View {
+    var ehaTesting: EHATesting
+    var dataModel = DataModel.shared
+    var relatedLinkEHATesting: (EHATesting) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
+    
+    var audioSessionModel = AudioSessionModel()
     var colorModel: ColorModel = ColorModel()
     @StateObject var systemSettingsEndEHAModel: SystemSettingsEndEHAModel = SystemSettingsEndEHAModel()
     @State var volumeEHAPostTest = Float()
     
-//    @State var monoRightEarBetterExists = Bool()
-//    @State var monoLeftEarBetterExists = Bool()
-//    @State var monoEarTestingPan = Float()
+    //    @State var monoRightEarBetterExists = Bool()
+    //    @State var monoLeftEarBetterExists = Bool()
+    //    @State var monoEarTestingPan = Float()
     
     var body: some View {
         ZStack{
@@ -33,32 +54,25 @@ struct PostEHATestView: View {
                 Text("Give Us A Moment To Calculate and Format Your Results")
                     .foregroundColor(.white)
                 Spacer()
-                NavigationLink {
-                    EHAResultsDisplayView()
-                } label: {
-                    Text("Continue To See Results")
-                        .fontWeight(.semibold)
-                        .padding()
-                        .frame(width: 200, height: 50, alignment: .center)
-                        .background(Color .green)
-                        .foregroundColor(.white)
-                        .cornerRadius(300)
+
+                Text("Return Home to Navigate To Results")
+                    .font(.title)
+                    .foregroundColor(.red)
                 }
                 Spacer()
             }
-        }
-        .onAppear {
-            Task{
-                audioSessionModel.setAudioSession()
-                await checkEHAPostTestVolume()
-                await savePostEHATestSystemSettings()
-//                await checkMonoRightTestLink()
-//                await checkMonoLeftTestLink()
-//                await monoEarBetterExists()
-                
+            .onAppear {
+                Task{
+                    audioSessionModel.setAudioSession()
+                    await checkEHAPostTestVolume()
+                    await savePostEHATestSystemSettings()
+                    //                await checkMonoRightTestLink()
+                    //                await checkMonoLeftTestLink()
+                    //                await monoEarBetterExists()
+                    
+                }
             }
-        }
-
+        
     }
     
     func checkEHAPostTestVolume() async {
@@ -74,8 +88,12 @@ struct PostEHATestView: View {
         await systemSettingsEndEHAModel.writeSystemEndEHAResultsToCSV()
         await systemSettingsEndEHAModel.writeInputSystemEndEHAResultsToCSV()
     }
+ 
+    private func linkEHATesting(ehaTesting: EHATesting) -> some View {
+        EmptyView()
+    }
     
-    
+}
 //    //TODO: Code to calculate delta at each EPTA frequency between ears. If gain delta is <= 2.5 dB (either at every frequency or in average, maybe with focus on 4kHz range, then allow user to select best ear test only for EHA Part 2. After completing this assessment, if applicable, generate a trigger csv file called. monoRightEarBetter.csv or monoLeftEarBetter.csv. Then check for each of these files and if one exists, that triggers the ability to test in that ear (Right or left) only for EHAP2. If neither file exists, then mono test is not available.
 //    
 //    func monoEarBetterExists() async {
@@ -140,11 +158,15 @@ struct PostEHATestView: View {
 //            }
 //        }
 //    }
-    
-}
-
-//struct PostEHATestView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PostEHATestView()
-//    }
+//
 //}
+
+struct PostEHATestView_Previews: PreviewProvider {
+    static var previews: some View {
+        PostEHATestView(ehaTesting: nil, relatedLinkEHATesting: linkEHATesting)
+    }
+    
+    static func linkEHATesting(ehaTesting: EHATesting) -> some View {
+        EmptyView()
+    }
+}

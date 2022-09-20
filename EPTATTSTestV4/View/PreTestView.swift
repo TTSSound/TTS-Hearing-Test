@@ -7,14 +7,35 @@
 
 import SwiftUI
 
-struct PreTestView: View {
+
+struct PreTestView<Link: View>: View {
+    var testing: Testing?
+    var relatedLinkTesting: (Testing) -> Link
+    
+    var body: some View {
+        if let testing = testing {
+            PreTestContent(testing: testing, relatedLinkTesting: relatedLinkTesting)
+        } else {
+            Text("Error Loading PreTest View")
+                .navigationTitle("")
+        }
+    }
+}
+
+
+struct PreTestContent<Link: View>: View {
+    var testing: Testing
+    var dataModel = DataModel.shared
+    var relatedLinkTesting: (Testing) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
 
     @StateObject var colorModel: ColorModel = ColorModel()
 
     @State var ehaLinkExists = Bool()
     @State var eptaLinkExists = Bool()
     @State var simpleLinkExists = Bool()
-    @State var returnedTestSelected = Int()
+    @State var returnedTestSelected = 0
+    @State var returnedTestSelectedArray = ["", "EHA Test", "EPTA Test", "Simple Test", "Error"]
  
 
 
@@ -25,6 +46,7 @@ struct PreTestView: View {
                 Spacer()
                 Text(" Pre Test View for a break and to get user's phon and reference curve data/funtions. Then Start Practice Test")
                     .foregroundColor(.white)
+                    .padding(.bottom, 40)
                 
                 Button {
                     Task {
@@ -36,26 +58,28 @@ struct PreTestView: View {
                     }
                 } label: {
                     Text("Check Test Selection")
-                        .foregroundColor(.blue)
+                        .frame(width: 300, height: 50, alignment: .center)
+                        .foregroundColor(.white)
+                        .background(Color.blue)
+                        .cornerRadius(24)
                 }
                 Spacer()
-                Text("TestReturned: \(returnedTestSelected)")
+                Text("TestReturned: \(returnedTestSelectedArray[returnedTestSelected])")
                     .foregroundColor(.white)
                 Spacer()
                 NavigationLink {
-//                    Bilateral1kHzTestView()
-//                   TrainingTestHoldingPlace()
-                    TrainingTestView()
+                    TrainingTestView(testing: testing, relatedLinkTesting: linkTesting)
                 } label: {
                     VStack{
                         Text("We are Now Ready To Take a Practice Test.")
                             .foregroundColor(.white)
+                            .padding(.bottom, 20)
                         Text("Continue")
                             .padding()
-                            .frame(width: 200, height: 50, alignment: .center)
+                            .frame(width: 300, height: 50, alignment: .center)
                             .background(.green)
                             .foregroundColor(.white)
-                            .cornerRadius(300)
+                            .cornerRadius(24)
 
                     }
                     .padding(.top, 40)
@@ -70,23 +94,24 @@ struct PreTestView: View {
     }
     
     func returnTestSelected() async {
-        if ehaLinkExists == true {
+        if ehaLinkExists == true && eptaLinkExists == false && simpleLinkExists == false {
             returnedTestSelected = 1
             print("EHA Test Link Exists")
-        } else {
-            print("EHA Link Does Not Exist")
-        }
-        if eptaLinkExists == true {
+            print("EPTA Link Does Not Exist")
+            print("Simple Link Does Not Exist")
+        } else if ehaLinkExists == false && eptaLinkExists == true && simpleLinkExists == false {
             returnedTestSelected = 2
             print("EPTA Test Link Exists")
-        } else {
-            print("EPTA Link Does Not Exist")
-        }
-        if simpleLinkExists == true {
+            print("EHA Link Does Not Exist")
+            print("Simple Link Does Not Exist")
+        } else  if ehaLinkExists == false && eptaLinkExists == false && simpleLinkExists == true {
             returnedTestSelected = 3
             print("Simple Test Link Exists")
+            print("EHA Link Does Not Exist")
+            print("EPTA Link Does Not Exist")
         } else {
-            print("Simple Link Does Not Exist")
+            returnedTestSelected = 4
+            print("Critical Error in returnTestSelected Logic")
         }
     }
     
@@ -137,6 +162,11 @@ struct PreTestView: View {
             }
         }
     }
+    
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+    
 }
 
 // CSV DECODING NEEDED NOW TO POPULATE NEW DATA Set To Reference and Read Only
@@ -148,8 +178,13 @@ struct PreTestView: View {
 
 
 
-//struct PreTestView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PreTestView()
-//    }
-//}
+struct PreTestView_Previews: PreviewProvider {
+    static var previews: some View {
+        PreTestView(testing: nil, relatedLinkTesting: linkTesting)
+    }
+    
+    static func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+    
+}

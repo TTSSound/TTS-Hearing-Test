@@ -7,9 +7,27 @@
 
 import SwiftUI
 
-struct SurveyErrorView: View {
+struct SurveyErrorView<Link: View>: View {
+    var testing: Testing?
+    var relatedLinkTesting: (Testing) -> Link
+    
+    var body: some View {
+        if let testing = testing {
+            SurveyErrorContent(testing: testing, relatedLinkTesting: relatedLinkTesting)
+        } else {
+            Text("Error Loading SurveyError View")
+                .navigationTitle("")
+        }
+    }
+}
+
+struct SurveyErrorContent<Link: View>: View {
+    var testing: Testing
+    var dataModel = DataModel.shared
+    var relatedLinkTesting: (Testing) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
  
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var colorModel: ColorModel = ColorModel()
 
     var body: some View {
         ZStack{
@@ -26,10 +44,18 @@ struct SurveyErrorView: View {
             }
         }
     }
+    
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
 }
 
-//struct SurveyErrorView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SurveyErrorView()
-//    }
-//}
+struct SurveyErrorView_Previews: PreviewProvider {
+    static var previews: some View {
+        SurveyErrorView(testing: nil, relatedLinkTesting: linkTesting)
+    }
+    
+    static func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+}

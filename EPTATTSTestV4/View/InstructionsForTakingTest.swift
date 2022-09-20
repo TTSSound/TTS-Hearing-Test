@@ -22,8 +22,9 @@ struct InstructionsForTakingTest: View {
             colorModel.colorBackgroundBottomTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack{
             Spacer()
-                Text("Instructions for Hearing Tests")
-                    .foregroundColor(.black)
+                Text("Instructions for Hearing Tests Holding Place")
+                    .foregroundColor(.white)
+                    .font(.title)
             Spacer()
             
                 
@@ -38,10 +39,17 @@ struct InstructionsForTakingTest: View {
                 NavigationLink(
                     destination: SiriSetupView(),
                     label: {
-                    Text("Start System Setup for The Hearing Test")
-                        .fontWeight(.bold)
-                        .padding()
-                        .foregroundColor(.green)
+                        HStack{
+                            Spacer()
+                            Text("Start System Setup for The Hearing Test")
+                            Spacer()
+                            Image(systemName: "arrowshape.bounce.right")
+                            Spacer()
+                        }
+                        .frame(width: 300, height: 50, alignment: .center)
+                        .foregroundColor(.white)
+                        .background(Color.green)
+                        .cornerRadius(24)
                 
                     })
             Spacer()

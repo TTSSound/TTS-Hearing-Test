@@ -59,7 +59,7 @@
 //            }
 //            .frame(width: 200, height: 50, alignment: .center)
 //            .background(Color.blue)
-//            .foregroundColor(.green)
+//            .foregroundColor(.white)
 //            .cornerRadius(300)
 //
 //

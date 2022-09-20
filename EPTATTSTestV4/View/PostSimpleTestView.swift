@@ -7,11 +7,29 @@
 
 import SwiftUI
 
-struct PostSimpleTestView: View {
-    var audioSessionModel = AudioSessionModel()
-    @StateObject var colorModel: ColorModel = ColorModel()
+struct PostSimpleTestView<Link: View>: View {
+    var testing: Testing?
+    var relatedLinkTesting: (Testing) -> Link
+    
+    var body: some View {
+        if let testing = testing {
+            PostSimpleTestContent(testing: testing, relatedLinkTesting: relatedLinkTesting)
+        } else {
+            Text("Error Loading PostSimpleTest View")
+                .navigationTitle("")
+        }
+    }
+}
 
-    @State var volumePostSimpleTest = Float()
+struct PostSimpleTestContent<Link: View>: View {
+    var testing: Testing
+    var dataModel = DataModel.shared
+    var relatedLinkTesting: (Testing) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
+        
+//    var audioSessionModel = AudioSessionModel()
+    var colorModel: ColorModel = ColorModel()
+//    @State var volumePostSimpleTest = Float()
     
     
     
@@ -26,31 +44,32 @@ struct PostSimpleTestView: View {
                 Text("Great Work!")
                     .foregroundColor(.white)
                 Spacer()
-                Text("Give Us A Moment To Calculate and Format Your Results")
+                Text("Return Home To Navigate To Your Results")
                     .foregroundColor(.white)
+                    .font(.title)
                 Spacer()
-                NavigationLink {
-                    SimpleResultsDisplayView()
-                } label: {
-                    Text("Continue To See Results")
-                        .foregroundColor(.green)
-                }
-                Spacer()
+//                NavigationLink {
+//                    SimpleResultsDisplayView()
+//                } label: {
+//                    Text("Continue To See Results")
+//                        .foregroundColor(.green)
+//                }
+//                Spacer()
             }
         }
-        .onAppear {
-            Task(priority: .userInitiated, operation: {
-                audioSessionModel.setAudioSession()
-                await checkPostTestVolume()
-                await savePostSimpleSettings()
-            })
-        }
+//        .onAppear {
+//            Task(priority: .userInitiated, operation: {
+//                audioSessionModel.setAudioSession()
+//                await checkPostTestVolume()
+//                await savePostSimpleSettings()
+//            })
+//        }
     }
     
     func checkPostTestVolume() async {
-        volumePostSimpleTest = audioSessionModel.audioSession.outputVolume
+//        volumePostSimpleTest = audioSessionModel.audioSession.outputVolume
 //        systemSettingsModel.finalEndingSystemVolume.append(volumePostSimpleTest)
-        print("Volume Post Test: \(volumePostSimpleTest)")
+//        print("Volume Post Test: \(volumePostSimpleTest)")
 //        print("setupDataModel finalEndingSystemVolume: \(systemSettingsModel.finalEndingSystemVolume)")
     }
     
@@ -59,10 +78,18 @@ struct PostSimpleTestView: View {
 //        await systemSettingsModel.saveSystemToJSON()
 //        await systemSettingsModel.writeSystemResultsToCSV()
     }
+    
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
 }
 
-//struct PostSimpleTestView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PostSimpleTestView()
-//    }
-//}
+struct PostSimpleTestView_Previews: PreviewProvider {
+    static var previews: some View {
+        PostSimpleTestView(testing: nil, relatedLinkTesting: linkTesting)
+    }
+    
+    static func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+}

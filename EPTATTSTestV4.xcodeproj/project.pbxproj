@@ -32,7 +32,6 @@
 		7C3316F128D25D2700721935 /* PostBilateral1kHzTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3316F028D25D2700721935 /* PostBilateral1kHzTestView.swift */; };
 		7C33E33428D82C2900435AE9 /* EHAInterimPreEHAP2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33E33328D82C2900435AE9 /* EHAInterimPreEHAP2View.swift */; };
 		7C3D20AD289DADCB0039EDA6 /* EPTATTSTestV4App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3D20AC289DADCB0039EDA6 /* EPTATTSTestV4App.swift */; };
-		7C3D20AF289DADCB0039EDA6 /* EPTATTSTestV4List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3D20AE289DADCB0039EDA6 /* EPTATTSTestV4List.swift */; };
 		7C3D20B1289DADCC0039EDA6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C3D20B0289DADCC0039EDA6 /* Assets.xcassets */; };
 		7C3D20B4289DADCC0039EDA6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C3D20B3289DADCC0039EDA6 /* Preview Assets.xcassets */; };
 		7C3D20BD289DB1BA0039EDA6 /* AudioSessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3D20BC289DB1BA0039EDA6 /* AudioSessionModel.swift */; };
@@ -611,7 +610,6 @@
 				7C99A16D28C95DFA00E46C65 /* Bilateral1kHzTestView.swift */,
 				7C3316F028D25D2700721935 /* PostBilateral1kHzTestView.swift */,
 				7C4D018928C1724100361559 /* EHATTSTestPart1View.swift */,
-				7C3D20AE289DADCB0039EDA6 /* EPTATTSTestV4List.swift */,
 				7C4D018B28C1728D00361559 /* SimpleTestView.swift */,
 				7C24C1E528BEC8F1006E77DD /* PostAllTestsSplashView.swift */,
 				7C24C1EB28BEE0A1006E77DD /* PostTestDirectorSplashView.swift */,
@@ -632,6 +630,7 @@
 				7C99A16B28C95D0800E46C65 /* DONOTChangeReferenceEHATest.swift */,
 				7C0AE96C28CCF55D00A4F652 /* DONOTChangeReferenceEPTATTSTestV4List.swift */,
 				7CCB2B2C28D4C5CD00056C49 /* DONOTChangeReferenceEHAP2TestView.swift */,
+				7C3D20AE289DADCB0039EDA6 /* EPTATTSTestV4List.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -917,7 +916,6 @@
 				7C24C1E628BEC8F1006E77DD /* PostAllTestsSplashView.swift in Sources */,
 				7C4D019828C283AE00361559 /* HoldingCSVInputModel.swift in Sources */,
 				7C3E16BA28BC214F003A0DA9 /* TestVideoPlayerView.swift in Sources */,
-				7C3D20AF289DADCB0039EDA6 /* EPTATTSTestV4List.swift in Sources */,
 				7C666D9C28B5D00E007707AC /* UserDataEntryView.swift in Sources */,
 				7C4D018C28C1728D00361559 /* SimpleTestView.swift in Sources */,
 				7C7A94FA28B7007300DD8FAC /* EHADescription.swift in Sources */,

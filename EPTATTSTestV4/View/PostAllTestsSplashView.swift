@@ -27,7 +27,26 @@ struct SaveSystemSettingsEndEPTASimple: Codable {
     }
 }
 
-struct PostAllTestsSplashView: View {
+
+struct PostAllTestsSplashView<Link: View>: View {
+    var testing: Testing?
+    var relatedLinkTesting: (Testing) -> Link
+    
+    var body: some View {
+        if let testing = testing {
+            PostAllTestsSplashContent(testing: testing, relatedLinkTesting: relatedLinkTesting)
+        } else {
+            Text("Error Loading PostAllTestsSplash View")
+                .navigationTitle("")
+        }
+    }
+}
+
+struct PostAllTestsSplashContent<Link: View>: View {
+    var testing: Testing
+    var dataModel = DataModel.shared
+    var relatedLinkTesting: (Testing) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
     
     
     @StateObject var colorModel: ColorModel = ColorModel()
@@ -69,6 +88,9 @@ struct PostAllTestsSplashView: View {
                 Spacer()
                 Text("Post All Test Splash View To Direct To The Correct Results Screen or To EHA Interim Test Screen")
                     .foregroundColor(.white)
+                    .padding()
+                    .padding(.leading)
+                    .padding(.trailing)
                 Spacer()
                 Button {
                     Task {
@@ -78,22 +100,32 @@ struct PostAllTestsSplashView: View {
                         await returnPostTestSelected()
                     }
                 } label: {
-                    Text("Check Test Selection")
-                        .foregroundColor(.blue)
+                    Text("Check Post Test System Setting")
+                        .frame(width: 300, height: 50, alignment: .center)
+                        .foregroundColor(.white)
+                        .background(Color.blue)
+                        .cornerRadius(24)
+                    
                 }
                 Spacer()
                 NavigationLink(destination:
-                                testTakenDirector == 1 ? AnyView(EHAInterimPostEPTAView())
-                                : testTakenDirector == 2 ? AnyView(PostEPTATestView())
-                                : testTakenDirector == 3 ? AnyView(PostSimpleTestView())
-                                : AnyView(PostTestDirectorSplashView())
+                                testTakenDirector == 1 ? AnyView(EHAInterimPostEPTAView(testing: testing, relatedLinkTesting: linkTesting))
+                                : testTakenDirector == 2 ? AnyView(PostEPTATestView(testing: testing, relatedLinkTesting: linkTesting))
+                                : testTakenDirector == 3 ? AnyView(PostSimpleTestView(testing: testing, relatedLinkTesting: linkTesting))
+                                : AnyView(PostTestDirectorSplashView(testing: testing, relatedLinkTesting: linkTesting))
                 ){
                     HStack{
-                       Image(systemName: "arrowshape.bounce.right")
-                            .foregroundColor(.green)
-                       Text("Now Let's Contine!")
-                            .foregroundColor(.green)
-                   }
+                        Spacer()
+                        Text("Now Let's Contine!")
+                        Spacer()
+                        Image(systemName: "arrowshape.bounce.right")
+                            .font(.title)
+                        Spacer()
+                    }
+                    .frame(width: 300, height: 50, alignment: .center)
+                    .foregroundColor(.white)
+                    .background(Color.green)
+                    .cornerRadius(24)
                 }
                 Spacer()
             }
@@ -233,13 +265,9 @@ struct PostAllTestsSplashView: View {
 }
 
 
-//struct PostAllTestsSplashView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PostAllTestsSplashView()
-//    }
-//}
 
-extension PostAllTestsSplashView {
+
+extension PostAllTestsSplashContent {
 //MAKR: -SystemSettingsEndEPTASimpleModel
     
     func getSystemEndData() async {
@@ -320,7 +348,7 @@ extension PostAllTestsSplashView {
     }
 }
 
-extension PostAllTestsSplashView {
+extension PostAllTestsSplashContent {
 //MARK: -SystemSettingsInterimEHAModel
     
     func getInterimEndData() async {
@@ -399,5 +427,17 @@ extension PostAllTestsSplashView {
         }
     }
     
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+}
+
+struct PostAllTestsSplashView_Previews: PreviewProvider {
+    static var previews: some View {
+        PostAllTestsSplashView(testing: nil, relatedLinkTesting: linkTesting)
+    }
     
+    static func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
 }

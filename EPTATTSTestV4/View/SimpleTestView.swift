@@ -48,7 +48,26 @@ struct simpleSaveFinalResults: Codable {  // This is a model
     var jsonStoredSecondGain: [Float]
     var jsonStoredAverageGain: [Float]
 }
-struct SimpleTestView: View {
+struct SimpleTestView<Link: View>: View {
+    
+    var testing: Testing?
+    var relatedLinkTesting: (Testing) -> Link
+    
+    var body: some View {
+        if let testing = testing {
+            SimpleTestContent(testing: testing, relatedLinkTesting: relatedLinkTesting)
+        } else {
+            Text("Error Loading SimpleTest View")
+                .navigationTitle("")
+        }
+    }
+}
+
+struct SimpleTestContent<Link: View>: View {
+    var testing: Testing
+    var dataModel = DataModel.shared
+    var relatedLinkTesting: (Testing) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
     
     enum simpleSampleErrors: Error {
         case simplenotFound
@@ -537,27 +556,22 @@ struct SimpleTestView: View {
     
     func simpleprintData () async {
         DispatchQueue.global(qos: .background).async {
-            print("Start printData)(")
-            print("--------Array Values Logged-------------")
-            print("testPan: \(simple_testPan)")
-            print("testTestGain: \(simple_testTestGain)")
-            print("frequency: \(simple_frequency)")
-            print("testCount: \(simple_testCount)")
-            print("heardArray: \(simple_heardArray)")
-            print("---------------------------------------")
+            Task{
+                print("Start printData)(")
+                print("--------Array Values Logged-------------")
+                print("testPan: \(await simple_testPan)")
+                print("testTestGain: \(await simple_testTestGain)")
+                print("frequency: \(await simple_frequency)")
+                print("testCount: \(await simple_testCount)")
+                print("heardArray: \(await simple_heardArray)")
+                print("---------------------------------------")
+            }
         }
     }
 }
 
 
-//struct SimpleTestView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SimpleTestView()
-//    }
-//}
-
-
-extension SimpleTestView {
+extension SimpleTestContent {
     
 
     enum simpleLastErrors: Error {
@@ -736,8 +750,11 @@ extension SimpleTestView {
     
     func simpleprintReversalGain() async {
         DispatchQueue.global(qos: .background).async {
-            print("New Gain: \(simple_testGain)")
-            print("Reversal Direcction: \(simple_reversalDirection)")
+            Task{
+                print("New Gain: \(await simple_testGain)")
+                print("Reversal Direcction: \(await simple_reversalDirection)")
+                
+            }
         }
     }
     
@@ -885,7 +902,6 @@ extension SimpleTestView {
                 print("=============================")
         } else {
 //                print("Reversal Limit Not Hit")
-
         }
     }
     
@@ -904,29 +920,19 @@ extension SimpleTestView {
         simplestop()
         simpleuserPausedTest = true
         simpleplayingStringColorIndex = 2
-        
-        simpleaudioThread.async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.2, qos: .userInitiated) {
+            simplelocalPlaying = -1
+            simplestop()
+            simpleuserPausedTest = true
+            simpleplayingStringColorIndex = 2
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.6, qos: .userInitiated) {
             simplelocalPlaying = 0
             simplestop()
             simpleuserPausedTest = true
             simpleplayingStringColorIndex = 2
         }
-        
-        DispatchQueue.main.async {
-            simplelocalPlaying = 0
-            simplestop()
-            simpleuserPausedTest = true
-            simpleplayingStringColorIndex = 2
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, qos: .userInitiated) {
-            simplelocalPlaying = 0
-            simplestop()
-            simpleuserPausedTest = true
-            simpleplayingStringColorIndex = 2
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3, qos: .userInitiated) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.4, qos: .userInitiated) {
             simplelocalPlaying = -1
             simplestop()
             simpleuserPausedTest = true
@@ -1212,5 +1218,19 @@ extension SimpleTestView {
              print("CVSWriter Input EHA Part 1 Summary Data Error or Error Finding File for Input Summary CSV \(error)")
          }
     }
+    
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
 }
 
+
+struct SimpleTestView_Previews: PreviewProvider {
+    static var previews: some View {
+        SimpleTestView(testing: nil, relatedLinkTesting: linkTesting)
+    }
+    
+    static func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+}

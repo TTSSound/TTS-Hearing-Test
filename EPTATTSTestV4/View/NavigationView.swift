@@ -387,7 +387,7 @@ struct NavigationView: View {
                         .frame(width: 200, height: 50, alignment: .center)
                         .background(colorModel.tiffanyBlue)
                         .foregroundColor(.white)
-                        .cornerRadius(12)
+                        .cornerRadius(24)
                         .onChange(of: firstTestingTabEnabled) { newValue in
                             firstTestingTabValue = firstTestingTabValueArray[1] ?? EPTATTSTestV4.Testing(id: 8.0, name: "Beta Testing Home", related: [])
                         }
@@ -413,7 +413,7 @@ struct NavigationView: View {
                         .frame(width: 200, height: 50, alignment: .center)
                         .background(colorModel.tiffanyBlue)
                         .foregroundColor(.white)
-                        .cornerRadius(12)
+                        .cornerRadius(24)
                         .onChange(of: secondTestingTabEnabled) { newValue in
                             secondTestingTabValue = secondTestingTabValueArray[1] ?? EPTATTSTestV4.EHATesting(id: 14.1, name: "EHA Interim Pre Part 2 Test", related: [])
                         }
@@ -438,7 +438,7 @@ struct NavigationView: View {
                         .frame(width: 200, height: 50, alignment: .center)
                         .background(colorModel.tiffanyBlue)
                         .foregroundColor(.white)
-                        .cornerRadius(12)
+                        .cornerRadius(24)
                         .onChange(of: closingTabEnabled) { newValue in
                             closingTabValue = closingTabValueArray[1] ?? EPTATTSTestV4.Closing(id: 15.0, name: "Results Landing View", related: [])
                         }
@@ -478,7 +478,7 @@ struct NavigationView: View {
                         .frame(width: 300, height: 100, alignment: .center)
                         .background(colorModel.tiffanyBlue)
                         .foregroundColor(.white)
-                        .cornerRadius(12)
+                        .cornerRadius(24)
                         .hoverEffect()
                         .navigationDestination(for: Setup.self) { setup in
                             DisclaimerView(setup: setup, relatedLink: link)
@@ -499,13 +499,13 @@ struct NavigationView: View {
                     colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
 //                    NavigationLink("Let's Begin Testing!", value: EPTATTSTestV4.Testing(id: 8.0, name: "Beta Testing Home", related: []))
                     if firstTestingTabEnabled == true {
-                        NavigationLink("Let's Begin Testing!", value: firstTestingTabEnabled)
+                        NavigationLink("Let's Begin Testing!", value: EPTATTSTestV4.Testing(id: 8.0, name: "Beta Testing Home", related: []))
                             .font(.title)
                             .padding()
                             .frame(width: 300, height: 100, alignment: .center)
                             .background(colorModel.tiffanyBlue)
                             .foregroundColor(.white)
-                            .cornerRadius(12)
+                            .cornerRadius(24)
                             .hoverEffect()
                             .navigationDestination(for: Testing.self) { testing in
                                 BetaTestingLandingView(testing: testing, relatedLinkTesting: linkTesting)
@@ -538,7 +538,7 @@ struct NavigationView: View {
                             .frame(width: 300, height: 100, alignment: .center)
                             .background(colorModel.tiffanyBlue)
                             .foregroundColor(.white)
-                            .cornerRadius(12)
+                            .cornerRadius(24)
                             .hoverEffect()
                             .navigationDestination(for: EHATesting.self) { ehaTesting in
                                 EHAInterimPreEHAP2View(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
@@ -572,7 +572,7 @@ struct NavigationView: View {
                             .frame(width: 300, height: 100, alignment: .center)
                             .background(colorModel.tiffanyBlue)
                             .foregroundColor(.white)
-                            .cornerRadius(12)
+                            .cornerRadius(24)
                             .hoverEffect()
                             .navigationDestination(for: Closing.self) { closing in
                                 ResultsLandingView(closing: closing, relatedLinkClosing: linkClosing)
@@ -643,18 +643,18 @@ struct NavigationView: View {
 
     
     func getLinks() {
-        ForEach(dataModel.setups, id: \.self) { setup in
-            NavigationLink(setup.name, value: setup)
-        }
-        ForEach(dataModel.testings, id: \.self) { testing in
-            NavigationLink(testing.name, value: testing)
-        }
-        ForEach(dataModel.ehaTestings, id: \.self) { ehaTesting in
-            NavigationLink(ehaTesting.name, value: ehaTesting)
-        }
-        ForEach(dataModel.closings, id: \.self) { closing in
-            NavigationLink(closing.name, value: closing)
-        }
+//        ForEach(dataModel.setups, id: \.self) { setup in
+//            NavigationLink(setup.name, value: setup)
+//        }
+//        ForEach(dataModel.testings, id: \.self) { testing in
+//            NavigationLink(testing.name, value: testing)
+//        }
+//        ForEach(dataModel.ehaTestings, id: \.self) { ehaTesting in
+//            NavigationLink(ehaTesting.name, value: ehaTesting)
+//        }
+//        ForEach(dataModel.closings, id: \.self) { closing in
+//            NavigationLink(closing.name, value: closing)
+//        }
         print(dataModel.setups)
     }
     

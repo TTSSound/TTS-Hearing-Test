@@ -18,7 +18,27 @@ struct SaveSystemSettingsInterimStartEHA: Codable {
     }
 }
 
-struct EHAInterimPostEPTAView: View {
+
+struct EHAInterimPostEPTAView<Link: View>: View {
+    var testing: Testing?
+    var relatedLinkTesting: (Testing) -> Link
+    
+    var body: some View {
+        if let testing = testing {
+            EHAInterimPostEPTAContent(testing: testing, relatedLinkTesting: relatedLinkTesting)
+        } else {
+            Text("Error Loading EHAInterimPostEPTA View")
+                .navigationTitle("")
+        }
+    }
+}
+
+
+struct EHAInterimPostEPTAContent<Link: View>: View {
+    var testing: Testing
+    var dataModel = DataModel.shared
+    var relatedLinkTesting: (Testing) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
     
     var audioSessionModel = AudioSessionModel()
     var colorModel: ColorModel = ColorModel()
@@ -74,10 +94,9 @@ struct EHAInterimPostEPTAView: View {
                             await recheckEHASilentMode()
                         }
                     } label: {
-                            Text("Recheck Settings Before Proceeding")
+                            Text("Recheck Settings Now")
                             .padding()
                             .frame(width: 300, height: 50, alignment: .center)
-                            .font(.caption)
                             .background(.green)
                             .foregroundColor(.white)
                             .cornerRadius(300)
@@ -163,17 +182,22 @@ struct EHAInterimPostEPTAView: View {
                     } else if interimEHAResultsSubmitted == true {
                         HStack{
                             Spacer()
-                            NavigationLink {
-//                                EHATTSTestPart2View()
-                                NavigationView()
-                            } label: {
-                                Text("Return Home To See Results and Continue")
-                                    .padding()
-                                    .frame(width: 300, height: 50, alignment: .center)
-                                    .background(.green)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(300)
-                            }
+                            Text("Return Home To See Results and Continue")
+                                .padding()
+                                .foregroundColor(.red)
+                                .font(.title)
+
+//                            NavigationLink {
+////                                EHATTSTestPart2View()
+//                                NavigationView()
+//                            } label: {
+//                                Text("Return Home To See Results and Continue")
+//                                    .padding()
+//                                    .frame(width: 300, height: 50, alignment: .center)
+//                                    .background(.green)
+//                                    .foregroundColor(.white)
+//                                    .cornerRadius(300)
+//                            }
                             Spacer()
                         }
                         .padding(.top, 80)
@@ -316,14 +340,8 @@ struct EHAInterimPostEPTAView: View {
     }
 }
 
-//struct EHAInterimPostEPTAView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        EHAInterimPostEPTAView()
-//    }
-//}
 
-
-extension EHAInterimPostEPTAView {
+extension EHAInterimPostEPTAContent {
     
     func getInterimStartingEHAData() async {
         guard let systemSettingsInterimStartingEHAData = await getSystemInterimStartingEHAJSONData() else { return }
@@ -406,4 +424,19 @@ extension EHAInterimPostEPTAView {
         }
     }
     
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+}
+
+
+
+struct EHAInterimPostEPTAView_Previews: PreviewProvider {
+    static var previews: some View {
+        EHAInterimPostEPTAView(testing: nil, relatedLinkTesting: linkTesting)
+    }
+    
+    static func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
 }

@@ -44,6 +44,21 @@ import CodableCSV
 // final sum score """"
 
 
+struct UserWrittenHearingAssessmentView<Link: View>: View {
+    var testing: Testing?
+    var relatedLinkTesting: (Testing) -> Link
+    
+    var body: some View {
+        if let testing = testing {
+            UserWrittenHearingAssessmentContent(testing: testing, relatedLinkTesting: relatedLinkTesting)
+        } else {
+            Text("Error Loading UserWrittenHearingAssessment View")
+                .navigationTitle("")
+        }
+    }
+}
+
+
 struct SaveSurveyAssessmentResults: Codable {  // This is a model
     var jsonFinalQuestion1responses = [Int]()
     var jsonFinalQuestion2responses = [Int]()
@@ -79,7 +94,11 @@ struct SaveSurveyAssessmentResults: Codable {  // This is a model
 }
 
 
-struct UserWrittenHearingAssessmentView: View {
+struct UserWrittenHearingAssessmentContent<Link: View>: View {
+    var testing: Testing
+    var dataModel = DataModel.shared
+    var relatedLinkTesting: (Testing) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
     
     @StateObject var colorModel: ColorModel = ColorModel()
     
@@ -131,7 +150,7 @@ struct UserWrittenHearingAssessmentView: View {
     @State var submitSurvey: Bool = false
     @State var surveySubmitted = [0]
     
-    @State var continueColor: [Color] = [Color.clear, Color.green]
+    @State var continueColor: [Color] = [Color.clear, Color.green, Color.white]
     
     
     @State var hhsiNoResponses = [Int]()
@@ -165,6 +184,7 @@ struct UserWrittenHearingAssessmentView: View {
             VStack {
             Text("Hearing Self Assessment")
                     .foregroundColor(.white)
+                    .font(.title2)
             Divider()
                 .padding()
                 .frame(height: 2.0)
@@ -594,19 +614,28 @@ struct UserWrittenHearingAssessmentView: View {
                     .frame(height: 2.0)
                     .foregroundColor(colorModel.tiffanyBlue)
                     .background(colorModel.tiffanyBlue)
-                NavigationLink(destination:
-                                surveySubmitted.first == 1 ? AnyView(PreTestView())
-                               : surveySubmitted.first != 1 ? AnyView(SurveyErrorView())
-                               : AnyView(InstructionsForTakingTest())
-                ){
-                    Text("Press to Contine!")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundColor(continueColor[surveySubmitted[0]])
-                        .padding()
+                
+                if surveySubmitted == [1] {
+                    NavigationLink(destination:
+                                    surveySubmitted.first == 1 ? AnyView(PreTestView(testing: testing, relatedLinkTesting: linkTesting))
+                                   : surveySubmitted.first != 1 ? AnyView(SurveyErrorView(testing: testing, relatedLinkTesting: linkTesting))
+                                   : AnyView(TestIDInputView(testing: testing, relatedLinkTesting: linkTesting))
+                    ){
+                        Text("Press to Contine!")
+                            .frame(width: 300, height: 50, alignment: .center)
+                            .foregroundColor(.white)
+                            .background(Color.green)
+                            .cornerRadius(24)
+                    }
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
                 }
+                
+             
             }
+            .padding(.bottom, 40)
         }
+    
     }
     
     func calculateSurveryResponses() async {
@@ -1086,32 +1115,21 @@ struct UserWrittenHearingAssessmentView: View {
             print("CVSWriter Input Survey Error or Error Finding File for Input Survey CSV \(error.localizedDescription)")
         }
     }
+    
+    
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
 }
 
-//struct SurveyErrorView: View {
-//
-//    @StateObject var colorModel: ColorModel = ColorModel()
-//    
-//    var body: some View {
-//        ZStack{
-//            colorModel.colorBackgroundRed.ignoresSafeArea(.all, edges: .top)
-//            VStack{
-//                Spacer()
-//                Text("Please hit BACK and confirm you selected submit survey at the bottom of the survey questions")
-//                    .foregroundColor(.white)
-//                    .font(.title)
-//                    .hoverEffect(/*@START_MENU_TOKEN@*/.highlight/*@END_MENU_TOKEN@*/)
-//                    .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
-//                    .brightness(4.0)
-//                Spacer()
-//            }
-//        }
-//     }
-//}
 
+struct UserWrittenHearingAssessmentView_Previews: PreviewProvider {
+    static var previews: some View {
+        UserWrittenHearingAssessmentView(testing: nil, relatedLinkTesting: linkTesting)
+    }
 
-//struct UserWrittenHearingAssessmentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        UserWrittenHearingAssessmentView()
-//    }
-//}
+    static func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+    
+}

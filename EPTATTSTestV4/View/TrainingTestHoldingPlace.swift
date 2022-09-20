@@ -7,7 +7,25 @@
 
 import SwiftUI
 
-struct TrainingTestHoldingPlace: View {
+struct TrainingTestHoldingPlace<Link: View>: View {
+    var testing: Testing?
+    var relatedLinkTesting: (Testing) -> Link
+    
+    var body: some View {
+        if let testing = testing {
+            TrainingTestHoldingPlaceContent(testing: testing, relatedLinkTesting: relatedLinkTesting)
+        } else {
+            Text("Error Loading TrainingTestHoldingPlace View")
+                .navigationTitle("")
+        }
+    }
+}
+
+struct TrainingTestHoldingPlaceContent<Link: View>: View {
+    var testing: Testing
+    var dataModel = DataModel.shared
+    var relatedLinkTesting: (Testing) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
     
     @StateObject var colorModel: ColorModel = ColorModel()
     
@@ -17,24 +35,22 @@ struct TrainingTestHoldingPlace: View {
     @State var ehaTrainLinkExists = Bool()
     @State var eptaTrainLinkExists = Bool()
     @State var simpleTrainLinkExists = Bool()
-    @State var returnedTrainTestSelected = Int()
+    @State var returnedHoldingTrainTestSelected = 0
+    @State var returnedHoldingTestSelected = 0
+    @State var returnedHoldingTestSelectedArray = ["", "EHA Test", "EPTA Test", "Simple Test", "Error"]
     
     var body: some View {
         
-
-//        NavigationView{
             ZStack{
                 colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
                 VStack{
-                    NavigationLink {
-                        PostAllTestsSplashView()
-                    } label: {
-                        Text("Test Phase Now Complete, Proceed Here")
-                            .foregroundColor(.white)
-                    }
-                    .padding(.top, 40)
-                    .padding(.bottom, 20)
-                    Text("Hold Place for Training Test")
+                    Text("Practice Phase Now Complete.")
+                        .foregroundColor(.white)
+                        .font(.title)
+
+                        .padding(.top, 40)
+                        .padding(.bottom, 20)
+                    Text("Before Starting The Test We Need To Check Your System Settings & Test Selection")
                         .foregroundColor(.white)
                         .padding(.top, 20)
                         .padding(.bottom, 20)
@@ -46,81 +62,119 @@ struct TrainingTestHoldingPlace: View {
                             await returnTrainTestSelected()
                         }
                     } label: {
-                        Text("Check Test Selection")
-                            .foregroundColor(.blue)
+                        Text("Check Settings & Test Selection")
+                            
                     }
+                    .frame(width: 300, height: 50, alignment: .center)
+                    .foregroundColor(.white)
+                    .background(Color.blue)
+                    .cornerRadius(24)
                     .padding(.top, 20)
                     .padding(.bottom, 20)
                     
-                    Text("TestReturned: \(returnedTrainTestSelected)")
+                    Text("TestReturned: \(returnedHoldingTestSelectedArray[returnedHoldingTrainTestSelected])")
                         .foregroundColor(.white)
                         .padding(.top, 20)
                         .padding(.bottom, 20)
                     
-                    NavigationLink(destination:
-                        returnedTrainTestSelected == 1 ? AnyView(EHATTSTestPart1View())
-                        : returnedTrainTestSelected == 2 ? AnyView(EPTATTSTestV4List())
-                        : returnedTrainTestSelected == 3 ? AnyView(SimpleTestView())
-                        : AnyView(TrainingTestHoldingPlace())
-                    ){
+                    Spacer()
+                    if returnedHoldingTrainTestSelected >= 1 {
+                        NavigationLink(destination: Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)) {
+                            HStack{
+                                VStack{
+                                    Text("We are Now Ready To Start The Test.")
+                                        .foregroundColor(.white)
+                                    Text("Continue to Get Started!")
+                                        .foregroundColor(.white)
+                                    Image(systemName: "arrowshape.bounce.right")
+                                        .foregroundColor(.white)
+                                }  
+                            }
+                            .frame(width: 300, height: 100, alignment: .center)
+                            .foregroundColor(.white)
+                            .background(Color.green)
+                            .cornerRadius(24)
+                            .padding(.top, 20)
+                            .padding(.bottom, 40)
+                        }
+                        .padding(.bottom,20)
+                    } else {
                         HStack{
-                           Image(systemName: "arrowshape.bounce.right")
-                                .foregroundColor(.green)
-                           Text("We are Now Ready To Start The Test.\nClick Continue to Get Started!")
-                                .foregroundColor(.green)
-                       }
+                            Image(systemName: "arrowshape.bounce.right")
+                                .foregroundColor(.clear)
+                            Text("")
+                                .foregroundColor(.clear)
+                        }
+                        .frame(width: 300, height: 50, alignment: .center)
+                        .foregroundColor(.clear)
+                        .background(Color.clear)
+                        .cornerRadius(24)
+                        .padding(.top, 20)
+                        .padding(.bottom, 40)
                     }
-                    .foregroundColor(.green)
-                    .foregroundColor(ttLinkColors[ttLinkColorIndex])
-                    .padding(.top, 20)
-                    .padding(.bottom, 20)
-                    
-                    Spacer()
-                    HStack{
-                        Spacer()
-                        NavigationLink("Bilateral1kHzTestView", destination: Bilateral1kHzTestView()).foregroundColor(.blue)
-                        Spacer()
-                        NavigationLink("EHATTSTestPart1", destination: EHATTSTestPart1View()).foregroundColor(.green)
-                        Spacer()
-                    }
-                    Spacer()
-                    HStack{
-                        Spacer()
-                        NavigationLink("EHATTSTestPart2View", destination: EHATTSTestPart2View()).foregroundColor(.orange)
-                        Spacer()
-                        NavigationLink("SimpleTest", destination: SimpleTestView()).foregroundColor(.red)
-                        Spacer()
-                    }
-                    Spacer()
-     
                 }
-                .onAppear(perform: {
-                    ttLinkColorIndex = 0
-                })
                 .padding(.leading)
                 .padding(.trailing)
-
-            // Present training tones before the test starts
-            // this then links to EPTATTSTestV4List
+                Spacer()
             }
+            .onAppear(perform: {
+                ttLinkColorIndex = 0
+            })
+
         }
-//    }
+                        
+//                    NavigationLink(destination:
+//                        returnedTrainTestSelected == 1 ? AnyView(EHATTSTestPart1View())
+//                        : returnedTrainTestSelected == 2 ? AnyView(EPTATTSTestV4List())
+//                        : returnedTrainTestSelected == 3 ? AnyView(SimpleTestView())
+//                        : AnyView(TrainingTestHoldingPlace(testing: testing, relatedLinkTesting: linkTesting))
+//                    ){
+//                        HStack{
+//                           Image(systemName: "arrowshape.bounce.right")
+//                                .foregroundColor(.green)
+//                           Text("We are Now Ready To Start The Test.\nClick Continue to Get Started!")
+//                                .foregroundColor(.green)
+//                       }
+//                    }
+//                    .foregroundColor(.green)
+//                    .foregroundColor(ttLinkColors[ttLinkColorIndex])
+//                    .padding(.top, 20)
+//                    .padding(.bottom, 20)
+                    
+//                    Spacer()
+//                    HStack{
+//                        Spacer()
+//                        NavigationLink("Bilateral1kHzTestView", destination: Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)).foregroundColor(.blue)
+//                        Spacer()
+//                        NavigationLink("EHATTSTestPart1", destination: EHATTSTestPart1View()).foregroundColor(.green)
+//                        Spacer()
+//                    }
+//                    Spacer()
+//                    HStack{
+//                        Spacer()
+//                        NavigationLink("EHATTSTestPart2View", destination: EHATTSTestPart2View()).foregroundColor(.orange)
+//                        Spacer()
+//                        NavigationLink("SimpleTest", destination: SimpleTestView()).foregroundColor(.red)
+//                        Spacer()
+//                    }
+//                    Spacer()
+
     
     func returnTrainTestSelected() async {
         if ehaTrainLinkExists == true {
-            returnedTrainTestSelected = 1
+            returnedHoldingTrainTestSelected = 1
             print("EHA Test Link Exists")
         } else {
             print("EHA Link Does Not Exist")
         }
         if eptaTrainLinkExists == true {
-            returnedTrainTestSelected = 2
+            returnedHoldingTrainTestSelected = 2
             print("EPTA Test Link Exists")
         } else {
             print("EPTA Link Does Not Exist")
         }
         if simpleTrainLinkExists == true {
-            returnedTrainTestSelected = 3
+            returnedHoldingTrainTestSelected = 3
             print("Simple Test Link Exists")
         } else {
             print("Simple Link Does Not Exist")
@@ -176,10 +230,18 @@ struct TrainingTestHoldingPlace: View {
             }
         }
     }
+    
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
 }
 
-//struct TrainingTest_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TrainingTest()
-//    }
-//}
+struct TrainingTestHoldingPlace_Previews: PreviewProvider {
+    static var previews: some View {
+        TrainingTestHoldingPlace(testing: nil, relatedLinkTesting: linkTesting)
+    }
+
+    static func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+}

@@ -72,7 +72,6 @@ struct TestSelectionView: View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack {
-               Spacer()
                 Text("Test Selection")
                     .foregroundColor(.white)
                     .font(.title)
@@ -85,27 +84,27 @@ struct TestSelectionView: View {
                 Toggle(isOn: $selectedEHA) {
                     Text("I Want the Gold Standard! Give Me The EHA!")
                         .frame(width: 200, height: 50, alignment: .center)
-
+                    
                 }
-//                Toggle("I Want the Gold Standard! Give Me The EHA!", isOn: $selectedEHA)
-                    .foregroundColor(colorModel.neonGreen)
-                    .padding(.leading)
-                    .padding(.leading)
-                    .padding(.trailing)
-                    .padding(.trailing)
-                    .onChange(of: selectedEHA) { ehaValue in
-                        if ehaValue == true {
-                            testSelectionSubmitted.removeAll()
-                            testSelectionSubmitted.append(0)
-                            selectedEPTA = false
-                            selectedSimple = false
-                            singleEHA = 0
-                            singleEPTA = 0
-                            singleSimple = 0
-                            }
-                        }
-                    .padding(.bottom, 20)
-                    .padding(.top, 20)
+                //                Toggle("I Want the Gold Standard! Give Me The EHA!", isOn: $selectedEHA)
+                .foregroundColor(colorModel.neonGreen)
+                .padding(.leading)
+                .padding(.leading)
+                .padding(.trailing)
+                .padding(.trailing)
+                .onChange(of: selectedEHA) { ehaValue in
+                    if ehaValue == true {
+                        testSelectionSubmitted.removeAll()
+                        testSelectionSubmitted.append(0)
+                        selectedEPTA = false
+                        selectedSimple = false
+                        singleEHA = 0
+                        singleEPTA = 0
+                        singleSimple = 0
+                    }
+                }
+                .padding(.bottom, 20)
+                .padding(.top, 20)
                 Divider()
                     .frame(width: 400, height: 3)
                     .background(.gray)
@@ -114,26 +113,26 @@ struct TestSelectionView: View {
                     Text("I Want The Shorter Test. Give Me The EPTA")
                         .frame(width: 200, height: 50, alignment: .center)
                 }
-//                Toggle("I'm Only Interested In Assessing My Hearing. Give me the EPTA", isOn: $selectedEPTA)
-                    .padding(.leading)
-                    .padding(.leading)
-                    .padding(.trailing)
-                    .padding(.trailing)
-                    .foregroundColor(colorModel.limeGreen)
-//                    .foregroundColor(Color(red: 0.6901960784313725, green: 0.5529411764705883, blue: 0.3411764705882353))
-                    .onChange(of: selectedEPTA) { eptaValue in
-                        if eptaValue == true {
-                            testSelectionSubmitted.removeAll()
-                            testSelectionSubmitted.append(1)
-                            selectedEHA = false
-                            selectedSimple = false
-                            singleEHA = 0
-                            singleEPTA = 0
-                            singleSimple = 0
-                        }
+                //                Toggle("I'm Only Interested In Assessing My Hearing. Give me the EPTA", isOn: $selectedEPTA)
+                .padding(.leading)
+                .padding(.leading)
+                .padding(.trailing)
+                .padding(.trailing)
+                .foregroundColor(colorModel.limeGreen)
+                //                    .foregroundColor(Color(red: 0.6901960784313725, green: 0.5529411764705883, blue: 0.3411764705882353))
+                .onChange(of: selectedEPTA) { eptaValue in
+                    if eptaValue == true {
+                        testSelectionSubmitted.removeAll()
+                        testSelectionSubmitted.append(1)
+                        selectedEHA = false
+                        selectedSimple = false
+                        singleEHA = 0
+                        singleEPTA = 0
+                        singleSimple = 0
                     }
-                    .padding(.top, 20)
-                    .padding(.bottom, 20)
+                }
+                .padding(.top, 20)
+                .padding(.bottom, 20)
                 Divider()
                     .frame(width: 400, height: 3)
                     .background(.gray)
@@ -142,115 +141,118 @@ struct TestSelectionView: View {
                     Text("I Only Want A Trial. Give me the Simple Test.")
                         .frame(width: 200, height: 50, alignment: .center)
                 }
-//                Toggle("I'd Like To Trial The Simple Hearing Test.", isOn: $selectedSimple)
-                    .padding(.leading)
-                    .padding(.leading)
-                    .padding(.trailing)
-                    .padding(.trailing)
-                    .foregroundColor(colorModel.darkNeonGreen)
-                    .onChange(of: selectedSimple) { simpleValue in
-                        if simpleValue == true {
-                            testSelectionSubmitted.removeAll()
-                            testSelectionSubmitted.append(2)
-                            selectedEHA = false
-                            selectedEPTA = false
-                            singleEHA = 0
-                            singleEPTA = 0
-                            singleSimple = 0
-                        }
+                //                Toggle("I'd Like To Trial The Simple Hearing Test.", isOn: $selectedSimple)
+                .padding(.leading)
+                .padding(.leading)
+                .padding(.trailing)
+                .padding(.trailing)
+                .foregroundColor(colorModel.darkNeonGreen)
+                .onChange(of: selectedSimple) { simpleValue in
+                    if simpleValue == true {
+                        testSelectionSubmitted.removeAll()
+                        testSelectionSubmitted.append(2)
+                        selectedEHA = false
+                        selectedEPTA = false
+                        singleEHA = 0
+                        singleEPTA = 0
+                        singleSimple = 0
                     }
-                    .padding(.top, 20)
-                    .padding(.bottom, 20)
+                }
+                .padding(.top, 20)
+                .padding(.bottom, 20)
                 Divider()
                     .frame(width: 400, height: 3)
                     .background(.gray)
                     .foregroundColor(.gray)
                 
-//!!!! Need to setup logic to catch mismatches, nonpurchased but selected EHA and dual or no selection and send user to a splash screen notifying to check selections again, run reset arrays function, and return user to selection screen. NOTE need to account for payment of EHA if it already went through so user does not double pay on second try at selection.
-//possibly use non standard if else navigation link results
+                //!!!! Need to setup logic to catch mismatches, nonpurchased but selected EHA and dual or no selection and send user to a splash screen notifying to check selections again, run reset arrays function, and return user to selection screen. NOTE need to account for payment of EHA if it already went through so user does not double pay on second try at selection.
+                //possibly use non standard if else navigation link results
                 
-                if isOkayToContinue == false {
-                    HStack{
+                HStack{
                     Spacer()
-                        Button {
-                            Task(priority: .userInitiated, operation: {
-                                await singleSelection()
-                                await checkMultipleSelections()
-                                await isSelectionSuccessful()
-                                print("button clicked")
-                                await finalTestSelectionArrays()
-                                await saveTestSelection()
-                                await saveTestLinkFile()
-                            })
-                        } label: {
-                            HStack{
-                                Spacer()
-                                Text("Submit Selection")
-                                Spacer()
-                                Image(systemName: "arrow.up.doc.fill")
-                                Spacer()
+                    if isOkayToContinue == false {
+                        HStack{
+                            Spacer()
+                            Button {
+                                Task(priority: .userInitiated, operation: {
+                                    await singleSelection()
+                                    await checkMultipleSelections()
+                                    await isSelectionSuccessful()
+                                    print("button clicked")
+                                    await finalTestSelectionArrays()
+                                    await saveTestSelection()
+                                    await saveTestLinkFile()
+                                })
+                            } label: {
+                                HStack{
+                                    Spacer()
+                                    Text("Submit Selection")
+                                    Spacer()
+                                    Image(systemName: "arrow.up.doc.fill")
+                                    Spacer()
+                                }
+                                .frame(width: 280, height: 50, alignment: .center)
+                                .background(Color.blue).opacity(0.7)
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
                             }
-                            .frame(width: 200, height: 50, alignment: .center)
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(300)
+                            Spacer()
                         }
+                        .padding(.top, 80)
+                        .padding(.bottom, 20)
+                    } else if isOkayToContinue == true && selectedSimple == true {
+                        HStack{
+                            Spacer()
+                            NavigationLink(destination:
+                                            isOkayToContinue == true ? AnyView(CalibrationAssessmentView())
+                                           : isOkayToContinue == false ? AnyView(TestSelectionSplashView())
+                                           : AnyView(TestSelectionView())
+                            ){
+                                HStack{
+                                    Spacer()
+                                    Text("Continue To Setup")
+                                    Spacer()
+                                    Image(systemName: "arrowshape.bounce.right")
+                                    Spacer()
+                                }
+                                .frame(width: 280, height: 50, alignment: .center)
+                                .background(Color.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
+                            }
+                            Spacer()
+                        }
+                        .padding(.top, 80)
+                        .padding(.bottom, 20)
+                    } else if isOkayToContinue == true && selectedEHA == true || selectedEPTA == true {
+                        HStack{
+                            Spacer()
+                            NavigationLink(destination:
+                                            isOkayToContinue == true ? AnyView(InAppPurchaseView())
+                                           : isOkayToContinue == false ? AnyView(TestSelectionSplashView())
+                                           : AnyView(TestSelectionView())
+                            ){
+                                HStack{
+                                    Spacer()
+                                    Text("Continue To Purchase")
+                                    Spacer()
+                                    Image(systemName: "purchased.circle")
+                                    Spacer()
+                                }
+                                .frame(width: 300, height: 50, alignment: .center)
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .hoverEffect()
+                                .cornerRadius(24)
+                            }
+                            Spacer()
+                        }
+                        .padding(.top, 80)
+                        .padding(.bottom, 20)
+                    }
                     Spacer()
-                    }
-                    .padding(.top, 120)
-                    .padding(.bottom, 40)
-                    Spacer()
-               
-                } else if isOkayToContinue == true && selectedSimple == true {
-                    HStack{
-                        Spacer()
-                        NavigationLink(destination:
-                                        isOkayToContinue == true ? AnyView(CalibrationAssessmentView())
-                                       : isOkayToContinue == false ? AnyView(TestSelectionSplashView())
-                                       : AnyView(TestSelectionView())
-                        ){
-                            HStack{
-                                Spacer()
-                                Text("Continue To Setup")
-                                Spacer()
-                                Image(systemName: "arrowshape.bounce.right")
-                                Spacer()
-                            }
-                            .frame(width: 200, height: 50, alignment: .center)
-                            .background(Color.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(300)
-                        }
-                        Spacer()
-                    }
-                    .padding(.top, 120)
-                    .padding(.bottom, 40)
-//                    Spacer()
-                } else if isOkayToContinue == true && selectedEHA == true || selectedEPTA == true {
-                    HStack{
-                        Spacer()
-                        NavigationLink(destination:
-                                        isOkayToContinue == true ? AnyView(InAppPurchaseView())
-                                       : isOkayToContinue == false ? AnyView(TestSelectionSplashView())
-                                       : AnyView(TestSelectionView())
-                        ){
-                            HStack{
-                                Spacer()
-                                Text("Continue To Purchase")
-                                Spacer()
-                                Image(systemName: "purchased.circle")
-                                Spacer()
-                            }
-                            .frame(width: 200, height: 50, alignment: .center)
-                            .background(Color.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(300)
-                        }
-                        Spacer()
-                    }
-                    .padding(.top, 120)
-                    .padding(.bottom, 40)
                 }
+                Spacer()
             }
         }
         .onAppear {

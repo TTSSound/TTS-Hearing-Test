@@ -17,6 +17,7 @@ struct PurchaseView: View {
             VStack{
                 Text("Post Test Up-Sell Purchase View")
                     .foregroundColor(.white)
+                    .padding(.bottom,80)
                 // EHA Purchase Option
                 // Hardware Purhcase Option
                 // Filter Purhcase Option

@@ -55,14 +55,10 @@ struct UserLoginContent<Link: View>: View {
                     .padding(.bottom, 20)
                     .padding(.leading,10)
                     .padding(.trailing, 10)
-        
-                NavigationLink("Disclaimer", destination: DisclaimerView(setup: setup, relatedLink: link))
-                    .foregroundColor(.green)
-                
             })
             .foregroundColor(.pink)
         }
-        .navigationTitle(setup.name)
+        .navigationTitle("")
     }
 // !!!!!! WILL NEED TO ADD VARIABLES FOR THIS ACTION INTO SETUPDATAMODEL, JSONS AND CSV WRITERS
     

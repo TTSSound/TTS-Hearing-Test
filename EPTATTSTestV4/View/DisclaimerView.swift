@@ -125,15 +125,15 @@ struct DisclaimerContent<Link: View>: View {
                                     : AnyView(LandingView())
                     ){  HStack {
                             Spacer()
-                            Text("Continue")
+                            Text("Now Let's Contine!")
                             Spacer()
                             Image(systemName: "arrowshape.bounce.right")
                             Spacer()
                         }
-                        .frame(width: 200, height: 50, alignment: .center)
+                        .frame(width: 300, height: 50, alignment: .center)
                         .background(dLinkColors[dLinkColorIndex])
                         .foregroundColor(dLinkColors2[dLinkColorIndex])
-                        .cornerRadius(300)
+                        .cornerRadius(24)
                         
                     }
                     .padding(.bottom, 40)

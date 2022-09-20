@@ -92,29 +92,38 @@ struct ManualDeviceDisclaimerView: View {
                         }
                     }
                 Spacer()
-                NavigationLink(destination:
-                                uncalUserAgreed == true ? AnyView(ManualDeviceEntryView())
-                                : uncalUserAgreed == false ? AnyView(ManualDeviceEntryInformationView())
-                                : AnyView(ManualDeviceEntryInformationView())
-                ){  VStack{
-                    Image(systemName: "arrowshape.bounce.right")
-                    Text("Let's Proceed")
+                if uncalUserAgreed == true {
+                    NavigationLink(destination:
+                                    uncalUserAgreed == true ? AnyView(ManualDeviceEntryView())
+                                   : uncalUserAgreed == false ? AnyView(ManualDeviceEntryInformationView())
+                                   : AnyView(ManualDeviceEntryInformationView())
+                    ){  HStack{
+                        Spacer()
+                        Text("Now Let's Continue")
+                        Spacer()
+                        Image(systemName: "arrowshape.bounce.right")
+                        Spacer()
+                    }
+                    .frame(width: 300, height: 50, alignment: .center)
+                    .foregroundColor(.white)
+                    .background(Color.green)
+                    .cornerRadius(24)
+                    }
+                    .foregroundColor(unLinkColors[unLinkColorIndex])
+                    .onTapGesture {
+                        Task(priority: .userInitiated, operation: {
+    //                        await uncalCompareDisclaimerAgreement()
+    //                        await uncalDisclaimerResponse()
+    //                        await concentenateFinalUncalDisclaimerArrays()
+    //                        await saveManualDeviceDisclaimer()
+                            print("uncalDisclaimerSetting: \(uncalDisclaimerSetting)")
+                            print("uncalDisclaimerAgreement: \(uncalDisclaimerAgreement)")
+                        })
                     }
                 }
-                .foregroundColor(unLinkColors[unLinkColorIndex])
-                .onTapGesture {
-                    Task(priority: .userInitiated, operation: {
-//                        await uncalCompareDisclaimerAgreement()
-//                        await uncalDisclaimerResponse()
-//                        await concentenateFinalUncalDisclaimerArrays()
-//                        await saveManualDeviceDisclaimer()
-                        print("uncalDisclaimerSetting: \(uncalDisclaimerSetting)")
-                        print("uncalDisclaimerAgreement: \(uncalDisclaimerAgreement)")
-                    })
-                }
-                .padding(.bottom, 40)
-                Spacer()
             }
+            .padding(.bottom, 40)
+            Spacer()
         }
     }
 

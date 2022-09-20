@@ -118,13 +118,19 @@ struct BetaTestingLandingContent<Link: View>: View {
                     }
                     .padding(.top, 20)
                     
-                    Toggle("Shorter EPTA Selected", isOn: $betaEPTA)
-                        .foregroundColor(.green)
-                        .padding(.top, 10)
-                        
                     Toggle("Full EHA Selected", isOn: $betaEHA)
                         .foregroundColor(.green)
                         .padding(.top, 10)
+                        .padding(.leading)
+                        .padding(.trailing)
+                    
+                    Toggle("Shorter EPTA Selected", isOn: $betaEPTA)
+                        .foregroundColor(.blue)
+                        .padding(.top, 10)
+                        .padding(.leading)
+                        .padding(.trailing)
+                        
+
                     if betaSelectionsSubmitted == false {
                         Button {
                             Task(priority: .userInitiated) {
@@ -135,30 +141,38 @@ struct BetaTestingLandingContent<Link: View>: View {
                                 betaSelectionsSubmitted = true
                             }
                         } label: {
-                            VStack{
+                            HStack{
+                                Text("Submit Selection")
+                                    .padding()
                                 Image(systemName: "arrow.up.doc.fill")
                                     .font(.title)
                                     .padding()
-                                Text("Submit Selection")
+                                
                             }
-                            .foregroundColor(.blue)
+                            .frame(width: 300, height: 50, alignment: .center)
+                            .foregroundColor(.white)
+                            .background(Color.blue)
+                            .cornerRadius(24)
                         }
                         .padding(.top, 20)
                         .padding(.bottom, 20)
                     }
                     if betaSelectionsSubmitted == true {
                         NavigationLink {
-                            TestIDInputView()
+                            TestIDInputView(testing: testing, relatedLinkTesting: linkTesting)
 //                            Bilateral1kHzTestView()
                         } label: {
-                            VStack{
+                            HStack{
+                                Spacer()
+                                Text("Continue to Start Testing!")
+                                Spacer()
                                 Image(systemName: "arrowshape.bounce.right")
-                                    .foregroundColor(.green)
-                                    .font(.title)
-                                    .padding(.all)
-                                Text("We are Now Ready To Start The Test.\nClick Continue to Get Started!")
-                                    .foregroundColor(.green)
+                                Spacer()
                             }
+                            .frame(width: 300, height: 50, alignment: .center)
+                            .foregroundColor(.white)
+                            .background(Color.green)
+                            .cornerRadius(24)
                         }
                         .padding(.top, 20)
                         .padding(.bottom, 20)

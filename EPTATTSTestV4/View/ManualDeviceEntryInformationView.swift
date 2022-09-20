@@ -26,52 +26,62 @@ struct ManualDeviceEntryInformationView: View {
                         .foregroundColor(.white)
                         .multilineTextAlignment(.leading)
                         .padding(.leading)
+                        .padding(.bottom, 20)
+                    NavigationLink  {
+                        CalibrationSplashView()
+                    } label: {
+                        VStack {
+                            Text("If You Would Prefer To Have Analytical Test Results, Review Our List Of Recommendations For Those That Do Not Already Own a Pair Of Calibrated Ear/Headphones")
+                                .multilineTextAlignment(.leading)
+                                .padding(.leading)
+                                .padding(.trailing)
+                                .foregroundColor(.white)
+                            HStack{
+                                Spacer()
+                                Image(systemName: "arrowshape.turn.up.backward.2")
+                                    .font(.title)
+                                Spacer()
+                            }
+                            .foregroundColor(.white)
+                        }
+                        .frame(width: 300, height: 200, alignment: .center)
+                        .background(Color.green)
+                        .cornerRadius(24)
+                    }
+                    .padding(.bottom, 20)
+                    
+                    NavigationLink {
+                        ManualDeviceDisclaimerView()
+                    } label: {
+                        VStack {
+                            Text("If Your Are Interested In Continuing With An Uncalibrated Test, Proceed To Enter Your Device Information and Review The Corresponding Agreement")
+                                .foregroundColor(.white)
+                                .multilineTextAlignment(.leading)
+                                .padding(.trailing)
+                                .padding(.leading)
+                            HStack{
+                                Spacer()
+                                Image(systemName: "arrowshape.bounce.right")
+                                    .foregroundColor(.blue)
+                                    .font(.title)
+                                Spacer()
+                            }
+                        }
+                        .frame(width: 300, height: 200, alignment: .center)
+                        .background(Color.gray)
+                        .cornerRadius(24)
+                    }
+                    .padding(.bottom, 20)
                 }
-                .frame(width: 375, height: 350, alignment: .leading)
+                .padding(.top, 20)
+                .padding(.bottom, 40)
+                .padding(.leading)
+                .padding(.trailing)
+                .cornerRadius(24)
                 .background(.clear)
-
-                NavigationLink  {
-                    CalibrationSplashView()
-                } label: {
-                    VStack {
-                        Text("If You Would Prefer To Have Analytical Test Results, Review Our List Of Recommendations For Those That Do Not Already Own a Pair Of Calibrated Ear/Headphones")
-                            .foregroundColor(.green)
-                            .multilineTextAlignment(.leading)
-                            .padding(.leading)
-                            .padding(.trailing)
-                        HStack{
-                            Spacer()
-                            Image(systemName: "arrowshape.turn.up.backward.2")
-                                .foregroundColor(.green)
-                                .font(.title)
-                            Spacer()
-                        }
-                    }
-                }
-
-                NavigationLink {
-                    ManualDeviceDisclaimerView()
-                } label: {
-                    VStack {
-                        Text("If Your Are Interested In Continuing With An Uncalibrated Test, Proceed To Enter Your Device Information and Review The Corresponding Agreement")
-                            .font(.subheadline)
-                            .foregroundColor(.blue)
-                            .multilineTextAlignment(.leading)
-                            .padding(.trailing)
-                        HStack{
-                            Spacer()
-                            Image(systemName: "arrowshape.bounce.right")
-                                .foregroundColor(.blue)
-                                .font(.title)
-                            Spacer()
-                        }
-                    }
-                }
                 Spacer()
             }
         }
-
-        
     }
 }
 

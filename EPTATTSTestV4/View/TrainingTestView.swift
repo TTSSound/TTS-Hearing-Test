@@ -23,6 +23,20 @@ import CodableCSV
 //import FileProvider
 //import Alamofire
 
+struct TrainingTestView<Link: View>: View {
+    var testing: Testing?
+    var relatedLinkTesting: (Testing) -> Link
+    
+    var body: some View {
+        if let testing = testing {
+            TrainingTestContent(testing: testing, relatedLinkTesting: relatedLinkTesting)
+        } else {
+            Text("Error Loading TrainingTest View")
+                .navigationTitle("")
+        }
+    }
+}
+
 
 struct trainingSaveFinalResults: Codable {  // This is a model
     var jsonName = String()
@@ -49,8 +63,11 @@ struct trainingSaveFinalResults: Codable {  // This is a model
     var jsonStoredAverageGain: [Float]
 }
 
-struct TrainingTestView: View {
-    
+struct TrainingTestContent<Link: View>: View {
+    var testing: Testing
+    var dataModel = DataModel.shared
+    var relatedLinkTesting: (Testing) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
     
     enum trainingSampleErrors: Error {
         case trainingnotFound
@@ -157,14 +174,15 @@ struct TrainingTestView: View {
 
     let trainingheardThread = DispatchQueue(label: "BackGroundThread", qos: .userInitiated)
     let trainingarrayThread = DispatchQueue(label: "BackGroundPlayBack", qos: .background)
-    let trainingaudioThread = DispatchQueue(label: "AudioThread", qos: .userInitiated)
+    let trainingaudioThread = DispatchQueue(label: "AudioThread", qos: .background)
     let trainingpreEventThread = DispatchQueue(label: "PreeventThread", qos: .userInitiated)
+    
+    @State var P: Testing?
     
     var body: some View {
  
         ZStack{
             colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
-//            RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
             VStack {
                 Spacer()
                 if trainingfullTestCompleted == false {
@@ -176,15 +194,21 @@ struct TrainingTestView: View {
                         .padding(.top, 40)
                         .padding(.bottom, 20)
                 } else if trainingfullTestCompleted == true {
-             
-                    NavigationLink("Training Complete. Continue", destination: Bilateral1kHzTestView())//, isActive: $trainingTestCompleted)
-                        .padding()
-                        .frame(width: 200, height: 50, alignment: .center)
-                        .background(.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(300)
-                        .padding(.top, 40)
-                        .padding(.bottom, 20)
+                    HStack{
+                        NavigationLink("Training Complete. Continue.", destination: Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting))
+//                        NavigationLink("Training Complete. Contine.", value: P)
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(24)
+                            .padding(.top, 40)
+                            .padding(.bottom, 20)
+                    }
+                    .navigationDestination(isPresented: $trainingTestCompleted) {
+                        Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)
+                    }
+
                 }
 
                 Spacer()
@@ -202,7 +226,7 @@ struct TrainingTestView: View {
                             .frame(width: 200, height: 50, alignment: .center)
                             .background(colorModel.tiffanyBlue)
                             .foregroundColor(.white)
-                            .cornerRadius(300)
+                            .cornerRadius(24)
                     }
                     .padding(.top, 20)
                     .padding(.bottom, 20)
@@ -213,7 +237,7 @@ struct TrainingTestView: View {
                         .frame(width: 200, height: 50, alignment: .center)
                         .background(Color .clear)
                         .foregroundColor(.clear)
-                        .cornerRadius(300)
+                        .cornerRadius(24)
                         .padding(.top, 20)
                         .padding(.bottom, 40)
                     
@@ -249,7 +273,7 @@ struct TrainingTestView: View {
                             .frame(width: 200, height: 50, alignment: .center)
                             .background(Color .yellow)
                             .foregroundColor(.black)
-                            .cornerRadius(300)
+                            .cornerRadius(24)
                         
                     }
                     .padding(.top, 20)
@@ -270,7 +294,7 @@ struct TrainingTestView: View {
                             .padding()
                             .frame(width: 200, height: 50, alignment: .center)
                             .background(trainingplayingAlternateStringColor[trainingplayingStringColorIndex])
-                            .cornerRadius(300)
+                            .cornerRadius(24)
                     }
                     .padding(.top, 20)
                     .padding(.bottom, 40)
@@ -286,7 +310,7 @@ struct TrainingTestView: View {
                         .frame(width: 300, height: 100, alignment: .center)
                         .background(Color .green)
                         .foregroundColor(.black)
-                        .cornerRadius(300)
+                        .cornerRadius(24)
                 }
                 .padding(.top, 20)
                 .padding(.bottom, 80)
@@ -299,7 +323,6 @@ struct TrainingTestView: View {
             .fullScreenCover(isPresented: $trainingshowTestCompletionSheet, content: {
                 ZStack{
                     colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
-//                    RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
                     VStack(alignment: .leading) {
                         
                         Button(action: {
@@ -339,6 +362,7 @@ struct TrainingTestView: View {
                             HStack{
                                 Spacer()
                                 Button {
+                                    P = EPTATTSTestV4.Testing(id: 11.2, name: "1kHz Test", related: [])
                                     trainingTestCompleted = true
                                     trainingshowTestCompletionSheet.toggle()
                                 } label: {
@@ -348,7 +372,7 @@ struct TrainingTestView: View {
                                         .frame(width: 200, height: 50, alignment: .center)
                                         .background(Color .green)
                                         .foregroundColor(.white)
-                                        .cornerRadius(300)
+                                        .cornerRadius(24)
                                 }
                                 Spacer()
                             }
@@ -358,7 +382,12 @@ struct TrainingTestView: View {
                         Spacer()
                     }
                 }
+                
             })
+            .navigationDestination(isPresented: $trainingTestCompleted, destination: {
+                TrainingTestHoldingPlace(testing: testing, relatedLinkTesting: linkTesting)
+            })
+            //EPTATTSTestV4.Testing(id: 11.2, name: "1kHz Test", related: [])
         }
         .onChange(of: trainingtestIsPlaying, perform: { trainingtestBoolValue in
             if trainingtestBoolValue == true && trainingendTestSeriesValue == false {
@@ -677,6 +706,10 @@ struct TrainingTestView: View {
         trainingidxTestCountUpdated = training_testCount.count + 1
         training_testCount.append(trainingidxTestCountUpdated)
     }
+    
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
 
     
 //    func arrayTesting() async {
@@ -703,13 +736,8 @@ struct TrainingTestView: View {
 //    }
 }
 
-struct TrainingTestView_Previews: PreviewProvider {
-    static var previews: some View {
-        TrainingTestView()
-    }
-}
 
-extension TrainingTestView {
+extension TrainingTestContent {
     
     enum trainingLastErrors: Error {
         case traininglastError
@@ -894,12 +922,12 @@ extension TrainingTestView {
         }
     }
     
-//    func trainingprintReversalGain() async {
-//        DispatchQueue.global(qos: .background).async {
-//            print("New Gain: \(training_testGain)")
-//            print("Reversal Direcction: \(training_reversalDirection)")
-//        }
-//    }
+    //    func trainingprintReversalGain() async {
+    //        DispatchQueue.global(qos: .background).async {
+    //            print("New Gain: \(training_testGain)")
+    //            print("Reversal Direcction: \(training_reversalDirection)")
+    //        }
+    //    }
     
     func trainingreversalHeardCount1() async {
         await trainingreversalAction()
@@ -980,20 +1008,20 @@ extension TrainingTestView {
         }
     }
     
-//    func trainingprintReversalData() async {
-//        print("--------Reversal Values Logged-------------")
-//        print("indexForTest: \(training_indexForTest)")
-//        print("Test Pan: \(training_testPan)")
-//        print("New TestGain: \(training_testTestGain)")
-//        print("reversalFrequency: \(trainingactiveFrequency)")
-//        print("testCount: \(training_testCount)")
-//        print("heardArray: \(training_heardArray)")
-//        print("reversalHeard: \(training_reversalHeard)")
-//        print("FirstGain: \(trainingfirstGain)")
-//        print("SecondGain: \(trainingsecondGain)")
-//        print("AverageGain: \(training_averageGain)")
-//        print("------------------------------------------")
-//    }
+    //    func trainingprintReversalData() async {
+    //        print("--------Reversal Values Logged-------------")
+    //        print("indexForTest: \(training_indexForTest)")
+    //        print("Test Pan: \(training_testPan)")
+    //        print("New TestGain: \(training_testTestGain)")
+    //        print("reversalFrequency: \(trainingactiveFrequency)")
+    //        print("testCount: \(training_testCount)")
+    //        print("heardArray: \(training_heardArray)")
+    //        print("reversalHeard: \(training_reversalHeard)")
+    //        print("FirstGain: \(trainingfirstGain)")
+    //        print("SecondGain: \(trainingsecondGain)")
+    //        print("AverageGain: \(training_averageGain)")
+    //        print("------------------------------------------")
+    //    }
     
     func trainingrestartPresentation() async {
         if trainingendTestSeriesValue == false {
@@ -1034,14 +1062,14 @@ extension TrainingTestView {
         traininglocalMarkNewTestCycle = 0
         traininglocalReversalEnd = 0
         training_index = training_index + 1
-//        envDataObjectModel_eptaSamplesCountArrayIdx += 1
+        //        envDataObjectModel_eptaSamplesCountArrayIdx += 1
         training_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
         trainingendTestSeriesValue = false
         trainingshowTestCompletionSheet = false
         trainingtestIsPlaying = true
         traininguserPausedTest = false
         trainingplayingStringColorIndex = 2
-//        envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
+        //        envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
         print(training_SamplesCountArray[training_index])
         traininglocalPlaying = 1
     }
@@ -1102,36 +1130,20 @@ extension TrainingTestView {
         trainingstop()
         traininguserPausedTest = true
         trainingplayingStringColorIndex = 2
-        
-//        trainingaudioThread.async {
-//            traininglocalPlaying = 0
-//            trainingstop()
-//            traininguserPausedTest = true
-//            trainingplayingStringColorIndex = 2
-//        }
-//
-//        DispatchQueue.main.async {
-//            traininglocalPlaying = 0
-//            trainingstop()
-//            traininguserPausedTest = true
-//            trainingplayingStringColorIndex = 2
-//        }
-//
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, qos: .userInitiated) {
-//            traininglocalPlaying = 0
-//            trainingstop()
-//            traininguserPausedTest = true
-//            trainingplayingStringColorIndex = 2
-//        }
-//
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 3, qos: .userInitiated) {
-//            traininglocalPlaying = -1
-//            trainingstop()
-//            traininguserPausedTest = true
-//            trainingplayingStringColorIndex = 2
-//        }
     }
 }
+
+struct TrainingTestView_Previews: PreviewProvider {
+    static var previews: some View {
+        TrainingTestView(testing: nil, relatedLinkTesting: linkTesting)
+    }
+    
+    static func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+}
+        
+
     
 //    func trainingconcatenateFinalArrays() async {
 //        if traininglocalMarkNewTestCycle == 1 && traininglocalReversalEnd == 1 {

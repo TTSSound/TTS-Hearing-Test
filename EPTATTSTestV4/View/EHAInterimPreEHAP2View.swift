@@ -15,7 +15,6 @@ struct EHAInterimPreEHAP2View<Link: View>: View {
     
     var ehaTesting: EHATesting?
     var relatedLinkEHATesting: (EHATesting) -> Link
-//    @State var saveSystemSettingsInterimPreEHAP2: SaveSystemSettingsInterimPreEHAP2? = nil
     
     var body: some View {
         if let ehaTesting = ehaTesting {
@@ -188,7 +187,7 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
                         HStack{
                             Spacer()
                             NavigationLink {
-                                EHATTSTestPart2View()
+                                EHATTSTestPart2View(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
                             } label: {
                                 Text("Continue")
                                     .padding()

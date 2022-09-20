@@ -23,6 +23,21 @@ import CodableCSV
 //import Alamofire
 
 
+struct EHATTSTestPart1View<Link: View>: View {
+    var testing: Testing?
+    var relatedLinkTesting: (Testing) -> Link
+    
+    var body: some View {
+        if let testing = testing {
+            EHATTSTestPart1Content(testing: testing, relatedLinkTesting: relatedLinkTesting)
+        } else {
+            Text("Error Loading EHATTSTestPart1 View")
+                .navigationTitle("")
+        }
+    }
+}
+
+
 struct SaveFinalResults: Codable {  // This is a model
     var jsonName = String()
     var jsonAge = Int()
@@ -53,8 +68,12 @@ struct SaveFinalResults: Codable {  // This is a model
 }
 
 
-
-struct EHATTSTestPart1View: View {
+struct EHATTSTestPart1Content<Link: View>: View {
+    var testing: Testing
+    var dataModel = DataModel.shared
+    var relatedLinkTesting: (Testing) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
+    
     enum SampleErrors: Error {
         case notFound
         case unexpected(code: Int)
@@ -203,7 +222,10 @@ struct EHATTSTestPart1View: View {
     @State var userPausedTest: Bool = false
     
     @State var ehaP1fullTestCompleted: Bool = false
-    @State var ehaP1fullTestCompletedHoldingArray: [Bool] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true]
+    @State var ehaP1fullTestCompletedHoldingArray: [Bool] = [false, false, false, false, false, false, false, false,
+                                                             false, false, false, false, false, false, false, false,
+                                                             false, false, false, false, false, false, false, false,
+                                                             false, false, false, false, false, false, false, true]
     
     
     
@@ -253,26 +275,30 @@ struct EHATTSTestPart1View: View {
         
         ZStack{
             colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
-//            RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
             VStack {
                 Spacer()
-                if ehaP1fullTestCompleted == false {
-                    Text("EHA Part 1 / EPTA Test")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding()
-                        .foregroundColor(.white)
-                        .padding(.top, 40)
-                        .padding(.bottom, 20)
-                } else if ehaP1EPTATestCompleted == true {
-                    NavigationLink("Test Phase Complete. Continue", destination: PostAllTestsSplashView())//, isActive: $ehaP1EPTATestCompleted)
-                        .padding()
-                        .frame(width: 200, height: 50, alignment: .center)
-                        .background(.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(300)
-                        .padding(.top, 40)
-                        .padding(.bottom, 20)
+                HStack{
+                    if ehaP1fullTestCompleted == false {
+                        Text("EHA Part 1 / EPTA Test")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .padding()
+                            .foregroundColor(.white)
+                            .padding(.top, 40)
+                            .padding(.bottom, 20)
+                    } else if ehaP1EPTATestCompleted == true {
+                        NavigationLink("Test Phase Complete. Continue.", destination: PostAllTestsSplashView(testing: testing, relatedLinkTesting: linkTesting))
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(24)
+                            .padding(.top, 40)
+                            .padding(.bottom, 20)
+                    }
+                }
+                .navigationDestination(isPresented: $ehaP1fullTestCompleted) {
+                    PostAllTestsSplashView(testing: testing, relatedLinkTesting: linkTesting)
                 }
                 
                 Spacer()
@@ -291,18 +317,18 @@ struct EHATTSTestPart1View: View {
                             .frame(width: 200, height: 50, alignment: .center)
                             .background(colorModel.tiffanyBlue)
                             .foregroundColor(.white)
-                            .cornerRadius(300)
+                            .cornerRadius(24)
                     }
                     .padding(.top, 20)
                     .padding(.bottom, 20)
                     
-                    Text("Gain Setting: \(envDataObjectModel_testGain)")
+                    Text("")
                         .padding()
                         .font(.caption)
                         .frame(width: 200, height: 50, alignment: .center)
-                        .background(Color .black)
-                        .foregroundColor(.white)
-                        .cornerRadius(300)
+                        .background(Color .clear)
+                        .foregroundColor(.clear)
+                        .cornerRadius(24)
                         .padding(.top, 20)
                         .padding(.bottom, 40)
                 } else if ehaP1TestStarted == true {
@@ -336,7 +362,7 @@ struct EHATTSTestPart1View: View {
                             .frame(width: 200, height: 50, alignment: .center)
                             .background(Color .yellow)
                             .foregroundColor(.black)
-                            .cornerRadius(300)
+                            .cornerRadius(24)
                     }
                     .padding(.top, 20)
                     .padding(.bottom, 20)
@@ -357,7 +383,7 @@ struct EHATTSTestPart1View: View {
                             .padding()
                             .frame(width: 200, height: 50, alignment: .center)
                             .background(ehaP1playingAlternateStringColor[playingStringColorIndex])
-                            .cornerRadius(300)
+                            .cornerRadius(24)
                     }
                     .padding(.top, 20)
                     .padding(.bottom, 40)
@@ -373,7 +399,7 @@ struct EHATTSTestPart1View: View {
                         .frame(width: 300, height: 100, alignment: .center)
                         .background(Color .green)
                         .foregroundColor(.black)
-                        .cornerRadius(300)
+                        .cornerRadius(24)
                 }
                 .padding(.top, 20)
                 .padding(.bottom, 80)
@@ -383,10 +409,7 @@ struct EHATTSTestPart1View: View {
             .fullScreenCover(isPresented: $showTestCompletionSheet, content: {
                 ZStack{
                     colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
-//                    RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
-                
                     VStack(alignment: .leading) {
-        
                         Button(action: {
                             if ehaP1fullTestCompleted == true {
                                 showTestCompletionSheet.toggle()
@@ -404,7 +427,7 @@ struct EHATTSTestPart1View: View {
                             Image(systemName: "xmark")
                                 .font(.headline)
                                 .padding(10)
-                                .foregroundColor(.red)
+                                .foregroundColor(.clear)
                         })
                         
                         if ehaP1fullTestCompleted == false {
@@ -429,10 +452,10 @@ struct EHATTSTestPart1View: View {
                                     Text("Start The Next Cycle")
                                         .fontWeight(.bold)
                                         .padding()
-                                        .frame(width: 200, height: 50, alignment: .center)
+                                        .frame(width: 300, height: 50, alignment: .center)
                                         .background(colorModel.tiffanyBlue)
                                         .foregroundColor(.white)
-                                        .cornerRadius(300)
+                                        .cornerRadius(24)
                                 })
                                 Spacer()
                             }
@@ -454,10 +477,10 @@ struct EHATTSTestPart1View: View {
                                     Text("Continue")
                                         .fontWeight(.semibold)
                                         .padding()
-                                        .frame(width: 200, height: 50, alignment: .center)
+                                        .frame(width: 300, height: 50, alignment: .center)
                                         .background(Color .green)
                                         .foregroundColor(.white)
-                                        .cornerRadius(300)
+                                        .cornerRadius(24)
                                 }
                                 Spacer()
                             }
@@ -471,6 +494,7 @@ struct EHATTSTestPart1View: View {
         }
         .onAppear() {
             Task(priority: .userInitiated) {
+                print("envDataObjectModel_index: \(envDataObjectModel_index)")
                 if gainEHAP1PhonIsSet == false {
                     await checkGainEHAP1_2_5DataLink()
                     await checkGainEHAP1_4DataLink()
@@ -904,17 +928,10 @@ struct EHATTSTestPart1View: View {
 //    }
 //}
 
-//MARK: - Preview View Struct
-
-//struct EHATTSTestPart1View_Previews: PreviewProvider {
-//    static var previews: some View {
-//        EHATTSTestPart1View()
-//    }
-//}
 
 
 //MARK: - Reversal Extension
-extension EHATTSTestPart1View {
+extension EHATTSTestPart1Content {
     enum LastErrors: Error {
         case lastError
         case lastUnexpected(code: Int)
@@ -1614,7 +1631,7 @@ extension EHATTSTestPart1View {
 //}
 //
 //
-//extension EHATTSTestPart1View {
+//extension EHATTSTestPart1Content {
 //MARK: -JSON and CSV Writing
     
     func getEHAP1Data() async {
@@ -1960,7 +1977,7 @@ extension EHATTSTestPart1View {
     
 }
 
-extension EHATTSTestPart1View {
+extension EHATTSTestPart1Content {
 //MARK: Extension for Gain Link File Checking
     
     
@@ -2221,6 +2238,21 @@ extension EHATTSTestPart1View {
         }
     }
     
-    
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
     
 }
+
+//MARK: - Preview View Struct
+
+struct EHATTSTestPart1View_Previews: PreviewProvider {
+    static var previews: some View {
+        EHATTSTestPart1View(testing: nil, relatedLinkTesting: linkTesting)
+    }
+    
+    static func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+}
+

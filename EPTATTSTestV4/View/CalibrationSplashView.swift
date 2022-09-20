@@ -20,7 +20,7 @@ struct CalibrationSplashView: View {
     var body: some View {
         
         ZStack{
-            colorModel.colorBackgroundRed.ignoresSafeArea(.all)
+            colorModel.colorBackgroundRed.ignoresSafeArea(.all, edges: .top)
             
             ScrollView{
                 Text("Non-Calibrated Equipment Notice\n")
@@ -74,6 +74,5 @@ struct CalibrationSplashView: View {
 //struct CalibrationSplashView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        CalibrationSplashView()
-//  //            .environmentObject(DeviceSelectionModel())
 //    }
 //}

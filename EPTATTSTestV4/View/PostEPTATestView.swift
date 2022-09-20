@@ -7,10 +7,30 @@
 
 import SwiftUI
 
-struct PostEPTATestView: View {
+struct PostEPTATestView<Link: View>: View {
+    var testing: Testing?
+    var relatedLinkTesting: (Testing) -> Link
     
-    var audioSessionModel = AudioSessionModel()
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var body: some View {
+        if let testing = testing {
+            PostEPTATestContent(testing: testing, relatedLinkTesting: relatedLinkTesting)
+        } else {
+            Text("Error Loading PostEPTATest View")
+                .navigationTitle("")
+        }
+    }
+    
+}
+
+
+struct PostEPTATestContent<Link: View>: View {
+    var testing: Testing
+    var dataModel = DataModel.shared
+    var relatedLinkTesting: (Testing) -> Link
+    @EnvironmentObject private var naviationModel: NavigationModel
+    
+//    var audioSessionModel = AudioSessionModel()
+    var colorModel: ColorModel = ColorModel()
 
     @State var volumeEPTAPostTest = Float()
     
@@ -25,26 +45,26 @@ struct PostEPTATestView: View {
                 Text("Great Work!")
                     .foregroundColor(.white)
                 Spacer()
-                Text("Give Us A Moment To Calculate and Format Your Results")
+                Text("Return Home To Navigate To Your Results")
                     .foregroundColor(.white)
+                    .font(.title)
                 Spacer()
-                NavigationLink {
-                    EPTAResultsDisplayView()
-                } label: {
-                    Text("Continue To See Results")
-                        .foregroundColor(.green)
-                }
-                Spacer()
+//                NavigationLink {
+//                    EPTAResultsDisplayView()
+//                } label: {
+//                    Text("Continue To See Results")
+//                        .foregroundColor(.green)
+//                }
+//                Spacer()
             }
         }
-        .onAppear {
-            Task(priority: .userInitiated, operation: {
-                audioSessionModel.setAudioSession()
-                await checkEPTAPostTestVolume()
-                await savePostEPTASettings()
-            })
-        }
-//        .environmentObject(systemSettingsModel)
+//        .onAppear {
+//            Task(priority: .userInitiated, operation: {
+//                audioSessionModel.setAudioSession()
+//                await checkEPTAPostTestVolume()
+//                await savePostEPTASettings()
+//            })
+//        }
     }
     
     func checkEPTAPostTestVolume() async {
@@ -59,11 +79,19 @@ struct PostEPTATestView: View {
 //        await systemSettingsModel.saveSystemToJSON()
 //        await systemSettingsModel.writeSystemResultsToCSV()
     }
+    
+    private func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
 }
 
-//struct PostTestView_Previews: PreviewProvider {
-//    
-//    static var previews: some View {
-//        PostEPTATestView()
-//    }
-//}
+struct PostTestView_Previews: PreviewProvider {
+    
+    static var previews: some View {
+        PostEPTATestView(testing: nil, relatedLinkTesting: linkTesting)
+    }
+    
+    static func linkTesting(testing: Testing) -> some View {
+        EmptyView()
+    }
+}

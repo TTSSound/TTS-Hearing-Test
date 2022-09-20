@@ -16,7 +16,7 @@ struct EPTAResultsDisplayView: View {
             colorModel.colorBackgroundBottomDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
             VStack{
                 Spacer()
-                Text("Holding Place To Display Calibrated Valid Results")
+                Text("Holding Place To Display EPTA Results")
                     .foregroundColor(.white)
                 
                 Spacer()
