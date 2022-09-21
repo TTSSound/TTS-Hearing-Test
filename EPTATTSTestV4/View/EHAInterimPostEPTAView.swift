@@ -7,6 +7,10 @@
 
 import SwiftUI
 import CodableCSV
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
+import Firebase
 
 struct SaveSystemSettingsInterimStartEHA: Codable {
     var jsonFinalInterimStartingEHASystemVolume = [Float]()
@@ -43,6 +47,11 @@ struct EHAInterimPostEPTAContent<Link: View>: View {
     var audioSessionModel = AudioSessionModel()
     var colorModel: ColorModel = ColorModel()
     
+    @State private var inputLastName = String()
+    @State private var dataFileURLComparedLastName = URL(fileURLWithPath: "")   // General and Open
+    @State private var isOkayToUpload = false
+    let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
+    
     @State var volumeInterimEHATest = Float()
     @State var volumeEHAStartingTest = Float()
     
@@ -77,14 +86,12 @@ struct EHAInterimPostEPTAContent<Link: View>: View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack(alignment: .leading) {
-              
                 Text("View for EHA test takers after they have completed the EPTA test. The extended phase of the hearing assessment is next.")
                     .foregroundColor(.white)
                     .padding()
                     .padding()
                     .padding(.top, 60)
                     .padding(.bottom, 40)
-        
                 HStack{
                     Spacer()
                     Button {
@@ -94,17 +101,16 @@ struct EHAInterimPostEPTAContent<Link: View>: View {
                             await recheckEHASilentMode()
                         }
                     } label: {
-                            Text("Recheck Settings Now")
+                        Text("Recheck Settings Now")
                             .padding()
                             .frame(width: 300, height: 50, alignment: .center)
                             .background(.green)
                             .foregroundColor(.white)
                             .cornerRadius(300)
                     }
-                Spacer()
+                    Spacer()
                 }
                 .padding(.bottom, 20)
-
                 HStack{
                     Spacer()
                     Text(String(volumeEHAStartingTest))
@@ -122,7 +128,6 @@ struct EHAInterimPostEPTAContent<Link: View>: View {
                 }
                 .padding(.top, 20)
                 .padding(.bottom, 20)
-    
                 HStack{
                     Spacer()
                     Text("System Volume is: ")
@@ -133,7 +138,6 @@ struct EHAInterimPostEPTAContent<Link: View>: View {
                     Spacer()
                 }
                 .padding(.trailing)
-              
                 HStack{
                     Spacer()
                     Text("Is Volume Correct?")
@@ -144,8 +148,6 @@ struct EHAInterimPostEPTAContent<Link: View>: View {
                     Spacer()
                 }
                 .padding(.trailing)
-           
-
                 HStack{
                     Spacer()
                     Text("Silent Mode Is Off?")
@@ -156,55 +158,54 @@ struct EHAInterimPostEPTAContent<Link: View>: View {
                     Spacer()
                 }
                 .padding(.trailing)
-
-                    if interimEHAResultsSubmitted == false {
-                        HStack{
-                            Spacer()
-                            Button {
-                                DispatchQueue.main.async {
-                                    Task{
-                                        await concantenateFinalEHASystemVolumeArray()
-                                        await saveInterimEHATestSystemSettings()
-                                    }
+                if interimEHAResultsSubmitted == false {
+                    HStack{
+                        Spacer()
+                        Button {
+                            DispatchQueue.main.async {
+                                Task{
+                                    await concantenateFinalEHASystemVolumeArray()
+                                    await saveInterimEHATestSystemSettings()
                                 }
-                            } label: {
-                                Text("Submit Results")
-                                    .padding()
-                                    .frame(width: 300, height: 50, alignment: .center)
-                                    .background(.blue)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(300)
                             }
-                            Spacer()
-                        }
-                        .padding(.top, 100)
-                        .padding(.bottom, 20)
-                    } else if interimEHAResultsSubmitted == true {
-                        HStack{
-                            Spacer()
-                            Text("Return Home To See Results and Continue")
+                        } label: {
+                            Text("Submit Results")
                                 .padding()
-                                .foregroundColor(.red)
-                                .font(.title)
-
-//                            NavigationLink {
-////                                EHATTSTestPart2View()
-//                                NavigationView()
-//                            } label: {
-//                                Text("Return Home To See Results and Continue")
-//                                    .padding()
-//                                    .frame(width: 300, height: 50, alignment: .center)
-//                                    .background(.green)
-//                                    .foregroundColor(.white)
-//                                    .cornerRadius(300)
-//                            }
-                            Spacer()
+                                .frame(width: 300, height: 50, alignment: .center)
+                                .background(.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(300)
                         }
-                        .padding(.top, 80)
-                        .padding(.bottom, 40)
+                        Spacer()
                     }
+                    .padding(.top, 100)
+                    .padding(.bottom, 20)
+                } else if interimEHAResultsSubmitted == true {
+                    HStack{
+                        Spacer()
+                        Text("Return Home To See Results and Continue")
+                            .padding()
+                            .foregroundColor(.red)
+                            .font(.title)
+                        
+                        //                            NavigationLink {
+                        ////                                EHATTSTestPart2View()
+                        //                                NavigationView()
+                        //                            } label: {
+                        //                                Text("Return Home To See Results and Continue")
+                        //                                    .padding()
+                        //                                    .frame(width: 300, height: 50, alignment: .center)
+                        //                                    .background(.green)
+                        //                                    .foregroundColor(.white)
+                        //                                    .cornerRadius(300)
+                        //                            }
+                        Spacer()
+                    }
+                    .padding(.top, 80)
+                    .padding(.bottom, 40)
                 }
             }
+        }
         Spacer()
         .onAppear {
             Task{
@@ -213,10 +214,23 @@ struct EHAInterimPostEPTAContent<Link: View>: View {
                 await checkMonoRightTestLink()
                 await checkMonoLeftTestLink()
                 await monoEarBetterExists()
+                await comparedLastNameCSVReader()
+            }
+        }
+        .onChange(of: isOkayToUpload) { uploadValue in
+            if uploadValue == true {
+                Task {
+                    await uploadEHAP1InterimPostSettings()
+                }
+            } else {
+                print("Fatal Error in uploadValue Change Of Logic")
             }
         }
     }
-    
+}
+ 
+extension EHAInterimPostEPTAContent {
+//MARK: -Methods Extension
     func checkInterimEHATestVolume() async {
         volumeInterimEHATest = audioSessionModel.audioSession.outputVolume
         finalInterimStartingEHASystemVolume.append(volumeInterimEHATest)
@@ -272,6 +286,7 @@ struct EHAInterimPostEPTAContent<Link: View>: View {
         await saveSystemInterimStartingEHAToJSON()
         await writeSystemInterimStartingEHAResultsToCSV()
         await writeInputSystemInterimStartingEHAResultsToCSV()
+        isOkayToUpload = true
     }
     
     //TODO: Code to calculate delta at each EPTA frequency between ears. If gain delta is <= 2.5 dB (either at every frequency or in average, maybe with focus on 4kHz range, then allow user to select best ear test only for EHA Part 2. After completing this assessment, if applicable, generate a trigger csv file called. monoRightEarBetter.csv or monoLeftEarBetter.csv. Then check for each of these files and if one exists, that triggers the ability to test in that ear (Right or left) only for EHAP2. If neither file exists, then mono test is not available.
@@ -338,11 +353,19 @@ struct EHAInterimPostEPTAContent<Link: View>: View {
             }
         }
     }
+    
+    func uploadEHAP1InterimPostSettings() async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, qos: .background) {
+            uploadFile(fileName: "SystemSettingsInterimStartingEHA.json")
+            uploadFile(fileName: systemInterimStartingEHACSVName)
+            uploadFile(fileName: inputSystemInterimStartingEHACSVName)
+        }
+    }
 }
 
 
 extension EHAInterimPostEPTAContent {
-    
+//MARK: -CSV/JSON Extension
     func getInterimStartingEHAData() async {
         guard let systemSettingsInterimStartingEHAData = await getSystemInterimStartingEHAJSONData() else { return }
         print("Json System Settings Interim Starting EHA Data:")
@@ -350,7 +373,7 @@ extension EHAInterimPostEPTAContent {
         let jsonSystemSettingsInterimStartingEHAString = String(data: systemSettingsInterimStartingEHAData, encoding: .utf8)
         print(jsonSystemSettingsInterimStartingEHAString!)
         do {
-        self.saveSystemSettingsInterimStartEHA = try JSONDecoder().decode(SaveSystemSettingsInterimStartEHA.self, from: systemSettingsInterimStartingEHAData)
+            self.saveSystemSettingsInterimStartEHA = try JSONDecoder().decode(SaveSystemSettingsInterimStartEHA.self, from: systemSettingsInterimStartingEHAData)
             print("JSON Get System Interim Starting EHA Settings Run")
             print("data: \(systemSettingsInterimStartingEHAData)")
         } catch let error {
@@ -360,7 +383,7 @@ extension EHAInterimPostEPTAContent {
     
     func getSystemInterimStartingEHAJSONData() async -> Data? {
         let saveSystemSettingsInterimStartEHA = SaveSystemSettingsInterimStartEHA (
-        jsonFinalInterimStartingEHASystemVolume: finalInterimStartingEHASystemVolume)
+            jsonFinalInterimStartingEHASystemVolume: finalInterimStartingEHASystemVolume)
         let jsonSystemInterimStartingEHASettingsData = try? JSONEncoder().encode(saveSystemSettingsInterimStartEHA)
         print("saveFinalResults: \(saveSystemSettingsInterimStartEHA)")
         print("Json Encoded \(jsonSystemInterimStartingEHASettingsData!)")
@@ -368,7 +391,7 @@ extension EHAInterimPostEPTAContent {
     }
     
     func saveSystemInterimStartingEHAToJSON() async {
-    // !!!This saves to device directory, whish is likely what is desired
+        // !!!This saves to device directory, whish is likely what is desired
         let systemInterimStartingEHAPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let interimStartingEHADocumentsDirectory = systemInterimStartingEHAPaths[0]
         print("interimStartingEHADocumentsDirectory: \(interimStartingEHADocumentsDirectory)")
@@ -384,7 +407,7 @@ extension EHAInterimPostEPTAContent {
             print("Error writing to JSON System Interim Starting EHA Settings file: \(error)")
         }
     }
-
+    
     func writeSystemInterimStartingEHAResultsToCSV() async {
         print("writeSystemInterimStartingEHAResultsToCSV Start")
         let stringFinalInterimStartingEHASystemVolume = "finalInterimStartingEHASystemVolume," + finalInterimStartingEHASystemVolume.map { String($0) }.joined(separator: ",")
@@ -406,7 +429,7 @@ extension EHAInterimPostEPTAContent {
     
     func writeInputSystemInterimStartingEHAResultsToCSV() async {
         print("writeInputSystemInterimStartingEHAResultsToCSV Start")
-
+        
         let stringFinalInterimStartingEHASystemVolume = finalInterimStartingEHASystemVolume.map { String($0) }.joined(separator: ",")
         let stringFinalInterimStartingEHASilentMode = finalInterimStartingEHASilentMode.map { String($0) }.joined(separator: "'")
         do {
@@ -424,19 +447,89 @@ extension EHAInterimPostEPTAContent {
         }
     }
     
+    private func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
+    
+    func comparedLastNameCSVReader() async {
+        let dataSetupName = inputFinalComparedLastNameCSV
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLComparedLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLComparedLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLComparedLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 0, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputLastName = fieldLastName
+            print("inputLastName: \(inputLastName)")
+        } catch {
+            print("Error in reading Last Name results")
+        }
+    }
+    
+    private func uploadFile(fileName: String) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let storageRef = Storage.storage().reference()
+            let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+            let lastNameRef = storageRef.child(inputLastName)
+            let fileManager = FileManager.default
+            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+            if fileManager.fileExists(atPath: filePath[0]) {
+                let filePath = URL(fileURLWithPath: filePath[0])
+                let localFile = filePath
+                //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                let fileRef = lastNameRef.child("\(fileName)")
+                
+                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                    if error == nil && metadata == nil {
+                        //TSave a reference to firestore database
+                    }
+                    return
+                }
+                print(uploadTask)
+            } else {
+                print("No File")
+            }
+        }
+    }
+}
+ 
+extension EHAInterimPostEPTAContent {
+//MARK: -NavigationLink Extension
     private func linkTesting(testing: Testing) -> some View {
         EmptyView()
     }
 }
 
 
-
-struct EHAInterimPostEPTAView_Previews: PreviewProvider {
-    static var previews: some View {
-        EHAInterimPostEPTAView(testing: nil, relatedLinkTesting: linkTesting)
-    }
-    
-    static func linkTesting(testing: Testing) -> some View {
-        EmptyView()
-    }
-}
+//struct EHAInterimPostEPTAView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        EHAInterimPostEPTAView(testing: nil, relatedLinkTesting: linkTesting)
+//    }
+//
+//    static func linkTesting(testing: Testing) -> some View {
+//        EmptyView()
+//    }
+//}

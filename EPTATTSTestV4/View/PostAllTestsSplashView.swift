@@ -7,6 +7,10 @@
 
 import SwiftUI
 import CodableCSV
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
+import Firebase
 
 
 struct SaveSystemSettingsInterimEHA: Codable {
@@ -52,6 +56,11 @@ struct PostAllTestsSplashContent<Link: View>: View {
     @StateObject var colorModel: ColorModel = ColorModel()
     var audioSessionModel: AudioSessionModel = AudioSessionModel()
     
+    @State private var inputLastName = String()
+    @State private var dataFileURLComparedLastName = URL(fileURLWithPath: "")   // General and Open
+    @State private var isOkayToUpload = false
+    let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
+    
     @State var pavolume = Float()
     @State var pavolumeCorrect = Int()
     @State var pavolumeSettingIndex = Int()
@@ -80,7 +89,7 @@ struct PostAllTestsSplashContent<Link: View>: View {
     let inputSystemInterimEHACSVName = "InputSystemSettingsInterimEHACSV.csv"
     
     @State var saveSystemSettingsInterimEHA: SaveSystemSettingsInterimEHA? = nil
-
+    
     var body: some View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
@@ -110,9 +119,9 @@ struct PostAllTestsSplashContent<Link: View>: View {
                 Spacer()
                 NavigationLink(destination:
                                 testTakenDirector == 1 ? AnyView(EHAInterimPostEPTAView(testing: testing, relatedLinkTesting: linkTesting))
-                                : testTakenDirector == 2 ? AnyView(PostEPTATestView(testing: testing, relatedLinkTesting: linkTesting))
-                                : testTakenDirector == 3 ? AnyView(PostSimpleTestView(testing: testing, relatedLinkTesting: linkTesting))
-                                : AnyView(PostTestDirectorSplashView(testing: testing, relatedLinkTesting: linkTesting))
+                               : testTakenDirector == 2 ? AnyView(PostEPTATestView(testing: testing, relatedLinkTesting: linkTesting))
+                               : testTakenDirector == 3 ? AnyView(PostSimpleTestView(testing: testing, relatedLinkTesting: linkTesting))
+                               : AnyView(PostTestDirectorSplashView(testing: testing, relatedLinkTesting: linkTesting))
                 ){
                     HStack{
                         Spacer()
@@ -136,10 +145,24 @@ struct PostAllTestsSplashContent<Link: View>: View {
                     await concantenateFinalSystemVolumeArray()
                     await saveTestSystemSettings()
                     audioSessionModel.cancelAudioSession()
+                    await comparedLastNameCSVReader()
+                }
+            }
+            .onChange(of: isOkayToUpload) { uploadValue in
+                if uploadValue == true {
+                    Task {
+                        await uploadPostAllTestSettings()
+                    }
+                } else {
+                    print("Fatal Error in uploadValue Change of Logic")
                 }
             }
         }
     }
+}
+
+extension PostAllTestsSplashContent {
+//MARK: -Methods Extension
     
     func recheckVolue() {
         if audioSessionModel.audioSession.outputVolume == 0.63 {
@@ -242,7 +265,6 @@ struct PostAllTestsSplashContent<Link: View>: View {
         }
     }
     
-
     func concantenateFinalSystemVolumeArray() async {
         finalEndingSystemVolume.removeAll()
         finalEndingSystemVolume.append(pavolume)
@@ -261,14 +283,25 @@ struct PostAllTestsSplashContent<Link: View>: View {
         await saveSystemInterimToJSON()
         await writeSystemInterimResultsToCSV()
         await writeInputSystemInterimResultsToCSV()
+        isOkayToUpload = true
+    }
+    
+    
+
+    func uploadPostAllTestSettings() async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, qos: .background) {
+            uploadFile(fileName: "EndEPTASimpleSystemSettings.json")
+            uploadFile(fileName: systemSettingsEndCSVName)
+            uploadFile(fileName: inputSystemSettingsEndCSVName)
+            uploadFile(fileName: "SystemSettingsInterimEHA.json")
+            uploadFile(fileName: systemInterimEHACSVName)
+        }
     }
 }
 
 
-
-
 extension PostAllTestsSplashContent {
-//MAKR: -SystemSettingsEndEPTASimpleModel
+//MARK: -CSV/JSON Methods Extensions
     
     func getSystemEndData() async {
         guard let systemSettingsEndData = await getSystemEndJSONData() else { return }
@@ -346,10 +379,6 @@ extension PostAllTestsSplashContent {
             print("CVSWriter Input System End Settings Error or Error Finding File for Input System End Settings CSV \(error.localizedDescription)")
         }
     }
-}
-
-extension PostAllTestsSplashContent {
-//MARK: -SystemSettingsInterimEHAModel
     
     func getInterimEndData() async {
         guard let systemSettingsInterimData = await getSystemInterimJSONData() else { return }
@@ -358,7 +387,7 @@ extension PostAllTestsSplashContent {
         let jsonSystemSettingsInterimString = String(data: systemSettingsInterimData, encoding: .utf8)
         print(jsonSystemSettingsInterimString!)
         do {
-        self.saveSystemSettingsInterimEHA = try JSONDecoder().decode(SaveSystemSettingsInterimEHA.self, from: systemSettingsInterimData)
+            self.saveSystemSettingsInterimEHA = try JSONDecoder().decode(SaveSystemSettingsInterimEHA.self, from: systemSettingsInterimData)
             print("JSON Get System Interim Settings Run")
             print("data: \(systemSettingsInterimData)")
         } catch let error {
@@ -368,7 +397,7 @@ extension PostAllTestsSplashContent {
     
     func getSystemInterimJSONData() async -> Data? {
         let saveSystemSettingsInterimEHA = SaveSystemSettingsInterimEHA (
-        jsonFinalInterimEndingEHASystemVolume: finalInterimEndingEHASystemVolume)
+            jsonFinalInterimEndingEHASystemVolume: finalInterimEndingEHASystemVolume)
         let jsonSystemInterimSettingsData = try? JSONEncoder().encode(saveSystemSettingsInterimEHA)
         print("saveFinalResults: \(saveSystemSettingsInterimEHA)")
         print("Json Encoded \(jsonSystemInterimSettingsData!)")
@@ -376,7 +405,7 @@ extension PostAllTestsSplashContent {
     }
     
     func saveSystemInterimToJSON() async {
-    // !!!This saves to device directory, whish is likely what is desired
+        // !!!This saves to device directory, whish is likely what is desired
         let systemInterimPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let interimDocumentsDirectory = systemInterimPaths[0]
         print("interimDocumentsDirectory: \(interimDocumentsDirectory)")
@@ -392,7 +421,7 @@ extension PostAllTestsSplashContent {
             print("Error writing to JSON System Interim Settings file: \(error)")
         }
     }
-
+    
     func writeSystemInterimResultsToCSV() async {
         print("writeSystemInterimResultsToCSV Start")
         let stringFinalInterimEndingEHASystemVolume = "finalInterimEndingEHASystemVolume," + finalInterimEndingEHASystemVolume.map { String($0) }.joined(separator: ",")
@@ -427,17 +456,88 @@ extension PostAllTestsSplashContent {
         }
     }
     
+    private func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
+    
+    func comparedLastNameCSVReader() async {
+        let dataSetupName = inputFinalComparedLastNameCSV
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLComparedLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLComparedLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLComparedLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 0, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputLastName = fieldLastName
+            print("inputLastName: \(inputLastName)")
+        } catch {
+            print("Error in reading Last Name results")
+        }
+    }
+    
+    private func uploadFile(fileName: String) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let storageRef = Storage.storage().reference()
+            let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+            let lastNameRef = storageRef.child(inputLastName)
+            let fileManager = FileManager.default
+            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+            if fileManager.fileExists(atPath: filePath[0]) {
+                let filePath = URL(fileURLWithPath: filePath[0])
+                let localFile = filePath
+                //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                let fileRef = lastNameRef.child("\(fileName)")
+                
+                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                    if error == nil && metadata == nil {
+                        //TSave a reference to firestore database
+                    }
+                    return
+                }
+                print(uploadTask)
+            } else {
+                print("No File")
+            }
+        }
+    }
+}
+
+extension PostAllTestsSplashContent {
+//MARK: -NavigationLink Extension
     private func linkTesting(testing: Testing) -> some View {
         EmptyView()
     }
 }
 
-struct PostAllTestsSplashView_Previews: PreviewProvider {
-    static var previews: some View {
-        PostAllTestsSplashView(testing: nil, relatedLinkTesting: linkTesting)
-    }
-    
-    static func linkTesting(testing: Testing) -> some View {
-        EmptyView()
-    }
-}
+//struct PostAllTestsSplashView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PostAllTestsSplashView(testing: nil, relatedLinkTesting: linkTesting)
+//    }
+//    
+//    static func linkTesting(testing: Testing) -> some View {
+//        EmptyView()
+//    }
+//}

@@ -268,7 +268,9 @@ struct TestSelectionView: View {
         }
         .onChange(of: isOkayToUpload) { uploadValue in
             if uploadValue == true {
-                uploadTestSelection()
+                Task {
+                    await uploadTestSelection()
+                }
             } else {
                 print("Fatal Upload Error in Change of")
             }
@@ -390,8 +392,8 @@ struct TestSelectionView: View {
         }
     }
     
-    func uploadTestSelection() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, qos: .background) {
+    func uploadTestSelection() async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, qos: .background) {
             uploadFile(fileName: testSelectionCSVName)
             uploadFile(fileName: inputTestSelectionCSVName)
             uploadFile(fileName: "TestSelection.json")

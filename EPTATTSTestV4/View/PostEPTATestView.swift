@@ -29,9 +29,9 @@ struct PostEPTATestContent<Link: View>: View {
     var relatedLinkTesting: (Testing) -> Link
     @EnvironmentObject private var naviationModel: NavigationModel
     
-//    var audioSessionModel = AudioSessionModel()
+    //    var audioSessionModel = AudioSessionModel()
     var colorModel: ColorModel = ColorModel()
-
+    
     @State var volumeEPTAPostTest = Float()
     
     var body: some View {
@@ -49,49 +49,54 @@ struct PostEPTATestContent<Link: View>: View {
                     .foregroundColor(.white)
                     .font(.title)
                 Spacer()
-//                NavigationLink {
-//                    EPTAResultsDisplayView()
-//                } label: {
-//                    Text("Continue To See Results")
-//                        .foregroundColor(.green)
-//                }
-//                Spacer()
+                //                NavigationLink {
+                //                    EPTAResultsDisplayView()
+                //                } label: {
+                //                    Text("Continue To See Results")
+                //                        .foregroundColor(.green)
+                //                }
+                //                Spacer()
             }
         }
-//        .onAppear {
-//            Task(priority: .userInitiated, operation: {
-//                audioSessionModel.setAudioSession()
-//                await checkEPTAPostTestVolume()
-//                await savePostEPTASettings()
-//            })
-//        }
+        //        .onAppear {
+        //            Task(priority: .userInitiated, operation: {
+        //                audioSessionModel.setAudioSession()
+        //                await checkEPTAPostTestVolume()
+        //                await savePostEPTASettings()
+        //            })
+        //        }
     }
-    
+}
+ 
+extension PostEPTATestContent {
+//MARK: -Methods Extension
     func checkEPTAPostTestVolume() async {
-//        volumeEPTAPostTest = audioSessionModel.audioSession.outputVolume
-//        systemSettingsModel.finalEndingSystemVolume.append(volumeEPTAPostTest)
-//        print("Volume Post Test: \(volumeEPTAPostTest)")
-//        print("systemSettingsModel finalEndingSystemVolume: \(systemSettingsModel.finalEndingSystemVolume)")
+        //        volumeEPTAPostTest = audioSessionModel.audioSession.outputVolume
+        //        systemSettingsModel.finalEndingSystemVolume.append(volumeEPTAPostTest)
+        //        print("Volume Post Test: \(volumeEPTAPostTest)")
+        //        print("systemSettingsModel finalEndingSystemVolume: \(systemSettingsModel.finalEndingSystemVolume)")
     }
     
     func savePostEPTASettings() async {
-//        await systemSettingsModel.getSystemData()
-//        await systemSettingsModel.saveSystemToJSON()
-//        await systemSettingsModel.writeSystemResultsToCSV()
+        //        await systemSettingsModel.getSystemData()
+        //        await systemSettingsModel.saveSystemToJSON()
+        //        await systemSettingsModel.writeSystemResultsToCSV()
     }
-    
+}
+
+extension PostEPTATestContent {
+//MARK: -NavigationLink Extension
     private func linkTesting(testing: Testing) -> some View {
         EmptyView()
     }
 }
 
-struct PostTestView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        PostEPTATestView(testing: nil, relatedLinkTesting: linkTesting)
-    }
-    
-    static func linkTesting(testing: Testing) -> some View {
-        EmptyView()
-    }
-}
+//struct PostTestView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PostEPTATestView(testing: nil, relatedLinkTesting: linkTesting)
+//    }
+//    
+//    static func linkTesting(testing: Testing) -> some View {
+//        EmptyView()
+//    }
+//}

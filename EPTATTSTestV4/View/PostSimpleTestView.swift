@@ -26,13 +26,11 @@ struct PostSimpleTestContent<Link: View>: View {
     var dataModel = DataModel.shared
     var relatedLinkTesting: (Testing) -> Link
     @EnvironmentObject private var naviationModel: NavigationModel
-        
-//    var audioSessionModel = AudioSessionModel()
+    
+    //    var audioSessionModel = AudioSessionModel()
     var colorModel: ColorModel = ColorModel()
-//    @State var volumePostSimpleTest = Float()
-    
-    
-    
+    //    @State var volumePostSimpleTest = Float()
+
     var body: some View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
@@ -48,37 +46,43 @@ struct PostSimpleTestContent<Link: View>: View {
                     .foregroundColor(.white)
                     .font(.title)
                 Spacer()
-//                NavigationLink {
-//                    SimpleResultsDisplayView()
-//                } label: {
-//                    Text("Continue To See Results")
-//                        .foregroundColor(.green)
-//                }
-//                Spacer()
+                //                NavigationLink {
+                //                    SimpleResultsDisplayView()
+                //                } label: {
+                //                    Text("Continue To See Results")
+                //                        .foregroundColor(.green)
+                //                }
+                //                Spacer()
             }
         }
-//        .onAppear {
-//            Task(priority: .userInitiated, operation: {
-//                audioSessionModel.setAudioSession()
-//                await checkPostTestVolume()
-//                await savePostSimpleSettings()
-//            })
-//        }
+        //        .onAppear {
+        //            Task(priority: .userInitiated, operation: {
+        //                audioSessionModel.setAudioSession()
+        //                await checkPostTestVolume()
+        //                await savePostSimpleSettings()
+        //            })
+        //        }
     }
-    
+}
+ 
+extension PostSimpleTestContent {
+//MARK: -Methods Extension
     func checkPostTestVolume() async {
-//        volumePostSimpleTest = audioSessionModel.audioSession.outputVolume
-//        systemSettingsModel.finalEndingSystemVolume.append(volumePostSimpleTest)
-//        print("Volume Post Test: \(volumePostSimpleTest)")
-//        print("setupDataModel finalEndingSystemVolume: \(systemSettingsModel.finalEndingSystemVolume)")
+        //        volumePostSimpleTest = audioSessionModel.audioSession.outputVolume
+        //        systemSettingsModel.finalEndingSystemVolume.append(volumePostSimpleTest)
+        //        print("Volume Post Test: \(volumePostSimpleTest)")
+        //        print("setupDataModel finalEndingSystemVolume: \(systemSettingsModel.finalEndingSystemVolume)")
     }
     
     func savePostSimpleSettings() async {
-//        await systemSettingsModel.getSystemData()
-//        await systemSettingsModel.saveSystemToJSON()
-//        await systemSettingsModel.writeSystemResultsToCSV()
+        //        await systemSettingsModel.getSystemData()
+        //        await systemSettingsModel.saveSystemToJSON()
+        //        await systemSettingsModel.writeSystemResultsToCSV()
     }
-    
+}
+
+extension PostSimpleTestContent {
+//MARK: -NavigationLink Extension
     private func linkTesting(testing: Testing) -> some View {
         EmptyView()
     }

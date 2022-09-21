@@ -226,7 +226,7 @@ extension ManualDeviceEntryView {
     }
     
     func uploadManualDeviceData() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, qos: .background) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, qos: .background) {
             uploadFile(fileName: manualDeviceCSVName)
             uploadFile(fileName: inputManualDeviceCSVName)
             uploadFile(fileName: "ManualDeviceSelection.json")

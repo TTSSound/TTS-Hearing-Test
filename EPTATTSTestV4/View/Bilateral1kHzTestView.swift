@@ -585,7 +585,9 @@ struct Bilateral1kHzTestContent<Link: View>: View {
         }
         .onChange(of: isOkayToUpload) { uploadValue in
             if uploadValue == true {
-                uploadUserDataEntry()
+                Task {
+                    await uploadBilateralTestResults()
+                }
             } else {
                 print("Fatal Error in uploadValue Change of Logic")
             }
@@ -1241,8 +1243,8 @@ extension Bilateral1kHzTestContent {
     //    let inputOnekHzSummaryCSVName = "InputSummaryOnekHzResultsCSV.csv"
     //    let inputOnekHzDetailedCSVName = "InputDetailedOnekHzResultsCSV.csv"
     
-    func uploadUserDataEntry() {
-        DispatchQueue.main.async(group: .none, qos: .background) {
+    func uploadBilateralTestResults() async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, qos: .background) {
             uploadFile(fileName: fileOnekHzName)
             uploadFile(fileName: summaryOnekHzCSVName)
             uploadFile(fileName: detailedOnekHzCSVName)

@@ -1224,13 +1224,13 @@ extension SimpleTestContent {
     }
 }
 
-
-struct SimpleTestView_Previews: PreviewProvider {
-    static var previews: some View {
-        SimpleTestView(testing: nil, relatedLinkTesting: linkTesting)
-    }
-    
-    static func linkTesting(testing: Testing) -> some View {
-        EmptyView()
-    }
-}
+//
+//struct SimpleTestView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SimpleTestView(testing: nil, relatedLinkTesting: linkTesting)
+//    }
+//
+//    static func linkTesting(testing: Testing) -> some View {
+//        EmptyView()
+//    }
+//}

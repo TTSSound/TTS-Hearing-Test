@@ -610,7 +610,7 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                         }
                         .onChange(of: isOkayToUpload) { uploadValue in
                             if uploadValue == true {
-                                uploadUserDataEntry()
+                                await uploadSurveyDataEntry()
                             } else {
                                 print("Fatal error in uploadvalue change of logic")
                             }
@@ -651,7 +651,7 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
 }
  
 extension UserWrittenHearingAssessmentContent {
-    //MARK: -Extension Methods
+//MARK: -Extension Methods
     func calculateSurveryResponses() async {
         let noSum = noResponses.reduce(0, +)
         let sometimesSum = sometimesResponses.reduce(0,+)
@@ -971,8 +971,8 @@ extension UserWrittenHearingAssessmentContent {
         isOkayToUpload = true
     }
     
-    func uploadUserDataEntry() {
-        DispatchQueue.main.async(group: .none, qos: .background) {
+    func uploadSurveyDataEntry() async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, qos: .background) {
             uploadFile(fileName: surveyCSVName)
             uploadFile(fileName: inputSurveyCSVName)
             uploadFile(fileName: "SurveyResults.json")

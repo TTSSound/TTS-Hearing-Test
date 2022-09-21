@@ -7,7 +7,9 @@
 
 import SwiftUI
 import CodableCSV
-
+import FirebaseStorage
+import FirebaseFirestoreSwift
+import Firebase
 
 
 
@@ -46,6 +48,11 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
     var audioSessionModel = AudioSessionModel()
     var colorModel: ColorModel = ColorModel()
     
+    @State private var inputLastName = String()
+    @State private var dataFileURLComparedLastName = URL(fileURLWithPath: "")   // General and Open
+    @State private var isOkayToUpload = false
+    let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
+    
     @State var volumeInterimPreEHAP2Test = Float()
     @State var volumePreEHAP2StartingTest = Float()
     
@@ -80,14 +87,12 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack(alignment: .leading) {
-              
                 Text("View for EHA test takers before they start EHA Part 2. The extended phase of the hearing assessment is next.")
                     .foregroundColor(.white)
                     .padding()
                     .padding()
                     .padding(.top, 60)
                     .padding(.bottom, 40)
-        
                 HStack{
                     Spacer()
                     Button {
@@ -97,7 +102,7 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
                             await recheckPreEHAP2SilentMode()
                         }
                     } label: {
-                            Text("Recheck Settings Before Proceeding")
+                        Text("Recheck Settings Before Proceeding")
                             .padding()
                             .frame(width: 300, height: 50, alignment: .center)
                             .font(.caption)
@@ -105,10 +110,9 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
                             .foregroundColor(.white)
                             .cornerRadius(300)
                     }
-                Spacer()
+                    Spacer()
                 }
                 .padding(.bottom, 20)
-
                 HStack{
                     Spacer()
                     Text(String(volumePreEHAP2StartingTest))
@@ -126,7 +130,6 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
                 }
                 .padding(.top, 20)
                 .padding(.bottom, 20)
-    
                 HStack{
                     Spacer()
                     Text("System Volume is: ")
@@ -137,7 +140,6 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
                     Spacer()
                 }
                 .padding(.trailing)
-              
                 HStack{
                     Spacer()
                     Text("Is Volume Correct?")
@@ -148,8 +150,6 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
                     Spacer()
                 }
                 .padding(.trailing)
-           
-
                 HStack{
                     Spacer()
                     Text("Silent Mode Is Off?")
@@ -160,62 +160,73 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
                     Spacer()
                 }
                 .padding(.trailing)
-
-                    if interimPreEHAP2ResultsSubmitted == false {
-                        HStack{
-                            Spacer()
-                            Button {
-                                DispatchQueue.main.async {
-                                    Task{
-                                        await concantenateFinalPreEHAP2SystemVolumeArray()
-                                        await saveInterimPreEHAP2TestSystemSettings()
-                                    }
+                if interimPreEHAP2ResultsSubmitted == false {
+                    HStack{
+                        Spacer()
+                        Button {
+                            DispatchQueue.main.async {
+                                Task{
+                                    await concantenateFinalPreEHAP2SystemVolumeArray()
+                                    await saveInterimPreEHAP2TestSystemSettings()
                                 }
-                            } label: {
-                                Text("Submit Results")
-                                    .padding()
-                                    .frame(width: 200, height: 50, alignment: .center)
-                                    .background(.blue)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(300)
                             }
-                            Spacer()
+                        } label: {
+                            Text("Submit Results")
+                                .padding()
+                                .frame(width: 200, height: 50, alignment: .center)
+                                .background(.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(300)
                         }
-                        .padding(.top, 100)
-                        .padding(.bottom, 20)
-                    } else if interimPreEHAP2ResultsSubmitted == true {
-                        HStack{
-                            Spacer()
-                            NavigationLink {
-                                EHATTSTestPart2View(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
-                            } label: {
-                                Text("Continue")
-                                    .padding()
-                                    .frame(width: 200, height: 50, alignment: .center)
-                                    .background(.green)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(300)
-                            }
-                            Spacer()
-                        }
-                        .padding(.top, 80)
-                        .padding(.bottom, 40)
+                        Spacer()
                     }
-                }
-            }
-            Spacer()
-            .onAppear {
-                Task{
-                    audioSessionModel.setAudioSession()
-                    await checkInterimPreEHAP2TestVolume()
-                    await checkPreEHAP2MonoRightTestLink()
-                    await checkPreEHAP2MonoLeftTestLink()
-                    await preEHAP2MonoEarBetterExists()
+                    .padding(.top, 100)
+                    .padding(.bottom, 20)
+                } else if interimPreEHAP2ResultsSubmitted == true {
+                    HStack{
+                        Spacer()
+                        NavigationLink {
+                            EHATTSTestPart2View(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
+                        } label: {
+                            Text("Continue")
+                                .padding()
+                                .frame(width: 200, height: 50, alignment: .center)
+                                .background(.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(300)
+                        }
+                        Spacer()
+                    }
+                    .padding(.top, 80)
+                    .padding(.bottom, 40)
                 }
             }
         }
+        Spacer()
+        .onAppear {
+            Task{
+                audioSessionModel.setAudioSession()
+                await checkInterimPreEHAP2TestVolume()
+                await checkPreEHAP2MonoRightTestLink()
+                await checkPreEHAP2MonoLeftTestLink()
+                await preEHAP2MonoEarBetterExists()
+                await comparedLastNameCSVReader()
+            }
+        }
+        .onChange(of: isOkayToUpload) { uploadValue in
+            if uploadValue == true {
+                Task {
+                    await uploadPreEHAP2Data()
+                }
+            } else {
+                print("Fatal error in uploadValue changeof Logic")
+            }
+        }
+    }
+}
     
-    
+extension EHAInterimPreEHAP2Content {
+    //MARK: -Methods Extension
     func checkInterimPreEHAP2TestVolume() async {
         volumeInterimPreEHAP2Test = audioSessionModel.audioSession.outputVolume
         finalInterimPreEHAP2SystemVolume.append(volumeInterimPreEHAP2Test)
@@ -271,6 +282,15 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
         await saveSystemInterimPreEHAP2ToJSON()
         await writeSystemInterimPreEHAP2ResultsToCSV()
         await writeInputSystemInterimPreEHAP2ResultsToCSV()
+        isOkayToUpload = true
+    }
+    
+    func uploadPreEHAP2Data() async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, qos: .background) {
+            uploadFile(fileName: "SystemSettingsInterimPreEHAP2.json")
+            uploadFile(fileName: systemInterimPreEHAP2CSVName)
+            uploadFile(fileName: inputSystemInterimPreEHAP2CSVName)
+        }
     }
     
     //TODO: Code to calculate delta at each EPTA frequency between ears. If gain delta is <= 2.5 dB (either at every frequency or in average, maybe with focus on 4kHz range, then allow user to select best ear test only for EHA Part 2. After completing this assessment, if applicable, generate a trigger csv file called. monoRightEarBetter.csv or monoLeftEarBetter.csv. Then check for each of these files and if one exists, that triggers the ability to test in that ear (Right or left) only for EHAP2. If neither file exists, then mono test is not available.
@@ -303,13 +323,16 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
             print("preEHAP2MonoEarTestingPan: \(preEHAP2MonoEarTestingPan)")
         }
     }
+}
     
+extension EHAInterimPreEHAP2Content {
+    //MARK: -CSV/JSON Extension
     func getPreEHAP2TestLinkPath() async -> String {
         let testLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = testLinkPaths[0]
         return documentsDirectory
     }
-
+    
     func checkPreEHAP2MonoRightTestLink() async {
         let preEHAP2MonoRightEarBetterName = ["preEHAP2MonoRightEarBetter.csv"]
         let fileManager = FileManager.default
@@ -337,11 +360,6 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
             }
         }
     }
-}
-
-
-
-extension EHAInterimPreEHAP2Content {
     
     func getInterimPreEHAP2Data() async {
         guard let systemSettingsInterimPreEHAP2Data = await getSystemInterimPreEHAP2JSONData() else { return }
@@ -350,7 +368,7 @@ extension EHAInterimPreEHAP2Content {
         let jsonSystemSettingsInterimPreEHAP2String = String(data: systemSettingsInterimPreEHAP2Data, encoding: .utf8)
         print(jsonSystemSettingsInterimPreEHAP2String!)
         do {
-        self.saveSystemSettingsInterimPreEHAP2 = try JSONDecoder().decode(SaveSystemSettingsInterimPreEHAP2.self, from: systemSettingsInterimPreEHAP2Data)
+            self.saveSystemSettingsInterimPreEHAP2 = try JSONDecoder().decode(SaveSystemSettingsInterimPreEHAP2.self, from: systemSettingsInterimPreEHAP2Data)
             print("JSON Get System Interim PreEHAP2 Settings Run")
             print("data: \(systemSettingsInterimPreEHAP2Data)")
         } catch let error {
@@ -360,7 +378,7 @@ extension EHAInterimPreEHAP2Content {
     
     func getSystemInterimPreEHAP2JSONData() async -> Data? {
         let saveSystemSettingsInterimPreEHAP2 = SaveSystemSettingsInterimPreEHAP2 (
-        jsonFinalInterimPreEHAP2SystemVolume: finalInterimPreEHAP2SystemVolume)
+            jsonFinalInterimPreEHAP2SystemVolume: finalInterimPreEHAP2SystemVolume)
         let jsonSystemInterimPreEHAP2SettingsData = try? JSONEncoder().encode(saveSystemSettingsInterimPreEHAP2)
         print("saveFinalResults: \(saveSystemSettingsInterimPreEHAP2)")
         print("Json Encoded \(jsonSystemInterimPreEHAP2SettingsData!)")
@@ -368,7 +386,7 @@ extension EHAInterimPreEHAP2Content {
     }
     
     func saveSystemInterimPreEHAP2ToJSON() async {
-    // !!!This saves to device directory, whish is likely what is desired
+        // !!!This saves to device directory, whish is likely what is desired
         let systemInterimPreEHAP2Paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let interimPreEHAP2DocumentsDirectory = systemInterimPreEHAP2Paths[0]
         print("interimPreEHAP2DocumentsDirectory: \(interimPreEHAP2DocumentsDirectory)")
@@ -384,7 +402,7 @@ extension EHAInterimPreEHAP2Content {
             print("Error writing to JSON System Interim PreEHAP2 Settings file: \(error)")
         }
     }
-
+    
     func writeSystemInterimPreEHAP2ResultsToCSV() async {
         print("writeSystemInterimPreEHAP2ResultsToCSV Start")
         let stringFinalInterimPreEHAP2SystemVolume = "finalInterimPreEHAP2SystemVolume," + finalInterimPreEHAP2SystemVolume.map { String($0) }.joined(separator: ",")
@@ -406,7 +424,7 @@ extension EHAInterimPreEHAP2Content {
     
     func writeInputSystemInterimPreEHAP2ResultsToCSV() async {
         print("writeInputSystemInterimPreEHAP2ResultsToCSV Start")
-
+        
         let stringFinalInterimPreEHAP2SystemVolume = finalInterimPreEHAP2SystemVolume.map { String($0) }.joined(separator: ",")
         let stringFinalInterimPreEHAP2SilentMode = finalInterimPreEHAP2SilentMode.map { String($0) }.joined(separator: "'")
         do {
@@ -424,17 +442,88 @@ extension EHAInterimPreEHAP2Content {
         }
     }
     
+    private func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
+    
+    func comparedLastNameCSVReader() async {
+        let dataSetupName = inputFinalComparedLastNameCSV
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLComparedLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLComparedLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLComparedLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 0, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputLastName = fieldLastName
+            print("inputLastName: \(inputLastName)")
+        } catch {
+            print("Error in reading Last Name results")
+        }
+    }
+    
+    private func uploadFile(fileName: String) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let storageRef = Storage.storage().reference()
+            let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+            let lastNameRef = storageRef.child(inputLastName)
+            let fileManager = FileManager.default
+            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+            if fileManager.fileExists(atPath: filePath[0]) {
+                let filePath = URL(fileURLWithPath: filePath[0])
+                let localFile = filePath
+                //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                let fileRef = lastNameRef.child("\(fileName)")
+                
+                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                    if error == nil && metadata == nil {
+                        //TSave a reference to firestore database
+                    }
+                    return
+                }
+                print(uploadTask)
+            } else {
+                print("No File")
+            }
+        }
+    }
+}
+
+extension EHAInterimPreEHAP2Content {
+//MARK: -NavigationLink Extension
     private func linkEHATesting(ehaTesting: EHATesting) -> some View {
         EmptyView()
     }
 }
 
-struct EHAInterimPreEHAP2View_Previews: PreviewProvider {
-    static var previews: some View {
-        EHAInterimPreEHAP2View(ehaTesting: nil, relatedLinkEHATesting: linkEHATesting)
-    }
-    
-    static func linkEHATesting(ehaTesting: EHATesting) -> some View {
-        EmptyView()
-    }
-}
+//struct EHAInterimPreEHAP2View_Previews: PreviewProvider {
+//    static var previews: some View {
+//        EHAInterimPreEHAP2View(ehaTesting: nil, relatedLinkEHATesting: linkEHATesting)
+//    }
+//
+//    static func linkEHATesting(ehaTesting: EHATesting) -> some View {
+//        EmptyView()
+//    }
+//}

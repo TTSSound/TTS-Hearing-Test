@@ -247,7 +247,9 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
             }
             .onChange(of: phonGain) { phonValue in
                 if phonValue > 0.0 {
-                    uploadUserDataEntry()
+                    Task {
+                        await uploadPostBilateralData()
+                    }
                 } else {
                     print("Fatal error in phon value change of logic")
                 }
@@ -267,7 +269,7 @@ extension PostBilateral1kHzTestContent {
         await writeBetaFinalGainSettingToCSV()
     }
     
-    func uploadUserDataEntry() {
+    func uploadPostBilateralData() async {
         DispatchQueue.main.async(group: .none, qos: .background) {
             uploadFile(fileName: betaInputOnekHzSummaryCSVName)
         }
@@ -620,7 +622,7 @@ extension PostBilateral1kHzTestContent {
 }
  
 extension PostBilateral1kHzTestContent {
-    //MARK: -CSV/JSON Methods Extenstion
+//MARK: -CSV/JSON Methods Extenstion
     func betaOnekHzInputResultsCSVReader() async {
         let onekHzSummaryCSVName = [betaInputOnekHzSummaryCSVName]
         let fileOnekHzManager = FileManager.default
@@ -711,7 +713,7 @@ extension PostBilateral1kHzTestContent {
     
     // Only Use Files that have a pure string name assigned, not a name of ["String"]
     private func uploadFile(fileName: String) {
-        DispatchQueue.global(qos: .userInteractive).async {
+        DispatchQueue.global(qos: .background).async {
             let storageRef = Storage.storage().reference()
             let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
             let lastNameRef = storageRef.child(inputLastName)

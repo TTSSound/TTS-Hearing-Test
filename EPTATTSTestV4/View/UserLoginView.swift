@@ -448,8 +448,10 @@ struct UserLoginContent<Link: View>: View {
                 })
                 .onChange(of: userLoggedInAndSubmitted) { uLIASValue in
                     if uLIASValue == true {
-                        uploadUserDataEntry()
-                        print("Success creating, loging in and starting upload")
+                        Task {
+                            await uploadUserDataEntry()
+                            print("Success creating, loging in and starting upload")
+                        }
                     } else {
                         print("Fatal Error in accountCreatedAndLoggedIn logic")
                     }
@@ -602,7 +604,7 @@ extension UserLoginContent {
         inputLastName = lastName
     }
     
-    func uploadUserDataEntry() {
+    func uploadUserDataEntry() async {
         DispatchQueue.main.asyncAfter(deadline: .now() + 7.5) {
             uploadFile2(fileName: disclaimerCSVName)
             uploadFile2(fileName: inputDisclaimerCSVName)

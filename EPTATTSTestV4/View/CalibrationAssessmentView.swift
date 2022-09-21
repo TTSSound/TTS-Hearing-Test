@@ -322,8 +322,10 @@ struct CalibrationAssessmentView: View {
         }
         .onChange(of: isOkayToUpload) { uploadValue in
             if uploadValue == true {
-                uploadDeviceData()
-                print("Upload Data Started")
+                Task{
+                    await uploadDeviceData()
+                    print("Upload Data Started")
+                }
             } else {
                 print("Fatal error in upload data change logic")
             }
@@ -434,8 +436,8 @@ extension CalibrationAssessmentView {
         await writeInputDeviceResultsToCSV()
     }
     
-    func uploadDeviceData() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, qos: .background) {
+    func uploadDeviceData() async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, qos: .background) {
             uploadFile(fileName: deviceCSVName)
             uploadFile(fileName: inputDeviceCSVName)
             uploadFile(fileName: "DeviceSelection.json")

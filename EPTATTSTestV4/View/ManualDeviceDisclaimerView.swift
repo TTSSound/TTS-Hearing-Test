@@ -115,9 +115,11 @@ struct ManualDeviceDisclaimerView: View {
                     }
                     .foregroundColor(unLinkColors[unLinkColorIndex])
                     .onTapGesture {
-                        uploadManualDeviceDisclaimer()
-                        print("uncalDisclaimerSetting: \(uncalDisclaimerSetting)")
-                        print("uncalDisclaimerAgreement: \(uncalDisclaimerAgreement)")
+                        Task {
+                            await uploadManualDeviceDisclaimer()
+                            print("uncalDisclaimerSetting: \(uncalDisclaimerSetting)")
+                            print("uncalDisclaimerAgreement: \(uncalDisclaimerAgreement)")
+                        }
                     }
                 }
             }
@@ -180,8 +182,8 @@ extension ManualDeviceDisclaimerView {
         await writeInputManualDisclaimerToCSV()
     }
     
-    func uploadManualDeviceDisclaimer() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, qos: .background) {
+    func uploadManualDeviceDisclaimer() async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, qos: .background) {
             uploadFile(fileName: manuaDisclaimerCSVName)
             uploadFile(fileName: inputManuaDisclaimerCSVName)
             uploadFile(fileName: "ManualDisclaimerAgreement.json")

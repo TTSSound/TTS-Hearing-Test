@@ -87,6 +87,11 @@ struct EHATTSTestPart1Content<Link: View>: View {
     var colorModel: ColorModel = ColorModel()
     @StateObject var gainReferenceModel: GainReferenceModel = GainReferenceModel()
     
+    @State private var inputLastName = String()
+    @State private var dataFileURLComparedLastName = URL(fileURLWithPath: "")   // General and Open
+    @State private var isOkayToUpload = false
+    let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
+    
     @State var localHeard = 0
     @State var localPlaying = Int()    // Playing = 1. Stopped = -1
     @State var localReversal = Int()
@@ -473,6 +478,9 @@ struct EHATTSTestPart1Content<Link: View>: View {
                                 Button {
                                     self.ehaP1EPTATestCompleted = true
                                     showTestCompletionSheet.toggle()
+                                    Task{
+                                        await uploadEPTAEHAP1Results()
+                                    }
                                 } label: {
                                     Text("Continue")
                                         .fontWeight(.semibold)
@@ -507,6 +515,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
                     await checkGainEHAP1_24DataLink()
                     await checkGainEHAP1_27DataLink()
                     await gainCurveAssignment()
+                    await comparedLastNameCSVReader()
                     envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]
                     gainEHAP1PhonIsSet = true
                 } else if gainEHAP1PhonIsSet == true {
@@ -1497,36 +1506,11 @@ extension EHATTSTestPart1Content {
         stop()
         userPausedTest = true
         playingStringColorIndex = 2
-        if envDataObjectModel_index == 31 {
-            playingStringColorIndex2 = 2
-        } else {
-            playingStringColorIndex2 = 1
-        }
-        
-        //        audioThread.async {
-        //            localPlaying = 0
-        //            stop()
-        //            userPausedTest = true
-        //            playingStringColorIndex = 2
-        //        }
-        //        DispatchQueue.main.async {
-        //            localPlaying = 0
-        //            stop()
-        //            userPausedTest = true
-        //            playingStringColorIndex = 2
-        //        }
-        //        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, qos: .userInitiated) {
-        //            localPlaying = 0
-        //            stop()
-        //            userPausedTest = true
-        //            playingStringColorIndex = 2
-        //        }
-        //        DispatchQueue.main.asyncAfter(deadline: .now() + 3, qos: .userInitiated) {
-        //            localPlaying = -1
-        //            stop()
-        //            userPausedTest = true
-        //            playingStringColorIndex = 2
-        //        }
+//        if envDataObjectModel_index == 31 {
+//            playingStringColorIndex2 = 2
+//        } else {
+//            playingStringColorIndex2 = 1
+//        }
     }
     
     func concatenateFinalArrays() async {
@@ -1585,13 +1569,33 @@ extension EHATTSTestPart1Content {
                         await writeEHA1InputRightLeftResultsToCSV()
                         await writeEHA1InputRightResultsToCSV()
                         await writeEHA1InputLeftResultsToCSV()
-                        
+            
                         await getEHAP1Data()
                         await saveEHA1ToJSON()
-                        //                await envDataObjectModel_uploadSummaryResultsTest()
+                        DispatchQueue.main.async(group: .none, qos: .userInteractive) {
+                            isOkayToUpload = true
+                        }
                     }
                 }
             }
+        }
+    }
+    
+
+    
+    func uploadEPTAEHAP1Results() async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, qos: .background) {
+            uploadFile(fileName: fileEHAP1Name)
+            uploadFile(fileName: summaryEHAP1CSVName)
+            uploadFile(fileName: detailedEHAP1CSVName)
+            uploadFile(fileName: inputEHAP1SummaryCSVName)
+            uploadFile(fileName: inputEHAP1DetailedCSVName)
+            uploadFile(fileName: summaryEHAP1LRCSVName)
+            uploadFile(fileName: summaryEHAP1RightCSVName)
+            uploadFile(fileName: summaryEHAP1LeftCSVName)
+            uploadFile(fileName: inputEHAP1LRSummaryCSVName)
+            uploadFile(fileName: inputEHAP1RightSummaryCSVName)
+            uploadFile(fileName: inputEHAP1LeftSummaryCSVName)
         }
     }
 }
@@ -1601,15 +1605,10 @@ extension EHATTSTestPart1Content {
     
     func getEHAP1Data() async {
         guard let data = await getEHAP1JSONData() else { return }
-//        print("Json Data:")
-//        print(data)
         let jsonString = String(data: data, encoding: .utf8)
         jsonHoldingString = [jsonString!]
-//        print(jsonString!)
         do {
         self.saveFinalResults = try JSONDecoder().decode(SaveFinalResults.self, from: data)
-//            print("JSON GetData Run")
-//            print("data: \(data)")
         } catch let error {
             print("error decoding \(error)")
         }
@@ -1645,8 +1644,6 @@ extension EHATTSTestPart1Content {
             jsonFinalStoredleftFinalGainsArray: finalStoredleftFinalGainsArray)
 
         let jsonData = try? JSONEncoder().encode(saveFinalResults)
-//        print("saveFinalResults: \(saveFinalResults)")
-//        print("Json Encoded \(jsonData!)")
         return jsonData
     }
 
@@ -1654,14 +1651,11 @@ extension EHATTSTestPart1Content {
         // !!!This saves to device directory, whish is likely what is desired
         let ehaP1paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let ehaP1DocumentsDirectory = ehaP1paths[0]
-//        print("ehaP1DocumentsDirectory: \(ehaP1DocumentsDirectory)")
         let ehaP1FilePaths = ehaP1DocumentsDirectory.appendingPathComponent(fileEHAP1Name)
-//        print(ehaP1FilePaths)
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         do {
             let jsonEHAP1Data = try encoder.encode(saveFinalResults)
-//            print(jsonEHAP1Data)
             try jsonEHAP1Data.write(to: ehaP1FilePaths)
         } catch {
             print("Error writing EHAP1 to JSON file: \(error)")
@@ -1684,14 +1678,10 @@ extension EHATTSTestPart1Content {
         let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
-//        finalStoredRightFinalGainsArray.append(contentsOf: rightFinalGainsArray)
-//        finalStoredleftFinalGainsArray.append(contentsOf: leftFinalGainsArray)
         do {
             let csvEHAP1DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvEHAP1DetailDocumentsDirectory = csvEHAP1DetailPath
-//                print("CSV DocumentsDirectory: \(csvEHAP1DetailDocumentsDirectory)")
             let csvEHAP1DetailFilePath = csvEHAP1DetailDocumentsDirectory.appendingPathComponent(detailedEHAP1CSVName)
-//            print(csvEHAP1DetailFilePath)
             let writer = try CSVWriter(fileURL: csvEHAP1DetailFilePath, append: false)
             try writer.write(row: [stringFinalStoredIndex])
             try writer.write(row: [stringFinalStoredTestPan])
@@ -1708,7 +1698,6 @@ extension EHATTSTestPart1Content {
             try writer.write(row: [stringFinalleftFinalGainsArray])
             try writer.write(row: [stringFinalStoredRightFinalGainsArray])
             try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//                print("CVS EHAP1 Detailed Writer Success")
         } catch {
             print("CVSWriter EHAP1 Detailed Error or Error Finding File for Detailed CSV \(error)")
         }
@@ -1727,9 +1716,7 @@ extension EHATTSTestPart1Content {
          do {
              let csvEHAP1SummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1SummaryDocumentsDirectory = csvEHAP1SummaryPath
-//                 print("CSV Summary EHA Part 1 DocumentsDirectory: \(csvEHAP1SummaryDocumentsDirectory)")
              let csvEHAP1SummaryFilePath = csvEHAP1SummaryDocumentsDirectory.appendingPathComponent(summaryEHAP1CSVName)
-//             print(csvEHAP1SummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1SummaryFilePath, append: false)
              try writer.write(row: [stringFinalStoredResultsFrequency])
              try writer.write(row: [stringFinalStoredTestPan])
@@ -1740,7 +1727,6 @@ extension EHATTSTestPart1Content {
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//                 print("CVS Summary EHA Part 1 Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 1 Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -1765,9 +1751,7 @@ extension EHATTSTestPart1Content {
         do {
             let csvInputEHAP1DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvInputEHAP1DetailDocumentsDirectory = csvInputEHAP1DetailPath
-//                print("CSV Input EHAP1 Detail DocumentsDirectory: \(csvInputEHAP1DetailDocumentsDirectory)")
             let csvInputEHAP1DetailFilePath = csvInputEHAP1DetailDocumentsDirectory.appendingPathComponent(inputEHAP1DetailedCSVName)
-//            print(csvInputEHAP1DetailFilePath)
             let writer = try CSVWriter(fileURL: csvInputEHAP1DetailFilePath, append: false)
             try writer.write(row: [stringFinalStoredIndex])
             try writer.write(row: [stringFinalStoredTestPan])
@@ -1784,7 +1768,6 @@ extension EHATTSTestPart1Content {
             try writer.write(row: [stringFinalleftFinalGainsArray])
             try writer.write(row: [stringFinalStoredRightFinalGainsArray])
             try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//                print("CVS Input EHA Part 1Detailed Writer Success")
         } catch {
             print("CVSWriter Input EHA Part 1 Detailed Error or Error Finding File for Input Detailed CSV \(error)")
         }
@@ -1803,9 +1786,7 @@ extension EHATTSTestPart1Content {
          do {
              let csvEHAP1InputSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1InputSummaryDocumentsDirectory = csvEHAP1InputSummaryPath
-//             print("CSV Input EHA Part 1 Summary DocumentsDirectory: \(csvEHAP1InputSummaryDocumentsDirectory)")
              let csvEHAP1InputSummaryFilePath = csvEHAP1InputSummaryDocumentsDirectory.appendingPathComponent(inputEHAP1SummaryCSVName)
-//             print(csvEHAP1InputSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1InputSummaryFilePath, append: false)
              try writer.write(row: [stringFinalStoredResultsFrequency])
              try writer.write(row: [stringFinalStoredTestPan])
@@ -1816,7 +1797,6 @@ extension EHATTSTestPart1Content {
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//                 print("CVS Input EHA Part 1 Summary Data Writer Success")
          } catch {
              print("CVSWriter Input EHA Part 1 Summary Data Error or Error Finding File for Input Summary CSV \(error)")
          }
@@ -1830,15 +1810,12 @@ extension EHATTSTestPart1Content {
          do {
              let csvEHAP1LRSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1LRSummaryDocumentsDirectory = csvEHAP1LRSummaryPath
-//                 print("CSV Summary EHA Part 1 LR Summary DocumentsDirectory: \(csvEHAP1LRSummaryDocumentsDirectory)")
              let csvEHAP1LRSummaryFilePath = csvEHAP1LRSummaryDocumentsDirectory.appendingPathComponent(summaryEHAP1LRCSVName)
-//             print(csvEHAP1LRSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1LRSummaryFilePath, append: false)
              try writer.write(row: [stringFinalrightFinalGainsArray])
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//                 print("CVS Summary EHA Part 1 LR Summary Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 1 LR Summary Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -1850,13 +1827,10 @@ extension EHATTSTestPart1Content {
          do {
              let csvEHAP1RightSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1RightSummaryDocumentsDirectory = csvEHAP1RightSummaryPath
-//                 print("CSV Summary EHA Part 1 Right Summary DocumentsDirectory: \(csvEHAP1RightSummaryDocumentsDirectory)")
              let csvEHAP1RightSummaryFilePath = csvEHAP1RightSummaryDocumentsDirectory.appendingPathComponent(summaryEHAP1RightCSVName)
-//             print(csvEHAP1RightSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1RightSummaryFilePath, append: false)
              try writer.write(row: [stringFinalrightFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
-//                 print("CVS Summary EHA Part 1 Right Summary Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 1 Right Summary Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -1868,13 +1842,10 @@ extension EHATTSTestPart1Content {
          do {
              let csvEHAP1LeftSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1LeftSummaryDocumentsDirectory = csvEHAP1LeftSummaryPath
-//                 print("CSV Summary EHA Part 1 Left Summary DocumentsDirectory: \(csvEHAP1LeftSummaryDocumentsDirectory)")
              let csvEHAP1LeftSummaryFilePath = csvEHAP1LeftSummaryDocumentsDirectory.appendingPathComponent(summaryEHAP1LeftCSVName)
-//             print(csvEHAP1LeftSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1LeftSummaryFilePath, append: false)
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//                 print("CVS Summary EHA Part 1 Left Summary Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 1 Left Summary Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -1888,9 +1859,8 @@ extension EHATTSTestPart1Content {
          do {
              let csvEHAP1InputLRSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1InputLRSummaryDocumentsDirectory = csvEHAP1InputLRSummaryPath
-//                 print("CSV Summary EHA Part 1 LR Summary DocumentsDirectory: \(csvEHAP1LRSummaryDocumentsDirectory)")
              let csvEHAP1InputLRSummaryFilePath = csvEHAP1InputLRSummaryDocumentsDirectory.appendingPathComponent(inputEHAP1LRSummaryCSVName)
-//             print(csvEHAP1InputLRSummaryFilePath)
+             print(csvEHAP1InputLRSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1InputLRSummaryFilePath, append: false)
              try writer.write(row: [stringFinalrightFinalGainsArray])
              try writer.write(row: [stringFinalleftFinalGainsArray])
@@ -1908,13 +1878,10 @@ extension EHATTSTestPart1Content {
          do {
              let csvEHAP1InputRightSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1InputRightSummaryDocumentsDirectory = csvEHAP1InputRightSummaryPath
-//                 print("CSV Summary EHA Part 1 Right Input DocumentsDirectory: \(csvEHAP1InputRightSummaryDocumentsDirectory)")
              let csvEHAP1InputRightSummaryFilePath = csvEHAP1InputRightSummaryDocumentsDirectory.appendingPathComponent(inputEHAP1RightSummaryCSVName)
-//             print(csvEHAP1InputRightSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1InputRightSummaryFilePath, append: false)
              try writer.write(row: [stringFinalrightFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
-//                 print("CVS Summary EHA Part 1 Right Input Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 1 Right Input Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -1926,16 +1893,82 @@ extension EHATTSTestPart1Content {
          do {
              let csvEHAP1InputLeftSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1InputLeftSummaryDocumentsDirectory = csvEHAP1InputLeftSummaryPath
-//                 print("CSV Summary EHA Part 1 Left Input DocumentsDirectory: \(csvEHAP1InputSummaryDocumentsDirectory)")
              let csvEHAP1InputLeftSummaryFilePath = csvEHAP1InputLeftSummaryDocumentsDirectory.appendingPathComponent(inputEHAP1LeftSummaryCSVName)
              print(csvEHAP1InputLeftSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP1InputLeftSummaryFilePath, append: false)
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//                 print("CVS Summary EHA Part 1 Left Input Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 1 Left Input Data Error or Error Finding File for Detailed CSV \(error)")
          }
+    }
+    
+    private func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
+    
+    func comparedLastNameCSVReader() async {
+        let dataSetupName = inputFinalComparedLastNameCSV
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLComparedLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLComparedLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLComparedLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 0, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputLastName = fieldLastName
+            print("inputLastName: \(inputLastName)")
+        } catch {
+            print("Error in reading Last Name results")
+        }
+    }
+    
+    private func uploadFile(fileName: String) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let storageRef = Storage.storage().reference()
+            let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+            let lastNameRef = storageRef.child(inputLastName)
+            let fileManager = FileManager.default
+            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+            if fileManager.fileExists(atPath: filePath[0]) {
+                let filePath = URL(fileURLWithPath: filePath[0])
+                let localFile = filePath
+                //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                let fileRef = lastNameRef.child("\(fileName)")
+                
+                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                    if error == nil && metadata == nil {
+                        //TSave a reference to firestore database
+                    }
+                    return
+                }
+                print(uploadTask)
+            } else {
+                print("No File")
+            }
+        }
     }
 }
 
