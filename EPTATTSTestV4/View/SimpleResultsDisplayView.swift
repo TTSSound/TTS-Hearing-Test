@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SimpleResultsDisplayView: View {
     
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var colorModel: ColorModel = ColorModel()
     
     var body: some View {
         ZStack{

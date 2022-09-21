@@ -7,6 +7,11 @@
 
 import SwiftUI
 import CodableCSV
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
+import Firebase
+import FileProvider
 
 struct SaveFinalTestPurchase: Codable {  // This is a model
     var jsonFinalPurchasedEHATestUUID = [String]()
@@ -23,8 +28,15 @@ struct SaveFinalTestPurchase: Codable {  // This is a model
 }
 
 struct InAppPurchaseView: View {
+    var colorModel: ColorModel = ColorModel()
     
-    @StateObject var colorModel: ColorModel = ColorModel()
+    @State private var inputLastName = String()
+    @State private var inputSetupLastName = String()
+    @State private var inputBetaLastName = String()
+    @State private var dataFileURLComparedLastName = URL(fileURLWithPath: "")   // General and Open
+    @State private var dataFileURLLastName = URL(fileURLWithPath: "")
+    @State private var isOkayToUpload = false
+    let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
     
     @State var EHAPurchased: Bool = false
     @State var EPTAPurchased: Bool = false
@@ -43,7 +55,7 @@ struct InAppPurchaseView: View {
     @State var finalPurchasedEPTATestUUID: [String] = [String]()
     @State var finalPurchasedTestTolken: [String] = [String]()
     @State var finalTestPurchased: [Int] = [Int]()  // 1 = Purchased The EHA Test, 2 = EPTA
- 
+    
     let fileTestPurchasedName = ["TestPurchase.json"]
     let testPurchasedCSVName = "TestPurchaseCSV.csv"
     let inputTestPurchasedCSVName = "InputTestPurchaseCSV.csv"
@@ -148,9 +160,28 @@ struct InAppPurchaseView: View {
                 }
                 Spacer()
             }
+            .onAppear {
+                Task{
+                    await setupCSVReader()
+                    await comparedLastNameCSVReader()
+                    await compareLastNames()
+                }
+            }
+            .onChange(of: isOkayToUpload) { uploadValue in
+                if uploadValue == true {
+                    Task {
+                        await uploadInAppPurchase()
+                    }
+                } else {
+                    print("Fatal Error in uploadValue Change Of logic")
+                }
+            }
         }
     }
-    
+}
+
+extension InAppPurchaseView {
+    //MARK: -Methods Extension
     func completePurchase() async {
         if EHAPurchased == true && EPTAPurchased == false {
             selectedTest = 1
@@ -200,56 +231,69 @@ struct InAppPurchaseView: View {
         }
     }
     
-//    func generateEHAUUID() async {
-//        purchasedEHAUUID = UUID().uuidString
-//        userPurchasedEHAUUIDString.append(purchasedEHAUUID)
-//
-//        userPurchasedTest.append(selectedTest)
-//        print("userUUID: \(purchasedEHAUUID)")
-//        print("selectedTest: \(selectedTest)")
-//        print("testSelectionModel userPurchasedEHAUUID: \(userPurchasedEHAUUIDString)")
-//        print("testSelectionModel userPurchasedTest EHA: \(userPurchasedTest)")
-//    }
-//
-//    func generateEPTAUUID() async {
-//        purchasedEPTAUUID = UUID().uuidString
-//        userPurchasedEPTAUUIDString.append(purchasedEPTAUUID)
-//        selectedTest = 2
-//        userPurchasedTest.append(selectedTest)
-//        print("userUUID: \(purchasedEPTAUUID)")
-//        print("testSelectionModel userPurchasedEPTAUUID: \(userPurchasedEPTAUUIDString)")
-//        print("testSelectionModel userPurchasedTest EPTA: \(userPurchasedTest)")
-//    }
-//
-//    func concatenatePurchaseTestFinalArrays() async {
-//        finalPurchasedEHATestUUID.append(userPurchasedEHAUUIDString)
-//        finalPurchasedEPTATestUUID.append(userPurchasedEPTAUUIDString)
-//        print("testSelectionModel finalPurchasedEHATestUUID: \(finalPurchasedEHATestUUID)")
-//        print("testSelectionModel finalPurchasedEPTATestUUID: \(finalPurchasedEPTATestUUID)")
-//    }
-//
-//    func assignFinalTestTolken() async {
-//        if selectedTest == 1 {
-//            finalPurchasedTestTolken.append(userPurchasedEHAUUIDString)
-//            finalTestPurchased.append(selectedTest)
-//        } else if selectedTest == 2 {
-//            finalPurchasedTestTolken.append(userPurchasedEPTAUUIDString)
-//            finalTestPurchased.append(selectedTest)
-//        } else {
-//            print("!!!Error in assignFinalTestTolken Logic")
-//        }
-//        print("finalTestPurchased: \(finalTestPurchased)")
-//        print("finalPurchasedTestTolken: \(finalPurchasedTestTolken)")
-//    }
-
+    //    func generateEHAUUID() async {
+    //        purchasedEHAUUID = UUID().uuidString
+    //        userPurchasedEHAUUIDString.append(purchasedEHAUUID)
+    //
+    //        userPurchasedTest.append(selectedTest)
+    //        print("userUUID: \(purchasedEHAUUID)")
+    //        print("selectedTest: \(selectedTest)")
+    //        print("testSelectionModel userPurchasedEHAUUID: \(userPurchasedEHAUUIDString)")
+    //        print("testSelectionModel userPurchasedTest EHA: \(userPurchasedTest)")
+    //    }
+    //
+    //    func generateEPTAUUID() async {
+    //        purchasedEPTAUUID = UUID().uuidString
+    //        userPurchasedEPTAUUIDString.append(purchasedEPTAUUID)
+    //        selectedTest = 2
+    //        userPurchasedTest.append(selectedTest)
+    //        print("userUUID: \(purchasedEPTAUUID)")
+    //        print("testSelectionModel userPurchasedEPTAUUID: \(userPurchasedEPTAUUIDString)")
+    //        print("testSelectionModel userPurchasedTest EPTA: \(userPurchasedTest)")
+    //    }
+    //
+    //    func concatenatePurchaseTestFinalArrays() async {
+    //        finalPurchasedEHATestUUID.append(userPurchasedEHAUUIDString)
+    //        finalPurchasedEPTATestUUID.append(userPurchasedEPTAUUIDString)
+    //        print("testSelectionModel finalPurchasedEHATestUUID: \(finalPurchasedEHATestUUID)")
+    //        print("testSelectionModel finalPurchasedEPTATestUUID: \(finalPurchasedEPTATestUUID)")
+    //    }
+    //
+    //    func assignFinalTestTolken() async {
+    //        if selectedTest == 1 {
+    //            finalPurchasedTestTolken.append(userPurchasedEHAUUIDString)
+    //            finalTestPurchased.append(selectedTest)
+    //        } else if selectedTest == 2 {
+    //            finalPurchasedTestTolken.append(userPurchasedEPTAUUIDString)
+    //            finalTestPurchased.append(selectedTest)
+    //        } else {
+    //            print("!!!Error in assignFinalTestTolken Logic")
+    //        }
+    //        print("finalTestPurchased: \(finalTestPurchased)")
+    //        print("finalPurchasedTestTolken: \(finalPurchasedTestTolken)")
+    //    }
+    
     func saveTestSelectionTolkens() async {
         await getTestPurchaseData()
         await saveTestPurchaseToJSON()
         await writeTestPurchaseToCSV()
         await writeInputTestPurchaseToCSV()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, qos: .userInteractive) {
+            isOkayToUpload = true
+        }
     }
     
-    
+    func uploadInAppPurchase() async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, qos: .background) {
+            uploadFile(fileName: "TestPurchase.json")
+            uploadFile(fileName: testPurchasedCSVName)
+            uploadFile(fileName: inputTestPurchasedCSVName)
+        }
+    }
+}
+
+extension InAppPurchaseView {
+//MARK: -CSV/JSON Methods Extension
     func getTestPurchaseData() async {
         guard let testPurchaseData = await getTestPurchseJSONData() else { return }
         print("Json Test Purchase Data")
@@ -341,11 +385,120 @@ struct InAppPurchaseView: View {
             print("CVSWriter Input Test Purchase Error or Error Finding File for Input Test Purchase CSV \(error.localizedDescription)")
         }
     }
-}
-
-
-struct InAppPurchaseView_Previews: PreviewProvider {
-    static var previews: some View {
-        InAppPurchaseView()
+    
+    private func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
+    
+    func comparedLastNameCSVReader() async {
+        let dataSetupName = inputFinalComparedLastNameCSV
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLComparedLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLComparedLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLComparedLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 0, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputBetaLastName = fieldLastName
+            print("inputLastName: \(inputLastName)")
+        } catch {
+            print("Error in reading Last Name results")
+        }
+    }
+    
+    private func setupCSVReader() async {
+        let dataSetupName = "InputSetupResultsCSV.csv"
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 1, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputSetupLastName = fieldLastName
+            print("inputLastName: \(inputLastName)")
+        } catch {
+            print("Error in reading Last Name results")
+        }
+    }
+    
+    func compareLastNames() async {
+        if inputSetupLastName == inputBetaLastName && inputSetupLastName != "" {
+            inputLastName = inputSetupLastName
+        } else if inputLastName != inputBetaLastName && inputLastName != "" {
+            inputLastName = inputSetupLastName
+        } else {
+            inputLastName = "ErrorLastName"
+            print("Fatal Error in input or beta last name")
+        }
+    }
+    
+    private func uploadFile(fileName: String) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let storageRef = Storage.storage().reference()
+            let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+            let lastNameRef = storageRef.child(inputLastName)
+            let fileManager = FileManager.default
+            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+            if fileManager.fileExists(atPath: filePath[0]) {
+                let filePath = URL(fileURLWithPath: filePath[0])
+                let localFile = filePath
+                //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                let fileRef = lastNameRef.child("\(fileName)")
+                
+                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                    if error == nil && metadata == nil {
+                        //TSave a reference to firestore database
+                    }
+                    return
+                }
+                print(uploadTask)
+            } else {
+                print("No File")
+            }
+        }
     }
 }
+
+
+//struct InAppPurchaseView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        InAppPurchaseView()
+//    }
+//}

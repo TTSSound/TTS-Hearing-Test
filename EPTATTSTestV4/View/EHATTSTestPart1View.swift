@@ -19,8 +19,8 @@ import Firebase
 import FirebaseStorage
 import FirebaseFirestoreSwift
 import Firebase
-//import FileProvider
-//import Alamofire
+import FileProvider
+
 
 
 struct EHATTSTestPart1View<Link: View>: View {
@@ -654,6 +654,17 @@ struct EHATTSTestPart1Content<Link: View>: View {
 //                        print("Prepare to Start Next Presentation")
                     }
                 }
+            }
+        }
+        .onChange(of: isOkayToUpload) { uploadValue in
+            print("!!@@@uploadValue: \(uploadValue)")
+            if uploadValue == true {
+                Task {
+                    print("!!!@@@@Starting Upload Results")
+                    await uploadEPTAEHAP1Results()
+                }
+            } else {
+                print("!!!Fatal error in uploadValue Change Of Logic")
             }
         }
     }
@@ -1572,7 +1583,7 @@ extension EHATTSTestPart1Content {
             
                         await getEHAP1Data()
                         await saveEHA1ToJSON()
-                        DispatchQueue.main.async(group: .none, qos: .userInteractive) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, qos: .userInteractive) {
                             isOkayToUpload = true
                         }
                     }

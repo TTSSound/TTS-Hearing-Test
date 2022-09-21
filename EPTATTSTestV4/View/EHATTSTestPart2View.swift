@@ -16,12 +16,12 @@ import Security
 import Combine
 import CoreData
 import CodableCSV
-//import Firebase
-//import FirebaseStorage
-//import FirebaseFirestoreSwift
-//import Firebase
-//import FileProvider
-//import Alamofire
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
+import Firebase
+import FileProvider
+
 
 struct ehaP2SaveFinalResults: Codable {  // This is a model
     var jsonName = String()
@@ -83,6 +83,11 @@ struct EHATTSTestPart2Content<Link: View>: View {
     var audioSessionModel = AudioSessionModel()
     var colorModel: ColorModel = ColorModel()
     @StateObject var gainReferenceModel: GainReferenceModel = GainReferenceModel()
+    
+    @State private var inputLastName = String()
+    @State private var dataFileURLComparedLastName = URL(fileURLWithPath: "")   // General and Open
+    @State private var isOkayToUpload = false
+    let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
 
     @State var ehaP2localHeard = 0
     @State var ehaP2localPlaying = Int()    // Playing = 1. Stopped = -1
@@ -403,10 +408,8 @@ struct EHATTSTestPart2Content<Link: View>: View {
   
     
     var body: some View {
-
        ZStack{
            colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
-//           RadialGradient(gradient: Gradient(colors: [Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706), Color.black]), center: .top, startRadius: -10, endRadius: 300).ignoresSafeArea()
            VStack {
                HStack{
                    if ehaP2fullTestCompleted == false {
@@ -415,7 +418,6 @@ struct EHATTSTestPart2Content<Link: View>: View {
                            .fontWeight(.bold)
                            .padding()
                            .foregroundColor(.white)
-
                    } else if ehaP2fullTestCompleted == true {
                        NavigationLink("Test Phase Complete, Press To Continue", destination: PostEHATestView(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting))
                            .padding()
@@ -423,7 +425,6 @@ struct EHATTSTestPart2Content<Link: View>: View {
                            .background(.green)
                            .foregroundColor(.white)
                            .cornerRadius(24)
-               
                    }
                }
                .navigationDestination(isPresented: $ehaP2fullTestCompleted) {
@@ -431,7 +432,6 @@ struct EHATTSTestPart2Content<Link: View>: View {
                }
                .padding(.top, 20)
                .padding(.bottom, 10)
-            
                HStack {
                    Spacer()
                    Toggle("MonoTest", isOn: $ehaP2MonoTest)
@@ -455,7 +455,6 @@ struct EHATTSTestPart2Content<Link: View>: View {
                }
                .padding(.top, 5)
                .padding(.bottom, 5)
-               
                .onChange(of: ehaP2MonoRightTest, perform: { rightValue in
                    if rightValue == true {
                            // Set Pan to 1.0
@@ -550,11 +549,8 @@ struct EHATTSTestPart2Content<Link: View>: View {
                .frame(width: 380, height: 50, alignment: .center)
                .background(Color .clear)
                .foregroundColor(.white)
-//               .cornerRadius(24)
                .padding(.top, 5)
                .padding(.bottom, 5)
-               
-               
                Spacer()
                if ehaP2TestStarted == false {
                    Button {
@@ -586,8 +582,6 @@ struct EHATTSTestPart2Content<Link: View>: View {
                        .cornerRadius(24)
                        .padding(.top, 20)
                        .padding(.bottom, 40)
-
-
                } else if ehaP2TestStarted == true {
                    Button {
                        ehaP2localPlaying = 0
@@ -624,7 +618,6 @@ struct EHATTSTestPart2Content<Link: View>: View {
                    }
                    .padding(.top, 10)
                    .padding(.bottom, 10)
-                   
                    Button {
                        ehaP2_heardArray.removeAll()
                        ehaP2pauseRestartTestCycle()
@@ -647,7 +640,6 @@ struct EHATTSTestPart2Content<Link: View>: View {
                    .padding(.top, 20)
                    .padding(.bottom, 20)
                }
-               
                Button {
                    ehaP2heardThread.async{ self.ehaP2localHeard = 1
                    }
@@ -662,16 +654,11 @@ struct EHATTSTestPart2Content<Link: View>: View {
                }
                .padding(.top, 10)
                .padding(.bottom, 80)
-               
-//               Spacer()
                }
                .fullScreenCover(isPresented: $ehaP2showTestCompletionSheet, content: {
                    ZStack{
                        colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
-//                       RadialGradient(gradient: Gradient(colors: [Color(red: 0.06274509803921569, green: 0.7372549019607844, blue: 0.06274509803921569), Color.black]), center: .bottom, startRadius: -10, endRadius: 300).ignoresSafeArea(.all, edges: .top)
-                       
                        VStack(alignment: .leading) {
-                           
                            Button(action: {
                                if ehaP2fullTestCompleted == true {
                                    ehaP2showTestCompletionSheet.toggle()
@@ -683,10 +670,8 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                    ehaP2localPlaying = 1
                                    ehaP2playingStringColorIndex = 2
                                    ehaP2userPausedTest = false
-                                   
                                    print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
                                }
-                               
                            }, label: {
                                Image(systemName: "xmark")
                                    .font(.headline)
@@ -797,6 +782,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                        await checkGainEHAP2_27DataLink()
                        await gainEHAP2CurveAssignment()
                        ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]
+                       await comparedLastNameCSVReader()
                        gainEHAP2PhonIsSet = true
                        ehaP2showTestCompletionSheet = true
                    } else if gainEHAP2PhonIsSet == true {
@@ -831,27 +817,15 @@ struct EHATTSTestPart2Content<Link: View>: View {
            // This is the lowest CPU approach from many, many tries
            .onChange(of: ehaP2localPlaying, perform: { ehaP2playingValue in
                ehaP2activeFrequency = ehaP2_samples[ehaP2_index]
-               
-               
-               
                ehaP2localPan = ehaP2localPanHoldingArray[ehaP2_index]
                ehaP2_pan = ehaP2localPanHoldingArray[ehaP2_index]
-//               print("ehaP2localPan: \(ehaP2localPan)")
-//               print("ehaP2localPanHoldingArray: \(ehaP2localPanHoldingArray)")
-//
 //               ehaP2localPan = ehaP2panArray[ehaP2_index]
 //               ehaP2_pan = ehaP2panArray[ehaP2_index]
                ehaP2localHeard = 0
                ehaP2localReversal = 0
                ehaP2TestStarted = true
-               
                if ehaP2playingValue == 1{
-//                   print("envDataObjectModel_testGain: \(ehaP2_testGain)")
-//                   print("activeFrequency: \(ehaP2activeFrequency)")
-//                   print("localPan: \(ehaP2localPan)")
-//                   print("envDataObjectModel_index: \(ehaP2_index)")
                    print("ehaP2localTestCount: \(ehaP2localTestCount)")
-                   
                    ehaP2audioThread.async {
                        ehaP2loadAndTestPresentation(sample: ehaP2activeFrequency, gain: ehaP2_testGain, pan: ehaP2localPan)
                        while ehaP2testPlayer!.isPlaying == true && self.ehaP2localHeard == 0 { }
@@ -969,6 +943,17 @@ struct EHATTSTestPart2Content<Link: View>: View {
                    }
                }
            }
+           .onChange(of: isOkayToUpload) { uploadValue in
+               print("!!@@@uploadValue: \(uploadValue)")
+               if uploadValue == true {
+                   Task{
+                       print("!!!@@@@Starting Upload Results")
+                       await uploadEHAP2Results()
+                   }
+               } else {
+                   print("Fatal Error in uploadValue Change of Logic")
+               }
+           }
        }
     
        
@@ -1014,7 +999,6 @@ struct EHATTSTestPart2Content<Link: View>: View {
         ehaP2localTestCount = 0
         ehaP2localMarkNewTestCycle = 0
         ehaP2localReversalEnd = 0
-        
         ehaP2_index = ehaP2_index + 1
 //        print(ehaP2_eptaSamplesCountArray[ehaP2_index]) /// This is causing the issue
         print("ehaP2_index: \(ehaP2_index)")
@@ -1115,7 +1099,6 @@ struct EHATTSTestPart2Content<Link: View>: View {
  
     func ehaP2preEventLogging() {
        DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
-//        DispatchQueue.global(qos: .userInitiated).async {
            ehaP2_indexForTest.append(ehaP2_index)
        }
        DispatchQueue.global(qos: .default).async {
@@ -1149,9 +1132,6 @@ struct EHATTSTestPart2Content<Link: View>: View {
             print("Error in localResponseTrackingLogic")
         }
     }
-    
-    
-    
     
     func maxEHAP2GainReachedReversal() async {
         if ehaP2_testGain >= 0.995 && ehaP2firstHeardIsTrue == false && ehaP2secondHeardIsTrue == false {
@@ -1205,8 +1185,6 @@ struct EHATTSTestPart2Content<Link: View>: View {
 //            await reversalStart()
         }
     }
-    
-   
 
     func ehaP2heardArrayNormalize() async {
         if ehaP2_testGain < 0.995 {
@@ -1215,7 +1193,6 @@ struct EHATTSTestPart2Content<Link: View>: View {
             ehaP2idxForTestNet1 = ehaP2idxForTest - 1
             ehaP2isCountSame = ehaP2idxHA - ehaP2idxForTest
             ehaP2heardArrayIdxAfnet1 = ehaP2_heardArray.index(after: ehaP2idxForTestNet1)
-            
             if ehaP2localStartingNonHeardArraySet == false {
                 ehaP2_heardArray.append(0)
                 self.ehaP2localStartingNonHeardArraySet = true
@@ -1232,7 +1209,6 @@ struct EHATTSTestPart2Content<Link: View>: View {
                     ehaP2idxHAFirst = ehaP2idxHAZero + 1
                     ehaP2isCountSame = ehaP2idxHA - ehaP2idxForTest
                     ehaP2heardArrayIdxAfnet1 = ehaP2_heardArray.index(after: ehaP2idxForTestNet1)
-                    
                 } else {
                     print("Error in arrayNormalization else if isCountSame && heardAIAFnet1 if segment")
                 }
@@ -1251,37 +1227,27 @@ struct EHATTSTestPart2Content<Link: View>: View {
     }
 }
 
-
 extension EHATTSTestPart2Content {
+    //MARK: -Reversal Methods Extension
     enum ehaP2LastErrors: Error {
         case ehaP2lastError
         case ehaP2lastUnexpected(code: Int)
     }
-
+    
     func ehaP2createReversalHeardArray() async {
         ehaP2_reversalHeard.append(ehaP2_heardArray[ehaP2idxHA-1])
         self.ehaP2idxReversalHeardCount = ehaP2_reversalHeard.count
     }
-    
-    
-    
     
     func ehaP2createReversalHeardArrayNonResponse() async {
         ehaP2_reversalHeard.append(ehaP2_heardArray[ehaP2idxHA-1])
         self.ehaP2idxReversalHeardCount = ehaP2_reversalHeard.count
     }
     
-    
-    
-    
-        
     func ehaP2createReversalGainArray() async {
         ehaP2_reversalGain.append(ehaP2_testGain)
-//        ehaP2_reversalGain.append(ehaP2_testTestGain[ehaP2idxHA-1])
+        //        ehaP2_reversalGain.append(ehaP2_testTestGain[ehaP2idxHA-1])
     }
-    
-    
-    
     
     func ehaP2createReversalGainArrayNonResponse() async {
         if ehaP2_testGain < 0.995 {
@@ -1291,10 +1257,6 @@ extension EHATTSTestPart2Content {
             ehaP2_reversalGain.append(1.0)
         }
     }
-    
-    
-    
-    
     
     func ehaP2checkHeardReversalArrays() async {
         if ehaP2idxHA - ehaP2idxReversalHeardCount == 0 {
@@ -1436,19 +1398,19 @@ extension EHATTSTestPart2Content {
             if ehaP2idxReversalHeardCount == 2 && ehaP2secondHeardIsTrue == true {
                 print("!!! In first sub if of else if check too high")
                 await ehaP2startTooHighCheck()
-//            } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false {
-//                print("!!! In first sub else if heard count == 2. reversal action")
-//                await ehaP2reversalAction()
-            
-// Changes HERE From EHAP1
-// !!!!
+                //            } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false {
+                //                print("!!! In first sub else if heard count == 2. reversal action")
+                //                await ehaP2reversalAction()
+                
+                // Changes HERE From EHAP1
+                // !!!!
             } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false && ehaP2localSeriesNoResponses < 2 {
                 print("!!! In first sub else if heard count == 2. reversal action")
                 await ehaP2reversalAction()
             } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false && ehaP2localSeriesNoResponses == 2 {
                 print("!!!in second sub else if heard count ==2 local series no response == 2 reversal of four")
                 await ehaP2reversalOfFour()
-// !!! Changes Above from EHAP1
+                // !!! Changes Above from EHAP1
                 
                 
             } else {
@@ -1477,24 +1439,17 @@ extension EHATTSTestPart2Content {
         }
     }
     
-//    func ehaP2printReversalGain() async {
-//        DispatchQueue.global(qos: .background).async {
-//            print("New Gain: \(ehaP2_testGain)")
-//            print("Reversal Direcction: \(ehaP2_reversalDirection)")
-//        }
-//    }
-    
     func ehaP2reversalHeardCount1() async {
-       await ehaP2reversalAction()
-   }
-            
+        await ehaP2reversalAction()
+    }
+    
     func ehaP2check2PositiveSeriesReversals() async {
         if ehaP2_reversalHeard[ehaP2idxHA-2] == 1 && ehaP2_reversalHeard[ehaP2idxHA-1] == 1 {
             print("reversal - check2PositiveSeriesReversals")
             print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
         }
     }
-
+    
     func ehaP2checkTwoNegativeSeriesReversals() async {
         if ehaP2_reversalHeard.count >= 3 && ehaP2_reversalHeard[ehaP2idxHA-2] == 0 && ehaP2_reversalHeard[ehaP2idxHA-1] == 0 {
             await ehaP2reversalOfFour()
@@ -1520,7 +1475,7 @@ extension EHATTSTestPart2Content {
         ehaP2secondHeardResponseIndex = Int()
         ehaP2secondHeardIsTrue = false
     }
-
+    
     func ehaP2reversalsCompleteLogging() async {
         print("in reversalcompletelogging")
         if ehaP2secondHeardIsTrue == true {
@@ -1535,10 +1490,8 @@ extension EHATTSTestPart2Content {
             print("ehaP2secondHeardResponseIndex: \(ehaP2secondHeardResponseIndex)")
             print("ehaP2firstGain: \(ehaP2firstGain)")
             print("ehaP2secondGain: \(ehaP2secondGain)")
-
             let ehaP2delta = ehaP2firstGain - ehaP2secondGain
             let ehaP2avg = (ehaP2firstGain + ehaP2secondGain)/2
-            
             if ehaP2delta == 0 {
                 print("in second if")
                 ehaP2_averageGain = ehaP2secondGain
@@ -1569,12 +1522,12 @@ extension EHATTSTestPart2Content {
                 print("average Gain: \(ehaP2_averageGain)")
             }
         } else if ehaP2secondHeardIsTrue == false {
-                print("Contine, second hear is true = false")
+            print("Contine, second hear is true = false")
         } else {
-                print("Critical error in reversalsCompletLogging Logic")
+            print("Critical error in reversalsCompletLogging Logic")
         }
     }
-
+    
     func ehaP2AssignLRAverageSampleGains() async {
         if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2localPan == 1.0 && ehaP2MonoTest == false {
             //go through each assignment based on index
@@ -1614,7 +1567,7 @@ extension EHATTSTestPart2Content {
                 ehaP2RightFinalGainSample25 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample25)
                 print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 18 {
                 ehaP2RightFinalGainSample26 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample26)
@@ -1651,7 +1604,7 @@ extension EHATTSTestPart2Content {
                 ehaP2RightFinalGainSample34 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample34)
                 print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 36 {
                 ehaP2RightFinalGainSample35 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample35)
@@ -1688,7 +1641,7 @@ extension EHATTSTestPart2Content {
                 ehaP2RightFinalGainSample43 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample43)
                 print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 54 {
                 ehaP2RightFinalGainSample44 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample44)
@@ -1725,7 +1678,7 @@ extension EHATTSTestPart2Content {
                 ehaP2RightFinalGainSample52 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample52)
                 print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 72 {
                 ehaP2RightFinalGainSample53 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample53)
@@ -1798,7 +1751,7 @@ extension EHATTSTestPart2Content {
                 ehaP2LeftFinalGainSample25 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample25)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 27 {
                 ehaP2LeftFinalGainSample26 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample26)
@@ -1835,7 +1788,7 @@ extension EHATTSTestPart2Content {
                 ehaP2LeftFinalGainSample34 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample34)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 45 {
                 ehaP2LeftFinalGainSample35 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample35)
@@ -1872,7 +1825,7 @@ extension EHATTSTestPart2Content {
                 ehaP2LeftFinalGainSample43 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample43)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 63 {
                 ehaP2LeftFinalGainSample44 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample44)
@@ -1909,7 +1862,7 @@ extension EHATTSTestPart2Content {
                 ehaP2LeftFinalGainSample52 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample52)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 79 {
                 ehaP2LeftFinalGainSample53 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample53)
@@ -1938,7 +1891,7 @@ extension EHATTSTestPart2Content {
                 ehaP2LeftFinalGainSample59 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample59)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
-            
+                
             } else {
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
                 fatalError("In ehaP2left side assignLRAverageSampleGains")
@@ -1948,8 +1901,8 @@ extension EHATTSTestPart2Content {
             print("in bilateral gain logging Coninue, not ready to log in assignLRAverageSampleGains")
         }
     }
-
-    // Need to add single sided mono test for Left / Right / and Mono of pan = 0.0
+    
+    // Single sided mono test for Left / Right / and Mono of pan = 0.0
     func ehaP2AssignMonoAverageSampleGains() async {
         if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2localPan == 1.0 && ehaP2MonoTest == true {
             //go through each assignment based on index
@@ -1989,7 +1942,7 @@ extension EHATTSTestPart2Content {
                 ehaP2RightFinalGainSample25 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample25)
                 print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 9 {
                 ehaP2RightFinalGainSample26 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample26)
@@ -2026,7 +1979,7 @@ extension EHATTSTestPart2Content {
                 ehaP2RightFinalGainSample34 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample34)
                 print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 18 {
                 ehaP2RightFinalGainSample35 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample35)
@@ -2063,7 +2016,7 @@ extension EHATTSTestPart2Content {
                 ehaP2RightFinalGainSample43 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample43)
                 print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 27 {
                 ehaP2RightFinalGainSample44 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample44)
@@ -2100,7 +2053,7 @@ extension EHATTSTestPart2Content {
                 ehaP2RightFinalGainSample52 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample52)
                 print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 36 {
                 ehaP2RightFinalGainSample53 = ehaP2_averageGain
                 ehaP2rightFinalGainsArray.append(ehaP2RightFinalGainSample53)
@@ -2172,7 +2125,7 @@ extension EHATTSTestPart2Content {
                 ehaP2LeftFinalGainSample25 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample25)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 9 {
                 ehaP2LeftFinalGainSample26 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample26)
@@ -2209,7 +2162,7 @@ extension EHATTSTestPart2Content {
                 ehaP2LeftFinalGainSample34 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample34)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 18 {
                 ehaP2LeftFinalGainSample35 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample35)
@@ -2246,7 +2199,7 @@ extension EHATTSTestPart2Content {
                 ehaP2LeftFinalGainSample43 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample43)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 27 {
                 ehaP2LeftFinalGainSample44 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample44)
@@ -2283,7 +2236,7 @@ extension EHATTSTestPart2Content {
                 ehaP2LeftFinalGainSample52 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample52)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 36 {
                 ehaP2LeftFinalGainSample53 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample53)
@@ -2312,7 +2265,7 @@ extension EHATTSTestPart2Content {
                 ehaP2LeftFinalGainSample59 = ehaP2_averageGain
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample59)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
-           
+                
             } else {
                 print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
                 fatalError("In ehaP2Right side assignLRAverageSampleGains")
@@ -2381,7 +2334,7 @@ extension EHATTSTestPart2Content {
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample25)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
                 print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 9 {
                 ehaP2LeftFinalGainSample26 = ehaP2_averageGain
                 ehaP2RightFinalGainSample26 = ehaP2_averageGain
@@ -2445,7 +2398,7 @@ extension EHATTSTestPart2Content {
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample34)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
                 print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 18 {
                 ehaP2LeftFinalGainSample35 = ehaP2_averageGain
                 ehaP2RightFinalGainSample35 = ehaP2_averageGain
@@ -2509,7 +2462,7 @@ extension EHATTSTestPart2Content {
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample43)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
                 print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 27 {
                 ehaP2LeftFinalGainSample44 = ehaP2_averageGain
                 ehaP2RightFinalGainSample44 = ehaP2_averageGain
@@ -2573,7 +2526,7 @@ extension EHATTSTestPart2Content {
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample52)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
                 print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
-            
+                
             } else if ehaP2_index == 36 {
                 ehaP2LeftFinalGainSample53 = ehaP2_averageGain
                 ehaP2RightFinalGainSample53 = ehaP2_averageGain
@@ -2623,7 +2576,7 @@ extension EHATTSTestPart2Content {
                 ehaP2leftFinalGainsArray.append(ehaP2LeftFinalGainSample59)
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
                 print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
-        
+                
             } else {
                 print("*** ehaP2leftFinalGainsArray: \(ehaP2leftFinalGainsArray)")
                 print("*** ehaP2rightFinalGainsArray: \(ehaP2rightFinalGainsArray)")
@@ -2635,10 +2588,6 @@ extension EHATTSTestPart2Content {
         }
     }
     
-    
-    
-    
-        
     func ehaP2restartPresentation() async {
         if ehaP2endTestSeriesValue == false {
             ehaP2localPlaying = 1
@@ -2672,7 +2621,7 @@ extension EHATTSTestPart2Content {
             ehaP2localReversalHeardLast = Int()
             ehaP2startTooHigh = 0
             ehaP2localSeriesNoResponses = Int()
-        print("ehaP2_reversalGain: \(ehaP2_reversalGain)")
+            print("ehaP2_reversalGain: \(ehaP2_reversalGain)")
         })
     }
     
@@ -2683,22 +2632,20 @@ extension EHATTSTestPart2Content {
         ehaP2localMarkNewTestCycle = 0
         ehaP2localReversalEnd = 0
         ehaP2_index = ehaP2_index + 1
-//        envDataObjectModel_eptaSamplesCountArrayIdx += 1
+        //        envDataObjectModel_eptaSamplesCountArrayIdx += 1
         ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]       // Add code to reset starting test gain by linking to table of expected HL
         ehaP2endTestSeriesValue = false
         ehaP2showTestCompletionSheet = false
         ehaP2testIsPlaying = true
         ehaP2userPausedTest = false
         ehaP2playingStringColorIndex = 2
-//        envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
+        //        envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
         print(ehaP2_eptaSamplesCountArray[ehaP2_index])
         ehaP2localPlaying = 1
     }
     
-    
-    
     func ehaP2newTestCycle() async {
-//        if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index < ehaP2_eptaSamplesCount && ehaP2endTestSeriesValue == false {
+        //        if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index < ehaP2_eptaSamplesCount && ehaP2endTestSeriesValue == false {
         if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index < ehaP2_eptaSamplesCountArray[ehaP2_index] && ehaP2endTestSeriesValue == false {
             print("New Test Cycle Triggered")
             await ehaP2wipeArrays()
@@ -2708,10 +2655,10 @@ extension EHATTSTestPart2Content {
             ehaP2_index = ehaP2_index + 1
             ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]       // Add code to reset starting test gain by linking to table of expected HL
             ehaP2endTestSeriesValue = false
-//                Task(priority: .userInitiated) {
-           
-//                }
-//        } else if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index == ehaP2_eptaSamplesCount && ehaP2endTestSeriesValue == false {
+            //                Task(priority: .userInitiated) {
+            
+            //                }
+            //        } else if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index == ehaP2_eptaSamplesCount && ehaP2endTestSeriesValue == false {
         } else if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index == ehaP2_eptaSamplesCountArray[ehaP2_index] && ehaP2endTestSeriesValue == false {
             print("=============================")
             print("!!!!! End of Test Series!!!!!!")
@@ -2719,7 +2666,7 @@ extension EHATTSTestPart2Content {
             ehaP2endTestSeriesValue = true
             ehaP2localPlaying = -1
             ehaP2_eptaSamplesCountArrayIdx += 1
-//            ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
+            //            ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
             if ehaP2fullTestCompleted == true {
                 ehaP2localPlaying = -1
                 ehaP2stop()
@@ -2739,11 +2686,8 @@ extension EHATTSTestPart2Content {
             } else {
                 print("!!!Critical error in fullTestCompleted Logic")
             }
-           
-
         } else {
-                print("Reversal Limit Not Hit")
-
+            print("Reversal Limit Not Hit")
         }
     }
     
@@ -2754,7 +2698,7 @@ extension EHATTSTestPart2Content {
         } else if ehaP2endTestSeriesValue == true {
             ehaP2showTestCompletionSheet = true
             ehaP2_eptaSamplesCount = ehaP2_eptaSamplesCountArray[ehaP2_index]
-//            ehaP2_eptaSamplesCount = ehaP2_eptaSamplesCount + 8
+            //            ehaP2_eptaSamplesCount = ehaP2_eptaSamplesCount + 8
             await ehaP2endTestSeriesStop()
         }
     }
@@ -2764,41 +2708,8 @@ extension EHATTSTestPart2Content {
         ehaP2stop()
         ehaP2userPausedTest = true
         ehaP2playingStringColorIndex = 2
-//        if ehaP2_index == 31 {
-//            ehaP2playingStringColorIndex2 = 2
-//        } else {
-//            ehaP2playingStringColorIndex2 = 1
-//        }
-        
-//        ehaP2audioThread.async {
-//            ehaP2localPlaying = 0
-//            ehaP2stop()
-//            ehaP2userPausedTest = true
-//            ehaP2playingStringColorIndex = 2
-//        }
-//
-//        DispatchQueue.main.async {
-//            ehaP2localPlaying = 0
-//            ehaP2stop()
-//            ehaP2userPausedTest = true
-//            ehaP2playingStringColorIndex = 2
-//        }
-//
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, qos: .userInitiated) {
-//            ehaP2localPlaying = 0
-//            ehaP2stop()
-//            ehaP2userPausedTest = true
-//            ehaP2playingStringColorIndex = 2
-//        }
-//
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 3, qos: .userInitiated) {
-//            ehaP2localPlaying = -1
-//            ehaP2stop()
-//            ehaP2userPausedTest = true
-//            ehaP2playingStringColorIndex = 2
-//        }
     }
-
+    
     
     func ehaP2concatenateFinalArrays() async {
         if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 {
@@ -2816,8 +2727,6 @@ extension EHATTSTestPart2Content {
             ehaP2finalStoredleftFinalGainsArray.removeAll()
             ehaP2finalStoredRightFinalGainsArray.append(contentsOf: ehaP2rightFinalGainsArray)
             ehaP2finalStoredleftFinalGainsArray.append(contentsOf: ehaP2leftFinalGainsArray)
-            
-            
         }
     }
     
@@ -2837,7 +2746,7 @@ extension EHATTSTestPart2Content {
         print("eha2finalStoredRightFinalGainsArray: \(ehaP2finalStoredRightFinalGainsArray)")
         print("eha2finalStoredleftFinalGainsArray: \(ehaP2finalStoredleftFinalGainsArray)")
     }
-        
+    
     func ehaP2saveFinalStoredArrays() async {
         if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 {
             DispatchQueue.global(qos: .userInitiated).async {
@@ -2847,8 +2756,8 @@ extension EHATTSTestPart2Content {
                         await writeEHAP2InputRightResultsToCSV()
                         await writeEHAP2InputLeftResultsToCSV()
                     } else if await ehaP2endTestSeriesValue == true {
-                    
-                    // Hold these until end of test cycle
+                        
+                        // Hold these until end of test cycle
                         await writeEHAP2DetailedResultsToCSV()
                         await writeEHAP2InputRightResultsToCSV()
                         await writeEHAP2InputLeftResultsToCSV()
@@ -2860,67 +2769,45 @@ extension EHATTSTestPart2Content {
                         await writeEHAP2RightResultsToCSV()
                         await writeEHAP2LeftResultsToCSV()
                         await writeEHAP2InputRightLeftResultsToCSV()
-
+                        
                         
                         await ehaP2getEHAP1Data()
                         await ehaP2saveEHA1ToJSON()
-            //                await ehaP2_uploadSummaryResultsTest()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, qos: .userInteractive) {
+                                isOkayToUpload = true
+                        }
                     }
                 }
             }
         }
     }
     
+    func uploadEHAP2Results() async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, qos: .background) {
+            uploadFile(fileName: fileehaP2Name)
+            uploadFile(fileName: summaryehaP2CSVName)
+            uploadFile(fileName: detailedehaP2CSVName)
+            uploadFile(fileName: inputehaP2SummaryCSVName)
+            uploadFile(fileName: inputehaP2DetailedCSVName)
+            uploadFile(fileName: summaryEHAP2LRCSVName)
+            uploadFile(fileName: summaryEHAP2RightCSVName)
+            uploadFile(fileName: summaryEHAP2LeftCSVName)
+            uploadFile(fileName: inputEHAP2LRSummaryCSVName)
+            uploadFile(fileName: inputEHAP2RightSummaryCSVName)
+            uploadFile(fileName: inputEHAP2LeftSummaryCSVName)
+        }
+    }
+}
 
-    
-
-//MARK: -FireBase Storage Upload
-
-//    func getDirectoryPath() -> String {
-//        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-//        let documentsDirectory = paths[0]
-//        return documentsDirectory
-//    }
-//
-//    func uploadCSV() async {
-//        DispatchQueue.global(qos: .background).async {
-//            let storageRef = Storage.storage().reference()
-//            let setupCSVName = ["SetupResultsCSV.csv"]
-//            let fileManager = FileManager.default
-//            let csvPath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: setupCSVName)
-//            if fileManager.fileExists(atPath: csvPath[0]) {
-//                let filePath = URL(fileURLWithPath: csvPath[0])
-//                let localFile = filePath
-//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
-//                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
-//                    if error == nil && metadata == nil {
-//                        //TSave a reference to firestore database
-//                    }
-//                    return
-//                }
-//                print(uploadTask)
-//            } else {
-//                print("No File")
-//            }
-//        }
-//    }
-//}
-//
-//
-//extension EHATTSTestPart1View {
-//MARK: -JSON and CSV Writing
+extension EHATTSTestPart2Content {
+//MARK: -CSV/JSON Methods Extension
     
     func ehaP2getEHAP1Data() async {
         guard let ehaP2data = await ehaP2getEHAP1JSONData() else { return }
-//        print("Json Data:")
-//        print(ehaP2data)
         let ehaP2jsonString = String(data: ehaP2data, encoding: .utf8)
         ehaP2jsonHoldingString = [ehaP2jsonString!]
-//            print(ehaP2jsonString!)
         do {
         self.ehaP2saveFinalResults = try JSONDecoder().decode(ehaP2SaveFinalResults.self, from: ehaP2data)
-//            print("JSON GetData Run")
-//            print("data: \(ehaP2data)")
         } catch let error {
             print("error decoding \(error)")
         }
@@ -2950,14 +2837,7 @@ extension EHATTSTestPart2Content {
             jsonStoredFirstGain: ehaP2_finalStoredFirstGain,
             jsonStoredSecondGain: ehaP2_finalStoredSecondGain,
             jsonStoredAverageGain: ehaP2_finalStoredAverageGain)
-//    jsonRightFinalGainsArray: rightFinalGainsArray,
-//    jsonLeftFinalGainsArray: leftFinalGainsArray,
-//    jsonFinalStoredRightFinalGainsArray: finalStoredRightFinalGainsArray,
-//    jsonFinalStoredleftFinalGainsArray: finalStoredleftFinalGainsArray)
-
         let ehaP2jsonData = try? JSONEncoder().encode(ehaP2saveFinalResults)
-//        print("saveFinalResults: \(ehaP2saveFinalResults)")
-//        print("Json Encoded \(ehaP2jsonData!)")
         return ehaP2jsonData
     }
 
@@ -2965,15 +2845,12 @@ extension EHATTSTestPart2Content {
         // !!!This saves to device directory, whish is likely what is desired
         let ehaP2paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let ehaP2DocumentsDirectory = ehaP2paths[0]
-//        print("ehaP2DocumentsDirectory: \(ehaP2DocumentsDirectory)")
         let ehaP2FilePaths = ehaP2DocumentsDirectory.appendingPathComponent(fileehaP2Name)
         print(ehaP2FilePaths)
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         do {
             let ehaP2jsonData = try encoder.encode(ehaP2saveFinalResults)
-//            print(ehaP2jsonData)
-          
             try ehaP2jsonData.write(to: ehaP2FilePaths)
         } catch {
             print("Error writing EHAP1 to JSON file: \(error)")
@@ -3000,12 +2877,8 @@ extension EHATTSTestPart2Content {
         do {
             let csvehaP2DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvehaP2DetailDocumentsDirectory = csvehaP2DetailPath
-//                print("CSV DocumentsDirectory: \(csvEHAP1DetailDocumentsDirectory)")
             let csvehaP2DetailFilePath = csvehaP2DetailDocumentsDirectory.appendingPathComponent(detailedehaP2CSVName)
-//            print(csvehaP2DetailFilePath)
-            
             let writer = try CSVWriter(fileURL: csvehaP2DetailFilePath, append: false)
-            
             try writer.write(row: [ehaP2stringFinalStoredIndex])
             try writer.write(row: [ehaP2stringFinalStoredTestPan])
             try writer.write(row: [ehaP2stringFinalStoredTestTestGain])
@@ -3021,8 +2894,6 @@ extension EHATTSTestPart2Content {
             try writer.write(row: [ehaP2stringFinalleftFinalGainsArray])
             try writer.write(row: [ehaP2stringFinalStoredRightFinalGainsArray])
             try writer.write(row: [ehaP2stringFinalStoredleftFinalGainsArray])
-//
-//                print("CVS EHAP1 Detailed Writer Success")
         } catch {
             print("CVSWriter EHAP1 Detailed Error or Error Finding File for Detailed CSV \(error)")
         }
@@ -3042,9 +2913,7 @@ extension EHATTSTestPart2Content {
          do {
              let csvehaP2SummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvehaP2SummaryDocumentsDirectory = csvehaP2SummaryPath
-//                 print("CSV Summary EHA Part 1 DocumentsDirectory: \(csvEHAP1SummaryDocumentsDirectory)")
              let csvehaP2SummaryFilePath = csvehaP2SummaryDocumentsDirectory.appendingPathComponent(summaryehaP2CSVName)
-//             print(csvehaP2SummaryFilePath)
              let writer = try CSVWriter(fileURL: csvehaP2SummaryFilePath, append: false)
              try writer.write(row: [ehaP2stringFinalStoredResultsFrequency])
              try writer.write(row: [ehaP2stringFinalStoredTestPan])
@@ -3055,13 +2924,10 @@ extension EHATTSTestPart2Content {
              try writer.write(row: [ehaP2stringFinalleftFinalGainsArray])
              try writer.write(row: [ehaP2stringFinalStoredRightFinalGainsArray])
              try writer.write(row: [ehaP2stringFinalStoredleftFinalGainsArray])
-//
-//                 print("CVS Summary EHA Part 1 Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 1 Data Error or Error Finding File for Detailed CSV \(error)")
          }
     }
-
 
     func writeEHAP2InputDetailedResultsToCSV() async {
         let ehaP2stringFinalStoredIndex = ehaP2_finalStoredIndex.map { String($0) }.joined(separator: ",")
@@ -3083,9 +2949,7 @@ extension EHATTSTestPart2Content {
         do {
             let csvInputehaP2DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvInputehaP2DetailDocumentsDirectory = csvInputehaP2DetailPath
-//                print("CSV Input EHAP1 Detail DocumentsDirectory: \(csvInputEHAP1DetailDocumentsDirectory)")
             let csvInputehaP2DetailFilePath = csvInputehaP2DetailDocumentsDirectory.appendingPathComponent(inputehaP2DetailedCSVName)
-//            print(csvInputehaP2DetailFilePath)
             let writer = try CSVWriter(fileURL: csvInputehaP2DetailFilePath, append: false)
             try writer.write(row: [ehaP2stringFinalStoredIndex])
             try writer.write(row: [ehaP2stringFinalStoredTestPan])
@@ -3102,8 +2966,6 @@ extension EHATTSTestPart2Content {
             try writer.write(row: [ehaP2stringFinalleftFinalGainsArray])
             try writer.write(row: [ehaP2stringFinalStoredRightFinalGainsArray])
             try writer.write(row: [ehaP2stringFinalStoredleftFinalGainsArray])
-//
-//                print("CVS Input EHA Part 1Detailed Writer Success")
         } catch {
             print("CVSWriter Input EHA Part 1 Detailed Error or Error Finding File for Input Detailed CSV \(error)")
         }
@@ -3119,13 +2981,10 @@ extension EHATTSTestPart2Content {
         let ehaP2stringFinalleftFinalGainsArray = ehaP2leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let ehaP2stringFinalStoredRightFinalGainsArray = ehaP2finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let ehaP2stringFinalStoredleftFinalGainsArray = ehaP2finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
-         
          do {
              let csvehaP2InputSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvehaP2InputSummaryDocumentsDirectory = csvehaP2InputSummaryPath
-//             print("CSV Input ehaP2 Summary DocumentsDirectory: \(csvehaP2InputSummaryDocumentsDirectory)")
              let csvehaP2InputSummaryFilePath = csvehaP2InputSummaryDocumentsDirectory.appendingPathComponent(inputehaP2SummaryCSVName)
-//             print(csvehaP2InputSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvehaP2InputSummaryFilePath, append: false)
              try writer.write(row: [ehaP2stringFinalStoredResultsFrequency])
              try writer.write(row: [ehaP2stringFinalStoredTestPan])
@@ -3136,8 +2995,6 @@ extension EHATTSTestPart2Content {
              try writer.write(row: [ehaP2stringFinalleftFinalGainsArray])
              try writer.write(row: [ehaP2stringFinalStoredRightFinalGainsArray])
              try writer.write(row: [ehaP2stringFinalStoredleftFinalGainsArray])
-//
-//                 print("CVS Input EHA Part 1 Summary Data Writer Success")
          } catch {
              print("CVSWriter Input EHA Part 1 Summary Data Error or Error Finding File for Input Summary CSV \(error)")
          }
@@ -3151,15 +3008,12 @@ extension EHATTSTestPart2Content {
          do {
              let csvEHAP2LRSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP2LRSummaryDocumentsDirectory = csvEHAP2LRSummaryPath
-//                 print("CSV Summary EHA Part 2 LR Summary DocumentsDirectory: \(csvEHAP2LRSummaryDocumentsDirectory)")
              let csvEHAP2LRSummaryFilePath = csvEHAP2LRSummaryDocumentsDirectory.appendingPathComponent(summaryEHAP2LRCSVName)
-//             print(csvEHAP2LRSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP2LRSummaryFilePath, append: false)
              try writer.write(row: [stringFinalrightFinalGainsArray])
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//                 print("CVS Summary EHA Part 2 LR Summary Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 2 LR Summary Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -3171,13 +3025,10 @@ extension EHATTSTestPart2Content {
          do {
              let csvEHAP2RightSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP2RightSummaryDocumentsDirectory = csvEHAP2RightSummaryPath
-//                 print("CSV Summary EHA Part 2 Right Summary DocumentsDirectory: \(csvEHAP2RightSummaryDocumentsDirectory)")
              let csvEHAP2RightSummaryFilePath = csvEHAP2RightSummaryDocumentsDirectory.appendingPathComponent(summaryEHAP2RightCSVName)
-//             print(csvEHAP1RightSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP2RightSummaryFilePath, append: false)
              try writer.write(row: [stringFinalrightFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
-//                 print("CVS Summary EHA Part 2 Right Summary Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 2 Right Summary Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -3189,13 +3040,10 @@ extension EHATTSTestPart2Content {
          do {
              let csvEHAP2LeftSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP2LeftSummaryDocumentsDirectory = csvEHAP2LeftSummaryPath
-//                 print("CSV Summary EHA Part 1 Left Summary DocumentsDirectory: \(csvEHAP1LeftSummaryDocumentsDirectory)")
              let csvEHAP2LeftSummaryFilePath = csvEHAP2LeftSummaryDocumentsDirectory.appendingPathComponent(summaryEHAP2LeftCSVName)
-//             print(csvEHAP2LeftSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP2LeftSummaryFilePath, append: false)
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//                 print("CVS Summary EHA Part 2 Left Summary Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 2 Left Summary Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -3209,15 +3057,13 @@ extension EHATTSTestPart2Content {
          do {
              let csvEHAP2InputLRSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP2InputLRSummaryDocumentsDirectory = csvEHAP2InputLRSummaryPath
-//                 print("CSV Summary EHA Part 2 LR Summary DocumentsDirectory: \(csvEHAP2LRSummaryDocumentsDirectory)")
              let csvEHAP2InputLRSummaryFilePath = csvEHAP2InputLRSummaryDocumentsDirectory.appendingPathComponent(inputEHAP2LRSummaryCSVName)
-//             print(csvEHAP2InputLRSummaryFilePath)
+             print(csvEHAP2InputLRSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP2InputLRSummaryFilePath, append: false)
              try writer.write(row: [stringFinalrightFinalGainsArray])
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//                 print("CVS Summary EHA Part 2 LR Input Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 2 LR Input Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -3230,13 +3076,10 @@ extension EHATTSTestPart2Content {
          do {
              let csvEHAP2InputRightSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP2InputRightSummaryDocumentsDirectory = csvEHAP2InputRightSummaryPath
-//                 print("CSV Summary EHA Part 2 Right Input DocumentsDirectory: \(csvEHAP2InputRightSummaryDocumentsDirectory)")
              let csvEHAP2InputRightSummaryFilePath = csvEHAP2InputRightSummaryDocumentsDirectory.appendingPathComponent(inputEHAP2RightSummaryCSVName)
-//             print(csvEHAP2InputRightSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP2InputRightSummaryFilePath, append: false)
              try writer.write(row: [stringFinalrightFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
-//                 print("CVS Summary EHA Part 2 Right Input Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 2 Right Input Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -3248,23 +3091,87 @@ extension EHATTSTestPart2Content {
          do {
              let csvEHAP2InputLeftSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP2InputLeftSummaryDocumentsDirectory = csvEHAP2InputLeftSummaryPath
-//                 print("CSV Summary EHA Part 2 Left Input DocumentsDirectory: \(csvEHAP2InputSummaryDocumentsDirectory)")
              let csvEHAP2InputLeftSummaryFilePath = csvEHAP2InputLeftSummaryDocumentsDirectory.appendingPathComponent(inputEHAP2LeftSummaryCSVName)
              print(csvEHAP2InputLeftSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP2InputLeftSummaryFilePath, append: false)
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
-//                 print("CVS Summary EHA Part 2 Left Input Data Writer Success")
          } catch {
              print("CVSWriter Summary EHA Part 2 Left Input Data Error or Error Finding File for Detailed CSV \(error)")
          }
     }
     
+    private func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
+    
+    func comparedLastNameCSVReader() async {
+        let dataSetupName = inputFinalComparedLastNameCSV
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLComparedLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLComparedLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLComparedLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 0, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputLastName = fieldLastName
+            print("inputLastName: \(inputLastName)")
+        } catch {
+            print("Error in reading Last Name results")
+        }
+    }
+    
+    private func uploadFile(fileName: String) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let storageRef = Storage.storage().reference()
+            let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+            let lastNameRef = storageRef.child(inputLastName)
+            let fileManager = FileManager.default
+            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+            if fileManager.fileExists(atPath: filePath[0]) {
+                let filePath = URL(fileURLWithPath: filePath[0])
+                let localFile = filePath
+                //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                let fileRef = lastNameRef.child("\(fileName)")
+                
+                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                    if error == nil && metadata == nil {
+                        //TSave a reference to firestore database
+                    }
+                    return
+                }
+                print(uploadTask)
+            } else {
+                print("No File")
+            }
+        }
+    }
 }
 
 extension EHATTSTestPart2Content {
-//MARK: Extension for Gain Link File Checking
-    
+    //MARK: Extension for Gain Link File Checking
     
     func gainEHAP2CurveAssignment() async {
         if ehaP2MonoTest == false {
@@ -3371,7 +3278,7 @@ extension EHATTSTestPart2Content {
         let documentsDirectory = dataLinkPaths[0]
         return documentsDirectory
     }
-
+    
     
     func checkGainEHAP2_2_5DataLink() async {
         let dataGainEHAP2_2_5Name = ["2_5.csv"]
@@ -3452,7 +3359,7 @@ extension EHATTSTestPart2Content {
             }
         }
     }
-
+    
     func checkGainEHAP2_8DataLink() async {
         let dataGainEHAP2_8Name = ["8.csv"]
         let fileGainEHAP2_8Manager = FileManager.default
@@ -3472,7 +3379,7 @@ extension EHATTSTestPart2Content {
             }
         }
     }
-
+    
     func checkGainEHAP2_11DataLink() async {
         let dataGainEHAP2_11Name = ["11.csv"]
         let fileGainEHAP2_11Manager = FileManager.default
@@ -3552,7 +3459,7 @@ extension EHATTSTestPart2Content {
             }
         }
     }
-
+    
     func checkGainEHAP2_27DataLink() async {
         let dataGainEHAP2_27Name = ["27.csv"]
         let fileGainEHAP2_27Manager = FileManager.default
@@ -3572,7 +3479,10 @@ extension EHATTSTestPart2Content {
             }
         }
     }
-    
+}
+
+extension EHATTSTestPart2Content {
+//MAKR: -NavigationLink Extension
     private func linkEHATesting(ehaTesting: EHATesting) -> some View {
         EmptyView()
     }

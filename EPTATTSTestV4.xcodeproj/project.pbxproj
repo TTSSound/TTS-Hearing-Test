@@ -91,7 +91,6 @@
 		7C4D019128C262CD00361559 /* EHAP1DataObjectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D019028C262CD00361559 /* EHAP1DataObjectModel.swift */; };
 		7C4D019328C2631000361559 /* SimpleDataObjectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D019228C2631000361559 /* SimpleDataObjectModel.swift */; };
 		7C4D019828C283AE00361559 /* HoldingCSVInputModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D019728C283AE00361559 /* HoldingCSVInputModel.swift */; };
-		7C4D019E28C28E1100361559 /* SystemSettingsEndEHAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D019D28C28E1100361559 /* SystemSettingsEndEHAModel.swift */; };
 		7C4EF1BB28B3D7CF008C81D6 /* ConditionalNavigation.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7C4EF1BA28B3D7CF008C81D6 /* ConditionalNavigation.txt */; };
 		7C51F16428C81FAC00FF5F0F /* Sample13.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7C51F15628C81FAB00FF5F0F /* Sample13.wav */; };
 		7C51F16528C81FAC00FF5F0F /* Sample8.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7C51F15728C81FAB00FF5F0F /* Sample8.wav */; };
@@ -972,7 +971,6 @@
 				7C24C1E228BEC419006E77DD /* PostEPTATestView.swift in Sources */,
 				7C7A94FC28B7009300DD8FAC /* EPTADescription.swift in Sources */,
 				7C24C1EA28BECCDD006E77DD /* PostEHATestView.swift in Sources */,
-				7C4D019E28C28E1100361559 /* SystemSettingsEndEHAModel.swift in Sources */,
 				7C3316F128D25D2700721935 /* PostBilateral1kHzTestView.swift in Sources */,
 				7C901FB728B970DE007E1336 /* ManualDeviceEntryInformationView.swift in Sources */,
 				7C24C1E828BEC9B1006E77DD /* EHAResultsDisplayView.swift in Sources */,

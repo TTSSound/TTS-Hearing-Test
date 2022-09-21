@@ -610,7 +610,9 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                         }
                         .onChange(of: isOkayToUpload) { uploadValue in
                             if uploadValue == true {
-                                await uploadSurveyDataEntry()
+                                Task{
+                                    await uploadSurveyDataEntry()
+                                }
                             } else {
                                 print("Fatal error in uploadvalue change of logic")
                             }
