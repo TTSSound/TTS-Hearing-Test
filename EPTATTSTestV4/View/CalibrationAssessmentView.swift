@@ -57,6 +57,10 @@
 
 import SwiftUI
 import CodableCSV
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
+
 
 struct SaveFinalDeviceSelection: Codable {  // This is a model
     var jsonFinalDevicSelectionName = [String]()
@@ -64,7 +68,6 @@ struct SaveFinalDeviceSelection: Codable {  // This is a model
     var jsonStringFinalDeviceSelectionUUID = [String]()
     var jsonFinalDeviceSelectionUUID = [UUID]()
     var jsonFinalHeadphoneModelIsUnknownIndex = [Int]()
-//    var jsonFinalUncalibratedUserAgreementAgreed = [Bool]()
 
     enum CodingKeys: String, CodingKey {
         case jsonFinalDevicSelectionName
@@ -87,12 +90,18 @@ struct HeadphoneModels: Identifiable, Hashable {
 
 struct CalibrationAssessmentView: View {
    
-    @StateObject var colorModel: ColorModel = ColorModel()
-//    @State var deviceSelection = 1
+    var colorModel: ColorModel = ColorModel()
+
+    
+    let setupCSVName = "SetupResultsCSV.csv"
+    @State private var inputLastName = String()
+    @State private var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
+    @State private var isOkayToUpload = false
+    
     
     @State var showDeviceSheet: Bool = false
     @State var refreshView: Bool = false
-//    @State var deviceListSheet = DeviceListSheet()
+
     @Environment(\.presentationMode) var presentationMode
     
     @State var deviceSelectionIndex = [Int]()
@@ -194,13 +203,6 @@ struct CalibrationAssessmentView: View {
                                         .foregroundColor(.blue)
                                         .onChange(of: self.headphones[index].isToggledH) { nameIndex in
                                             Task(priority: .userInitiated, operation: {
-//                                                deviceApprovalFinding = Int()
-//                                                selectedDeviceName.removeAll()
-//                                                selectedDeviceUUID.removeAll()
-//                                                userSelectedDeviceName.removeAll()
-//                                                userSelectedDeviceUUID.removeAll()
-//                                                userSelectedDeviceIndex.removeAll()
-//                                                headphoneModelsUnknownIndex.removeAll()
                                                 deviceSelectionIndex.removeAll()
                                                 selectedDeviceName.append(self.headphones[index].name)
                                                 selectedDeviceUUID.append(self.headphones[index].id)
@@ -285,6 +287,7 @@ struct CalibrationAssessmentView: View {
                                     await saveCalibrationData()
                                 }
                                 multipleDevicesCheck.removeAll()
+                                isOkayToUpload = true
                             }
                         })
                     }
@@ -316,6 +319,14 @@ struct CalibrationAssessmentView: View {
                 isSubmitted = false
                 linkColorIndex = 0
             }
+            .onChange(of: isOkayToUpload) { uploadValue in
+                if uploadValue == true {
+                    uploadDeviceData()
+                    print("Upload Data Started")
+                } else {
+                    print("Fatal error in upload data change logic")
+                }
+            }
     }
     
     
@@ -345,41 +356,19 @@ struct CalibrationAssessmentView: View {
        
     func compareDeviceCalibration()  async {
         if  deviceApprovalFinding == 0 {
-//            deviceApprovalFinding = 0
             manualDeviceEntryRequired.append(0)
-//            print(deviceApprovalFinding)
-//            print(manualDeviceEntryRequired)
             print("User is using an unapproved device")
-//            print(deviceApprovalFinding)
-//            print(userSelectedDeviceName)
-//            print(userSelectedDeviceUUID)
-//            print(userSelectedDeviceIndex)
         } else if   deviceApprovalFinding == 1 {
             deviceApprovalFinding = 1
             manualDeviceEntryRequired.append(0)
-//            print(deviceApprovalFinding)
-//            print(manualDeviceEntryRequired)
             print("User is using an unknown device")
-//            print(userSelectedDeviceName)
-//            print(userSelectedDeviceUUID)
-//            print(userSelectedDeviceIndex)
         } else if deviceApprovalFinding > 1 {
             deviceApprovalFinding = 2
             manualDeviceEntryRequired.append(2)
-//            print(deviceApprovalFinding)
-//            print(manualDeviceEntryRequired)
             print("User States Device is Unknown")
             print("Manual Device Entry is Required")
-//            print(userSelectedDeviceName)
-//            print(userSelectedDeviceUUID)
-//            print(userSelectedDeviceIndex)
         } else {
             print("Error!!! in compareDeviceCalibration Func")
-//            print(deviceApprovalFinding)
-//            print(manualDeviceEntryRequired)
-//            print(userSelectedDeviceName)
-//            print(userSelectedDeviceUUID)
-//            print(userSelectedDeviceIndex)
         }
     }
     
@@ -418,12 +407,7 @@ struct CalibrationAssessmentView: View {
         print("isokaytoproceed reset: \(isOkayToProceed)")
     }
 
-// This is duplicating the appends in the toggle functions in view
     func appendDeviceCalibrationResults()  async {
-//        userSelectedDeviceName.append(contentsOf: selectedDeviceName)
-//        userSelectedDeviceUUID.append(contentsOf: selectedDeviceUUID)
-//        userSelectedDeviceIndex.append(contentsOf: deviceSelectionIndex)
-//        headphoneModelsUnknownIndex.append(self.headphones.count)
         print("userSelectedDeviceName: \(userSelectedDeviceName)")
         print("userSelectedDeviceUUID: \(userSelectedDeviceUUID)")
         print("userSelectedDeviceIndex: \(userSelectedDeviceIndex)")
@@ -448,6 +432,14 @@ struct CalibrationAssessmentView: View {
         await writeInputDeviceResultsToCSV()
     }
     
+    
+    func uploadDeviceData() {
+        DispatchQueue.main.async(group: .none, qos: .background) {
+            uploadFile(fileName: deviceCSVName)
+            uploadFile(fileName: inputDeviceCSVName)
+            uploadFile(fileName: "DeviceSelection.json")
+        }
+    }
     
     func getDeviceData() async {
         guard let deviceSelectionData = await getDeviceJSONData() else { return }
@@ -564,6 +556,74 @@ struct CalibrationAssessmentView: View {
         }
     }
     
+    private func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+
+    // Only Use Files that have a pure string name assigned, not a name of ["String"]
+    private func uploadFile(fileName: String) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let storageRef = Storage.storage().reference()
+            let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+            let lastNameRef = storageRef.child(inputLastName)
+            let fileManager = FileManager.default
+            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+            if fileManager.fileExists(atPath: filePath[0]) {
+                let filePath = URL(fileURLWithPath: filePath[0])
+                let localFile = filePath
+//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                let fileRef = lastNameRef.child("\(fileName)")
+                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                    if error == nil && metadata == nil {
+                        //TSave a reference to firestore database
+                    }
+                    return
+                }
+                print(uploadTask)
+            } else {
+                print("No File")
+            }
+        }
+    }
+    
+    private func setupCSVReader() async {
+        let dataSetupName = "InputSetupResultsCSV.csv"
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 1, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputLastName = fieldLastName
+            print("inputLastName: \(inputLastName)")
+        } catch {
+            print("Error in reading Last Name results")
+        }
+    }
+    
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
 }
 
 

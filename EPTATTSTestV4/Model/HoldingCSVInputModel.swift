@@ -7,9 +7,19 @@
 
 import SwiftUI
 import CodableCSV
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
 
 
-//@State var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
+
+//import Firebase
+//import FirebaseStorage
+//import FirebaseFirestoreSwift
+//let setupCSVName = "SetupResultsCSV.csv"
+//@State private var inputLastName = String()
+//@State private var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
+//@State private var isOkayToUpload = false
 //
 //
 //func uploadUserDataEntry() {
@@ -26,10 +36,10 @@ import CodableCSV
 //    return documentsDirectory
 //}
 //
-//func setupCSVReader() async {
-//    let dataSetupName = ["InputSetupResultsCSV.csv"]
+//private func setupCSVReader() async {
+//    let dataSetupName = "InputSetupResultsCSV.csv"
 //    let fileSetupManager = FileManager.default
-//    let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: dataSetupName)
+//    let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
 //    if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
 //        let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
 //        if dataSetupFilePath.isFileURL  {
@@ -42,7 +52,7 @@ import CodableCSV
 //        }
 //    }
 //    do {
-//        let results = try CSVReader.decode(input: dataFileURL1)
+//        let results = try CSVReader.decode(input: dataFileURLLastName)
 //        print(results)
 //        print("Setup Results Read")
 //        let rows = results.columns
@@ -56,11 +66,11 @@ import CodableCSV
 //    }
 //}
 //
-////        import Firebase
-////        import FirebaseStorage
-////        import FirebaseFirestoreSwift
-////    @State private var inputLastName = String()
-////    let setupCSVName = "SetupResultsCSV.csv"
+//import Firebase
+//import FirebaseStorage
+//import FirebaseFirestoreSwift
+
+
 ////    e.g. fileName variable is setupCSVName with value of "SetupResultsCSV.csv"
 //
 ////    let setupCSVName = "SetupResultsCSV.csv"
@@ -73,31 +83,31 @@ import CodableCSV
 //    }
 //
 //    // Only Use Files that have a pure string name assigned, not a name of ["String"]
-//    func uploadFile(fileName: String) {
-//        DispatchQueue.global(qos: .background).async {
-//            let storageRef = Storage.storage().reference()
-//            let fileName = [fileName] //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
-//            let lastNameRef = storageRef.child(inputLastName)
-//            let fileManager = FileManager.default
-//            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: fileName)
-//            if fileManager.fileExists(atPath: filePath[0]) {
-//                let filePath = URL(fileURLWithPath: filePath[0])
-//                let localFile = filePath
+//  private func uploadFile(fileName: String) {
+//DispatchQueue.global(qos: .userInteractive).async {
+//    let storageRef = Storage.storage().reference()
+//    let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+//    let lastNameRef = storageRef.child(inputLastName)
+//    let fileManager = FileManager.default
+//    let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+//    if fileManager.fileExists(atPath: filePath[0]) {
+//        let filePath = URL(fileURLWithPath: filePath[0])
+//        let localFile = filePath
 ////                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
-//                let fileRef = lastNameRef.child("\(fileName)")
+//        let fileRef = lastNameRef.child("\(fileName)")
 //
-//                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
-//                    if error == nil && metadata == nil {
-//                        //TSave a reference to firestore database
-//                    }
-//                    return
-//                }
-//                print(uploadTask)
-//            } else {
-//                print("No File")
+//        let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+//            if error == nil && metadata == nil {
+//                //TSave a reference to firestore database
 //            }
+//            return
 //        }
+//        print(uploadTask)
+//    } else {
+//        print("No File")
 //    }
+//}
+
 
 
 

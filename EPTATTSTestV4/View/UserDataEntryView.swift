@@ -619,8 +619,6 @@ extension UserDataEntryContent {
         }
     }
 
-
-    
     func getSetupData() async {
         guard let setupData = await self.getDemoJSONData() else { return }
         print("Json Setup Data:")
@@ -635,8 +633,6 @@ extension UserDataEntryContent {
             print("!!!Error decoding setup json data: \(error)")
         }
     }
-    
-
     
     func getDemoJSONData() async -> Data? {
         
@@ -750,8 +746,6 @@ extension UserDataEntryContent {
         }
     }
     
-    
-    
 //        import Firebase
 //        import FirebaseStorage
 //        import FirebaseFirestoreSwift
@@ -824,9 +818,9 @@ extension UserDataEntryContent {
     
     private func checkDataLinkCSV() async {
 //        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
-        let dataName = ["DisclaimerResults.json"]
+        let dataName = "DisclaimerResultsCSV.csv"
         let fileManager = FileManager.default
-        let dataPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: dataName)
+        let dataPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataName])
         if fileManager.fileExists(atPath: dataPath[0]) {
             let dataFilePath = URL(fileURLWithPath: dataPath[0])
             if dataFilePath.isFileURL  {
@@ -842,9 +836,9 @@ extension UserDataEntryContent {
     
     private func checkDataLinkInputCSV() async {
 //        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
-        let dataName = ["DisclaimerResults.json"]
+        let dataName = "InputDisclaimerResultsCSV.csv"
         let fileManager = FileManager.default
-        let dataPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: dataName)
+        let dataPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataName])
         if fileManager.fileExists(atPath: dataPath[0]) {
             let dataFilePath = URL(fileURLWithPath: dataPath[0])
             if dataFilePath.isFileURL  {

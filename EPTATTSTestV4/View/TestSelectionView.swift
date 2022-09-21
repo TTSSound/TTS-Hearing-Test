@@ -7,6 +7,9 @@
 
 import SwiftUI
 import CodableCSV
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
 
 //Add in final test selection class write int and final test tolken UUID
 
@@ -31,6 +34,11 @@ struct TestSelectionView: View {
     var colorModel = ColorModel()
     
  
+    let setupCSVName = "SetupResultsCSV.csv"
+    @State private var inputLastName = String()
+    @State private var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
+    @State private var isOkayToUpload = false
+    
     @State var selectedEHA: Bool = false
     @State var selectedEPTA: Bool = false
     @State var selectedSimple: Bool = false
@@ -258,6 +266,14 @@ struct TestSelectionView: View {
         .onAppear {
             tsLinkColorIndex = 0
             isOkayToContinue = false
+            isOkayToUpload = false
+        }
+        .onChange(of: isOkayToUpload) { uploadValue in
+            if uploadValue == true {
+                uploadTestSelection()
+            } else {
+                print("Fatal Upload Error in Change of")
+            }
         }
     }
     
@@ -358,20 +374,33 @@ struct TestSelectionView: View {
     func saveTestLinkFile() async {
         if singleEHA == 1 {
             await writeEHATestLinkToCSV()
+            isOkayToUpload = true
         } else {
             print("!!Error in singleEHA test link logic")
         }
         if singleEPTA == 1 {
             await writeEPTATestLinkToCSV()
+            isOkayToUpload = true
         } else {
             print("!!Error in singleEPTA test link logic")
         }
         if singleSimple == 1 {
             await writeSimpleTestLinkToCSV()
+            isOkayToUpload = true
         } else {
             print("!!Error in singleSimple test link logic")
         }
     }
+    
+    func uploadTestSelection() {
+        DispatchQueue.main.async(group: .none, qos: .background) {
+            uploadFile(fileName: testSelectionCSVName)
+            uploadFile(fileName: inputTestSelectionCSVName)
+            uploadFile(fileName: "TestSelection.json")
+        }
+    }
+    
+    
     
 //MARK: -TestSelectionModel Funcst
     
@@ -527,6 +556,80 @@ struct TestSelectionView: View {
             print("CVSWriter Simple Link  Error or Error Finding File for Simple Link CSV \(error.localizedDescription)")
         }
     }
+    
+
+//    let setupCSVName = "SetupResultsCSV.csv"
+//    e.g. fileName variable is setupCSVName with value of "SetupResultsCSV.csv"
+    private func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+
+    // Only Use Files that have a pure string name assigned, not a name of ["String"]
+    private func uploadFile(fileName: String) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let storageRef = Storage.storage().reference()
+            let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+            let lastNameRef = storageRef.child(inputLastName)
+            let fileManager = FileManager.default
+            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+            if fileManager.fileExists(atPath: filePath[0]) {
+                let filePath = URL(fileURLWithPath: filePath[0])
+                let localFile = filePath
+//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                let fileRef = lastNameRef.child("\(fileName)")
+               
+                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                    if error == nil && metadata == nil {
+                        //TSave a reference to firestore database
+                    }
+                    return
+                }
+                print(uploadTask)
+            } else {
+                print("No File")
+            }
+        }
+    }
+    
+    private func setupCSVReader() async {
+        let dataSetupName = "InputSetupResultsCSV.csv"
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 1, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputLastName = fieldLastName
+            print("inputLastName: \(inputLastName)")
+        } catch {
+            print("Error in reading Last Name results")
+        }
+    }
+    
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
+    
 }
 
 

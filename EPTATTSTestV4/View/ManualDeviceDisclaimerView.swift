@@ -7,6 +7,9 @@
 
 import SwiftUI
 import CodableCSV
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
 
 
 // Add in user agreed store variable and time of agreement CMseconds and Date
@@ -27,8 +30,13 @@ struct SaveFinalManualDisclaimerAgreement: Codable {  // This is a model
 
 struct ManualDeviceDisclaimerView: View {
     
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var colorModel: ColorModel = ColorModel()
     @State var uncalibratedAgreementModel: UncalibratedAgreementModel = UncalibratedAgreementModel()
+    
+    let setupCSVName = "SetupResultsCSV.csv"
+    @State private var inputLastName = String()
+    @State private var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
+    @State private var isOkayToUpload = false
 
     @State var uncalDisclaimerSetting = Bool()
     @State var uncalDisclaimerAgreement = Int()
@@ -89,6 +97,7 @@ struct ManualDeviceDisclaimerView: View {
                             await saveManualDeviceDisclaimer()
                             print("uncalDisclaimerSetting: \(uncalDisclaimerSetting)")
                             print("uncalDisclaimerAgreement: \(uncalDisclaimerAgreement)")
+                            isOkayToUpload = true
                         }
                     }
                 Spacer()
@@ -111,14 +120,9 @@ struct ManualDeviceDisclaimerView: View {
                     }
                     .foregroundColor(unLinkColors[unLinkColorIndex])
                     .onTapGesture {
-                        Task(priority: .userInitiated, operation: {
-    //                        await uncalCompareDisclaimerAgreement()
-    //                        await uncalDisclaimerResponse()
-    //                        await concentenateFinalUncalDisclaimerArrays()
-    //                        await saveManualDeviceDisclaimer()
-                            print("uncalDisclaimerSetting: \(uncalDisclaimerSetting)")
-                            print("uncalDisclaimerAgreement: \(uncalDisclaimerAgreement)")
-                        })
+                        uploadManualDeviceData()
+                        print("uncalDisclaimerSetting: \(uncalDisclaimerSetting)")
+                        print("uncalDisclaimerAgreement: \(uncalDisclaimerAgreement)")
                     }
                 }
             }
@@ -173,7 +177,15 @@ struct ManualDeviceDisclaimerView: View {
         await writeManualDisclaimerToCSV()
         await writeInputManualDisclaimerToCSV()
     }
+
     
+    func uploadManualDeviceData() {
+        DispatchQueue.main.async(group: .none, qos: .background) {
+            uploadFile(fileName: manuaDisclaimerCSVName)
+            uploadFile(fileName: inputManuaDisclaimerCSVName)
+            uploadFile(fileName: "ManualDisclaimerAgreement.json")
+        }
+    }
     
     func getManualDisclaimerData() async {
         guard let manualDisclaimerAgreementData = await getManualDisclaimerJSONData() else { return }
@@ -288,6 +300,75 @@ struct ManualDeviceDisclaimerView: View {
         } catch {
             print("CVSWriter Input Manual Disclaimer Error or Error Finding File for Input Manual Disclaimer CSV \(error.localizedDescription)")
         }
+    }
+    
+    private func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+
+    // Only Use Files that have a pure string name assigned, not a name of ["String"]
+    private func uploadFile(fileName: String) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let storageRef = Storage.storage().reference()
+            let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+            let lastNameRef = storageRef.child(inputLastName)
+            let fileManager = FileManager.default
+            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+            if fileManager.fileExists(atPath: filePath[0]) {
+                let filePath = URL(fileURLWithPath: filePath[0])
+                let localFile = filePath
+//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                let fileRef = lastNameRef.child("\(fileName)")
+                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                    if error == nil && metadata == nil {
+                        //TSave a reference to firestore database
+                    }
+                    return
+                }
+                print(uploadTask)
+            } else {
+                print("No File")
+            }
+        }
+    }
+    
+    private func setupCSVReader() async {
+        let dataSetupName = "InputSetupResultsCSV.csv"
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 1, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputLastName = fieldLastName
+            print("inputLastName: \(inputLastName)")
+        } catch {
+            print("Error in reading Last Name results")
+        }
+    }
+    
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
     }
     
 }
