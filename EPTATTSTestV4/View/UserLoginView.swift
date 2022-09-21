@@ -11,6 +11,9 @@ import CodableCSV
 import FirebaseCore
 import FirebaseFirestore
 import FirebaseAuth
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
 
 
 struct SaveFinalSetupResults2: Codable {
@@ -76,6 +79,8 @@ struct UserLoginContent<Link: View>: View {
     @EnvironmentObject private var navigationModel: NavigationModel
     
     var colorModel: ColorModel = ColorModel()
+    
+    @State private var inputLastName = String()
     
     @State private var isLogin = true
     
@@ -163,17 +168,42 @@ struct UserLoginContent<Link: View>: View {
             colorModel.colorBackgroundBottomTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack(alignment: .leading, spacing: 10) {
                 Spacer()
-                Text("User Login Screen")
-                    .padding(.top, 20)
-                    .padding(.bottom, 20)
-                    .padding(.leading,10)
-                    .padding(.trailing, 10)
                 HStack{
                     Spacer()
-                    Text("Email")
+                    Text("User Login Screen")
+                        .font(.title)
                         .foregroundColor(.white)
                     Spacer()
-                    TextField("EnterYourEmail@Here.com", text: $email)
+                }
+                .padding(.top, 40)
+                .padding(.bottom, 20)
+                HStack{
+                    VStack(alignment: .leading) {
+                        Text(" Use The Tester Profile Info Below.")
+                            .font(.title2)
+                            .foregroundColor(.white)
+                            .padding(.top, 20)
+                            .padding(.bottom, 5)
+                        Text("Tester@TrueToSourceSound.com")
+                            .font(.title3)
+                            .foregroundColor(.white)
+                            .padding(.top, 5)
+                            .padding(.bottom, 5)
+                        Text("password")
+                            .font(.title3)
+                            .foregroundColor(.blue)
+                            .padding(.top, 5)
+                            .padding(.bottom, 20)
+                    }
+                    Spacer()
+                }
+                .padding(.leading, 10)
+                HStack{
+                    Spacer()
+                    Text("Email  ")
+                        .foregroundColor(.white)
+                    Spacer()
+                    TextField("Enter_Email@Here.com", text: $email)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
@@ -218,7 +248,7 @@ struct UserLoginContent<Link: View>: View {
                             .cornerRadius(24)
                             Spacer()
                         }
-                        .padding(.bottom, 60)
+//                        .padding(.bottom, 60)
                         
                     } else if userDataSubmitted == true || userLoggedInSuccessful == true  {
                         HStack{
@@ -244,8 +274,21 @@ struct UserLoginContent<Link: View>: View {
                             .cornerRadius(24)
                             Spacer()
                         }
-                        .padding(.bottom, 60)
+//                        .padding(.bottom, 60)
                     }
+                HStack{
+                    NavigationLink("ExplanationView", destination: ExplanationView(setup: setup, relatedLink: link))
+                        .foregroundColor(.clear)
+                        .background(Color.clear)
+                }
+                .frame(width: 300, height: 50, alignment: .center)
+                .foregroundColor(.clear)
+                .background(Color.clear)
+                .cornerRadius(24)
+                .padding(.bottom, 60)
+                .navigationDestination(isPresented: $userLoggedInAndSubmitted) {
+                    ExplanationView(setup: setup, relatedLink: link)
+                }
                 Spacer()
 
                 
@@ -662,6 +705,46 @@ struct UserLoginContent<Link: View>: View {
             print("CVSWriter Input Setup 2 Error or Error Finding File for Input Setup 2 CSV \(error.localizedDescription)")
         }
     }
+    
+    //        import Firebase
+    //        import FirebaseStorage
+    //        import FirebaseFirestoreSwift
+    //    @State private var inputLastName = String()
+    //    let setupCSVName = "SetupResultsCSV.csv"
+    //    e.g. fileName variable is setupCSVName with value of "SetupResultsCSV.csv"
+        
+        private func getDirectoryPath() -> String {
+            let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+            let documentsDirectory = paths[0]
+            return documentsDirectory
+        }
+
+        // Only Use Files that have a pure string name assigned, not a name of ["String"]
+        private func uploadCSV(fileName: String) {
+            DispatchQueue.global(qos: .background).async {
+                let storageRef = Storage.storage().reference()
+                let fileName = [fileName] //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+                let lastNameRef = storageRef.child(inputLastName)
+                let fileManager = FileManager.default
+                let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: fileName)
+                if fileManager.fileExists(atPath: filePath[0]) {
+                    let filePath = URL(fileURLWithPath: filePath[0])
+                    let localFile = filePath
+    //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                    let fileRef = lastNameRef.child("\(fileName)")
+                   
+                    let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                        if error == nil && metadata == nil {
+                            //TSave a reference to firestore database
+                        }
+                        return
+                    }
+                    print(uploadTask)
+                } else {
+                    print("No File")
+                }
+            }
+        }
     
 
     private func link(setup: Setup) -> some View {

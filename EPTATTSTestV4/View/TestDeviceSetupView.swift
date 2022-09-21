@@ -127,12 +127,8 @@ struct TestDeviceSetupView: View {
                     .background(Color.blue)
                     .cornerRadius(24)
                 }
-                Spacer()
-                // Below Works To Display Update from Button Above
-//                Text(String(audioSessionModel.audioSession.outputVolume))
-//                    .foregroundColor(.white)
-//                    .font(.caption)
-//                    .padding()
+//                Spacer()
+
                 Spacer()
                 if volumeCorrect >= 1 {
                     HStack{
@@ -154,25 +150,6 @@ struct TestDeviceSetupView: View {
                             .foregroundColor(.clear)
                     }
                 }
-
-
-//                NavigationLink(
-//                    destination: LandingView(),
-////                    destination: TestIDInputView(),
-//                    label: {
-//                    Text("Continue to Return Home and Start The Hearing Test")
-////                    Text("Continue to Start The Hearing Test")
-//                        .fontWeight(.bold)
-//                        .padding()
-//                        .foregroundColor(.white)
-//
-//                })
-//                .onTapGesture {
-//                    Task(priority: .userInitiated, operation: {
-//                        await concantenateFinalSystemVolumeArray()
-//                        await saveTestSystemSettings()
-//                    })
-//                }
                 Spacer()
             }
             .onAppear {

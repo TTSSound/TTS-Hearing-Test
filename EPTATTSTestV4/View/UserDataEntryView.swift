@@ -11,6 +11,10 @@ import CodableCSV
 import FirebaseCore
 import FirebaseFirestore
 import FirebaseAuth
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
+
 //import Alamofire
 
 
@@ -117,7 +121,8 @@ struct UserDataEntryContent<Link: View>:View {
     @Environment(\.presentationMode) var presentationMode
     
     
-    
+    @State private var inputLastName = String()
+    @State private var accountCreatedAndLoggedIn: Bool = false
     
     @ObservedObject var whyWeAskModel: WhyWeAskModel = WhyWeAskModel()
     @State var showWhyDoWeAskSheet: Bool = false
@@ -191,6 +196,15 @@ struct UserDataEntryContent<Link: View>:View {
     let fileSetupName = ["SetupResults.json"]
     let setupCSVName = "SetupResultsCSV.csv"
     let inputSetupCSVName = "InputSetupResultsCSV.csv"
+    
+    let fileDisclaimerName = ["DisclaimerResults.json"]
+    let disclaimerCSVName = "DisclaimerResultsCSV.csv"
+    let inputDisclaimerCSVName = "InputDisclaimerResultsCSV.csv"
+    
+    @State var dataFileURLDisclaimerJson = URL(fileURLWithPath: "")
+    @State var dataFileURLDisclaimerCSV = URL(fileURLWithPath: "")
+    @State var dataFileURLDisclaimerInputCSV = URL(fileURLWithPath: "")
+    
     
     @State var saveFinalSetupResults: SaveFinalSetupResults? = nil
     
@@ -385,6 +399,7 @@ struct UserDataEntryContent<Link: View>:View {
                     HStack{
                         Spacer()
                         Button {
+                            userDataSubmitted = true
                             DispatchQueue.main.async(group: .none, qos: .userInitiated) {
                                 Task(priority: .userInitiated, operation: {
                                     await assignSex()
@@ -418,8 +433,8 @@ struct UserDataEntryContent<Link: View>:View {
                     HStack{
                         Spacer()
                         NavigationLink {
-                            userDataSubmitted == false ? AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
-                            : userDataSubmitted == true ? AnyView(ExplanationView(setup: nil, relatedLink: link))
+                            userDataSubmitted == false && accountCreatedAndLoggedIn == false ? AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
+                            : userDataSubmitted == true && accountCreatedAndLoggedIn == true ? AnyView(ExplanationView(setup: setup, relatedLink: link))
                             : AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
                         } label: {
                             HStack{
@@ -439,14 +454,27 @@ struct UserDataEntryContent<Link: View>:View {
                     .padding(.bottom, 60)
                 }
             }
+            .padding(.leading)
+            .padding(.trailing)
             .onAppear(perform: {
                 uLinkColorIndex = 0
                 userDataSubmitted = false
+                Task{
+                    await checkDataLinkJson()
+                    await checkDataLinkCSV()
+                    await checkDataLinkInputCSV()
+                }
             })
-            .padding(.leading)
-            .padding(.trailing)
-        }.navigationTitle("")
-        
+            .onChange(of: accountCreatedAndLoggedIn) { aCALIValue in
+                if aCALIValue == true {
+                    uploadUserDataEntry()
+                    print("Success creating, loging in and starting upload")
+                } else {
+                    print("Fatal Error in accountCreatedAndLoggedIn logic")
+                }
+            }
+        }
+        .navigationTitle("")
     }
     
 }
@@ -470,6 +498,8 @@ extension UserDataEntryContent {
                 return
             }
             print("Successfully created account with ID: \(result?.user.uid ?? "")")
+            accountCreatedAndLoggedIn = true
+            print("accountCreatedAndLoggedIn: \(accountCreatedAndLoggedIn)")
         })
     }
     
@@ -573,7 +603,23 @@ extension UserDataEntryContent {
         await saveSetupToJSON()
         await writeSetupResultsToCSV()
         await writeInputSetupResultsToCSV()
+        inputLastName = lastName
     }
+    
+    
+    func uploadUserDataEntry() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
+            uploadFile(fileName: disclaimerCSVName)
+            uploadFile(fileName: inputDisclaimerCSVName)
+            uploadFile(fileName: "DisclaimerResults.json")
+            
+            uploadFile(fileName: setupCSVName)
+            uploadFile(fileName: inputSetupCSVName)
+            uploadFile(fileName: "SetupResults.json")
+        }
+    }
+
+
     
     func getSetupData() async {
         guard let setupData = await self.getDemoJSONData() else { return }
@@ -701,6 +747,114 @@ extension UserDataEntryContent {
             print("CVS Input Setup Writer Success")
         } catch {
             print("CVSWriter Input Setup Error or Error Finding File for Input Setup CSV \(error.localizedDescription)")
+        }
+    }
+    
+    
+    
+//        import Firebase
+//        import FirebaseStorage
+//        import FirebaseFirestoreSwift
+//    @State private var inputLastName = String()
+//    let setupCSVName = "SetupResultsCSV.csv"
+//    e.g. fileName variable is setupCSVName with value of "SetupResultsCSV.csv"
+    private func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+
+    // Only Use Files that have a pure string name assigned, not a name of ["String"]
+    private func uploadFile(fileName: String) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let storageRef = Storage.storage().reference()
+            let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+            let lastNameRef = storageRef.child(inputLastName)
+            let fileManager = FileManager.default
+            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+            if fileManager.fileExists(atPath: filePath[0]) {
+                let filePath = URL(fileURLWithPath: filePath[0])
+                let localFile = filePath
+//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                let fileRef = lastNameRef.child("\(fileName)")
+               
+                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                    if error == nil && metadata == nil {
+                        //TSave a reference to firestore database
+                    }
+                    return
+                }
+                print(uploadTask)
+            } else {
+                print("No File")
+            }
+        }
+    }
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
+    
+//    let fileDisclaimerName = ["DisclaimerResults.json"]
+//    let disclaimerCSVName = "DisclaimerResultsCSV.csv"
+//    let inputDisclaimerCSVName = "InputDisclaimerResultsCSV.csv"
+//    dataFileURLDisclaimerJson
+//     dataFileURLDisclaimerCSV
+//     dataFileURLDisclaimerInputCSV
+    
+    private func checkDataLinkJson() async {
+//        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
+        let dataName = ["DisclaimerResults.json"]
+        let fileManager = FileManager.default
+        let dataPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: dataName)
+        if fileManager.fileExists(atPath: dataPath[0]) {
+            let dataFilePath = URL(fileURLWithPath: dataPath[0])
+            if dataFilePath.isFileURL  {
+                dataFileURLDisclaimerJson = dataFilePath
+                print("dataFilePath: \(dataFilePath)")
+                print("dataFileURL: \(dataFileURLDisclaimerJson)")
+                print("Input File Exists")
+            } else {
+                print("Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    private func checkDataLinkCSV() async {
+//        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
+        let dataName = ["DisclaimerResults.json"]
+        let fileManager = FileManager.default
+        let dataPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: dataName)
+        if fileManager.fileExists(atPath: dataPath[0]) {
+            let dataFilePath = URL(fileURLWithPath: dataPath[0])
+            if dataFilePath.isFileURL  {
+                dataFileURLDisclaimerCSV = dataFilePath
+                print("dataFilePath: \(dataFilePath)")
+                print("dataFileURL: \(dataFileURLDisclaimerCSV)")
+                print("Input File Exists")
+            } else {
+                print("Data File Path Does Not Exist")
+            }
+        }
+    }
+    
+    private func checkDataLinkInputCSV() async {
+//        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
+        let dataName = ["DisclaimerResults.json"]
+        let fileManager = FileManager.default
+        let dataPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: dataName)
+        if fileManager.fileExists(atPath: dataPath[0]) {
+            let dataFilePath = URL(fileURLWithPath: dataPath[0])
+            if dataFilePath.isFileURL  {
+                dataFileURLDisclaimerInputCSV = dataFilePath
+                print("dataFilePath: \(dataFilePath)")
+                print("dataFileURL: \(dataFileURLDisclaimerInputCSV)")
+                print("Input File Exists")
+            } else {
+                print("Data File Path Does Not Exist")
+            }
         }
     }
     

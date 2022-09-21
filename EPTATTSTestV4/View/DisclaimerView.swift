@@ -8,7 +8,10 @@
 import SwiftUI
 import CoreMedia
 import CodableCSV
-
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
+import Firebase
 
 // Cannot use private Vars Here
 
@@ -195,6 +198,7 @@ struct DisclaimerContent<Link: View>: View {
         await getDisclaimerData()
         await saveDisclaimerToJSON()
         await writeDisclaimerResultsToCSV()
+        await writeInputDisclaimerResultsToCSV()
     }
     
     func getDisclaimerData() async {

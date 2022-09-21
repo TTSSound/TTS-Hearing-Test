@@ -15,10 +15,10 @@ import Security
 import Combine
 import CoreData
 import CodableCSV
-//import Firebase
-//import FirebaseStorage
-//import FirebaseFirestoreSwift
-//import Firebase
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
+import Firebase
 //import FileProvider
 //import Alamofire
 
@@ -1606,7 +1606,7 @@ extension EHATTSTestPart1Content {
 //        return documentsDirectory
 //    }
 //
-//    func uploadCSV() async {
+//    func uploadCSV() {
 //        DispatchQueue.global(qos: .background).async {
 //            let storageRef = Storage.storage().reference()
 //            let setupCSVName = ["SetupResultsCSV.csv"]
@@ -1917,10 +1917,10 @@ extension EHATTSTestPart1Content {
     }
     
     func writeEHA1InputRightLeftResultsToCSV() async {
-        let stringFinalrightFinalGainsArray = "rightFinalGainsArray," + rightFinalGainsArray.map { String($0) }.joined(separator: ",")
-        let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalrightFinalGainsArray = rightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsArray = leftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsArray = finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsArray = finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
          do {
              let csvEHAP1InputLRSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1InputLRSummaryDocumentsDirectory = csvEHAP1InputLRSummaryPath
@@ -1940,8 +1940,8 @@ extension EHATTSTestPart1Content {
     
     
     func writeEHA1InputRightResultsToCSV() async {
-        let stringFinalrightFinalGainsArray = "rightFinalGainsArray," + rightFinalGainsArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalrightFinalGainsArray = rightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsArray = finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
          do {
              let csvEHAP1InputRightSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1InputRightSummaryDocumentsDirectory = csvEHAP1InputRightSummaryPath
@@ -1958,8 +1958,8 @@ extension EHATTSTestPart1Content {
     }
     
     func writeEHA1InputLeftResultsToCSV() async {
-        let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsArray = leftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsArray = finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
          do {
              let csvEHAP1InputLeftSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1InputLeftSummaryDocumentsDirectory = csvEHAP1InputLeftSummaryPath

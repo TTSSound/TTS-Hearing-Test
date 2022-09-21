@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SimpleTrialDescriptionView: View {
     
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var colorModel: ColorModel = ColorModel()
     @ObservedObject var simpleTrialDescriptionModel: SimpleTrialDescriptionModel = SimpleTrialDescriptionModel()
   
     var body: some View {

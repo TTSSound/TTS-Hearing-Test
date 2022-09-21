@@ -9,11 +9,104 @@ import SwiftUI
 import CodableCSV
 
 
+//@State var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
+//
+//
+//func uploadUserDataEntry() {
+//    DispatchQueue.main.async(group: .none, qos: .background) {
+//        uploadFile(fileName: setupCSVName)
+//        uploadFile(fileName: inputSetupCSVName)
+//        uploadFile(fileName: "SetupResults.json")
+//    }
+//}
+//
+//func getDataLinkPath() async -> String {
+//    let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+//    let documentsDirectory = dataLinkPaths[0]
+//    return documentsDirectory
+//}
+//
+//func setupCSVReader() async {
+//    let dataSetupName = ["InputSetupResultsCSV.csv"]
+//    let fileSetupManager = FileManager.default
+//    let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: dataSetupName)
+//    if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+//        let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+//        if dataSetupFilePath.isFileURL  {
+//            dataFileURLLastName = dataSetupFilePath
+//            print("dataSetupFilePath: \(dataSetupFilePath)")
+//            print("dataFileURL1: \(dataFileURLLastName)")
+//            print("Setup Input File Exists")
+//        } else {
+//            print("Setup Data File Path Does Not Exist")
+//        }
+//    }
+//    do {
+//        let results = try CSVReader.decode(input: dataFileURL1)
+//        print(results)
+//        print("Setup Results Read")
+//        let rows = results.columns
+//        print("rows: \(rows)")
+//        let fieldLastName: String = results[row: 1, column: 0]
+//        print("fieldLastName: \(fieldLastName)")
+//        inputLastName = fieldLastName
+//        print("inputLastName: \(inputLastName)")
+//    } catch {
+//        print("Error in reading Last Name results")
+//    }
+//}
+//
+////        import Firebase
+////        import FirebaseStorage
+////        import FirebaseFirestoreSwift
+////    @State private var inputLastName = String()
+////    let setupCSVName = "SetupResultsCSV.csv"
+////    e.g. fileName variable is setupCSVName with value of "SetupResultsCSV.csv"
+//
+////    let setupCSVName = "SetupResultsCSV.csv"
+////    let inputSetupCSVName = "InputSetupResultsCSV.csv"
+//
+//    func getDirectoryPath() -> String {
+//        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+//        let documentsDirectory = paths[0]
+//        return documentsDirectory
+//    }
+//
+//    // Only Use Files that have a pure string name assigned, not a name of ["String"]
+//    func uploadFile(fileName: String) {
+//        DispatchQueue.global(qos: .background).async {
+//            let storageRef = Storage.storage().reference()
+//            let fileName = [fileName] //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+//            let lastNameRef = storageRef.child(inputLastName)
+//            let fileManager = FileManager.default
+//            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: fileName)
+//            if fileManager.fileExists(atPath: filePath[0]) {
+//                let filePath = URL(fileURLWithPath: filePath[0])
+//                let localFile = filePath
+////                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+//                let fileRef = lastNameRef.child("\(fileName)")
+//
+//                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+//                    if error == nil && metadata == nil {
+//                        //TSave a reference to firestore database
+//                    }
+//                    return
+//                }
+//                print(uploadTask)
+//            } else {
+//                print("No File")
+//            }
+//        }
+//    }
+
+
+
 
 
 class HoldingCSVInputModel: ObservableObject {
     
     //Setup Model Variables
+    @State var inputLastName = String()
     @State var inputAge = Int()
     @State var inputGender = String()
     @State var inputGenderIndex = Int()
@@ -226,16 +319,18 @@ class HoldingCSVInputModel: ObservableObject {
             print("Setup Results Read")
             let rows = results.columns
             print("rows: \(rows)")
-            let fieldAge: String = results[row:6, column: 0]
-            let fieldGender: String = results[row:7, column: 0]
-            let fieldGenderIndex: String = results[row:8, column: 0]
-            let fieldSex: String = results[row:9, column: 0]
-            let fieldUserUUID: String = results[row:10, column: 0]
+            let fieldLastName: String = results[row: 1, column: 0]
+            let fieldAge: String = results[row:5, column: 0]
+            let fieldGender: String = results[row:6, column: 0]
+            let fieldGenderIndex: String = results[row:7, column: 0]
+            let fieldSex: String = results[row:8, column: 0]
+            let fieldUserUUID: String = results[row:8, column: 0]
             print("fieldAge: \(fieldAge)")
             print("fieldGender: \(fieldGender)")
             print("fieldGenderIndex: \(fieldGenderIndex)")
             print("fieldSex: \(fieldSex)")
             print("fieldUserUUID: \(fieldUserUUID)")
+            inputLastName = fieldLastName
             let inputAg = Int(fieldAge)
             inputAge = inputAg ?? -999
             inputGender = fieldGender

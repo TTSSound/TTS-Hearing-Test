@@ -28,7 +28,7 @@ struct SaveFinalTestSelection: Codable {  // This is a model
 
 struct TestSelectionView: View {
 
-    @StateObject var colorModel = ColorModel()
+    var colorModel = ColorModel()
     
  
     @State var selectedEHA: Bool = false

@@ -356,7 +356,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
     
     @State var ehaP2fullTestCompletedTestingArray: [Bool] = [false, false, true]
                                                      
-
+    @State var ehaP2TestingPhases = 0
     
     //ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
     
@@ -390,9 +390,9 @@ struct EHATTSTestPart2Content<Link: View>: View {
     let summaryEHAP2LRCSVName = "SummaryEHAP2LRResultsCSV.csv"
     let summaryEHAP2RightCSVName = "SummaryEHAP2RightResultsCSV.csv"
     let summaryEHAP2LeftCSVName = "SummaryEHAP2LeftResultsCSV.csv"
-    let inputEHAP2LRSummaryCSVName = "InputDetailedEHAP2LRResultsCSV.csv"
-    let inputEHAP2RightSummaryCSVName = "InputDetailedEHAP2RightResultsCSV.csv"
-    let inputEHAP2LeftSummaryCSVName = "InputDetailedEHAP2LeftResultsCSV.csv"
+    let inputEHAP2LRSummaryCSVName = "InputSummaryEHAP2LRResultsCSV.csv"
+    let inputEHAP2RightSummaryCSVName = "InputSummaryEHAP2RightResultsCSV.csv"
+    let inputEHAP2LeftSummaryCSVName = "InputSummaryEHAP2LeftResultsCSV.csv"
     
     @State var ehaP2saveFinalResults: ehaP2SaveFinalResults? = nil
 
@@ -410,7 +410,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
            VStack {
                HStack{
                    if ehaP2fullTestCompleted == false {
-                       Text("EHA Part 2 Test")
+                       Text("EHA Part 2 Test Cycle \(ehaP2TestingPhases)")
                            .font(.title)
                            .fontWeight(.bold)
                            .padding()
@@ -693,13 +693,40 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                    .padding(10)
                                    .foregroundColor(.red)
                            })
-                           if ehaP2fullTestCompleted == false {
+                           if ehaP2fullTestCompleted == false && ehaP2TestingPhases < 1 {
+                               Spacer()
+                               Text("You are now going to take the full extended hearing assessment. The test is completed in TEN phases and will take about 25 minutes to complete.")
+                                   .foregroundColor(.white)
+                                   .font(.title)
+                                   .padding()
+                               Spacer()
+                               Text("Make sure to take a break after each test phase, as you must concentrate deeply while actively testing, which may become tiring without breaks")
+                                   .foregroundColor(.white)
+                                   .font(.title2)
+                                   .padding()
+                               Spacer()
+                               HStack{
+                                   Spacer()
+                                   Text("Let's Continue To Start The Test!")
+                                       .frame(width: 300, height: 50, alignment: .center)
+                                       .foregroundColor(.white)
+                                       .background(Color.green)
+                                       .cornerRadius(24)
+                                       .onTapGesture {
+                                           ehaP2TestingPhases += 1
+                                           ehaP2showTestCompletionSheet.toggle()
+                                       }
+                               Spacer()
+                               }
+                               Spacer()
+                           } else if ehaP2fullTestCompleted == false && ehaP2TestingPhases >= 1 {
                                Spacer()
                                Text("Take a moment for a break before exiting to continue with the next test segment")
                                    .foregroundColor(.white)
                                    .font(.title)
                                    .padding()
                                Spacer()
+                               Text("You have completed \(ehaP2TestingPhases) of TEN test phases.")
                                HStack{
                                    Spacer()
                                    Button(action: {
@@ -709,6 +736,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                            DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
                                                Task(priority: .userInitiated) {
                                                    await ehaP2combinedPauseRestartAndStartNexTestCycle()
+                                                   ehaP2TestingPhases += 1
                                                }
                                            }
                                        }
@@ -723,7 +751,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                    })
                                Spacer()
                                }
-                           } else if ehaP2fullTestCompleted == true {
+                           } else if ehaP2fullTestCompleted == true && ehaP2TestingPhases >= 1 {
                                Text("Test Phase Complete, Let's Proceed.")
                                    .foregroundColor(.green)
                                    .font(.title)
@@ -770,6 +798,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                        await gainEHAP2CurveAssignment()
                        ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]
                        gainEHAP2PhonIsSet = true
+                       ehaP2showTestCompletionSheet = true
                    } else if gainEHAP2PhonIsSet == true {
                        print("Gain Already Set")
                    } else {
@@ -893,25 +922,49 @@ struct EHATTSTestPart2Content<Link: View>: View {
                if ehaP2reversalValue == 1 {
                    DispatchQueue.global(qos: .background).async {
                        Task(priority: .userInitiated) {
-   //                        await ehaP2createReversalHeardArray()
-   //                        await ehaP2createReversalGainArray()
-   //                        await ehaP2checkHeardReversalArrays()
-                           await ehaP2reversalDirection()
-                           await ehaP2reversalComplexAction()
-                           await ehaP2reversalsCompleteLogging()
-                           await ehaP2AssignLRAverageSampleGains()
-                           await ehaP2AssignMonoAverageSampleGains()
-   //                        await ehaP2printReversalGain()
-   //                        await ehaP2printData()
-   //                        await ehaP2printReversalData()
-                           await ehaP2concatenateFinalArrays()
-   //                        await ehaP2printConcatenatedArrays()
-                           await ehaP2saveFinalStoredArrays()
-                           await ehaP2endTestSeriesFunc()
-                           await ehaP2newTestCycle()
-                           await ehaP2restartPresentation()
-                           print("End of Reversals")
-                           print("Prepare to Start Next Presentation")
+                           if ehaP2MonoTest == false {
+                               //                        await ehaP2createReversalHeardArray()
+                               //                        await ehaP2createReversalGainArray()
+                               //                        await ehaP2checkHeardReversalArrays()
+                               await ehaP2reversalDirection()
+                               await ehaP2reversalComplexAction()
+                               await ehaP2reversalsCompleteLogging()
+                               await ehaP2AssignLRAverageSampleGains()
+//                               await ehaP2AssignMonoAverageSampleGains()
+                               //                        await ehaP2printReversalGain()
+                               //                        await ehaP2printData()
+                               //                        await ehaP2printReversalData()
+                               await ehaP2concatenateFinalArrays()
+                               //                        await ehaP2printConcatenatedArrays()
+                               await ehaP2saveFinalStoredArrays()
+                               await ehaP2endTestSeriesFunc()
+                               await ehaP2newTestCycle()
+                               await ehaP2restartPresentation()
+                               print("End of Reversals")
+                               print("Prepare to Start Next Presentation")
+                           } else if ehaP2MonoTest == true {
+                               //                        await ehaP2createReversalHeardArray()
+                               //                        await ehaP2createReversalGainArray()
+                               //                        await ehaP2checkHeardReversalArrays()
+                               await ehaP2reversalDirection()
+                               await ehaP2reversalComplexAction()
+                               await ehaP2reversalsCompleteLogging()
+//                               await ehaP2AssignLRAverageSampleGains()
+                               await ehaP2AssignMonoAverageSampleGains()
+                               //                        await ehaP2printReversalGain()
+                               //                        await ehaP2printData()
+                               //                        await ehaP2printReversalData()
+                               await ehaP2concatenateFinalArrays()
+                               //                        await ehaP2printConcatenatedArrays()
+                               await ehaP2saveFinalStoredArrays()
+                               await ehaP2endTestSeriesFunc()
+                               await ehaP2newTestCycle()
+                               await ehaP2restartPresentation()
+                               print("End of Reversals")
+                               print("Prepare to Start Next Presentation")
+                           } else {
+                               print("!!!Fatal error in ehaP2ReversalValue ehaP2MonoTest Logic")
+                           }
                        }
                    }
                }
@@ -2668,10 +2721,11 @@ extension EHATTSTestPart2Content {
             ehaP2_eptaSamplesCountArrayIdx += 1
 //            ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
             if ehaP2fullTestCompleted == true {
+                ehaP2localPlaying = -1
+                ehaP2stop()
                 ehaP2fullTestCompleted = true
                 ehaP2endTestSeriesValue = true
-                ehaP2localPlaying = -1
-//                ehaP2_eptaSamplesCountArrayIdx += 1
+                ehaP2_eptaSamplesCountArrayIdx -= 1
                 print("*****************************")
                 print("=============================")
                 print("^^^^^^End of Full Test Series^^^^^^")
@@ -3148,10 +3202,10 @@ extension EHATTSTestPart2Content {
     }
 
     func writeEHAP2InputRightLeftResultsToCSV() async {
-        let stringFinalrightFinalGainsArray = "rightFinalGainsArray," + ehaP2rightFinalGainsArray.map { String($0) }.joined(separator: ",")
-        let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + ehaP2leftFinalGainsArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + ehaP2finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + ehaP2finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalrightFinalGainsArray = ehaP2rightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsArray = ehaP2leftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsArray = ehaP2finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsArray = ehaP2finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
          do {
              let csvEHAP2InputLRSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP2InputLRSummaryDocumentsDirectory = csvEHAP2InputLRSummaryPath
@@ -3171,8 +3225,8 @@ extension EHATTSTestPart2Content {
 
 
     func writeEHAP2InputRightResultsToCSV() async {
-        let stringFinalrightFinalGainsArray = "rightFinalGainsArray," + ehaP2rightFinalGainsArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + ehaP2finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalrightFinalGainsArray = ehaP2rightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsArray = ehaP2finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
          do {
              let csvEHAP2InputRightSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP2InputRightSummaryDocumentsDirectory = csvEHAP2InputRightSummaryPath
@@ -3189,8 +3243,8 @@ extension EHATTSTestPart2Content {
     }
 
     func writeEHAP2InputLeftResultsToCSV() async {
-        let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + ehaP2leftFinalGainsArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + ehaP2finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsArray = ehaP2leftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsArray = ehaP2finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
          do {
              let csvEHAP2InputLeftSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP2InputLeftSummaryDocumentsDirectory = csvEHAP2InputLeftSummaryPath
