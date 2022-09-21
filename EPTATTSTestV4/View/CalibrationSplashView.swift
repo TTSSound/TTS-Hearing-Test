@@ -12,16 +12,12 @@ import SwiftUI
 
 struct CalibrationSplashView: View {
     
-    @StateObject var colorModel: ColorModel = ColorModel()
-//    @EnvironmentObject var deviceSelectionModel: DeviceSelectionModel
-    
-    
-    
+    var colorModel: ColorModel = ColorModel()
+
     var body: some View {
         
         ZStack{
             colorModel.colorBackgroundRed.ignoresSafeArea(.all, edges: .top)
-            
             ScrollView{
                 Text("Non-Calibrated Equipment Notice\n")
                     .multilineTextAlignment(.center)
@@ -66,8 +62,7 @@ struct CalibrationSplashView: View {
             .multilineTextAlignment(.leading)
             .padding(.horizontal)
             .foregroundColor(.white)
-        }
-    
+        }    
     }
 }
 

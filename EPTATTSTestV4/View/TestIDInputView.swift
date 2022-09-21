@@ -6,6 +6,10 @@
 //
 
 import SwiftUI
+import CodableCSV
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
 
 struct TestIDInputView<Link: View>: View {
     var testing: Testing?
@@ -27,7 +31,20 @@ struct TestIDInputContent<Link: View>: View {
     var relatedLinkTesting: (Testing) -> Link
     @EnvironmentObject private var naviationModel: NavigationModel
     
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var colorModel: ColorModel = ColorModel()
+    
+    @State private var inputBetaLastName = String()
+    @State private var inputLastName = String()
+    @State private var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
+    @State private var dataFileURLBetaLastName = URL(fileURLWithPath: "")
+    @State private var isOkayToUpload = false
+    @State private var finalComparedLastName = String()
+    
+    
+    let inputBetaSummaryCSVName = "InputBetaSummaryCSV.csv"
+    let setupCSVName = "SetupResultsCSV.csv"
+    let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
+    
     @State var testIDKey: String = ""
     
     var body: some View {
@@ -80,6 +97,109 @@ struct TestIDInputContent<Link: View>: View {
             Spacer()
             }
         }
+        .onAppear {
+            Task {
+                await setupLastNameCSVReader()
+                await setupBetaLastNameCSVReader()
+                await compareLastNames()
+                await writeLastNameToCSV()
+            }
+        }
+    }
+    
+    private func setupLastNameCSVReader() async {
+        let dataSetupName = setupCSVName
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 1, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputLastName = fieldLastName
+            print("inputLastName: \(inputLastName)")
+        } catch {
+            print("Error in reading Last Name results")
+        }
+    }
+    
+    private func setupBetaLastNameCSVReader() async {
+        let dataSetupName = inputBetaSummaryCSVName
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLBetaLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLBetaLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLBetaLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 0, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputBetaLastName = fieldLastName
+            print("inputBetaLastName: \(inputBetaLastName)")
+        } catch {
+            print("Error in reading Beta Last Name results")
+        }
+    }
+    
+    func compareLastNames() async {
+        if inputLastName == inputBetaLastName && inputLastName != "" {
+            finalComparedLastName = inputLastName
+        } else if inputLastName != inputBetaLastName && inputLastName != "" {
+            finalComparedLastName = inputLastName
+        } else {
+            finalComparedLastName = "ErrorLastName"
+            print("Fatal Error in input or beta last name")
+        }
+    }
+    
+    func writeLastNameToCSV() async {
+        print("writeLastNameToCSV Start")
+        let stringFinalInputLastName = finalComparedLastName.map { String($0) }.joined(separator: ",")
+        do {
+            let csvBetaEHAInputSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvBetaEHAInputSummaryDocumentsDirectory = csvBetaEHAInputSummaryPath
+            print("CSV Beta EHA Input Summary Selection DocumentsDirectory: \(csvBetaEHAInputSummaryDocumentsDirectory)")
+            let csvBetaEHAInputSummaryFilePath = csvBetaEHAInputSummaryDocumentsDirectory.appendingPathComponent(inputFinalComparedLastNameCSV)
+            print(csvBetaEHAInputSummaryFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvBetaEHAInputSummaryFilePath, append: false)
+            try writerSetup.write(row: [stringFinalInputLastName])
+        
+            print("CVS Last Na,e Writer Success")
+        } catch {
+            print("CVSWriter Last Name Error or Error Finding File for Last Name CSV \(error.localizedDescription)")
+        }
+    }
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
     }
     
     private func linkTesting(testing: Testing) -> some View {

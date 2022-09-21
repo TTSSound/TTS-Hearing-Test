@@ -94,7 +94,6 @@ struct TestSelectionView: View {
                         .frame(width: 200, height: 50, alignment: .center)
                     
                 }
-                //                Toggle("I Want the Gold Standard! Give Me The EHA!", isOn: $selectedEHA)
                 .foregroundColor(colorModel.neonGreen)
                 .padding(.leading)
                 .padding(.leading)
@@ -121,13 +120,11 @@ struct TestSelectionView: View {
                     Text("I Want The Shorter Test. Give Me The EPTA")
                         .frame(width: 200, height: 50, alignment: .center)
                 }
-                //                Toggle("I'm Only Interested In Assessing My Hearing. Give me the EPTA", isOn: $selectedEPTA)
                 .padding(.leading)
                 .padding(.leading)
                 .padding(.trailing)
                 .padding(.trailing)
                 .foregroundColor(colorModel.limeGreen)
-                //                    .foregroundColor(Color(red: 0.6901960784313725, green: 0.5529411764705883, blue: 0.3411764705882353))
                 .onChange(of: selectedEPTA) { eptaValue in
                     if eptaValue == true {
                         testSelectionSubmitted.removeAll()
@@ -149,7 +146,6 @@ struct TestSelectionView: View {
                     Text("I Only Want A Trial. Give me the Simple Test.")
                         .frame(width: 200, height: 50, alignment: .center)
                 }
-                //                Toggle("I'd Like To Trial The Simple Hearing Test.", isOn: $selectedSimple)
                 .padding(.leading)
                 .padding(.leading)
                 .padding(.trailing)
@@ -267,6 +263,9 @@ struct TestSelectionView: View {
             tsLinkColorIndex = 0
             isOkayToContinue = false
             isOkayToUpload = false
+            Task{
+                await setupCSVReader()
+            }
         }
         .onChange(of: isOkayToUpload) { uploadValue in
             if uploadValue == true {
@@ -393,7 +392,7 @@ struct TestSelectionView: View {
     }
     
     func uploadTestSelection() {
-        DispatchQueue.main.async(group: .none, qos: .background) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, qos: .background) {
             uploadFile(fileName: testSelectionCSVName)
             uploadFile(fileName: inputTestSelectionCSVName)
             uploadFile(fileName: "TestSelection.json")
@@ -420,7 +419,6 @@ struct TestSelectionView: View {
     }
  
     func getTestSelectionJSONData() async -> Data? {
-        
         let saveFinalTestSelection = SaveFinalTestSelection (
             jsonFinalSelectedEHATest: finalSelectedEHATest,
             jsonFinalSelectedEPTATest: finalSelectedEPTATest,
@@ -452,7 +450,6 @@ struct TestSelectionView: View {
             print("Error writing to JSON Test Selection file: \(error)")
         }
     }
-
     
     func writeTestSelectionToCSV() async {
         print("writeTestSelectionToCSV Start")
@@ -557,9 +554,6 @@ struct TestSelectionView: View {
         }
     }
     
-
-//    let setupCSVName = "SetupResultsCSV.csv"
-//    e.g. fileName variable is setupCSVName with value of "SetupResultsCSV.csv"
     private func getDirectoryPath() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0]
@@ -579,7 +573,6 @@ struct TestSelectionView: View {
                 let localFile = filePath
 //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
                 let fileRef = lastNameRef.child("\(fileName)")
-               
                 let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
                     if error == nil && metadata == nil {
                         //TSave a reference to firestore database

@@ -9,8 +9,7 @@ import SwiftUI
 
 struct ManualSetupInstructionView: View {
     
-    @StateObject var colorModel: ColorModel = ColorModel()
-
+    var colorModel: ColorModel = ColorModel()
     
     var body: some View {
         ZStack{

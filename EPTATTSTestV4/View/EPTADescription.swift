@@ -26,7 +26,6 @@ struct EPTADescription: View {
                         }
                         .frame(height: 425)
                     }
-      
                 HStack{
                     Spacer()
                     VStack{

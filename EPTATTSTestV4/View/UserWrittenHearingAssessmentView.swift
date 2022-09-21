@@ -18,7 +18,13 @@
 //10. Does a hearing problem cause you difficulty when in a restaurant with relatives or friends?
 
 import SwiftUI
+import CoreData
 import CodableCSV
+import FirebaseCore
+import FirebaseFirestore
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
 
 
 //struct HHISurveryModel: Identifiable, Hashable {
@@ -100,7 +106,14 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
     var relatedLinkTesting: (Testing) -> Link
     @EnvironmentObject private var naviationModel: NavigationModel
     
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var colorModel: ColorModel = ColorModel()
+    
+    @State private var inputLastName = String()
+    @State private var dataFileURLComparedLastName = URL(fileURLWithPath: "")   // General and Open
+    @State private var isOkayToUpload = false
+    let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
+
+    
     
     @State var noResponses = [Int]()
     @State var sometimesResponses = [Int]()
@@ -605,6 +618,13 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                                 await saveWrittenHearingTest()
                             })
                         }
+                        .onChange(of: isOkayToUpload) { uploadValue in
+                            if uploadValue == true {
+                                uploadUserDataEntry()
+                            } else {
+                                print("Fatal error in uploadvalue change of logic")
+                            }
+                        }
                     }
                     .padding(.bottom)
                     .background(.black)
@@ -966,6 +986,15 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
         await saveSurveyToJSON()
         await writeSurveyResultsToCSV()
         await writeInputSurveyResultsToCSV()
+        isOkayToUpload = true
+    }
+    
+    func uploadUserDataEntry() {
+        DispatchQueue.main.async(group: .none, qos: .background) {
+            uploadFile(fileName: surveyCSVName)
+            uploadFile(fileName: inputSurveyCSVName)
+            uploadFile(fileName: "SurveyResults.json")
+        }
     }
     
     func getSurveyData() async {
@@ -1116,6 +1145,73 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
         }
     }
     
+    private func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
+        
+    func comparedLastNameCSVReader() async {
+        let dataSetupName = inputFinalComparedLastNameCSV
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLComparedLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLComparedLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLComparedLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 0, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputLastName = fieldLastName
+            print("inputLastName: \(inputLastName)")
+        } catch {
+            print("Error in reading Last Name results")
+        }
+    }
+    
+    private func uploadFile(fileName: String) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let storageRef = Storage.storage().reference()
+            let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+            let lastNameRef = storageRef.child(inputLastName)
+            let fileManager = FileManager.default
+            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+            if fileManager.fileExists(atPath: filePath[0]) {
+                let filePath = URL(fileURLWithPath: filePath[0])
+                let localFile = filePath
+                //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                let fileRef = lastNameRef.child("\(fileName)")
+                
+                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                    if error == nil && metadata == nil {
+                        //TSave a reference to firestore database
+                    }
+                    return
+                }
+                print(uploadTask)
+            } else {
+                print("No File")
+            }
+        }
+    }
     
     private func linkTesting(testing: Testing) -> some View {
         EmptyView()

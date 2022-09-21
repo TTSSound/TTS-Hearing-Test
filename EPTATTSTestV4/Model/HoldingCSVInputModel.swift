@@ -66,6 +66,8 @@ import FirebaseFirestoreSwift
 //    }
 //}
 //
+
+
 //import Firebase
 //import FirebaseStorage
 //import FirebaseFirestoreSwift
@@ -122,6 +124,15 @@ class HoldingCSVInputModel: ObservableObject {
     @State var inputGenderIndex = Int()
     @State var inputSex = Int()
     @State var inputUserUUID = String()
+    
+    //Beta Demo Variables
+    @State var inputBetaLastName = String()
+    @State var inputBetaTestSelected = String()
+    @State var inputBetaAge = String()
+    @State var inputBetaSex = String()
+    
+    //Compared Last Name
+    @State var inputComparedLastName = String()
     
     //Test Selection Variables
     @State var inputEHATest = Int()
@@ -245,11 +256,26 @@ class HoldingCSVInputModel: ObservableObject {
     @State var dataFileURL13 = URL(fileURLWithPath: "") // 1kHZ Bilateral test results
     @State var dataFileURL14 = URL(fileURLWithPath: "") // right EHA Part 1 Results
     @State var dataFileURL15 = URL(fileURLWithPath: "") // left EHA Part 1 results
-    @State var dataFileURL16 = URL(fileURLWithPath: "")
-    @State var dataFileURL17 = URL(fileURLWithPath: "")
+    @State var dataFileURL16 = URL(fileURLWithPath: "") // beta demo setup variables
+    @State var dataFileURL17 = URL(fileURLWithPath: "") // Compared Last Name
     @State var dataFileURL18 = URL(fileURLWithPath: "")
     @State var dataFileURL19 = URL(fileURLWithPath: "")
     @State var dataFileURL20 = URL(fileURLWithPath: "")
+    
+    
+    
+    // Gain Setting Functions for EHAP1/EPTA/EHAP2 Tests
+    @State var dataFileURLGain1 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain2 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain3 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain4 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain5 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain6 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain7 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain8 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain9 = URL(fileURLWithPath: "")
+    @State var dataFileURLGain10 = URL(fileURLWithPath: "")
+    
     
     let inputSetupCSVName = "InputSetupResultsCSV.csv"
     let inputTestSelectionCSVName = "InputTestSelectionCSV.csv"
@@ -281,7 +307,9 @@ class HoldingCSVInputModel: ObservableObject {
     let inputSummaryCSVName = "InputSummaryResultsCSV.csv"
     let inputDetailedCSVName = "InputDetailedResultsCSV.csv"
 
-    
+    // Compared Last Name
+    let inputBetaSummaryCSVName = "InputBetaSummaryCSV.csv"
+    let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
     
     func getDataLinkPath() async -> String {
         let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
@@ -763,6 +791,58 @@ class HoldingCSVInputModel: ObservableObject {
 //Users/jeffreyjaskunas/Library/Developer/CoreSimulator/Devices/05B0F8D8-D5E9-4CF8-8E31-EB5EDC61373D/data/Containers/Data/Application/546DACC7-B118-4E3D-94DC-CA9C5A252994/Documents/InputSummaryOnekHzResultsCSV.csv
 
     
+    
+    
+    
+    
+// Beta Test Entry Demo Input Results
+    func betaSetupCSVReader() async {
+        let dataSetupName = inputBetaSummaryCSVName
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURL16 = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURL16)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURL16)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 0, column: 0]
+            let fieldTestSelected: String = results[row:1, column: 0]
+            let fieldAge: String = results[row:2, column: 0]
+            let fieldSex: String = results[row:3, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            print("fieldTestSelected: \(fieldTestSelected)")
+            print("fieldAge: \(fieldAge)")
+            print("fieldSex: \(fieldSex)")
+
+            inputBetaLastName = fieldLastName
+            inputBetaTestSelected = fieldTestSelected
+            inputBetaAge = fieldAge
+            inputBetaSex = fieldSex
+            
+            print("inputLastName: \(inputLastName)")
+            print("inputTestSelected:\(inputTestSelected)")
+            print("inputAge: \(inputAge)")
+            print("inputSex: \(inputSex)")
+        } catch {
+            print("Error in reading Setup results")
+        }
+    }
+    
+    
+    
+    
     func onekHzInputResultsCSVReader() async {
         
         let onekHzSummaryCSVName = [inputOnekHzSummaryCSVName]
@@ -1132,17 +1212,7 @@ class HoldingCSVInputModel: ObservableObject {
         }
     }
     
-    // Gain Setting Functions for EHAP1/EPTA/EHAP2 Tests
-    @State var dataFileURLGain1 = URL(fileURLWithPath: "")
-    @State var dataFileURLGain2 = URL(fileURLWithPath: "")
-    @State var dataFileURLGain3 = URL(fileURLWithPath: "")
-    @State var dataFileURLGain4 = URL(fileURLWithPath: "")
-    @State var dataFileURLGain5 = URL(fileURLWithPath: "")
-    @State var dataFileURLGain6 = URL(fileURLWithPath: "")
-    @State var dataFileURLGain7 = URL(fileURLWithPath: "")
-    @State var dataFileURLGain8 = URL(fileURLWithPath: "")
-    @State var dataFileURLGain9 = URL(fileURLWithPath: "")
-    @State var dataFileURLGain10 = URL(fileURLWithPath: "")
+
     
     func getGainDataLinkPath() async -> String {
         let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
@@ -1343,9 +1413,39 @@ class HoldingCSVInputModel: ObservableObject {
 
 
 
-    
 
+//    let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
+//    @State var inputComparedLastName = String()
     
+    func comparedLastNameCSVReader() async {
+        let dataSetupName = inputFinalComparedLastNameCSV
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURL16 = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURL16)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURL16)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 0, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputComparedLastName = fieldLastName
+            print("inputLastName: \(inputComparedLastName)")
+        } catch {
+            print("Error in reading Last Name results")
+        }
+    }
 }
 
 extension HoldingCSVInputModel {

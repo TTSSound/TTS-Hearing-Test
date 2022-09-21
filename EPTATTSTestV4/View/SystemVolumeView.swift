@@ -9,10 +9,9 @@ import SwiftUI
 
 struct SystemVolumeView: View {
     @State var systemVolumeSetting = false
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var colorModel: ColorModel = ColorModel()
     
     var body: some View {
-        
         ZStack{
             colorModel.colorBackgroundBottomTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack{

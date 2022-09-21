@@ -8,10 +8,8 @@
 import SwiftUI
 
 struct ManualDeviceEntryIssueSplashView: View {
-    
-    
-    @StateObject var colorModel: ColorModel = ColorModel()
 
+    var colorModel: ColorModel = ColorModel()
     
     var body: some View {
         ZStack{
@@ -19,7 +17,6 @@ struct ManualDeviceEntryIssueSplashView: View {
             VStack{
                 Spacer()
                 Spacer()
-            
                 Text("There Was An Issue With The Device Information Entered.")
                     .foregroundColor(.white)
                     .font(.title)
@@ -29,7 +26,6 @@ struct ManualDeviceEntryIssueSplashView: View {
                     .padding(.leading)
                     .padding(.trailing)
                     .padding(.top, 20)
-
                 Text("Please Return To Manual Device Entry and Try Again. Make Sure Both Fields Are Completed")
                     .foregroundColor(.white)
                     .font(.title)
@@ -38,13 +34,10 @@ struct ManualDeviceEntryIssueSplashView: View {
                     .brightness(4.0)
                     .padding(.trailing)
                     .padding(.top, 20)
-                
-            
                 Spacer()
                 NavigationLink {
                     ManualDeviceEntryView()
                 } label: {
-                    
                     VStack {
                         Text("Return to Manual Device Entry")
                             .foregroundColor(.blue)

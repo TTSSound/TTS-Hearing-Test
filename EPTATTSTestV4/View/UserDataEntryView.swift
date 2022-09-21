@@ -608,7 +608,7 @@ extension UserDataEntryContent {
     
     
     func uploadUserDataEntry() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 7.5) {
             uploadFile(fileName: disclaimerCSVName)
             uploadFile(fileName: inputDisclaimerCSVName)
             uploadFile(fileName: "DisclaimerResults.json")

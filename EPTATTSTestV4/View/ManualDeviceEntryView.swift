@@ -7,6 +7,9 @@
 
 import SwiftUI
 import CodableCSV
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
 
 struct SaveFinalManualDeviceSelection: Codable {  // This is a model
     var jsonFinalManualDeviceBrand = [String]()
@@ -20,9 +23,13 @@ struct SaveFinalManualDeviceSelection: Codable {  // This is a model
 
 struct ManualDeviceEntryView: View {
     
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var colorModel: ColorModel = ColorModel()
 
-//    @StateObject var manualDeviceSelectionModel: ManualDeviceSelectionModel = ManualDeviceSelectionModel()
+    let setupCSVName = "SetupResultsCSV.csv"
+    @State private var inputLastName = String()
+    @State private var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
+    @State private var isOkayToUpload = false
+
     @State var deviceBrand: String = ""
     @State var deviceModel: String = ""
     @State var manualUserDataSubmitted = Bool()
@@ -41,11 +48,9 @@ struct ManualDeviceEntryView: View {
     @State var saveFinalManualDeviceSelection: SaveFinalManualDeviceSelection? = nil
 
     var body: some View {
-    
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack(alignment: .leading) {
-                
                 HStack{
                     Spacer()
                     Text("Manual Device Entry")
@@ -56,24 +61,18 @@ struct ManualDeviceEntryView: View {
                 .padding()
                 .padding(.top, 40)
                 .padding(.bottom, 40)
-
                 Text("Complete Each Field Below For The\n   Earphones, or\n   Headphones, or\n   In-Ear Monitors\nYou Will Use For This Test.")
                     .foregroundColor(.white)
                     .font(.title2)
                     .padding(.leading)
                     .padding(.trailing)
                     .padding(.bottom)
-      
-
                 Text("Enter Your Ear / Headphones Brand")
                     .foregroundColor(.white)
                     .font(.title2)
                     .padding(.leading)
                     .padding(.top)
                     .padding(.top)
-                    
-                    
-                
                 HStack{
                     Text("Device Brand")
                         .foregroundColor(.white)
@@ -87,14 +86,11 @@ struct ManualDeviceEntryView: View {
                 }
                 .padding(.leading)
                 .padding(.bottom)
-                
-            
                 Text("Enter Your Ear / Headphones Model")
                     .foregroundColor(.white)
                     .font(.title2)
                     .padding(.leading)
                     .padding(.top)
-
                 HStack{
                     Text("Device Model")
                         .foregroundColor(.white)
@@ -107,8 +103,6 @@ struct ManualDeviceEntryView: View {
                     Spacer()
                 }
                 .padding(.leading)
-               
-                
                 Spacer()
                 if manualUserDataSubmitted == false {
                     HStack{
@@ -119,8 +113,6 @@ struct ManualDeviceEntryView: View {
                                 await appendManualDeviceData()
                                 await concantenateFinalManualDeviceArrays()
                                 await saveManualDeviceData()
-                                //                            await transmitManualDeviceData()
-                                print("FIGURE OUT HOW TO EMAIL RESULTS")
                             })
                         } label: {
                             HStack{
@@ -166,12 +158,18 @@ struct ManualDeviceEntryView: View {
                 Task(priority: .userInitiated) {
                     manualUserDataSubmitted = false
                     manLinkColorIndex = 0
+                    await setupCSVReader()
+                }
+            }
+            .onChange(of: isOkayToUpload) { uploadValue in
+                if uploadValue == true {
+                    uploadManualDeviceData()
+                } else {
+                    print("Fatal error in upload value change logic")
                 }
             }
         }
     }
-    //!!!!!!!!! STILL NEEDED
-    // DETERMINE HOW TO USE Function to email brand model to company
     
     func areDMFieldsEmpty() async {
         if deviceBrand.count > 0 && deviceModel.count > 0 {
@@ -198,7 +196,6 @@ struct ManualDeviceEntryView: View {
             manLinkColorIndex = 1
             print("!!!Error in areDMFieldsEmpty() Logic")
         }
-    
     }
     
     func appendManualDeviceData() async {
@@ -218,18 +215,21 @@ struct ManualDeviceEntryView: View {
         print("manualDeviceSelectionModel finalManualDeviceModel: \(finalManualDeviceModel)")
     }
     
-//    func transmitManualDeviceData() async {
-//        print("!!!!!!!Still need to figure out how to email data results")
-//        // NEED TO FIGURE OUT HOW TO DO THIS
-//    }
-    
     func saveManualDeviceData() async {
         await getManualDeviceData()
         await saveManualDeviceToJSON()
         await writeManualDeviceResultsToCSV()
         await writeInputManualDeviceResultsToCSV()
+        isOkayToUpload = true
     }
-    
+
+    func uploadManualDeviceData() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, qos: .background) {
+            uploadFile(fileName: manualDeviceCSVName)
+            uploadFile(fileName: inputManualDeviceCSVName)
+            uploadFile(fileName: "ManualDeviceSelection.json")
+        }
+    }
     
     func getManualDeviceData() async {
         guard let manualDeviceSelectionData = await getManualDeviceJSONData() else { return }
@@ -304,7 +304,6 @@ struct ManualDeviceEntryView: View {
             print("CSV Input Device Selection DocumentsDirectory: \(csvInputManualDeviceDocumentsDirectory)")
             let csvInputManualDeviceFilePath = csvInputManualDeviceDocumentsDirectory.appendingPathComponent(inputManualDeviceCSVName)
             print(csvInputManualDeviceFilePath)
-            
             let writerSetup = try CSVWriter(fileURL: csvInputManualDeviceFilePath, append: false)
             try writerSetup.write(row: [stringFinalManualDeviceBrand])
             try writerSetup.write(row: [stringFinalManualDeviceModel])
@@ -315,6 +314,73 @@ struct ManualDeviceEntryView: View {
         }
     }
     
+    private func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+
+    // Only Use Files that have a pure string name assigned, not a name of ["String"]
+    private func uploadFile(fileName: String) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let storageRef = Storage.storage().reference()
+            let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+            let lastNameRef = storageRef.child(inputLastName)
+            let fileManager = FileManager.default
+            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+            if fileManager.fileExists(atPath: filePath[0]) {
+                let filePath = URL(fileURLWithPath: filePath[0])
+                let localFile = filePath
+//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                let fileRef = lastNameRef.child("\(fileName)")
+                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                    if error == nil && metadata == nil {
+                        //TSave a reference to firestore database
+                    }
+                    return
+                }
+                print(uploadTask)
+            } else {
+                print("No File")
+            }
+        }
+    }
+    
+    private func setupCSVReader() async {
+        let dataSetupName = "InputSetupResultsCSV.csv"
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 1, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputLastName = fieldLastName
+            print("inputLastName: \(inputLastName)")
+        } catch {
+            print("Error in reading Last Name results")
+        }
+    }
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
     
 }
 

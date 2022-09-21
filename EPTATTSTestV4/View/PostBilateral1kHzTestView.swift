@@ -7,6 +7,12 @@
 
 import SwiftUI
 import CodableCSV
+import FirebaseCore
+import FirebaseFirestore
+import FirebaseAuth
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
 
 struct PostBilateral1kHzTestView<Link: View>: View {
     var testing: Testing?
@@ -29,7 +35,12 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
 
     @EnvironmentObject private var naviationModel: NavigationModel
     
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var colorModel: ColorModel = ColorModel()
+    
+    @State private var inputLastName = String()
+    @State private var dataFileURLComparedLastName = URL(fileURLWithPath: "")   // General and Open
+    @State private var isOkayToUpload = false
+    let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
     
     @State var ehaBetaLinkExists = Bool()
     @State var eptaBetaLinkExists = Bool()
@@ -230,6 +241,18 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
                 }
                 Spacer()
             }
+            .onAppear {
+                Task {
+                    await comparedLastNameCSVReader()
+                }
+            }
+            .onChange(of: phonGain) { phonValue in
+                if phonValue > 0.0 {
+                     uploadUserDataEntry()
+                } else {
+                    print("Fatal error in phon value change of logic")
+                }
+            }
         }
     }
     
@@ -241,6 +264,15 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
         await determineBetaGainCurve()
         await writeBetaFinalGainSettingToCSV()
     }
+    
+    
+
+    func uploadUserDataEntry() {
+        DispatchQueue.main.async(group: .none, qos: .background) {
+            uploadFile(fileName: betaInputOnekHzSummaryCSVName)
+        }
+    }
+    
     
     func determineBetaGainCurve() async {
         //TODO: Unclear on how to make this work without having actual testing data. For now, just use phon value
@@ -704,6 +736,75 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
             print("CVS BetaBetaFinalGainSetting Writer Success")
         } catch {
             print("CVSWriter BetaBetaFinalGainSetting Error or Error Finding File for BetaBetaFinalGainSetting CSV \(error.localizedDescription)")
+        }
+    }
+       
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
+    
+    private func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+
+    // Only Use Files that have a pure string name assigned, not a name of ["String"]
+    private func uploadFile(fileName: String) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let storageRef = Storage.storage().reference()
+            let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+            let lastNameRef = storageRef.child(inputLastName)
+            let fileManager = FileManager.default
+            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+            if fileManager.fileExists(atPath: filePath[0]) {
+                let filePath = URL(fileURLWithPath: filePath[0])
+                let localFile = filePath
+//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                let fileRef = lastNameRef.child("\(fileName)")
+                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                    if error == nil && metadata == nil {
+                        //TSave a reference to firestore database
+                    }
+                    return
+                }
+                print(uploadTask)
+            } else {
+                print("No File")
+            }
+        }
+    }
+    
+    func comparedLastNameCSVReader() async {
+        let dataSetupName = inputFinalComparedLastNameCSV
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLComparedLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLComparedLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLComparedLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 0, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputLastName = fieldLastName
+            print("inputLastName: \(inputLastName)")
+        } catch {
+            print("Error in reading Last Name results")
         }
     }
     

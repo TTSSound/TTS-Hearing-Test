@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TestSelectionLandingView: View {
     
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var colorModel: ColorModel = ColorModel()
     
     var body: some View {
     //        Text("Test Selection View Test")
@@ -26,12 +26,10 @@ struct TestSelectionLandingView: View {
                 .foregroundColor(.white)
                 .padding()
                 .padding()
-
                 Divider()
                     .frame(width: 400, height: 3)
                     .background(.blue)
                     .foregroundColor(.blue)
-                
                 HStack {
                     Spacer()
                     Text("Explore Our Gold Standard True To Source Enhanced Hearing Assessment")
@@ -50,9 +48,6 @@ struct TestSelectionLandingView: View {
                 .padding(.leading)
                 .padding(.top, 10)
                 .padding(.bottom, 10)
-                
-                
-                
                 HStack {
                     Spacer()
                     Text("Explore The Experience of True To Source Personalized Corrective Audio")
@@ -71,7 +66,6 @@ struct TestSelectionLandingView: View {
                 .padding(.leading)
                 .padding(.top, 10)
                 .padding(.bottom, 10)
-                
                 HStack {
                     Spacer()
                     Text("Explore Our FULL SPECTRUM True To Source Extended Pure Tone Audiogram")
@@ -90,7 +84,6 @@ struct TestSelectionLandingView: View {
                 .padding(.leading)
                 .padding(.top, 10)
                 .padding(.bottom, 10)
-                
                 HStack {
                     Spacer()
                     Text("Trial Our Technology With Our Simplest Hearing Test")
@@ -108,7 +101,6 @@ struct TestSelectionLandingView: View {
                 .padding(.leading)
                 .padding(.top, 10)
                 .padding(.bottom, 10)
-                
                 HStack{
                     Spacer()
                     NavigationLink {

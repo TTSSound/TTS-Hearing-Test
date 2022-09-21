@@ -16,11 +16,11 @@ import Security
 import Combine
 import CoreData
 import CodableCSV
-//import Firebase
-//import FirebaseStorage
-//import FirebaseFirestoreSwift
-//import Firebase
-//import FileProvider
+import FirebaseCore
+import FirebaseFirestore
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
 //import Alamofire
 
 struct Bilateral1kHzTestView<Link: View>: View {
@@ -76,6 +76,12 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     
     var audioSessionModel = AudioSessionModel()
     var colorModel: ColorModel = ColorModel()
+    
+    @State private var inputLastName = String()
+    @State private var dataFileURLComparedLastName = URL(fileURLWithPath: "")   // General and Open
+    @State private var isOkayToUpload = false
+    let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
+    
 
     @State var onekHzlocalHeard = 0
     @State var onekHzlocalPlaying = Int()    // Playing = 1. Stopped = -1
@@ -470,6 +476,11 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                 }
             })
         }
+        .onAppear(perform: {
+            Task{
+                await comparedLastNameCSVReader()
+            }
+        })
         .onChange(of: onekHztestIsPlaying, perform: { onekHztestBoolValue in
             if onekHztestBoolValue == true && onekHzendTestSeries == false {
             //User is starting test for first time
@@ -1224,7 +1235,21 @@ extension Bilateral1kHzTestContent {
         }
     }
     
-
+//    let fileOnekHzName = "SummaryOnekHzResults.json"
+//    let summaryOnekHzCSVName = "SummaryOnekHzResultsCSV.csv"
+//    let detailedOnekHzCSVName = "DetailedOnekHzResultsCSV.csv"
+//    let inputOnekHzSummaryCSVName = "InputSummaryOnekHzResultsCSV.csv"
+//    let inputOnekHzDetailedCSVName = "InputDetailedOnekHzResultsCSV.csv"
+    
+    func uploadUserDataEntry() {
+        DispatchQueue.main.async(group: .none, qos: .background) {
+            uploadFile(fileName: fileOnekHzName)
+            uploadFile(fileName: summaryOnekHzCSVName)
+            uploadFile(fileName: detailedOnekHzCSVName)
+            uploadFile(fileName: inputOnekHzSummaryCSVName)
+            uploadFile(fileName: inputOnekHzDetailedCSVName)
+        }
+    }
     
 
 //MARK: -FireBase Storage Upload
@@ -1477,6 +1502,76 @@ extension Bilateral1kHzTestContent {
              print("CVSWriter Input 1kHZ Summary Data Error or Error Finding File for Input Summary CSV \(error)")
          }
     }
+    
+    
+    private func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
+        
+    func comparedLastNameCSVReader() async {
+        let dataSetupName = inputFinalComparedLastNameCSV
+        let fileSetupManager = FileManager.default
+        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+            if dataSetupFilePath.isFileURL  {
+                dataFileURLComparedLastName = dataSetupFilePath
+                print("dataSetupFilePath: \(dataSetupFilePath)")
+                print("dataFileURL1: \(dataFileURLComparedLastName)")
+                print("Setup Input File Exists")
+            } else {
+                print("Setup Data File Path Does Not Exist")
+            }
+        }
+        do {
+            let results = try CSVReader.decode(input: dataFileURLComparedLastName)
+            print(results)
+            print("Setup Results Read")
+            let rows = results.columns
+            print("rows: \(rows)")
+            let fieldLastName: String = results[row: 0, column: 0]
+            print("fieldLastName: \(fieldLastName)")
+            inputLastName = fieldLastName
+            print("inputLastName: \(inputLastName)")
+        } catch {
+            print("Error in reading Last Name results")
+        }
+    }
+    
+    private func uploadFile(fileName: String) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let storageRef = Storage.storage().reference()
+            let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+            let lastNameRef = storageRef.child(inputLastName)
+            let fileManager = FileManager.default
+            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+            if fileManager.fileExists(atPath: filePath[0]) {
+                let filePath = URL(fileURLWithPath: filePath[0])
+                let localFile = filePath
+                //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                let fileRef = lastNameRef.child("\(fileName)")
+                
+                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                    if error == nil && metadata == nil {
+                        //TSave a reference to firestore database
+                    }
+                    return
+                }
+                print(uploadTask)
+            } else {
+                print("No File")
+            }
+        }
+    }
+    
     
     private func linkTesting(testing: Testing) -> some View {
         EmptyView()

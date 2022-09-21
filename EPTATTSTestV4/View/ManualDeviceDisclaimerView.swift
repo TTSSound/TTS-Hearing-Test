@@ -12,8 +12,6 @@ import FirebaseStorage
 import FirebaseFirestoreSwift
 
 
-// Add in user agreed store variable and time of agreement CMseconds and Date
-
 struct SaveFinalManualDisclaimerAgreement: Codable {  // This is a model
     var jsonFinalUncalibratedUserAgreementAgreed = [Bool]()
     var jsonStringFinalUncalibratedUserAgreementAgreedDate = String()
@@ -25,7 +23,6 @@ struct SaveFinalManualDisclaimerAgreement: Codable {  // This is a model
         case jsonFinalUncalibratedUserAgreementAgreedDate
     }
 }
-
 
 
 struct ManualDeviceDisclaimerView: View {
@@ -61,7 +58,6 @@ struct ManualDeviceDisclaimerView: View {
     @State var saveFinalManualDisclaimerAgreement: SaveFinalManualDisclaimerAgreement? = nil
     
     var body: some View {
-
         ZStack{
             colorModel.colorBackgroundBottomRed .ignoresSafeArea(.all, edges: .top)
             VStack {
@@ -120,17 +116,21 @@ struct ManualDeviceDisclaimerView: View {
                     }
                     .foregroundColor(unLinkColors[unLinkColorIndex])
                     .onTapGesture {
-                        uploadManualDeviceData()
+                        uploadManualDeviceDisclaimer()
                         print("uncalDisclaimerSetting: \(uncalDisclaimerSetting)")
                         print("uncalDisclaimerAgreement: \(uncalDisclaimerAgreement)")
                     }
                 }
             }
+            .onAppear(perform: {
+                Task {
+                    await setupCSVReader()
+                }
+            })
             .padding(.bottom, 40)
             Spacer()
         }
     }
-
 
     func loadUncalibratedAgreement() {
         uncalibratedAgreementModel.load(file: uncalibratedAgreementModel.uncalibratedAgreementText)
@@ -178,9 +178,8 @@ struct ManualDeviceDisclaimerView: View {
         await writeInputManualDisclaimerToCSV()
     }
 
-    
-    func uploadManualDeviceData() {
-        DispatchQueue.main.async(group: .none, qos: .background) {
+    func uploadManualDeviceDisclaimer() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, qos: .background) {
             uploadFile(fileName: manuaDisclaimerCSVName)
             uploadFile(fileName: inputManuaDisclaimerCSVName)
             uploadFile(fileName: "ManualDisclaimerAgreement.json")
@@ -244,13 +243,11 @@ struct ManualDeviceDisclaimerView: View {
         print("writeManualDisclaimerSelectionToCSV Start")
         let formatter3 = DateFormatter()
         formatter3.dateFormat = "HH:mm E, d MMM y"
-
         if finalUncalibratedUserAgreementAgreedDate.count != 0 {
             stringFUUAADate = formatter3.string(from: finalUncalibratedUserAgreementAgreedDate[0])
         } else {
             print("finaluncalibrateduseragreementdata is nil")
         }
-
         let stringFinalUncalibratedUserAgreementAgreed = "finalUncalibratedUserAgreementAgreed," + finalUncalibratedUserAgreementAgreed.map { String($0) }.joined(separator: ",")
         let stringFinalUncalibratedUserAgreementAgreedDate = "stringFinalUncalibratedUserAgreementAgreedDate," + stringFUUAADate
         let stringMapFinalUncalibratedUserAgreementAgreedDate = "finalUncalibratedUserAgreementAgreedDate," + stringFUUAADate.map { String($0) }.joined(separator: ",")
@@ -364,7 +361,6 @@ struct ManualDeviceDisclaimerView: View {
         }
     }
     
-    
     private func getDataLinkPath() async -> String {
         let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = dataLinkPaths[0]
@@ -375,7 +371,6 @@ struct ManualDeviceDisclaimerView: View {
 
 
 class UncalibratedAgreementModel: ObservableObject {
-    
     @Published var uncalibratedAgreementText: String = ""
         init() { self.load(file: "uncalibratedAgreementText") }
         func load(file: String) {

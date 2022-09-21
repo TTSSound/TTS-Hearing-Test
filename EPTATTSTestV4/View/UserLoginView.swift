@@ -190,7 +190,7 @@ struct UserLoginContent<Link: View>: View {
                 .padding(.bottom, 20)
                 HStack{
                     VStack(alignment: .leading) {
-                        Text(" Use The Tester Profile Info Below.")
+                        Text(" Use The Tester Profile Info Below To Login.")
                             .font(.title2)
                             .foregroundColor(.white)
                             .padding(.top, 20)
@@ -608,7 +608,7 @@ struct UserLoginContent<Link: View>: View {
     }
     
     func uploadUserDataEntry() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 7.5) {
             uploadFile2(fileName: disclaimerCSVName)
             uploadFile2(fileName: inputDisclaimerCSVName)
             uploadFile2(fileName: "DisclaimerResults.json")

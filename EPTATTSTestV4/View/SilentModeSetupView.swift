@@ -10,7 +10,7 @@ import SwiftUI
 struct SilentModeSetupView: View {
     
     @State var silentSetting = false
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var colorModel: ColorModel = ColorModel()
     var body: some View {
 
         ZStack{
@@ -47,7 +47,6 @@ struct SilentModeSetupView: View {
                 .padding(.trailing, 30.0)
                 Spacer()
             }
-          
         } 
      }
 }

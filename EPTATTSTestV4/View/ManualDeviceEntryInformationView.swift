@@ -10,13 +10,9 @@ import SwiftUI
 struct ManualDeviceEntryInformationView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var colorModel: ColorModel = ColorModel()
 
-
-  
-    
     var body: some View {
-        
         ZStack{
             colorModel.colorBackgroundTopRed.ignoresSafeArea(.all, edges: .top)
             VStack(alignment: .leading, spacing: 20) {
@@ -49,7 +45,6 @@ struct ManualDeviceEntryInformationView: View {
                         .cornerRadius(24)
                     }
                     .padding(.bottom, 20)
-                    
                     NavigationLink {
                         ManualDeviceDisclaimerView()
                     } label: {

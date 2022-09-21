@@ -6,8 +6,14 @@
 //
 
 import SwiftUI
+import CoreData
 import CodableCSV
-
+import FirebaseCore
+import FirebaseFirestore
+import FirebaseAuth
+import Firebase
+import FirebaseStorage
+import FirebaseFirestoreSwift
 
 struct BetaTestingLandingView<Link: View>: View {
     
@@ -31,12 +37,21 @@ struct BetaTestingLandingContent<Link: View>: View {
     var relatedLinkTesting: (Testing) -> Link
     @EnvironmentObject private var naviationModel: NavigationModel
     
-    @StateObject var colorModel: ColorModel = ColorModel()
+    var colorModel: ColorModel = ColorModel()
     
+    @State private var inputLastName = String()
+    @State private var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
+    @State private var isOkayToUpload = false
+    @State private var email: String = ""
+    @State private var password: String = ""
+    @State private var userLoggedInSuccessful: Bool = false
+    @State private var logInAttempt: Bool = false
+        
     @State var betaSexIdx = Int()
     @State var betaSexTitle = "Sex"
     @State var betaAgeIdx = Int()
     @State var betaTestSelectionIdx = Int()
+    @State var betaTestSelectionName = String()
     @State var betaSelectionsSubmitted: Bool = false
     
     @State var betaFemale: Bool = false
@@ -57,6 +72,8 @@ struct BetaTestingLandingContent<Link: View>: View {
     let inputBetaEHATestSelectionCSVName = "EHA.csv"
     let inputBetaEPTATestSelectionCSVName = "EPTA.csv"
     
+    let inputBetaSummaryCSVName = "InputBetaSummaryCSV.csv"
+    
     @State var inputBetaAgeCSVName = String()
         // <= 27").tag(0)   age0.csv
         // 28-39").tag(2)   age1.csv
@@ -70,9 +87,9 @@ struct BetaTestingLandingContent<Link: View>: View {
         // 0 idx  = female.csv
         // 1 idx = male.csv
     
+    @State var showBetaNameScreen = Bool()
+    
     var body: some View {
-        
-
             ZStack{
                 colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
                 VStack{
@@ -117,27 +134,23 @@ struct BetaTestingLandingContent<Link: View>: View {
                         Spacer()
                     }
                     .padding(.top, 20)
-                    
                     Toggle("Full EHA Selected", isOn: $betaEHA)
                         .foregroundColor(.green)
                         .padding(.top, 10)
                         .padding(.leading)
                         .padding(.trailing)
-                    
                     Toggle("Shorter EPTA Selected", isOn: $betaEPTA)
                         .foregroundColor(.blue)
                         .padding(.top, 10)
                         .padding(.leading)
                         .padding(.trailing)
-                        
-
-                    if betaSelectionsSubmitted == false {
+                    if betaSelectionsSubmitted == false && userLoggedInSuccessful == true || userLoggedInSuccessful == false {
                         Button {
                             Task(priority: .userInitiated) {
                                 await writeBetaSex()
                                 await writeBetaAge()
                                 await writeBetaTest()
-
+                                await writeBetaInputSummaryToCSV()
                                 betaSelectionsSubmitted = true
                             }
                         } label: {
@@ -157,10 +170,9 @@ struct BetaTestingLandingContent<Link: View>: View {
                         .padding(.top, 20)
                         .padding(.bottom, 20)
                     }
-                    if betaSelectionsSubmitted == true {
+                    if betaSelectionsSubmitted == true && userLoggedInSuccessful == true {
                         NavigationLink {
                             TestIDInputView(testing: testing, relatedLinkTesting: linkTesting)
-//                            Bilateral1kHzTestView()
                         } label: {
                             HStack{
                                 Spacer()
@@ -179,6 +191,189 @@ struct BetaTestingLandingContent<Link: View>: View {
                     }
                   //End Vstack
                 }
+                .fullScreenCover(isPresented: $showBetaNameScreen) {
+                    colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+                    VStack(alignment: .leading) {
+                        Text("This Is A Shortcut For App Testing Use To Surpass the Main Setup Process, While Still Entering The Key Demographic Variables Needed For The Actual Test")
+                            .font(.title3)
+                            .foregroundColor(.white)
+                            .padding(.top, 40)
+                            .padding(.bottom, 10)
+                        
+                        Text("If you completed the full setup process, still enter the information requested")
+                            .foregroundColor(.white)
+                            .padding(.bottom, 10)
+                        
+                        HStack{
+                            Spacer()
+                            Text("Last Name")
+                                .foregroundColor(.white)
+                            Spacer()
+                            TextField("Last Name", text: $inputLastName)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .autocapitalization(.none)
+                                .disableAutocorrection(true)
+                                .foregroundColor(.blue)
+                            Spacer()
+                        }
+                        
+                        Text(" Use The Tester Profile Info Below To Login.")
+                            .font(.title3)
+                            .foregroundColor(.white)
+                            .padding(.top, 10)
+                            .padding(.bottom, 2)
+                        Text("Tester@TrueToSourceSound.com")
+                            .foregroundColor(.blue)
+                            .padding(.leading)
+                            .padding(.top, 2)
+                            .padding(.bottom, 2)
+                        Text("password")
+                            .foregroundColor(.blue)
+                            .padding(.leading)
+                            .padding(.top, 2)
+                            .padding(.bottom, 10)
+                        
+                        HStack{
+                            Spacer()
+                            Text("Email  ")
+                                .foregroundColor(.white)
+                            Spacer()
+                            TextField("Enter_Email@Here.com", text: $email)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .autocapitalization(.none)
+                                .disableAutocorrection(true)
+                                .foregroundColor(.blue)
+                            Spacer()
+                        }
+                        
+                        HStack{
+                            Spacer()
+                            Text("Password")
+                                .foregroundColor(.white)
+                            Spacer()
+                            TextField("Enter Your Password", text: $password)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .autocapitalization(.none)
+                                .disableAutocorrection(true)
+                                .foregroundColor(.blue)
+                            Spacer()
+                        }
+                        
+                        if logInAttempt == false {
+                            HStack{
+                                Spacer()
+                                Button {
+                                    loginUser3()
+                                    logInAttempt = true
+                                } label: {
+                                    HStack{
+                                        Spacer()
+                                        Text("Login")
+                                        Spacer()
+                                        Image(systemName: "arrow.up.doc.fill")
+                                        Spacer()
+                                    }
+                                    .frame(width: 300, height: 50, alignment: .center)
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(24)
+                                }
+                                .frame(width: 300, height: 50, alignment: .center)
+                                .cornerRadius(24)
+                                Spacer()
+                            }
+                            .frame(width: 350, height: 250, alignment: .center)
+                            .foregroundColor(.clear)
+                            .background(Color.clear)
+                            .cornerRadius(24)
+                            .padding(.bottom, 20)
+                        } else if logInAttempt == true {
+                            if userLoggedInSuccessful == false {
+                                HStack {
+                                    VStack{
+                                        Text("Login Error!! Try Again!")
+                                            .foregroundColor(.red)
+                                            .padding()
+                                        HStack{
+                                            Spacer()
+                                            Button {
+                                                loginUser3()
+                                            } label: {
+                                                HStack{
+                                                    Spacer()
+                                                    Text("Press To Reset")
+                                                    Spacer()
+                                                    Image(systemName: "arrowshape.turn.up.backward.2")
+                                                    Spacer()
+                                                }
+                                                .frame(width: 300, height: 50, alignment: .center)
+                                                .background(Color.red)
+                                                .foregroundColor(.white)
+                                                .cornerRadius(24)
+                                            }
+                                            .frame(width: 300, height: 50, alignment: .center)
+                                            .cornerRadius(24)
+                                            Spacer()
+                                        }
+                                    }
+                                }
+                                .frame(width: 350, height: 250, alignment: .center)
+                                .foregroundColor(.clear)
+                                .background(Color.clear)
+                                .cornerRadius(24)
+                                .padding(.bottom, 20)
+                            } else if userLoggedInSuccessful == true {
+                                HStack{
+                                    Spacer()
+                                    Button {
+                                        showBetaNameScreen.toggle()
+                                        logInAttempt = false
+                                        userLoggedInSuccessful = true
+                                    } label: {
+                                        HStack{
+                                            Spacer()
+                                            Text("Continue")
+                                            Spacer()
+                                            Image(systemName: "arrowshape.bounce.right")
+                                            Spacer()
+                                        }
+                                        .frame(width: 300, height: 50, alignment: .center)
+                                        .background(Color.green)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(24)
+                                    }
+                                    .frame(width: 300, height: 50, alignment: .center)
+                                    .cornerRadius(24)
+                                    Spacer()
+                                }
+                                .frame(width: 350, height: 250, alignment: .center)
+                                .foregroundColor(.clear)
+                                .background(Color.clear)
+                                .cornerRadius(24)
+                                .padding(.bottom, 20)
+                            }
+                        } else {
+                            Text("Fatal Error in Toggle Sub Stack")
+                                .frame(width: 350, height: 250, alignment: .center)
+                                .foregroundColor(.red)
+                                .background(Color.black)
+                                .cornerRadius(24)
+                                .padding(.bottom, 20)
+                        }
+                    }
+                }
+            }
+            .onAppear {
+                userLoggedInSuccessful = false
+                showBetaNameScreen = true
+                logInAttempt = false
+            }
+            .onChange(of: betaSelectionsSubmitted ) { submittedValue in
+                if betaSelectionsSubmitted == true && userLoggedInSuccessful {
+                   uploadBetaDataEntry()
+                } else {
+                    print("Fatal Error in betaselection upload change of logic")
+                }
             }
         }
 
@@ -189,6 +384,29 @@ struct BetaTestingLandingContent<Link: View>: View {
     // 60-69").tag(14)   age4.csv
     // 70-79").tag(15)   age5.csv
     // 80-89").tag(16)   age6.csv
+
+
+    private func loginUser3() {
+            Auth.auth().signIn(withEmail: email, password: password) { result, err in
+                if let err = err {
+                    print("Failed due to error:", err)
+                    return
+                }
+                print("Successfully logged in with ID: \(result?.user.uid ?? "")")
+                userLoggedInSuccessful = true
+                print("userLoggedInSuccessful: \(userLoggedInSuccessful)")
+            }
+        }
+        
+    private func createUser2() {
+        Auth.auth().createUser(withEmail: email, password: password, completion: { result, err in
+            if let err = err {
+                print("Failed due to error:", err)
+                return
+            }
+            print("Successfully created account with ID: \(result?.user.uid ?? "")")
+        })
+    }
     
     func assignBetaAge() async {
         if age0 == true {
@@ -220,6 +438,7 @@ struct BetaTestingLandingContent<Link: View>: View {
         }
     }
     
+    
     func writeBetaSex() async {
         if betaFemale == true && betaMale == false {
             await writeBetaSexFemaleInputTestSelectionToCSV()
@@ -233,8 +452,10 @@ struct BetaTestingLandingContent<Link: View>: View {
     func writeBetaTest() async {
         if betaEPTA == true && betaEHA == false {
             await writeBetaEPTAInputTestSelectionToCSV()
+            betaTestSelectionName = "EPTA.csv"
         } else if betaEPTA == false && betaEHA == true {
             await writeBetaEHAInputTestSelectionToCSV()
+            betaTestSelectionName = "EHA.csv"
         } else {
             print("critical error in writeBetaTest Logic")
         }
@@ -257,6 +478,13 @@ struct BetaTestingLandingContent<Link: View>: View {
             await writeBetaAge6InputTestSelectionToCSV()
         } else {
             print("Critical error in writeBetaAge Logic")
+        }
+    }
+    
+    
+    func uploadBetaDataEntry() {
+        DispatchQueue.main.async(group: .none, qos: .background) {
+            uploadFile(fileName: inputBetaSummaryCSVName)
         }
     }
    
@@ -379,9 +607,6 @@ struct BetaTestingLandingContent<Link: View>: View {
         }
     }
     
-    
-    
-    
     func writeBetaSexMaleInputTestSelectionToCSV() async {
         let betaMaleSelected = "male" + "male"
         print("writeBetaSexMaleInputTestSelectionToCSV Start")
@@ -415,7 +640,6 @@ struct BetaTestingLandingContent<Link: View>: View {
             print("CVSWriter Beta SexFemale Error or Error Finding File for Input SexFemale CSV \(error.localizedDescription)")
         }
     }
-    
     
     func writeBetaEPTAInputTestSelectionToCSV() async {
         let selectedBetaEPTATest = "EPTA" + "EPTA"
@@ -451,6 +675,115 @@ struct BetaTestingLandingContent<Link: View>: View {
             print("CVSWriter Beta EHA Input Test Selection Error or Error Finding File for Input Test Selection CSV \(error.localizedDescription)")
         }
     }
+    
+
+//    inputBetaAgeCSVName = "age6.csv"
+//    inputBetaSexCSVName = "male.csv"
+//    betaTestSelectionName = "EPTA.csv"
+//    inputLastName
+//    let inputBetaSummaryCSVName = "InputBetaSummaryCSV.csv"
+    
+    func writeBetaInputSummaryToCSV() async {
+        print("writeBetaEHAInputSummaryToCSV Start")
+        let stringFinalInputLastName = inputLastName.map { String($0) }.joined(separator: ",")
+        let stringFinalBetaTestSelection = betaTestSelectionName.map { String($0) }.joined(separator: ",")
+        let stringFinalInputBetaAge = inputBetaAgeCSVName.map { String($0) }.joined(separator: ",")
+        let stringFinalInputBetaSex = inputBetaSexCSVName.map { String($0) }.joined(separator: ",")
+        do {
+            let csvBetaEHAInputSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvBetaEHAInputSummaryDocumentsDirectory = csvBetaEHAInputSummaryPath
+            print("CSV Beta EHA Input Summary Selection DocumentsDirectory: \(csvBetaEHAInputSummaryDocumentsDirectory)")
+            let csvBetaEHAInputSummaryFilePath = csvBetaEHAInputSummaryDocumentsDirectory.appendingPathComponent(inputBetaSummaryCSVName)
+            print(csvBetaEHAInputSummaryFilePath)
+            let writerSetup = try CSVWriter(fileURL: csvBetaEHAInputSummaryFilePath, append: false)
+            try writerSetup.write(row: [stringFinalInputLastName])
+            try writerSetup.write(row: [stringFinalBetaTestSelection])
+            try writerSetup.write(row: [stringFinalInputBetaAge])
+            try writerSetup.write(row: [stringFinalInputBetaSex])
+            print("CVS Beta Input Summary Writer Success")
+        } catch {
+            print("CVSWriter Beta EHA Input Test Selection Error or Error Finding File for Input Test Selection CSV \(error.localizedDescription)")
+        }
+    }
+    
+    
+    private func getDataLinkPath() async -> String {
+        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = dataLinkPaths[0]
+        return documentsDirectory
+    }
+    
+    private func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
+
+
+    // Only Use Files that have a pure string name assigned, not a name of ["String"]
+    private func uploadFile(fileName: String) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let storageRef = Storage.storage().reference()
+            let fileName = fileName //e.g.  let setupCSVName = ["SetupResultsCSV.csv"] with an input from (let setupCSVName = "SetupResultsCSV.csv")
+            let lastNameRef = storageRef.child(inputLastName)
+            let fileManager = FileManager.default
+            let filePath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: [fileName])
+            if fileManager.fileExists(atPath: filePath[0]) {
+                let filePath = URL(fileURLWithPath: filePath[0])
+                let localFile = filePath
+//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                let fileRef = lastNameRef.child("\(fileName)")
+                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
+                    if error == nil && metadata == nil {
+                        //TSave a reference to firestore database
+                    }
+                    return
+                }
+                print(uploadTask)
+            } else {
+                print("No File")
+            }
+        }
+    }
+    
+//    private func setupCSVReader() async {
+//        let dataSetupName = "InputSetupResultsCSV.csv"
+//        let fileSetupManager = FileManager.default
+//        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+//        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+//            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+//            if dataSetupFilePath.isFileURL  {
+//                dataFileURLLastName = dataSetupFilePath
+//                print("dataSetupFilePath: \(dataSetupFilePath)")
+//                print("dataFileURL1: \(dataFileURLLastName)")
+//                print("Setup Input File Exists")
+//            } else {
+//                print("Setup Data File Path Does Not Exist")
+//            }
+//        }
+//        do {
+//            let results = try CSVReader.decode(input: dataFileURLLastName)
+//            print(results)
+//            print("Setup Results Read")
+//            let rows = results.columns
+//            print("rows: \(rows)")
+//            let fieldLastName: String = results[row: 1, column: 0]
+//            print("fieldLastName: \(fieldLastName)")
+//            inputLastName = fieldLastName
+//            print("inputLastName: \(inputLastName)")
+//        } catch {
+//            print("Error in reading Last Name results")
+//        }
+//    }
+//
+//    private func getDataLinkPath() async -> String {
+//        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+//        let documentsDirectory = dataLinkPaths[0]
+//        return documentsDirectory
+//    }
+    
+    
     
     private func linkTesting(testing: Testing) -> some View {
         EmptyView()

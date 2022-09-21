@@ -25,8 +25,6 @@ struct TestSelectionSplashView: View {
                     .padding(.leading)
                     .padding(.trailing)
                     .padding(.bottom, 40)
-
-                    
                 VStack(alignment: .leading, spacing: 20) {
                     Text("Please Return To The Test Selection Screen")
                         .foregroundColor(.white)
@@ -35,7 +33,6 @@ struct TestSelectionSplashView: View {
                         .brightness(4.0)
                         .padding(.leading)
                         .padding(.trailing)
-         
                     Text("Confirm You Only Have One Test Selected")
                         .foregroundColor(.white)
                         .hoverEffect(/*@START_MENU_TOKEN@*/.highlight/*@END_MENU_TOKEN@*/)
@@ -43,7 +40,6 @@ struct TestSelectionSplashView: View {
                         .brightness(4.0)
                         .padding(.leading)
                         .padding(.trailing)
-
                     Text("And, That The Test Selected Is The Test You Want")
                         .foregroundColor(.white)
                         .hoverEffect(/*@START_MENU_TOKEN@*/.highlight/*@END_MENU_TOKEN@*/)
@@ -59,9 +55,6 @@ struct TestSelectionSplashView: View {
                         .padding(.leading)
                         .padding(.trailing)
                 }
-                
-                
-
                 Spacer()
                 NavigationLink {
                     TestSelectionView()
@@ -79,12 +72,11 @@ struct TestSelectionSplashView: View {
                     .cornerRadius(24)
                 }
                 .padding(.bottom, 20)
-              
             }
         }
     }
 }
-//
+
 //struct TestSelectionSplashView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        TestSelectionSplashView()

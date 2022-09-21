@@ -91,7 +91,7 @@ struct HeadphoneModels: Identifiable, Hashable {
 struct CalibrationAssessmentView: View {
    
     var colorModel: ColorModel = ColorModel()
-
+    
     
     let setupCSVName = "SetupResultsCSV.csv"
     @State private var inputLastName = String()
@@ -163,7 +163,6 @@ struct CalibrationAssessmentView: View {
                         .padding()
                         .foregroundColor(.white)
                         .font(.title3)
-                    
                     Text("ONLY SELECT ONE ITEM!")
                         .font(.title)
                         .padding()
@@ -318,6 +317,9 @@ struct CalibrationAssessmentView: View {
             .onAppear {
                 isSubmitted = false
                 linkColorIndex = 0
+                Task {
+                    await setupCSVReader()
+                }
             }
             .onChange(of: isOkayToUpload) { uploadValue in
                 if uploadValue == true {
@@ -397,7 +399,6 @@ struct CalibrationAssessmentView: View {
         }
     }
     
-    
     func resetCheckMultipleDevices() async {
         multipleDevicesCheck.removeAll()
         isOkayToProceed = false
@@ -432,9 +433,8 @@ struct CalibrationAssessmentView: View {
         await writeInputDeviceResultsToCSV()
     }
     
-    
     func uploadDeviceData() {
-        DispatchQueue.main.async(group: .none, qos: .background) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, qos: .background) {
             uploadFile(fileName: deviceCSVName)
             uploadFile(fileName: inputDeviceCSVName)
             uploadFile(fileName: "DeviceSelection.json")

@@ -9,8 +9,7 @@ import SwiftUI
 
 struct CalibrationIssueSplashView: View {
     
-    @StateObject var colorModel: ColorModel = ColorModel()
-//    @EnvironmentObject var deviceSelectionModel: DeviceSelectionModel
+    var colorModel: ColorModel = ColorModel()
     
     var body: some View {
         ZStack{
@@ -18,7 +17,6 @@ struct CalibrationIssueSplashView: View {
             VStack{
                 Spacer()
                 Spacer()
-            
                 Text("Device Selection Issue. Please Return To Device Selection and Try Again.")
                     .foregroundColor(.white)
                     .font(.title)
@@ -28,10 +26,6 @@ struct CalibrationIssueSplashView: View {
                     .padding(.leading)
                     .padding(.trailing)
                     .padding(.top, 20)
-//                    .padding(.bottom, 20)
-                
-                
-            
                 Spacer()
                 NavigationLink {
                     CalibrationAssessmentView()

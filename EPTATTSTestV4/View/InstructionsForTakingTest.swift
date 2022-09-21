@@ -11,10 +11,7 @@ import WebKit
 
 struct InstructionsForTakingTest: View {
     
-
-    @StateObject var colorModel: ColorModel = ColorModel()
-   
-    
+    var colorModel: ColorModel = ColorModel()
     let videoInstructionLink = "KzQ4cYPZnfo"
     
     var body: some View {
@@ -26,15 +23,11 @@ struct InstructionsForTakingTest: View {
                     .foregroundColor(.white)
                     .font(.title)
             Spacer()
-            
-                
                 VideoInstructionView(videoInstructionID: videoInstructionLink)
                     .frame(minHeight: 0, maxHeight:
                             UIScreen.main.bounds.height * 0.3)
                     .cornerRadius(12)
                     .padding(.horizontal, 12)
-                
-                
             Spacer()
                 NavigationLink(
                     destination: SiriSetupView(),
@@ -76,7 +69,6 @@ struct VideoInstructionView: UIViewRepresentable {
         uiView.scrollView.isScrollEnabled = false
         uiView.load(URLRequest(url: youtubeURL))
     }
-    
 }
 
 //struct InstructionsForTakingTest_Previews: PreviewProvider {
