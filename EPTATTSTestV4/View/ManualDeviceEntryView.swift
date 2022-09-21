@@ -22,14 +22,13 @@ struct SaveFinalManualDeviceSelection: Codable {  // This is a model
 }
 
 struct ManualDeviceEntryView: View {
-    
     var colorModel: ColorModel = ColorModel()
-
+    
     let setupCSVName = "SetupResultsCSV.csv"
     @State private var inputLastName = String()
     @State private var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
     @State private var isOkayToUpload = false
-
+    
     @State var deviceBrand: String = ""
     @State var deviceModel: String = ""
     @State var manualUserDataSubmitted = Bool()
@@ -46,7 +45,7 @@ struct ManualDeviceEntryView: View {
     let manualDeviceCSVName = "ManualDeviceSelectionCSV.csv"
     let inputManualDeviceCSVName = "InputManualDeviceSelectionCSV.csv"
     @State var saveFinalManualDeviceSelection: SaveFinalManualDeviceSelection? = nil
-
+    
     var body: some View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
@@ -127,7 +126,7 @@ struct ManualDeviceEntryView: View {
                             .background(Color.blue)
                             .cornerRadius(24)
                         }
-                    Spacer()
+                        Spacer()
                     }
                 } else if manualUserDataSubmitted == true {
                     HStack{
@@ -149,7 +148,7 @@ struct ManualDeviceEntryView: View {
                         .background(Color.green)
                         .cornerRadius(24)
                         }
-                    Spacer()
+                        Spacer()
                     }
                 }
                 Spacer()
@@ -170,7 +169,10 @@ struct ManualDeviceEntryView: View {
             }
         }
     }
-    
+}
+
+extension ManualDeviceEntryView {
+    //MARK: -Extension Methods
     func areDMFieldsEmpty() async {
         if deviceBrand.count > 0 && deviceModel.count > 0 {
             manualUserDataSubmitted = true
@@ -201,7 +203,7 @@ struct ManualDeviceEntryView: View {
     func appendManualDeviceData() async {
         userBrand.append(deviceBrand)
         userModel.append(deviceModel)
-
+        
         print("Brand: \(deviceBrand)")
         print("Model: \(deviceModel)")
         print("setupData userBrand: \(userBrand)")
@@ -222,7 +224,7 @@ struct ManualDeviceEntryView: View {
         await writeInputManualDeviceResultsToCSV()
         isOkayToUpload = true
     }
-
+    
     func uploadManualDeviceData() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, qos: .background) {
             uploadFile(fileName: manualDeviceCSVName)
@@ -230,7 +232,10 @@ struct ManualDeviceEntryView: View {
             uploadFile(fileName: "ManualDeviceSelection.json")
         }
     }
-    
+}
+
+extension ManualDeviceEntryView {
+//MARK: -Extension CSV/JSON Methods
     func getManualDeviceData() async {
         guard let manualDeviceSelectionData = await getManualDeviceJSONData() else { return }
         print("Json Manual Device Selection Data:")
@@ -381,7 +386,6 @@ struct ManualDeviceEntryView: View {
         let documentsDirectory = dataLinkPaths[0]
         return documentsDirectory
     }
-    
 }
 
 //struct ManualDeviceEntryView_Previews: PreviewProvider {

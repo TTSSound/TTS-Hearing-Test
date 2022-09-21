@@ -31,9 +31,8 @@ struct SaveSystemSettings: Codable {  // This is a model
 }
 
 struct TestDeviceSetupView: View {
-    
-    var audioSessionModel = AudioSessionModel()
     var colorModel: ColorModel = ColorModel()
+    var audioSessionModel = AudioSessionModel()
     
     
     let setupCSVName = "SetupResultsCSV.csv"
@@ -54,13 +53,13 @@ struct TestDeviceSetupView: View {
     @State var volumeSettingIndex = Int()
     @State var silentModeSettingString = ["No, Silent Mode Is Not Off. Please Repeat Silent Mode Setup", "Yes, Silent Mode Is Off"]
     @State var silentModeSettingIndex = Int()
-
+    
     
     @State var silentModeStatus = [Bool]()
     @State var doNotDisturbStatus = [Bool]()
     @State var systemVolumeStatus = [Bool]()
     @State var finalStartingSystemVolume: [Float] = [Float]()
-
+    
     let fileSystemName = ["SystemSettings.json"]
     let systemCSVName = "SystemSettingsCSV.csv"
     let inputSystemCSVName = "InputSystemSettingsCSV.csv"
@@ -115,7 +114,7 @@ struct TestDeviceSetupView: View {
                         .foregroundColor(silColors[silLinkColorIndex])
                         .padding()
                 }
-/// THIS    IS THE KEY TO GETTING IT TO REFRESH VALUE !!!!!!!!!!
+                /// THIS    IS THE KEY TO GETTING IT TO REFRESH VALUE !!!!!!!!!!
                 Button {
                     Task{
                         audioSessionModel.setAudioSession()
@@ -176,7 +175,10 @@ struct TestDeviceSetupView: View {
             }
         }
     }
-    
+}
+
+extension TestDeviceSetupView {
+    //MARK: -Extension Methods
     func checkVolue() {
         if audioSessionModel.audioSession.outputVolume == 0.63 {
             volumeCorrect = 1
@@ -234,7 +236,10 @@ struct TestDeviceSetupView: View {
             uploadFile(fileName: "SystemSettings.json")
         }
     }
-    
+}
+
+extension TestDeviceSetupView {
+//MARK: -Extension CSV/JSON Methods
     func getSystemData() async {
         guard let systemSettingsData = await getSystemJSONData() else { return }
         print("Json System Settings Data:")
@@ -271,7 +276,6 @@ struct TestDeviceSetupView: View {
         do {
             let jsonSystemData = try encoder.encode(saveSystemSettings)
             print(jsonSystemData)
-          
             try jsonSystemData.write(to: systemFilePaths)
         } catch {
             print("Error writing to JSON System Settings file: \(error)")
@@ -373,7 +377,6 @@ struct TestDeviceSetupView: View {
             print("Error in reading Last Name results")
         }
     }
-    
     
     private func getDataLinkPath() async -> String {
         let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)

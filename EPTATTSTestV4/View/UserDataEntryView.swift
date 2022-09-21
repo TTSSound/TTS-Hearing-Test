@@ -209,11 +209,9 @@ struct UserDataEntryContent<Link: View>:View {
     @State var saveFinalSetupResults: SaveFinalSetupResults? = nil
     
     var body: some View {
-        
         ZStack {
             colorModel.colorBackgroundTopTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack(alignment: .leading, spacing: 10) {
-                
                 VStack{
                     HStack{
                         Spacer()
@@ -242,7 +240,6 @@ struct UserDataEntryContent<Link: View>:View {
                         isLogin = true
                     }
                 }
-                
                 HStack() {
                     Spacer()
                     Text("First Name")
@@ -255,7 +252,6 @@ struct UserDataEntryContent<Link: View>:View {
                         .foregroundColor(.blue)
                     Spacer()
                 }
-                
                 HStack{
                     Spacer()
                     Text("Last Name")
@@ -268,7 +264,6 @@ struct UserDataEntryContent<Link: View>:View {
                         .foregroundColor(.blue)
                     Spacer()
                 }
-                
                 HStack{
                     Spacer()
                     Text("Email")
@@ -281,7 +276,6 @@ struct UserDataEntryContent<Link: View>:View {
                         .foregroundColor(.blue)
                     Spacer()
                 }
-                
                 HStack{
                     Spacer()
                     Text("Password")
@@ -294,8 +288,6 @@ struct UserDataEntryContent<Link: View>:View {
                         .foregroundColor(.blue)
                     Spacer()
                 }
-                
-                
                 HStack {
                     Spacer()
                     Text("Select Your Age in Years")
@@ -304,8 +296,6 @@ struct UserDataEntryContent<Link: View>:View {
                 }
                 .padding(.top)
                 .padding(.top)
-                
-                // GENDER SELECTION
                 VStack{
                     HStack{
                         Picker(
@@ -320,13 +310,11 @@ struct UserDataEntryContent<Link: View>:View {
                                 }
                             })
                     }
-                    
                     HStack{
                         Spacer()
                         Text("Select Your Gender")
                             .foregroundColor(.white)
                         Spacer()
-                        
                         Button(action: {
                             showWhyDoWeAskSheet.toggle()
                             
@@ -340,7 +328,6 @@ struct UserDataEntryContent<Link: View>:View {
                         ZStack {
                             colorModel.colorBackgroundBottomTiffanyBlue.ignoresSafeArea()
                             VStack(alignment: .leading) {
-                                
                                 Button(action: {
                                     showWhyDoWeAskSheet.toggle()
                                 }, label: {
@@ -351,7 +338,6 @@ struct UserDataEntryContent<Link: View>:View {
                                 })
                                 .padding(.top, 40)
                                 .padding(.leading, 20)
-                                
                                 GroupBox(label:
                                             Label("Why Do We Ask", systemImage: "person.fill.questionmark").foregroundColor(.purple)
                                 ) {
@@ -374,7 +360,6 @@ struct UserDataEntryContent<Link: View>:View {
                 .foregroundColor(.purple)
                 .padding(.leading)
                 .padding(.bottom)
-                
                 HStack{
                     Spacer()
                     Picker("Gender", selection: $genderIdx) {
@@ -394,7 +379,6 @@ struct UserDataEntryContent<Link: View>:View {
                 }
                 .padding(.leading)
                 .padding(.bottom, 60)
-                
                 if userDataSubmitted == false {
                     HStack{
                         Spacer()
@@ -476,21 +460,20 @@ struct UserDataEntryContent<Link: View>:View {
         }
         .navigationTitle("")
     }
-    
 }
 
 extension UserDataEntryContent {
-    
+    //MARK: - Extension Methods Auth
     private func loginUser() {
-            Auth.auth().signIn(withEmail: email, password: password) { result, err in
-                if let err = err {
-                    print("Failed due to error:", err)
-                    return
-                }
-                print("Successfully logged in with ID: \(result?.user.uid ?? "")")
+        Auth.auth().signIn(withEmail: email, password: password) { result, err in
+            if let err = err {
+                print("Failed due to error:", err)
+                return
             }
+            print("Successfully logged in with ID: \(result?.user.uid ?? "")")
         }
-        
+    }
+    
     private func createUser() {
         Auth.auth().createUser(withEmail: email, password: password, completion: { result, err in
             if let err = err {
@@ -503,6 +486,7 @@ extension UserDataEntryContent {
         })
     }
     
+    //MARK: -Extenstion Methods
     func loadWhyWeAsk() {
         whyWeAskModel.load(file: whyWeAskModel.whyDoWeAskForThisText)
     }
@@ -519,7 +503,6 @@ extension UserDataEntryContent {
     }
     
     func areDemoFieldsEmpty() async {
-        
         if firtsName.count > 0 && lastName.count > 0 && email.count > 0 && password.count > 0 && genderIdx >= 0 {
             userDataSubmitted = true
             udLinkColorIndex = 1
@@ -570,8 +553,7 @@ extension UserDataEntryContent {
         print("SetupModel genderIdx: \(userGenderIndex)")
         print("SetupModel sex: \(userSex)")
         print("SetupModel userUUIDString: \(userUUIDString)")
-      }
-    
+    }
     
     func concatenateDemoFinalArrays() async {
         finalFirstName.append(contentsOf: userFirstName)
@@ -618,7 +600,10 @@ extension UserDataEntryContent {
             uploadFile(fileName: "SetupResults.json")
         }
     }
+}
 
+extension UserDataEntryContent {
+//MARK: -Extentions CSV/JSON Methods
     func getSetupData() async {
         guard let setupData = await self.getDemoJSONData() else { return }
         print("Json Setup Data:")
@@ -635,7 +620,6 @@ extension UserDataEntryContent {
     }
     
     func getDemoJSONData() async -> Data? {
-        
         let saveFinalSetupResults = SaveFinalSetupResults (
             jsonFinalFirstName: finalFirstName,
             jsonFinalLastName: finalLastName,
@@ -646,7 +630,6 @@ extension UserDataEntryContent {
             jsonFinalGenderIndex: finalGenderIndex,
             jsonFinalSex: finalSex,
             jsonUserUUID: finalUserUUIDString)
-        
         let jsonSetupData = try? JSONEncoder().encode(saveFinalSetupResults)
         print("saveFinalResults: \(saveFinalSetupResults)")
         print("Json Encoded \(jsonSetupData!)")
@@ -673,10 +656,8 @@ extension UserDataEntryContent {
         }
     }
 
-    
     func writeSetupResultsToCSV() async {
         print("writeSetupResultsToCSV Start")
-        
         let stringFinalFirstName = "finalFirstName," + finalFirstName.map { String($0) }.joined(separator: ",")
         let stringFinalLastName = "finalLastName," + finalLastName.map { String($0) }.joined(separator: ",")
         let stringFinalEmail = "finalEmail," + finalEmail.map { String($0) }.joined(separator: ",")
@@ -686,16 +667,13 @@ extension UserDataEntryContent {
         let stringFinalGenderIndex = "finalGenderIndex," + finalGenderIndex.map { String($0) }.joined(separator: ",")
         let stringFinalSex = "finalSex," + finalSex.map { String($0) }.joined(separator: ",")
         let stringFinalUserUUIDString = "finalUserUUIDString," + finalUserUUIDString.map { String($0) }.joined(separator: ",")
-        
         do {
             let csvSetupPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvSetupDocumentsDirectory = csvSetupPath
             print("CSV Setup DocumentsDirectory: \(csvSetupDocumentsDirectory)")
             let csvSetupFilePath = csvSetupDocumentsDirectory.appendingPathComponent(setupCSVName)
             print(csvSetupFilePath)
-            
             let writerSetup = try CSVWriter(fileURL: csvSetupFilePath, append: false)
-        
             try writerSetup.write(row: [stringFinalFirstName])
             try writerSetup.write(row: [stringFinalLastName])
             try writerSetup.write(row: [stringFinalEmail])
@@ -705,7 +683,6 @@ extension UserDataEntryContent {
             try writerSetup.write(row: [stringFinalGenderIndex])
             try writerSetup.write(row: [stringFinalSex])
             try writerSetup.write(row: [stringFinalUserUUIDString])
-        
             print("CVS Setup Writer Success")
         } catch {
             print("CVSWriter Setup Error or Error Finding File for Setup CSV \(error.localizedDescription)")
@@ -714,7 +691,6 @@ extension UserDataEntryContent {
     
     func writeInputSetupResultsToCSV() async {
         print("writeInputSetupResultsToCSV Start")
-        
         let stringFinalFirstName = finalFirstName.map { String($0) }.joined(separator: ",")
         let stringFinalLastName = finalLastName.map { String($0) }.joined(separator: ",")
         let stringFinalEmail = finalEmail.map { String($0) }.joined(separator: ",")
@@ -758,7 +734,7 @@ extension UserDataEntryContent {
         return documentsDirectory
     }
 
-    // Only Use Files that have a pure string name assigned, not a name of ["String"]
+// Only Use Files that have a pure string name assigned, not a name of ["String"]
     private func uploadFile(fileName: String) {
         DispatchQueue.global(qos: .userInteractive).async {
             let storageRef = Storage.storage().reference()
@@ -771,7 +747,6 @@ extension UserDataEntryContent {
                 let localFile = filePath
 //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
                 let fileRef = lastNameRef.child("\(fileName)")
-               
                 let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
                     if error == nil && metadata == nil {
                         //TSave a reference to firestore database
@@ -851,7 +826,8 @@ extension UserDataEntryContent {
             }
         }
     }
-    
+
+//MARK: -NavigationLink Method
     private func link(setup: Setup) -> some View {
         EmptyView()
     }
@@ -879,13 +855,13 @@ class WhyWeAskModel: ObservableObject {
 
 
 
-struct TestUserDataEntryView_Previews: PreviewProvider {
-    static var previews: some View {
-        UserDataEntryView(setup: nil, relatedLink: link)
-    }
-    
-    static func link(setup: Setup) -> some View {
-        EmptyView()
-    }
-}
+//struct TestUserDataEntryView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        UserDataEntryView(setup: nil, relatedLink: link)
+//    }
+//    
+//    static func link(setup: Setup) -> some View {
+//        EmptyView()
+//    }
+//}
 

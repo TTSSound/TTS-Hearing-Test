@@ -89,7 +89,6 @@ struct HeadphoneModels: Identifiable, Hashable {
 }
 
 struct CalibrationAssessmentView: View {
-   
     var colorModel: ColorModel = ColorModel()
     
     
@@ -101,7 +100,7 @@ struct CalibrationAssessmentView: View {
     
     @State var showDeviceSheet: Bool = false
     @State var refreshView: Bool = false
-
+    
     @Environment(\.presentationMode) var presentationMode
     
     @State var deviceSelectionIndex = [Int]()
@@ -157,32 +156,32 @@ struct CalibrationAssessmentView: View {
     var body: some View {
         ZStack{
             colorModel.colorBackgroundBottomTiffanyBlue.ignoresSafeArea(.all, edges: .top)
-                VStack {
+            VStack {
                 Spacer()
-                    Text("Select The Type of Ear/Headphones You Are Using or Select The Most Appropriate Option Available.")
+                Text("Select The Type of Ear/Headphones You Are Using or Select The Most Appropriate Option Available.")
+                    .padding()
+                    .foregroundColor(.white)
+                    .font(.title3)
+                Text("ONLY SELECT ONE ITEM!")
+                    .font(.title)
+                    .padding()
+                    .foregroundColor(.white)
+                Spacer()
+                Button(action: {
+                    showDeviceSheet.toggle()
+                    
+                }, label: {
+                    Text("Open Our List of Calibrated Ear/Headphones")
                         .padding()
-                        .foregroundColor(.white)
-                        .font(.title3)
-                    Text("ONLY SELECT ONE ITEM!")
-                        .font(.title)
+                        .foregroundColor(colorModel.neonGreen)
+                    Image(systemName: "arrow.up.doc.on.clipboard")
                         .padding()
-                        .foregroundColor(.white)
-                    Spacer()
-                    Button(action: {
-                        showDeviceSheet.toggle()
-                       
-                    }, label: {
-                        Text("Open Our List of Calibrated Ear/Headphones")
-                            .padding()
-                            .foregroundColor(colorModel.neonGreen)
-                        Image(systemName: "arrow.up.doc.on.clipboard")
-                            .padding()
-                            .foregroundColor(colorModel.neonGreen)
-                    })
-                    Spacer()
+                        .foregroundColor(colorModel.neonGreen)
+                })
+                Spacer()
                     .fullScreenCover(isPresented: $showDeviceSheet, content: {
                         VStack(alignment: .leading) {
-            
+                            
                             Button(action: {
                                 showDeviceSheet.toggle()
                             }, label: {
@@ -193,42 +192,42 @@ struct CalibrationAssessmentView: View {
                             })
                             List {
                                 ForEach(headphones.indices, id: \.self) {index in
-                                HStack {
-                                   
-                                    Text("\(self.headphones[index].name)")
-                                        .foregroundColor(.blue)
-                                  
-                                    Toggle("", isOn: self.$headphones[index].isToggledH)
-                                        .foregroundColor(.blue)
-                                        .onChange(of: self.headphones[index].isToggledH) { nameIndex in
-                                            Task(priority: .userInitiated, operation: {
-                                                deviceSelectionIndex.removeAll()
-                                                selectedDeviceName.append(self.headphones[index].name)
-                                                selectedDeviceUUID.append(self.headphones[index].id)
-                                                
-                                                deviceApprovalFinding = index
-                                                multipleDevicesCheck.append(deviceApprovalFinding)
-                                                userSelectedDeviceName.append(headphones[index].name)
-                                                userSelectedDeviceUUID.append(headphones[index].id)
-                                                userSelectedDeviceIndex.append(index)
-                                                headphoneModelsUnknownIndex.append(self.headphones.count)
-                                                deviceSelectionIndex.append(index)
-                                                
-                                                print("isokaytoproceed: \(isOkayToProceed)")
-                                                print("multipledevices: \(multipleDevicesCheck)")
-                                                print(index)
-                                                print(nameIndex)
-                                                print(selectedDeviceName)
-                                                print(selectedDeviceUUID)
-                                                print(self.headphones[index].name)
-                                                print(self.headphones[index].id)
-                                                print(self.headphones[0].id)
-                                                print(deviceSelectionIndex)
-                                                print(userSelectedDeviceName)
-                                                print(userSelectedDeviceUUID)
-                                                print(userSelectedDeviceIndex)
-                                            })
-                                        }
+                                    HStack {
+                                        
+                                        Text("\(self.headphones[index].name)")
+                                            .foregroundColor(.blue)
+                                        
+                                        Toggle("", isOn: self.$headphones[index].isToggledH)
+                                            .foregroundColor(.blue)
+                                            .onChange(of: self.headphones[index].isToggledH) { nameIndex in
+                                                Task(priority: .userInitiated, operation: {
+                                                    deviceSelectionIndex.removeAll()
+                                                    selectedDeviceName.append(self.headphones[index].name)
+                                                    selectedDeviceUUID.append(self.headphones[index].id)
+                                                    
+                                                    deviceApprovalFinding = index
+                                                    multipleDevicesCheck.append(deviceApprovalFinding)
+                                                    userSelectedDeviceName.append(headphones[index].name)
+                                                    userSelectedDeviceUUID.append(headphones[index].id)
+                                                    userSelectedDeviceIndex.append(index)
+                                                    headphoneModelsUnknownIndex.append(self.headphones.count)
+                                                    deviceSelectionIndex.append(index)
+                                                    
+                                                    print("isokaytoproceed: \(isOkayToProceed)")
+                                                    print("multipledevices: \(multipleDevicesCheck)")
+                                                    print(index)
+                                                    print(nameIndex)
+                                                    print(selectedDeviceName)
+                                                    print(selectedDeviceUUID)
+                                                    print(self.headphones[index].name)
+                                                    print(self.headphones[index].id)
+                                                    print(self.headphones[0].id)
+                                                    print(deviceSelectionIndex)
+                                                    print(userSelectedDeviceName)
+                                                    print(userSelectedDeviceUUID)
+                                                    print(userSelectedDeviceIndex)
+                                                })
+                                            }
                                     }
                                 }
                             }
@@ -251,87 +250,89 @@ struct CalibrationAssessmentView: View {
                             }
                         }
                     })
+                HStack{
+                    Spacer()
+                    Toggle("Submit Selection", isOn: $isSubmitted)
+                        .foregroundColor(.blue)
+                        .font(.title3)
+                        .padding(.leading)
+                        .padding(.trailing)
+                        .toggleStyle(.switch)
+                        .onChange(of: isSubmitted) { submittedValue in
+                            Task(priority: .userInitiated, operation: {
+                                if submittedValue == true {
+                                    await checkMultipleDevices()
+                                    await manualDeviceEntryNeeded()
+                                    await compareDeviceCalibration()
+                                }
+                            })
+                        }
+                    Spacer()
+                }
+                .onChange(of: notifyOfMultipleDevices) { notifyofMultipleValues in
+                    Task(priority: .userInitiated, operation: {
+                        if notifyofMultipleValues == 1 {
+                            isSubmitted.toggle()
+                            self.isOkayToProceed = false
+                            self.linkColorIndex = 1
+                            multipleDevicesCheck.removeAll()
+                        } else if notifyofMultipleValues == 2 {
+                            self.isOkayToProceed = true
+                            self.linkColorIndex = 1
+                            Task {
+                                await appendDeviceCalibrationResults()
+                                await concentenateFinalDeviceArrays()
+                                await saveCalibrationData()
+                            }
+                            multipleDevicesCheck.removeAll()
+                            isOkayToUpload = true
+                        }
+                    })
+                }
+                Spacer()
+                NavigationLink(destination:
+                                isOkayToProceed == false ? AnyView(CalibrationIssueSplashView())
+                               : multipleDevicesCheck.count > 1 ? AnyView(CalibrationIssueSplashView())
+                               : deviceApprovalFinding == 0 ? AnyView(CalibrationSplashView())
+                               : deviceApprovalFinding == 1 ? AnyView(ManualDeviceEntryInformationView())
+                               : AnyView(InstructionsForTakingTest())
+                ){
                     HStack{
                         Spacer()
-                        Toggle("Submit Selection", isOn: $isSubmitted)
-                            .foregroundColor(.blue)
-                            .font(.title3)
-                            .padding(.leading)
-                            .padding(.trailing)
-                            .toggleStyle(.switch)
-                            .onChange(of: isSubmitted) { submittedValue in
-                                Task(priority: .userInitiated, operation: {
-                                    if submittedValue == true {
-                                        await checkMultipleDevices()
-                                        await manualDeviceEntryNeeded()
-                                        await compareDeviceCalibration()
-                                        }
-                                    })
-                                }
+                        Text("Now Let's Contine!")
+                        Spacer()
+                        Image(systemName: "arrowshape.bounce.right")
                         Spacer()
                     }
-                    .onChange(of: notifyOfMultipleDevices) { notifyofMultipleValues in
-                        Task(priority: .userInitiated, operation: {
-                            if notifyofMultipleValues == 1 {
-                                isSubmitted.toggle()
-                                self.isOkayToProceed = false
-                                self.linkColorIndex = 1
-                                multipleDevicesCheck.removeAll()
-                            } else if notifyofMultipleValues == 2 {
-                                self.isOkayToProceed = true
-                                self.linkColorIndex = 1
-                                Task {
-                                    await appendDeviceCalibrationResults()
-                                    await concentenateFinalDeviceArrays()
-                                    await saveCalibrationData()
-                                }
-                                multipleDevicesCheck.removeAll()
-                                isOkayToUpload = true
-                            }
-                        })
-                    }
-                    Spacer()
-                    NavigationLink(destination:
-                                    isOkayToProceed == false ? AnyView(CalibrationIssueSplashView())
-                                    : multipleDevicesCheck.count > 1 ? AnyView(CalibrationIssueSplashView())
-                                    : deviceApprovalFinding == 0 ? AnyView(CalibrationSplashView())
-                                    : deviceApprovalFinding == 1 ? AnyView(ManualDeviceEntryInformationView())
-                                    : AnyView(InstructionsForTakingTest())
-                    ){
-                        HStack{
-                            Spacer()
-                            Text("Now Let's Contine!")
-                            Spacer()
-                            Image(systemName: "arrowshape.bounce.right")
-                            Spacer()
-                       }
-                        .frame(width: 300, height: 50, alignment: .center)
-                        .background(linkColors[linkColorIndex])
-                        .foregroundColor(linkColors2[linkColorIndex])
-                        .cornerRadius(24)
-                    }
-                    Spacer()
+                    .frame(width: 300, height: 50, alignment: .center)
+                    .background(linkColors[linkColorIndex])
+                    .foregroundColor(linkColors2[linkColorIndex])
+                    .cornerRadius(24)
                 }
+                Spacer()
+            }
             Spacer()
+        }
+        .onAppear {
+            isSubmitted = false
+            linkColorIndex = 0
+            Task {
+                await setupCSVReader()
             }
-            .onAppear {
-                isSubmitted = false
-                linkColorIndex = 0
-                Task {
-                    await setupCSVReader()
-                }
+        }
+        .onChange(of: isOkayToUpload) { uploadValue in
+            if uploadValue == true {
+                uploadDeviceData()
+                print("Upload Data Started")
+            } else {
+                print("Fatal error in upload data change logic")
             }
-            .onChange(of: isOkayToUpload) { uploadValue in
-                if uploadValue == true {
-                    uploadDeviceData()
-                    print("Upload Data Started")
-                } else {
-                    print("Fatal error in upload data change logic")
-                }
-            }
+        }
     }
+}
     
-    
+extension CalibrationAssessmentView {
+//MARK: -Extension Methods
     func manualDeviceEntryNeeded() async {
         if deviceSelectionIndex.count > 0 {
             if deviceSelectionIndex.last! == 0 {
@@ -347,7 +348,7 @@ struct CalibrationAssessmentView: View {
                 deviceSelection.append(2)
                 print("User is using a Approved device")
             } else {
-              // Error go to Manual Entry
+                // Error go to Manual Entry
                 deviceSelection.append(3)
                 print("!!!Error Device Selection Error")
             }
@@ -355,7 +356,7 @@ struct CalibrationAssessmentView: View {
             print("!!!Error in manualDeviceEntryNeeded First Logic Block")
         }
     }
-       
+    
     func compareDeviceCalibration()  async {
         if  deviceApprovalFinding == 0 {
             manualDeviceEntryRequired.append(0)
@@ -407,7 +408,7 @@ struct CalibrationAssessmentView: View {
         print("multipleDevices reset: \(multipleDevicesCheck)")
         print("isokaytoproceed reset: \(isOkayToProceed)")
     }
-
+    
     func appendDeviceCalibrationResults()  async {
         print("userSelectedDeviceName: \(userSelectedDeviceName)")
         print("userSelectedDeviceUUID: \(userSelectedDeviceUUID)")
@@ -440,7 +441,10 @@ struct CalibrationAssessmentView: View {
             uploadFile(fileName: "DeviceSelection.json")
         }
     }
-    
+}
+ 
+extension CalibrationAssessmentView {
+//MARK: -Extension CSV/JSON Methods
     func getDeviceData() async {
         guard let deviceSelectionData = await getDeviceJSONData() else { return }
         print("Json Device Selection Data:")
@@ -562,7 +566,7 @@ struct CalibrationAssessmentView: View {
         return documentsDirectory
     }
 
-    // Only Use Files that have a pure string name assigned, not a name of ["String"]
+// Only Use Files that have a pure string name assigned, not a name of ["String"]
     private func uploadFile(fileName: String) {
         DispatchQueue.global(qos: .userInteractive).async {
             let storageRef = Storage.storage().reference()

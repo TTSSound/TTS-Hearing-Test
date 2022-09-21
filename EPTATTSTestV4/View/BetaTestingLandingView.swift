@@ -46,7 +46,7 @@ struct BetaTestingLandingContent<Link: View>: View {
     @State private var password: String = ""
     @State private var userLoggedInSuccessful: Bool = false
     @State private var logInAttempt: Bool = false
-        
+    
     @State var betaSexIdx = Int()
     @State var betaSexTitle = "Sex"
     @State var betaAgeIdx = Int()
@@ -75,206 +75,270 @@ struct BetaTestingLandingContent<Link: View>: View {
     let inputBetaSummaryCSVName = "InputBetaSummaryCSV.csv"
     
     @State var inputBetaAgeCSVName = String()
-        // <= 27").tag(0)   age0.csv
-        // 28-39").tag(2)   age1.csv
-        // 40-49").tag(3)   age2.csv
-        // 50-59").tag(4)   age3.csv
-        // 60-69").tag(5)   age4.csv
-        // 70-79").tag(6)   age5.csv
-        // 80-89").tag(7)   age6.csv
+    // <= 27").tag(0)   age0.csv
+    // 28-39").tag(2)   age1.csv
+    // 40-49").tag(3)   age2.csv
+    // 50-59").tag(4)   age3.csv
+    // 60-69").tag(5)   age4.csv
+    // 70-79").tag(6)   age5.csv
+    // 80-89").tag(7)   age6.csv
     
     @State var inputBetaSexCSVName = String()
-        // 0 idx  = female.csv
-        // 1 idx = male.csv
+    // 0 idx  = female.csv
+    // 1 idx = male.csv
     
     @State var showBetaNameScreen = Bool()
     
     var body: some View {
-            ZStack{
-                colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
-                VStack{
-                    Text("Select Sex and Age")
+        ZStack{
+            colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+            VStack{
+                Text("Select Sex and Age")
+                    .foregroundColor(.white)
+                    .font(.title)
+                    .padding(.top, 40)
+                HStack{
+                    Spacer()
+                    Toggle("Female", isOn: $betaFemale)
+                        .foregroundColor(.green)
+                    Spacer()
+                    Toggle("Male", isOn: $betaMale)
+                        .foregroundColor(.green)
+                    Spacer()
+                }
+                .padding(.top, 20)
+                HStack{
+                    Toggle("<= 27", isOn: $age0)
+                    Toggle("28-39", isOn: $age1)
+                    Toggle("40-49", isOn: $age2)
+                }
+                .foregroundColor(.green)
+                .padding(.top,20)
+                HStack{
+                    Toggle("50-59", isOn: $age3)
+                    Toggle("60-69", isOn: $age4)
+                    Toggle("70-79", isOn: $age5)
+                }
+                .foregroundColor(.green)
+                .padding(.top, 20)
+                HStack{
+                    Toggle("80-89", isOn: $age6)
+                }
+                .foregroundColor(.green)
+                .padding(.top, 20)
+                HStack{
+                    Spacer()
+                    Text("Test Selected")
                         .foregroundColor(.white)
                         .font(.title)
-                        .padding(.top, 40)
-                    HStack{
-                        Spacer()
-                        Toggle("Female", isOn: $betaFemale)
-                            .foregroundColor(.green)
-                        Spacer()
-                        Toggle("Male", isOn: $betaMale)
-                            .foregroundColor(.green)
-                        Spacer()
-                    }
-                    .padding(.top, 20)
-                    HStack{
-                        Toggle("<= 27", isOn: $age0)
-                        Toggle("28-39", isOn: $age1)
-                        Toggle("40-49", isOn: $age2)
-                    }
-                    .foregroundColor(.green)
-                    .padding(.top,20)
-                    HStack{
-                        Toggle("50-59", isOn: $age3)
-                        Toggle("60-69", isOn: $age4)
-                        Toggle("70-79", isOn: $age5)
-                    }
-                    .foregroundColor(.green)
-                    .padding(.top, 20)
-                    HStack{
-                        Toggle("80-89", isOn: $age6)
-                    }
-                    .foregroundColor(.green)
-                    .padding(.top, 20)
-                    HStack{
-                        Spacer()
-                        Text("Test Selected")
-                            .foregroundColor(.white)
-                            .font(.title)
-                        Spacer()
-                    }
-                    .padding(.top, 20)
-                    Toggle("Full EHA Selected", isOn: $betaEHA)
-                        .foregroundColor(.green)
-                        .padding(.top, 10)
-                        .padding(.leading)
-                        .padding(.trailing)
-                    Toggle("Shorter EPTA Selected", isOn: $betaEPTA)
-                        .foregroundColor(.blue)
-                        .padding(.top, 10)
-                        .padding(.leading)
-                        .padding(.trailing)
-                    if betaSelectionsSubmitted == false && userLoggedInSuccessful == true || userLoggedInSuccessful == false {
-                        Button {
-                            Task(priority: .userInitiated) {
-                                await writeBetaSex()
-                                await writeBetaAge()
-                                await writeBetaTest()
-                                await writeBetaInputSummaryToCSV()
-                                betaSelectionsSubmitted = true
-                            }
-                        } label: {
-                            HStack{
-                                Text("Submit Selection")
-                                    .padding()
-                                Image(systemName: "arrow.up.doc.fill")
-                                    .font(.title)
-                                    .padding()
-                                
-                            }
-                            .frame(width: 300, height: 50, alignment: .center)
-                            .foregroundColor(.white)
-                            .background(Color.blue)
-                            .cornerRadius(24)
-                        }
-                        .padding(.top, 20)
-                        .padding(.bottom, 20)
-                    }
-                    if betaSelectionsSubmitted == true && userLoggedInSuccessful == true {
-                        NavigationLink {
-                            TestIDInputView(testing: testing, relatedLinkTesting: linkTesting)
-                        } label: {
-                            HStack{
-                                Spacer()
-                                Text("Continue to Start Testing!")
-                                Spacer()
-                                Image(systemName: "arrowshape.bounce.right")
-                                Spacer()
-                            }
-                            .frame(width: 300, height: 50, alignment: .center)
-                            .foregroundColor(.white)
-                            .background(Color.green)
-                            .cornerRadius(24)
-                        }
-                        .padding(.top, 20)
-                        .padding(.bottom, 20)
-                    }
-                  //End Vstack
+                    Spacer()
                 }
-                .fullScreenCover(isPresented: $showBetaNameScreen) {
-                    colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
-                    VStack(alignment: .leading) {
-                        Text("This Is A Shortcut For App Testing Use To Surpass the Main Setup Process, While Still Entering The Key Demographic Variables Needed For The Actual Test")
-                            .font(.title3)
-                            .foregroundColor(.white)
-                            .padding(.top, 40)
-                            .padding(.bottom, 10)
-                        
-                        Text("If you completed the full setup process, still enter the information requested")
-                            .foregroundColor(.white)
-                            .padding(.bottom, 10)
-                        
+                .padding(.top, 20)
+                Toggle("Full EHA Selected", isOn: $betaEHA)
+                    .foregroundColor(.green)
+                    .padding(.top, 10)
+                    .padding(.leading)
+                    .padding(.trailing)
+                Toggle("Shorter EPTA Selected", isOn: $betaEPTA)
+                    .foregroundColor(.blue)
+                    .padding(.top, 10)
+                    .padding(.leading)
+                    .padding(.trailing)
+                if betaSelectionsSubmitted == false && userLoggedInSuccessful == true || userLoggedInSuccessful == false {
+                    Button {
+                        Task(priority: .userInitiated) {
+                            await writeBetaSex()
+                            await writeBetaAge()
+                            await writeBetaTest()
+                            await writeBetaInputSummaryToCSV()
+                            betaSelectionsSubmitted = true
+                        }
+                    } label: {
+                        HStack{
+                            Text("Submit Selection")
+                                .padding()
+                            Image(systemName: "arrow.up.doc.fill")
+                                .font(.title)
+                                .padding()
+                            
+                        }
+                        .frame(width: 300, height: 50, alignment: .center)
+                        .foregroundColor(.white)
+                        .background(Color.blue)
+                        .cornerRadius(24)
+                    }
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
+                }
+                if betaSelectionsSubmitted == true && userLoggedInSuccessful == true {
+                    NavigationLink {
+                        TestIDInputView(testing: testing, relatedLinkTesting: linkTesting)
+                    } label: {
                         HStack{
                             Spacer()
-                            Text("Last Name")
-                                .foregroundColor(.white)
+                            Text("Continue to Start Testing!")
                             Spacer()
-                            TextField("Last Name", text: $inputLastName)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .autocapitalization(.none)
-                                .disableAutocorrection(true)
-                                .foregroundColor(.blue)
+                            Image(systemName: "arrowshape.bounce.right")
                             Spacer()
                         }
-                        
-                        Text(" Use The Tester Profile Info Below To Login.")
-                            .font(.title3)
+                        .frame(width: 300, height: 50, alignment: .center)
+                        .foregroundColor(.white)
+                        .background(Color.green)
+                        .cornerRadius(24)
+                    }
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
+                }
+                //End Vstack
+            }
+            .fullScreenCover(isPresented: $showBetaNameScreen) {
+                colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+                VStack(alignment: .leading) {
+                    Text("This Is A Shortcut For App Testing Use To Surpass the Main Setup Process, While Still Entering The Key Demographic Variables Needed For The Actual Test")
+                        .font(.title3)
+                        .foregroundColor(.white)
+                        .padding(.top, 40)
+                        .padding(.bottom, 10)
+                    
+                    Text("If you completed the full setup process, still enter the information requested")
+                        .foregroundColor(.white)
+                        .padding(.bottom, 10)
+                    
+                    HStack{
+                        Spacer()
+                        Text("Last Name")
                             .foregroundColor(.white)
-                            .padding(.top, 10)
-                            .padding(.bottom, 2)
-                        Text("Tester@TrueToSourceSound.com")
+                        Spacer()
+                        TextField("Last Name", text: $inputLastName)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
                             .foregroundColor(.blue)
-                            .padding(.leading)
-                            .padding(.top, 2)
-                            .padding(.bottom, 2)
-                        Text("password")
+                        Spacer()
+                    }
+                    
+                    Text(" Use The Tester Profile Info Below To Login.")
+                        .font(.title3)
+                        .foregroundColor(.white)
+                        .padding(.top, 10)
+                        .padding(.bottom, 2)
+                    Text("Tester@TrueToSourceSound.com")
+                        .foregroundColor(.blue)
+                        .padding(.leading)
+                        .padding(.top, 2)
+                        .padding(.bottom, 2)
+                    Text("password")
+                        .foregroundColor(.blue)
+                        .padding(.leading)
+                        .padding(.top, 2)
+                        .padding(.bottom, 10)
+                    
+                    HStack{
+                        Spacer()
+                        Text("Email  ")
+                            .foregroundColor(.white)
+                        Spacer()
+                        TextField("Enter_Email@Here.com", text: $email)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
                             .foregroundColor(.blue)
-                            .padding(.leading)
-                            .padding(.top, 2)
-                            .padding(.bottom, 10)
-                        
+                        Spacer()
+                    }
+                    
+                    HStack{
+                        Spacer()
+                        Text("Password")
+                            .foregroundColor(.white)
+                        Spacer()
+                        TextField("Enter Your Password", text: $password)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            .foregroundColor(.blue)
+                        Spacer()
+                    }
+                    
+                    if logInAttempt == false {
                         HStack{
                             Spacer()
-                            Text("Email  ")
+                            Button {
+                                loginUser3()
+                                logInAttempt = true
+                            } label: {
+                                HStack{
+                                    Spacer()
+                                    Text("Login")
+                                    Spacer()
+                                    Image(systemName: "arrow.up.doc.fill")
+                                    Spacer()
+                                }
+                                .frame(width: 300, height: 50, alignment: .center)
+                                .background(Color.blue)
                                 .foregroundColor(.white)
-                            Spacer()
-                            TextField("Enter_Email@Here.com", text: $email)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .autocapitalization(.none)
-                                .disableAutocorrection(true)
-                                .foregroundColor(.blue)
+                                .cornerRadius(24)
+                            }
+                            .frame(width: 300, height: 50, alignment: .center)
+                            .cornerRadius(24)
                             Spacer()
                         }
-                        
-                        HStack{
-                            Spacer()
-                            Text("Password")
-                                .foregroundColor(.white)
-                            Spacer()
-                            TextField("Enter Your Password", text: $password)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .autocapitalization(.none)
-                                .disableAutocorrection(true)
-                                .foregroundColor(.blue)
-                            Spacer()
-                        }
-                        
-                        if logInAttempt == false {
+                        .frame(width: 350, height: 250, alignment: .center)
+                        .foregroundColor(.clear)
+                        .background(Color.clear)
+                        .cornerRadius(24)
+                        .padding(.bottom, 20)
+                    } else if logInAttempt == true {
+                        if userLoggedInSuccessful == false {
+                            HStack {
+                                VStack{
+                                    Text("Login Error!! Try Again!")
+                                        .foregroundColor(.red)
+                                        .padding()
+                                    HStack{
+                                        Spacer()
+                                        Button {
+                                            loginUser3()
+                                        } label: {
+                                            HStack{
+                                                Spacer()
+                                                Text("Press To Reset")
+                                                Spacer()
+                                                Image(systemName: "arrowshape.turn.up.backward.2")
+                                                Spacer()
+                                            }
+                                            .frame(width: 300, height: 50, alignment: .center)
+                                            .background(Color.red)
+                                            .foregroundColor(.white)
+                                            .cornerRadius(24)
+                                        }
+                                        .frame(width: 300, height: 50, alignment: .center)
+                                        .cornerRadius(24)
+                                        Spacer()
+                                    }
+                                }
+                            }
+                            .frame(width: 350, height: 250, alignment: .center)
+                            .foregroundColor(.clear)
+                            .background(Color.clear)
+                            .cornerRadius(24)
+                            .padding(.bottom, 20)
+                        } else if userLoggedInSuccessful == true {
                             HStack{
                                 Spacer()
                                 Button {
-                                    loginUser3()
-                                    logInAttempt = true
+                                    showBetaNameScreen.toggle()
+                                    logInAttempt = false
+                                    userLoggedInSuccessful = true
                                 } label: {
                                     HStack{
                                         Spacer()
-                                        Text("Login")
+                                        Text("Continue")
                                         Spacer()
-                                        Image(systemName: "arrow.up.doc.fill")
+                                        Image(systemName: "arrowshape.bounce.right")
                                         Spacer()
                                     }
                                     .frame(width: 300, height: 50, alignment: .center)
-                                    .background(Color.blue)
+                                    .background(Color.green)
                                     .foregroundColor(.white)
                                     .cornerRadius(24)
                                 }
@@ -287,95 +351,32 @@ struct BetaTestingLandingContent<Link: View>: View {
                             .background(Color.clear)
                             .cornerRadius(24)
                             .padding(.bottom, 20)
-                        } else if logInAttempt == true {
-                            if userLoggedInSuccessful == false {
-                                HStack {
-                                    VStack{
-                                        Text("Login Error!! Try Again!")
-                                            .foregroundColor(.red)
-                                            .padding()
-                                        HStack{
-                                            Spacer()
-                                            Button {
-                                                loginUser3()
-                                            } label: {
-                                                HStack{
-                                                    Spacer()
-                                                    Text("Press To Reset")
-                                                    Spacer()
-                                                    Image(systemName: "arrowshape.turn.up.backward.2")
-                                                    Spacer()
-                                                }
-                                                .frame(width: 300, height: 50, alignment: .center)
-                                                .background(Color.red)
-                                                .foregroundColor(.white)
-                                                .cornerRadius(24)
-                                            }
-                                            .frame(width: 300, height: 50, alignment: .center)
-                                            .cornerRadius(24)
-                                            Spacer()
-                                        }
-                                    }
-                                }
-                                .frame(width: 350, height: 250, alignment: .center)
-                                .foregroundColor(.clear)
-                                .background(Color.clear)
-                                .cornerRadius(24)
-                                .padding(.bottom, 20)
-                            } else if userLoggedInSuccessful == true {
-                                HStack{
-                                    Spacer()
-                                    Button {
-                                        showBetaNameScreen.toggle()
-                                        logInAttempt = false
-                                        userLoggedInSuccessful = true
-                                    } label: {
-                                        HStack{
-                                            Spacer()
-                                            Text("Continue")
-                                            Spacer()
-                                            Image(systemName: "arrowshape.bounce.right")
-                                            Spacer()
-                                        }
-                                        .frame(width: 300, height: 50, alignment: .center)
-                                        .background(Color.green)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(24)
-                                    }
-                                    .frame(width: 300, height: 50, alignment: .center)
-                                    .cornerRadius(24)
-                                    Spacer()
-                                }
-                                .frame(width: 350, height: 250, alignment: .center)
-                                .foregroundColor(.clear)
-                                .background(Color.clear)
-                                .cornerRadius(24)
-                                .padding(.bottom, 20)
-                            }
-                        } else {
-                            Text("Fatal Error in Toggle Sub Stack")
-                                .frame(width: 350, height: 250, alignment: .center)
-                                .foregroundColor(.red)
-                                .background(Color.black)
-                                .cornerRadius(24)
-                                .padding(.bottom, 20)
                         }
+                    } else {
+                        Text("Fatal Error in Toggle Sub Stack")
+                            .frame(width: 350, height: 250, alignment: .center)
+                            .foregroundColor(.red)
+                            .background(Color.black)
+                            .cornerRadius(24)
+                            .padding(.bottom, 20)
                     }
                 }
             }
-            .onAppear {
-                userLoggedInSuccessful = false
-                showBetaNameScreen = true
-                logInAttempt = false
-            }
-            .onChange(of: betaSelectionsSubmitted ) { submittedValue in
-                if betaSelectionsSubmitted == true && userLoggedInSuccessful {
-                   uploadBetaDataEntry()
-                } else {
-                    print("Fatal Error in betaselection upload change of logic")
-                }
+        }
+        .onAppear {
+            userLoggedInSuccessful = false
+            showBetaNameScreen = true
+            logInAttempt = false
+        }
+        .onChange(of: betaSelectionsSubmitted ) { submittedValue in
+            if betaSelectionsSubmitted == true && userLoggedInSuccessful {
+                uploadBetaDataEntry()
+            } else {
+                print("Fatal Error in betaselection upload change of logic")
             }
         }
+    }
+}
 
     // <= 27").tag(10)   age0.csv
     // 28-39").tag(11)   age1.csv
@@ -385,19 +386,20 @@ struct BetaTestingLandingContent<Link: View>: View {
     // 70-79").tag(15)   age5.csv
     // 80-89").tag(16)   age6.csv
 
-
+extension BetaTestingLandingContent {
+    //MARK: -Extension Authorization Methods
     private func loginUser3() {
-            Auth.auth().signIn(withEmail: email, password: password) { result, err in
-                if let err = err {
-                    print("Failed due to error:", err)
-                    return
-                }
-                print("Successfully logged in with ID: \(result?.user.uid ?? "")")
-                userLoggedInSuccessful = true
-                print("userLoggedInSuccessful: \(userLoggedInSuccessful)")
+        Auth.auth().signIn(withEmail: email, password: password) { result, err in
+            if let err = err {
+                print("Failed due to error:", err)
+                return
             }
+            print("Successfully logged in with ID: \(result?.user.uid ?? "")")
+            userLoggedInSuccessful = true
+            print("userLoggedInSuccessful: \(userLoggedInSuccessful)")
         }
-        
+    }
+    
     private func createUser2() {
         Auth.auth().createUser(withEmail: email, password: password, completion: { result, err in
             if let err = err {
@@ -407,7 +409,10 @@ struct BetaTestingLandingContent<Link: View>: View {
             print("Successfully created account with ID: \(result?.user.uid ?? "")")
         })
     }
-    
+}
+
+extension BetaTestingLandingContent {
+    //MARK: -Extension Methods
     func assignBetaAge() async {
         if age0 == true {
             inputBetaAgeCSVName = "age0.csv"
@@ -437,7 +442,6 @@ struct BetaTestingLandingContent<Link: View>: View {
             print("Error in assignBetaSex Logic")
         }
     }
-    
     
     func writeBetaSex() async {
         if betaFemale == true && betaMale == false {
@@ -481,13 +485,15 @@ struct BetaTestingLandingContent<Link: View>: View {
         }
     }
     
-    
     func uploadBetaDataEntry() {
         DispatchQueue.main.async(group: .none, qos: .background) {
             uploadFile(fileName: inputBetaSummaryCSVName)
         }
     }
-   
+}
+
+extension BetaTestingLandingContent{
+    //MARK: -Extension CSV/JSON Methods
     func writeBetaAge0InputTestSelectionToCSV() async {
         let betaAge0 = "age0" + "age0"
         print("writeBetaAge0InputTestSelectionToCSV Start")
@@ -669,19 +675,12 @@ struct BetaTestingLandingContent<Link: View>: View {
             print(csvBetaEHAInputTestFilePath)
             let writerSetup = try CSVWriter(fileURL: csvBetaEHAInputTestFilePath, append: false)
             try writerSetup.write(row: [selectedBetaEHATest])
-        
+            
             print("CVS Beta EHA Input Test Selection Writer Success")
         } catch {
             print("CVSWriter Beta EHA Input Test Selection Error or Error Finding File for Input Test Selection CSV \(error.localizedDescription)")
         }
     }
-    
-
-//    inputBetaAgeCSVName = "age6.csv"
-//    inputBetaSexCSVName = "male.csv"
-//    betaTestSelectionName = "EPTA.csv"
-//    inputLastName
-//    let inputBetaSummaryCSVName = "InputBetaSummaryCSV.csv"
     
     func writeBetaInputSummaryToCSV() async {
         print("writeBetaEHAInputSummaryToCSV Start")
@@ -706,7 +705,6 @@ struct BetaTestingLandingContent<Link: View>: View {
         }
     }
     
-    
     private func getDataLinkPath() async -> String {
         let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = dataLinkPaths[0]
@@ -719,8 +717,6 @@ struct BetaTestingLandingContent<Link: View>: View {
         return documentsDirectory
     }
     
-
-
     // Only Use Files that have a pure string name assigned, not a name of ["String"]
     private func uploadFile(fileName: String) {
         DispatchQueue.global(qos: .userInteractive).async {
@@ -732,7 +728,7 @@ struct BetaTestingLandingContent<Link: View>: View {
             if fileManager.fileExists(atPath: filePath[0]) {
                 let filePath = URL(fileURLWithPath: filePath[0])
                 let localFile = filePath
-//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
                 let fileRef = lastNameRef.child("\(fileName)")
                 let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
                     if error == nil && metadata == nil {
@@ -746,7 +742,7 @@ struct BetaTestingLandingContent<Link: View>: View {
             }
         }
     }
-    
+}
 //    private func setupCSVReader() async {
 //        let dataSetupName = "InputSetupResultsCSV.csv"
 //        let fileSetupManager = FileManager.default
@@ -784,19 +780,20 @@ struct BetaTestingLandingContent<Link: View>: View {
 //    }
     
     
-    
+extension BetaTestingLandingContent {
+//MARK: -NavigationLink Extension
     private func linkTesting(testing: Testing) -> some View {
         EmptyView()
     }
     
 }
 
-struct BetaTestingLandingView_Previews: PreviewProvider {
-    static var previews: some View {
-        BetaTestingLandingView(testing: nil, relatedLinkTesting: linkTesting)
-    }
-    
-    static func linkTesting(testing: Testing) -> some View {
-        EmptyView()
-    }
-}
+//struct BetaTestingLandingView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        BetaTestingLandingView(testing: nil, relatedLinkTesting: linkTesting)
+//    }
+//    
+//    static func linkTesting(testing: Testing) -> some View {
+//        EmptyView()
+//    }
+//}

@@ -30,7 +30,6 @@ struct SaveFinalTestSelection: Codable {  // This is a model
 }
 
 struct TestSelectionView: View {
-
     var colorModel = ColorModel()
     
  
@@ -626,8 +625,8 @@ struct TestSelectionView: View {
 }
 
 
-struct TestSelectionView_Previews: PreviewProvider {
-    static var previews: some View {
-        TestSelectionView()
-    }
-}
+//struct TestSelectionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TestSelectionView()
+//    }
+//}

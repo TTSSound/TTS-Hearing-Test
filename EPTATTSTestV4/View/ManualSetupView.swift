@@ -6,10 +6,9 @@
 //
 
 import SwiftUI
-import MediaPlayer
+//import MediaPlayer
 
 struct ManualSetupView: View {
-    
     var colorModel: ColorModel = ColorModel()
     
     var body: some View {

@@ -8,14 +8,12 @@
 import SwiftUI
 
 struct TestSelectionLandingView: View {
-    
     var colorModel: ColorModel = ColorModel()
     
     var body: some View {
-    //        Text("Test Selection View Test")
 
-    // Marketing and info on EPTA vs EHA Tests
-    // Direction that EHA test be taken in two parts at two different times and days
+// Marketing and info on EPTA vs EHA Tests
+// Direction that EHA test be taken in two parts at two different times and days
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack(alignment: .leading) {

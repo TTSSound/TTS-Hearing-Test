@@ -80,7 +80,7 @@ struct TrainingTestContent<Link: View>: View {
     
     var audioSessionModel = AudioSessionModel()
     var colorModel: ColorModel = ColorModel()
-
+    
     @State var traininglocalHeard = 0
     @State var traininglocalPlaying = Int()    // Playing = 1. Stopped = -1
     @State var traininglocalReversal = Int()
@@ -117,13 +117,13 @@ struct TrainingTestContent<Link: View>: View {
     @State var training_reversalFrequency = [String]()
     @State var training_reversalDirection = Float()
     @State var training_reversalDirectionArray = [Float]()
-
+    
     @State var training_averageGain = Float()
-
+    
     @State var training_eptaSamplesCount = 1 //17
     @State var training_SamplesCountArray = [1, 1]
     @State var training_SamplesCountArrayIdx = 0
-
+    
     @State var training_finalStoredIndex: [Int] = [Int]()
     @State var training_finalStoredTestPan: [Int] = [Int]()
     @State var training_finalStoredTestTestGain: [Float] = [Float]()
@@ -156,7 +156,7 @@ struct TrainingTestContent<Link: View>: View {
     
     @State var trainingplayingStringColorIndex = 0
     @State var traininguserPausedTest: Bool = false
-
+    
     @State var trainingTestCompleted: Bool = false
     
     @State var trainingfullTestCompleted: Bool = false
@@ -171,7 +171,7 @@ struct TrainingTestContent<Link: View>: View {
     let inputtrainingDetailedCSVName = "InputDetailedTrainingResultsCSV.csv"
     
     @State var trainingsaveFinalResults: trainingSaveFinalResults? = nil
-
+    
     let trainingheardThread = DispatchQueue(label: "BackGroundThread", qos: .userInitiated)
     let trainingarrayThread = DispatchQueue(label: "BackGroundPlayBack", qos: .background)
     let trainingaudioThread = DispatchQueue(label: "AudioThread", qos: .background)
@@ -180,7 +180,7 @@ struct TrainingTestContent<Link: View>: View {
     @State var P: Testing?
     
     var body: some View {
- 
+        
         ZStack{
             colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
             VStack {
@@ -196,7 +196,7 @@ struct TrainingTestContent<Link: View>: View {
                 } else if trainingfullTestCompleted == true {
                     HStack{
                         NavigationLink("Training Complete. Continue.", destination: Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting))
-//                        NavigationLink("Training Complete. Contine.", value: P)
+                        //                        NavigationLink("Training Complete. Contine.", value: P)
                             .padding()
                             .frame(width: 200, height: 50, alignment: .center)
                             .background(.green)
@@ -208,9 +208,9 @@ struct TrainingTestContent<Link: View>: View {
                     .navigationDestination(isPresented: $trainingTestCompleted) {
                         Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)
                     }
-
+                    
                 }
-
+                
                 Spacer()
                 if trainingTestStarted == false {
                     Button {
@@ -230,7 +230,7 @@ struct TrainingTestContent<Link: View>: View {
                     }
                     .padding(.top, 20)
                     .padding(.bottom, 20)
-
+                    
                     Text("")
                         .fontWeight(.bold)
                         .padding()
@@ -299,7 +299,7 @@ struct TrainingTestContent<Link: View>: View {
                     .padding(.top, 20)
                     .padding(.bottom, 40)
                 }
-
+                
                 Button {
                     trainingheardThread.async{ self.traininglocalHeard = 1
                     }
@@ -314,8 +314,8 @@ struct TrainingTestContent<Link: View>: View {
                 }
                 .padding(.top, 20)
                 .padding(.bottom, 80)
-
-            Spacer()
+                
+                Spacer()
             }
             .onAppear(perform: {
                 trainingshowTestCompletionSheet = true
@@ -391,13 +391,13 @@ struct TrainingTestContent<Link: View>: View {
         }
         .onChange(of: trainingtestIsPlaying, perform: { trainingtestBoolValue in
             if trainingtestBoolValue == true && trainingendTestSeriesValue == false {
-            //User is starting test for first time
+                //User is starting test for first time
                 audioSessionModel.setAudioSession()
                 traininglocalPlaying = 1
                 trainingplayingStringColorIndex = 0
                 traininguserPausedTest = false
             } else if trainingtestBoolValue == false && trainingendTestSeriesValue == false {
-            // User is pausing test for firts time
+                // User is pausing test for firts time
                 trainingstop()
                 traininglocalPlaying = 0
                 trainingplayingStringColorIndex = 1
@@ -427,8 +427,8 @@ struct TrainingTestContent<Link: View>: View {
                         print("Stopped in while if: Returned Array \(traininglocalHeard)")
                     } else {
                         trainingtestPlayer!.stop()
-                    self.traininglocalHeard = -1
-                    print("Stopped naturally: Returned Array \(traininglocalHeard)")
+                        self.traininglocalHeard = -1
+                        print("Stopped naturally: Returned Array \(traininglocalHeard)")
                     }
                 }
                 trainingpreEventThread.async {
@@ -497,8 +497,9 @@ struct TrainingTestContent<Link: View>: View {
             }
         }
     }
+}
  
-    
+extension TrainingTestContent {
 //MARK: - AudioPlayer Methods
     
     func trainingpauseRestartTestCycle() {
@@ -738,7 +739,7 @@ struct TrainingTestContent<Link: View>: View {
 
 
 extension TrainingTestContent {
-    
+//MARK: -Extension Methods Reversals
     enum trainingLastErrors: Error {
         case traininglastError
         case traininglastUnexpected(code: Int)
@@ -973,10 +974,8 @@ extension TrainingTestContent {
             self.trainingfirstGain = training_reversalGain[trainingfirstHeardResponseIndex-1]
             self.trainingsecondGain = training_reversalGain[trainingsecondHeardResponseIndex-1]
             print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
-            
             let trainingdelta = trainingfirstGain - trainingsecondGain
             let trainingavg = (trainingfirstGain + trainingsecondGain)/2
-            
             if trainingdelta == 0 {
                 training_averageGain = trainingsecondGain
                 print("average Gain: \(training_averageGain)")
@@ -1110,7 +1109,6 @@ extension TrainingTestContent {
             }
         } else {
             //                print("Reversal Limit Not Hit")
-            
         }
     }
     
@@ -1133,15 +1131,15 @@ extension TrainingTestContent {
     }
 }
 
-struct TrainingTestView_Previews: PreviewProvider {
-    static var previews: some View {
-        TrainingTestView(testing: nil, relatedLinkTesting: linkTesting)
-    }
-    
-    static func linkTesting(testing: Testing) -> some View {
-        EmptyView()
-    }
-}
+//struct TrainingTestView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TrainingTestView(testing: nil, relatedLinkTesting: linkTesting)
+//    }
+//
+//    static func linkTesting(testing: Testing) -> some View {
+//        EmptyView()
+//    }
+//}
         
 
     

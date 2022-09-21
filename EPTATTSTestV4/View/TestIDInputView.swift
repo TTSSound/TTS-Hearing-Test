@@ -57,7 +57,7 @@ struct TestIDInputContent<Link: View>: View {
                     .font(.title2)
                     .padding(.leading)
                     .padding(.top)
-           
+                
                 HStack{
                     Text("Test Key")
                         .foregroundColor(.white)
@@ -70,20 +70,19 @@ struct TestIDInputContent<Link: View>: View {
                     Spacer()
                 }
                 .padding(.leading)
-        
                 ScrollView {
                     Text(" Require input of Test ID/Tolken to....Have a Purchase Token Input of EHA and EPTA purchased tests Another set of tolkens/IDs indicating it is trial free simple audiogram test Identify the test for later uses with a unique ID that is not directly associated to the user or can be easily parsed from the user\n\nThis is a security measure")
                 }
                 .foregroundColor(.white)
                 .frame(width: 300, height: 200, alignment: .center)
-           
-//!!!!!!!NEED TO DETERMINE HOW TO AUTHORIZE TOLKENS"
+                
+                //!!!!!!!NEED TO DETERMINE HOW TO AUTHORIZE TOLKENS"
                 
                 Text("NEED TO DETERMINE HOW TO AUTHORIZE TOLKENS")
                     .foregroundColor(.pink)
                 Spacer()
                 
-          Spacer()
+                Spacer()
                 NavigationLink {
                     UserWrittenHearingAssessmentView(testing: testing, relatedLinkTesting: linkTesting)
                 } label: {
@@ -94,7 +93,7 @@ struct TestIDInputContent<Link: View>: View {
                         .background(Color.green)
                         .cornerRadius(24)
                 }
-            Spacer()
+                Spacer()
             }
         }
         .onAppear {
@@ -106,7 +105,10 @@ struct TestIDInputContent<Link: View>: View {
             }
         }
     }
-    
+}
+ 
+extension TestIDInputContent {
+//MARK: -Extension CSV/JSON Methods
     private func setupLastNameCSVReader() async {
         let dataSetupName = setupCSVName
         let fileSetupManager = FileManager.default
@@ -189,7 +191,7 @@ struct TestIDInputContent<Link: View>: View {
             print(csvBetaEHAInputSummaryFilePath)
             let writerSetup = try CSVWriter(fileURL: csvBetaEHAInputSummaryFilePath, append: false)
             try writerSetup.write(row: [stringFinalInputLastName])
-        
+            
             print("CVS Last Na,e Writer Success")
         } catch {
             print("CVSWriter Last Name Error or Error Finding File for Last Name CSV \(error.localizedDescription)")
@@ -201,20 +203,22 @@ struct TestIDInputContent<Link: View>: View {
         let documentsDirectory = dataLinkPaths[0]
         return documentsDirectory
     }
-    
+}
+
+extension TestIDInputContent {
+//MARK: -NavigationLink Extenstion
     private func linkTesting(testing: Testing) -> some View {
         EmptyView()
     }
     
 }
 
-struct TestIDInputView_Previews: PreviewProvider {
-    static var previews: some View {
-        TestIDInputView(testing: nil, relatedLinkTesting: linkTesting)
-    }
-    
-    static func linkTesting(testing: Testing) -> some View {
-        EmptyView()
-    }
-    
-}
+//struct TestIDInputView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TestIDInputView(testing: nil, relatedLinkTesting: linkTesting)
+//    }
+//
+//    static func linkTesting(testing: Testing) -> some View {
+//        EmptyView()
+//    }
+//}

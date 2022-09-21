@@ -51,9 +51,9 @@ struct DisclaimerContent<Link: View>: View {
     
     var colorModel = ColorModel()
     
-//    @Binding var selectedTab: Int
-
-        
+    //    @Binding var selectedTab: Int
+    
+    
     
     @ObservedObject var userAgreementModel: UserAgreementModel = UserAgreementModel()
     @State var disclaimerSetting = Bool()
@@ -61,7 +61,7 @@ struct DisclaimerContent<Link: View>: View {
     @State var dLinkColors: [Color] = [Color.clear, Color.green]
     @State var dLinkColors2: [Color] = [Color.clear, Color.white]
     @State var dLinkColorIndex = Int()
-   
+    
     @State var userAgreed: Bool = false
     @State var userAgreementTime = Float()
     @State var userAgreementDate = Date()
@@ -84,74 +84,77 @@ struct DisclaimerContent<Link: View>: View {
     @State var saveFinalDisclaimerResults: SaveFinalDisclaimerResults? = nil
     
     var body: some View {
-            ZStack{
-                colorModel.colorBackgroundTopTiffanyBlue .ignoresSafeArea(.all, edges: .top)
-                VStack {
-                    GroupBox(label:
+        ZStack{
+            colorModel.colorBackgroundTopTiffanyBlue .ignoresSafeArea(.all, edges: .top)
+            VStack {
+                GroupBox(label:
                             Label("End-User Agreement", systemImage: "building.columns")
-                        ) {
-                            ScrollView(.vertical, showsIndicators: true) {
-                                Text(userAgreementModel.userAgreementText)
-                                    .font(.footnote)
-                            }
-                            .frame(height: 425)
-                            Toggle(isOn: $userAgreed) {
-                                Text("I agree to the above terms")
-                                    .foregroundColor(.blue)
-                            }
-                            .padding(.trailing)
-                            .padding(.leading)
-                        }
-                        .onAppear(perform: {
-                            loadUserAgreement()
-                        })
-                        .onChange(of: userAgreed) { _ in
-                            DispatchQueue.main.async(group: .none, qos: .userInitiated) {
-                                Task(priority: .userInitiated, operation: {
-                                    dLinkColorIndex = 1
-                                    disclaimerSetting = userAgreed
-                                    await compareDisclaimerAgreement()
-                                    await disclaimerResponse()
-                                    await agreementDate()
-                                    await concatenateFinalUserAgreementArrays()
-                                    await finalUserAgreementArrays()
-                                    await saveDisclaimerData()
-                                    print(disclaimerSetting)
-                                    print(disclaimerAgreement)
-                                })
-                            }
-                        }
-                    Spacer()
-                    NavigationLink(destination:
-                                    userAgreed == true ? AnyView(UserDataEntryView(setup: setup, relatedLink: link))
-                                    : userAgreed == false ? AnyView(LandingView())
-                                    : AnyView(LandingView())
-                    ){  HStack {
-                            Spacer()
-                            Text("Now Let's Contine!")
-                            Spacer()
-                            Image(systemName: "arrowshape.bounce.right")
-                            Spacer()
-                        }
-                        .frame(width: 300, height: 50, alignment: .center)
-                        .background(dLinkColors[dLinkColorIndex])
-                        .foregroundColor(dLinkColors2[dLinkColorIndex])
-                        .cornerRadius(24)
-                        
+                ) {
+                    ScrollView(.vertical, showsIndicators: true) {
+                        Text(userAgreementModel.userAgreementText)
+                            .font(.footnote)
                     }
-                    .padding(.bottom, 40)
+                    .frame(height: 425)
+                    Toggle(isOn: $userAgreed) {
+                        Text("I agree to the above terms")
+                            .foregroundColor(.blue)
+                    }
+                    .padding(.trailing)
+                    .padding(.leading)
+                }
+                .onAppear(perform: {
+                    loadUserAgreement()
+                })
+                .onChange(of: userAgreed) { _ in
+                    DispatchQueue.main.async(group: .none, qos: .userInitiated) {
+                        Task(priority: .userInitiated, operation: {
+                            dLinkColorIndex = 1
+                            disclaimerSetting = userAgreed
+                            await compareDisclaimerAgreement()
+                            await disclaimerResponse()
+                            await agreementDate()
+                            await concatenateFinalUserAgreementArrays()
+                            await finalUserAgreementArrays()
+                            await saveDisclaimerData()
+                            print(disclaimerSetting)
+                            print(disclaimerAgreement)
+                        })
+                    }
+                }
+                Spacer()
+                NavigationLink(destination:
+                                userAgreed == true ? AnyView(UserDataEntryView(setup: setup, relatedLink: link))
+                               : userAgreed == false ? AnyView(LandingView())
+                               : AnyView(LandingView())
+                ){  HStack {
                     Spacer()
+                    Text("Now Let's Contine!")
+                    Spacer()
+                    Image(systemName: "arrowshape.bounce.right")
+                    Spacer()
+                }
+                .frame(width: 300, height: 50, alignment: .center)
+                .background(dLinkColors[dLinkColorIndex])
+                .foregroundColor(dLinkColors2[dLinkColorIndex])
+                .cornerRadius(24)
+                    
+                }
+                .padding(.bottom, 40)
+                Spacer()
             }
             .onAppear {
                 dLinkColorIndex = 0
             }
         }
     }
-    
+}
+ 
+extension DisclaimerContent {
+    //MARK: -Extension Methods
     func loadUserAgreement() {
         userAgreementModel.load(file: userAgreementModel.userAgreementText)
     }
-
+    
     func compareDisclaimerAgreement() async {
         if disclaimerSetting == true {
             disclaimerAgreement = 1
@@ -164,7 +167,7 @@ struct DisclaimerContent<Link: View>: View {
             print("Disclaimer Response: \(disclaimerAgreement) & \(disclaimerSetting)")
         }
     }
-
+    
     func disclaimerResponse() async {
         disclaimerSetting = true
         if userAgreement.count < 1 || userAgreement.count > 1{
@@ -194,12 +197,15 @@ struct DisclaimerContent<Link: View>: View {
     }
     
     func saveDisclaimerData() async {
-//        await writeJSONSetupData(saveFinalSetupResults: savefinalSetupResults)
         await getDisclaimerData()
         await saveDisclaimerToJSON()
         await writeDisclaimerResultsToCSV()
         await writeInputDisclaimerResultsToCSV()
     }
+}
+    
+extension DisclaimerContent {
+//MARK: -Extension CSV/JSON Methods
     
     func getDisclaimerData() async {
         guard let disclaimerData = await self.getDemoJSONData() else { return }
@@ -215,8 +221,6 @@ struct DisclaimerContent<Link: View>: View {
             print("!!!Error decoding Disclaimer json data: \(error)")
         }
     }
-    
-
     
     func getDemoJSONData() async -> Data? {
         let formatter3J = DateFormatter()
@@ -262,30 +266,22 @@ struct DisclaimerContent<Link: View>: View {
         print("writeDisclaimerResultsToCSV Start")
         let formatter3 = DateFormatter()
         formatter3.dateFormat = "HH:mm E, d MMM y"
-        
         if finalUserAgreementAgreedDate.count != 0 {
             stringFUAADate = formatter3.string(from: finalUserAgreementAgreedDate[0])
         } else {
             print("finaluseragreementagreeddate is nil")
         }
-        
-        
         let stringFinalUserAgreementAgreed = "finalUserAgreementAgreed," + finalUserAgreementAgreed.map { String($0) }.joined(separator: ",")
         let stringFinalUserAgreementAgreedDate = "finalUserAgreementAgreedDate," + stringFUAADate.map { String($0) }.joined(separator: ",")
-        
-        
         do {
             let csvDisclaimerPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvDisclaimerDocumentsDirectory = csvDisclaimerPath
             print("CSV Disclaimer DocumentsDirectory: \(csvDisclaimerDocumentsDirectory)")
             let csvDisclaimerFilePath = csvDisclaimerDocumentsDirectory.appendingPathComponent(disclaimerCSVName)
             print(csvDisclaimerFilePath)
-            
             let writerDisclaimer = try CSVWriter(fileURL: csvDisclaimerFilePath, append: false)
-        
             try writerDisclaimer.write(row: [stringFinalUserAgreementAgreed])
             try writerDisclaimer.write(row: [stringFinalUserAgreementAgreedDate])
-        
             print("CVS Disclaimer Writer Success")
         } catch {
             print("CVSWriter Disclaimer Error or Error Finding File for Disclaimer CSV \(error.localizedDescription)")
@@ -303,7 +299,6 @@ struct DisclaimerContent<Link: View>: View {
         }
         let stringFinalUserAgreementAgreed = finalUserAgreementAgreed.map { String($0) }.joined(separator: ",")
         let stringFinalUserAgreementAgreedDate = stringFUAADate.map { String($0) }.joined(separator: ",")
-        
         do {
             let csvInputDisclaimerPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvInputDisclaimerDocumentsDirectory = csvInputDisclaimerPath
@@ -313,17 +308,16 @@ struct DisclaimerContent<Link: View>: View {
             let writerDisclaimer = try CSVWriter(fileURL: csvInputDisclaimerFilePath, append: false)
             try writerDisclaimer.write(row: [stringFinalUserAgreementAgreed])
             try writerDisclaimer.write(row: [stringFinalUserAgreementAgreedDate])
-            
             print("CVS Input Disclaimer Writer Success")
         } catch {
             print("CVSWriter Input Disclaimer Error or Error Finding File for Input Disclaimer CSV \(error.localizedDescription)")
         }
     }
-    
+
+//MARK: -NavigationLink Method
     private func link(setup: Setup) -> some View {
         EmptyView()
     }
-    
 }
 
 

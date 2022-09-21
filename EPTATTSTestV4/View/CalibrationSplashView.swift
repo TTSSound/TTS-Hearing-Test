@@ -11,11 +11,9 @@ import SwiftUI
 // ADD BUTTON TO RETURN TO HOME SCREEN
 
 struct CalibrationSplashView: View {
-    
     var colorModel: ColorModel = ColorModel()
 
     var body: some View {
-        
         ZStack{
             colorModel.colorBackgroundRed.ignoresSafeArea(.all, edges: .top)
             ScrollView{

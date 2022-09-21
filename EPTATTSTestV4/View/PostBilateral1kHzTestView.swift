@@ -32,7 +32,7 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
     var testing: Testing
     var dataModel = DataModel.shared
     var relatedLinkTesting: (Testing) -> Link
-
+    
     @EnvironmentObject private var naviationModel: NavigationModel
     
     var colorModel: ColorModel = ColorModel()
@@ -165,7 +165,7 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
                     })
                     .padding(.top, 40)
                     .padding(.bottom, 20)
-
+                    
                 } else if phonGain != 0 && ehaBetaLinkExists == true && eptaBetaLinkExists == false {
                     Text("Now We're Ready To Start The Main Test Phases")
                         .font(.title)
@@ -189,7 +189,7 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
                     })
                     .padding(.top, 40)
                     .padding(.bottom, 20)
-
+                    
                 } else if userSubmittedSettings == true && ehaBetaLinkExists == false && eptaBetaLinkExists == false {
                     Text("Now We're Ready To Start The Main Test Phases")
                         .font(.title)
@@ -223,21 +223,20 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
                         })
                         .padding(.top, 10)
                         .padding(.bottom, 10)
-//                        
-//                        NavigationLink(destination: {
-//                            EHATTSTestPart2View(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
-//                        }, label: {
-//                            Text("3. EHA Part 2")
-//                                .padding()
-//                                .frame(width: 300, height: 50, alignment: .center)
-//                                .background(.gray)
-//                                .foregroundColor(.white)
-//                                .cornerRadius(24)
-//                        })
-//                        .padding(.top, 10)
-//                        .padding(.bottom, 60)
+                        //
+                        //                        NavigationLink(destination: {
+                        //                            EHATTSTestPart2View(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
+                        //                        }, label: {
+                        //                            Text("3. EHA Part 2")
+                        //                                .padding()
+                        //                                .frame(width: 300, height: 50, alignment: .center)
+                        //                                .background(.gray)
+                        //                                .foregroundColor(.white)
+                        //                                .cornerRadius(24)
+                        //                        })
+                        //                        .padding(.top, 10)
+                        //                        .padding(.bottom, 60)
                     }
-    
                 }
                 Spacer()
             }
@@ -248,14 +247,17 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
             }
             .onChange(of: phonGain) { phonValue in
                 if phonValue > 0.0 {
-                     uploadUserDataEntry()
+                    uploadUserDataEntry()
                 } else {
                     print("Fatal error in phon value change of logic")
                 }
             }
         }
     }
-    
+}
+ 
+extension PostBilateral1kHzTestContent {
+    //MARK: -Extension Methods
     func betaReviewWriteGainSetting() async {
         await betaGainCurveGenderAge()
         await betaUserItrnaEarDeltaGain()
@@ -265,14 +267,11 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
         await writeBetaFinalGainSettingToCSV()
     }
     
-    
-
     func uploadUserDataEntry() {
         DispatchQueue.main.async(group: .none, qos: .background) {
             uploadFile(fileName: betaInputOnekHzSummaryCSVName)
         }
     }
-    
     
     func determineBetaGainCurve() async {
         //TODO: Unclear on how to make this work without having actual testing data. For now, just use phon value
@@ -280,12 +279,12 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
         // compare actual bilateral results with gender age curve and pick the best option
         // unclear how to write this logic. Maybe based on age? Need to find a way to pick the cloest
         // or start with base of phon gain and then go from there...
-            // if phon is 2.5 and + delta is < 4, use 2.5, but if it is greater than 4 and < 5, use 4 and if it is greater than 5, but less than 7, use 5, and if it is >7, but < 8, use 7, and if it is >8, but less than 11, use 8 and so on for 11, 16, 17, 24, 27
-            // the logical comparitor would be X > 4 && X < 5, then use 4!!!!!!!
+        // if phon is 2.5 and + delta is < 4, use 2.5, but if it is greater than 4 and < 5, use 4 and if it is greater than 5, but less than 7, use 5, and if it is >7, but < 8, use 7, and if it is >8, but less than 11, use 8 and so on for 11, 16, 17, 24, 27
+        // the logical comparitor would be X > 4 && X < 5, then use 4!!!!!!!
         
         // Only need the above logic when reference is > phon
         
-         // if reference is less than phon, find the next lowest phon value below the reference value and use that phon value for the gain setting
+        // if reference is less than phon, find the next lowest phon value below the reference value and use that phon value for the gain setting
         
         // once phon setting is determined, create a csv file with phon(#) to then look for in each test view
         
@@ -398,7 +397,7 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
             }
             
         } else if femaleBetaLinkExists == false && maleBetaLinkExists == true {
-                //enter male if logic base on age
+            //enter male if logic base on age
             if age0BetaLinkExists == true && age1BetaLinkExists == false && age2BetaLinkExists == false && age3BetaLinkExists == false && age4BetaLinkExists == false && age5BetaLinkExists == false && age6BetaLinkExists == false {
                 phonGain = 2.5  //2.5
             } else if age0BetaLinkExists == false && age1BetaLinkExists == true && age2BetaLinkExists == false && age3BetaLinkExists == false && age4BetaLinkExists == false && age5BetaLinkExists == false && age6BetaLinkExists == false {
@@ -454,9 +453,9 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
         let documentsBetaDirectory = testBetaLinkPaths[0]
         return documentsBetaDirectory
     }
-
-//NEED NEW APPROACH. THIS DOESN'T WORK IF TWO FILES ARE CREATED
-// NEED TO FIGURE OUT HOW TO DELETE FILES ON SECOND ATTEMPT TO TAKE TEST
+    
+    //NEED NEW APPROACH. THIS DOESN'T WORK IF TWO FILES ARE CREATED
+    // NEED TO FIGURE OUT HOW TO DELETE FILES ON SECOND ATTEMPT TO TAKE TEST
     func checkBetaEHATestLik() async {
         let ehaBetaName = ["EHA.csv"]
         let fileEHABetaManager = FileManager.default
@@ -470,7 +469,7 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
             }
         }
     }
-        
+    
     func checkTrainEPTATestLik() async {
         let eptaBetaName = ["EPTA.csv"]
         let fileEPTABetaManager = FileManager.default
@@ -484,7 +483,7 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
             }
         }
     }
-       
+    
     func checkMaleLink() async {
         let maleBetaName = ["male.csv"]
         let fileMaleBetaManager = FileManager.default
@@ -611,18 +610,19 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
         }
     }
     
-  
+    
     
     func betaGetDataLinkPath() async -> String {
         let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = dataLinkPaths[0]
         return documentsDirectory
     }
-    
+}
+ 
+extension PostBilateral1kHzTestContent {
+    //MARK: -CSV/JSON Methods Extenstion
     func betaOnekHzInputResultsCSVReader() async {
-        
         let onekHzSummaryCSVName = [betaInputOnekHzSummaryCSVName]
-        
         let fileOnekHzManager = FileManager.default
         let onekHZPath = (await self.betaGetDataLinkPath() as NSString).strings(byAppendingPaths: onekHzSummaryCSVName)
         if fileOnekHzManager.fileExists(atPath: onekHZPath[0]) {
@@ -642,55 +642,14 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
             print("onekHZResults Read")
             let rows = results.columns
             print("rows: \(rows)")
-//            let fieldOnekHz_averageGainRightArray1: String = results[row:0, column: 0]
-//            let fieldOnekHz_averageGainRightArray2: String = results[row:0, column: 1]
-//            let fieldOnekHz_averageGainRightArray3: String = results[row:0, column: 2]
-//            let fieldOnekHz_averageGainRightArray4: String = results[row:0, column: 3]
-//            let fieldOnekHz_averageGainLeftArray1: String = results[row:1, column: 0]
-//            let fieldOnekHz_averageGainLeftArray2: String = results[row:1, column: 1]
-//            let fieldOnekHz_averageGainLeftArray3: String = results[row:1, column: 2]
-//            let fieldOnekHz_averageGainLeftArray4: String = results[row:1, column: 3]
             let fieldOnekHz_averageLowestGainRightArray: String = results[row:2, column: 0]
             let fieldOnekHz_HoldingLowestRightGainArray: String = results[row:3, column: 0]
             let fieldOnekHz_averageLowestGainLeftArray: String = results[row:4, column: 0]
             let fieldOnekHz_HoldingLowestLeftGainArray: String = results[row:5, column: 0]
-         
-//            print("fieldOnekHz_averageGainRightArray1: \(fieldOnekHz_averageGainRightArray1)")
-//            print("fieldOnekHz_averageGainRightArray2: \(fieldOnekHz_averageGainRightArray2)")
-//            print("fieldOnekHz_averageGainRightArray3: \(fieldOnekHz_averageGainRightArray3)")
-//            print("fieldOnekHz_averageGainRightArray4: \(fieldOnekHz_averageGainRightArray4)")
-//            print("fieldOnekHz_averageGainLeftArray1: \(fieldOnekHz_averageGainLeftArray1)")
-//            print("fieldOnekHz_averageGainLeftArray2: \(fieldOnekHz_averageGainLeftArray2)")
-//            print("fieldOnekHz_averageGainLeftArray3: \(fieldOnekHz_averageGainLeftArray3)")
-//            print("fieldOnekHz_averageGainLeftArray4: \(fieldOnekHz_averageGainLeftArray4)")
             print("fieldOnekHz_averageLowestGainRightArray: \(fieldOnekHz_averageLowestGainRightArray)")
             print("fieldOnekHz_HoldingLowestRightGainArray: \(fieldOnekHz_HoldingLowestRightGainArray)")
             print("fieldOnekHz_averageLowestGainLeftArray: \(fieldOnekHz_averageLowestGainLeftArray)")
             print("fieldOnekHz_HoldingLowestLeftGainArray: \(fieldOnekHz_HoldingLowestLeftGainArray)")
-            
-//            let inputOnekHz_averageGainRightArry1 = Float(fieldOnekHz_averageGainRightArray1)
-//            betaInputOnekHz_averageGainRightArray1 = inputOnekHz_averageGainRightArry1 ?? -99.9
-//            
-//            let inputOnekHz_averageGainRightArry2 = Float(fieldOnekHz_averageGainRightArray2)
-//            betaInputOnekHz_averageGainRightArray2 = inputOnekHz_averageGainRightArry2 ?? -99.9
-//            
-//            let inputOnekHz_averageGainRightArry3 = Float(fieldOnekHz_averageGainRightArray3)
-//            betaInputOnekHz_averageGainRightArray3 = inputOnekHz_averageGainRightArry3 ?? -99.9
-//            
-//            let inputOnekHz_averageGainRightArry4 = Float(fieldOnekHz_averageGainRightArray4)
-//            betaInputOnekHz_averageGainRightArray4 = inputOnekHz_averageGainRightArry4 ?? -99.9
-//            
-//            let inputOnekHz_averageGainLeftArry1 = Float(fieldOnekHz_averageGainLeftArray1)
-//            betaInputOnekHz_averageGainLeftArray1 = inputOnekHz_averageGainLeftArry1 ?? -99.9
-//            
-//            let inputOnekHz_averageGainLeftArry2 = Float(fieldOnekHz_averageGainLeftArray2)
-//            betaInputOnekHz_averageGainLeftArray2 = inputOnekHz_averageGainLeftArry2 ?? -99.9
-//            
-//            let inputOnekHz_averageGainLeftArry3 = Float(fieldOnekHz_averageGainLeftArray3)
-//            betaInputOnekHz_averageGainLeftArray3 = inputOnekHz_averageGainLeftArry3 ?? -99.9
-//            
-//            let inputOnekHz_averageGainLeftArry4 = Float(fieldOnekHz_averageGainLeftArray4)
-//            betaInputOnekHz_averageGainLeftArray4 = inputOnekHz_averageGainLeftArry4 ?? -99.9
             
             let inputOnekHz_averageLowestGainRightArry = Float(fieldOnekHz_averageLowestGainRightArray)
             betaInputOnekHz_averageLowestGainRightArray = inputOnekHz_averageLowestGainRightArry ?? -99.9
@@ -704,7 +663,6 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
             let inputOnekHz_HoldingLowestLeftGainArry = Float(fieldOnekHz_HoldingLowestLeftGainArray)
             betaInputOnekHz_HoldingLowestLeftGainArray = inputOnekHz_HoldingLowestLeftGainArry ?? -99.9
             
-
             print("inputOnekHz_averageGainRightArray1: \(betaInputOnekHz_averageGainRightArray1)")
             print("inputOnekHz_averageGainRightArray2: \(betaInputOnekHz_averageGainRightArray2)")
             print("inputOnekHz_averageGainRightArray3: \(betaInputOnekHz_averageGainRightArray3)")
@@ -738,7 +696,6 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
             print("CVSWriter BetaBetaFinalGainSetting Error or Error Finding File for BetaBetaFinalGainSetting CSV \(error.localizedDescription)")
         }
     }
-       
     
     private func getDataLinkPath() async -> String {
         let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
@@ -751,7 +708,7 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
         let documentsDirectory = paths[0]
         return documentsDirectory
     }
-
+    
     // Only Use Files that have a pure string name assigned, not a name of ["String"]
     private func uploadFile(fileName: String) {
         DispatchQueue.global(qos: .userInteractive).async {
@@ -763,7 +720,7 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
             if fileManager.fileExists(atPath: filePath[0]) {
                 let filePath = URL(fileURLWithPath: filePath[0])
                 let localFile = filePath
-//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
                 let fileRef = lastNameRef.child("\(fileName)")
                 let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
                     if error == nil && metadata == nil {
@@ -807,18 +764,22 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
             print("Error in reading Last Name results")
         }
     }
-    
+}
+
+extension PostBilateral1kHzTestContent {
+//MARK: -NavigationLink Extension
+
     private func linkTesting(testing: Testing) -> some View {
         EmptyView()
     }
 }
 
-struct PostBilateral1kHzTestView_Previews: PreviewProvider {
-    static var previews: some View {
-        PostBilateral1kHzTestView(testing: nil, relatedLinkTesting: linkTesting)
-    }
-    
-    static func linkTesting(testing: Testing) -> some View {
-        EmptyView()
-    }
-}
+//struct PostBilateral1kHzTestView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PostBilateral1kHzTestView(testing: nil, relatedLinkTesting: linkTesting)
+//    }
+//
+//    static func linkTesting(testing: Testing) -> some View {
+//        EmptyView()
+//    }
+//}

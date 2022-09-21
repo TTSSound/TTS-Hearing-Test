@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ManualSetupInstructionView: View {
-    
     var colorModel: ColorModel = ColorModel()
     
     var body: some View {

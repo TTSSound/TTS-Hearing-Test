@@ -82,7 +82,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     @State private var isOkayToUpload = false
     let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
     
-
+    
     @State var onekHzlocalHeard = 0
     @State var onekHzlocalPlaying = Int()    // Playing = 1. Stopped = -1
     @State var onekHzlocalReversal = Int()
@@ -100,47 +100,47 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     @State var onekHzsecondHeardIsTrue: Bool = false
     @State var onekHzstartTooHigh = 0
     
-            //!!!!Changes
-            @State var onekHzfirstGain = Float()
-            @State var onekHzsecondGain = Float()
-            
-            @State var onekHzfirstGainRight1 = Float()
-            @State var onekHzsecondGainRight1 = Float()
-            @State var onekHzfirstGainRight2 = Float()
-            @State var onekHzsecondGainRight2 = Float()
-            @State var onekHzfirstGainLeft1 = Float()
-            @State var onekHzsecondGainLeft1 = Float()
-            @State var onekHzfirstGainLeft2 = Float()
-            @State var onekHzsecondGainLeft2 = Float()
-            
-            @State var onekHz_rightFirstSecondGainArray: [Float] = [Float]()
-            @State var onekHz_leftFirstSecondGainArray: [Float] = [Float]()
+    //!!!!Changes
+    @State var onekHzfirstGain = Float()
+    @State var onekHzsecondGain = Float()
     
-            @State var needToRepeatTesting: Bool = false
+    @State var onekHzfirstGainRight1 = Float()
+    @State var onekHzsecondGainRight1 = Float()
+    @State var onekHzfirstGainRight2 = Float()
+    @State var onekHzsecondGainRight2 = Float()
+    @State var onekHzfirstGainLeft1 = Float()
+    @State var onekHzsecondGainLeft1 = Float()
+    @State var onekHzfirstGainLeft2 = Float()
+    @State var onekHzsecondGainLeft2 = Float()
     
-            @State var onekHzRightSorted: [Float] = [Float]()
-            @State var onekHzLeftSorted: [Float] = [Float]()
-            @State var onekHzIntraEarDeltaHL1 = Float()
-            @State var onekHzIntraEarDeltaHL2 = Float()
-            @State var onekHzIntraEarDeltaHLFinal = Float()
-           
-            @State var onekHzFinalLRGains1: [Float] = [Float]()
-            @State var onekHzFinalLRGains2: [Float] = [Float]()
-            @State var onekHzInterimLRGainsFinal: [Float] = [Float]()
-            @State var onekHzFinalComboLRGains: [Float] = [Float]()
+    @State var onekHz_rightFirstSecondGainArray: [Float] = [Float]()
+    @State var onekHz_leftFirstSecondGainArray: [Float] = [Float]()
     
-            @State var repeatArraysWiped: Bool = false
-       
-            //!!!!Changes
+    @State var needToRepeatTesting: Bool = false
+    
+    @State var onekHzRightSorted: [Float] = [Float]()
+    @State var onekHzLeftSorted: [Float] = [Float]()
+    @State var onekHzIntraEarDeltaHL1 = Float()
+    @State var onekHzIntraEarDeltaHL2 = Float()
+    @State var onekHzIntraEarDeltaHLFinal = Float()
+    
+    @State var onekHzFinalLRGains1: [Float] = [Float]()
+    @State var onekHzFinalLRGains2: [Float] = [Float]()
+    @State var onekHzInterimLRGainsFinal: [Float] = [Float]()
+    @State var onekHzFinalComboLRGains: [Float] = [Float]()
+    
+    @State var repeatArraysWiped: Bool = false
+    
+    //!!!!Changes
     
     @State var onekHzendTestSeries: Bool = false
     @State var onekHzshowTestCompletionSheet: Bool = false
-        
-            //!!!!!!Changes
-            @State var onekHz_samples: [String] = ["Sample0", "Sample0", "Sample0", "Sample0","Sample0", "Sample0", "Sample0", "Sample0"]
-            @State var onekHz_panSettingArray: [Float] = [1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0]    // -1.0 = Left , 0.0 = Middle, 1.0 = Right
-            @State var pan: Float = 1.0
-            //!!!!! Changes Above
+    
+    //!!!!!!Changes
+    @State var onekHz_samples: [String] = ["Sample0", "Sample0", "Sample0", "Sample0","Sample0", "Sample0", "Sample0", "Sample0"]
+    @State var onekHz_panSettingArray: [Float] = [1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0]    // -1.0 = Left , 0.0 = Middle, 1.0 = Right
+    @State var pan: Float = 1.0
+    //!!!!! Changes Above
     
     @State var onekHz_index: Int = 0
     @State var onekHz_testGain: Float = 0.025
@@ -148,10 +148,10 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     @State var onekHz_indexForTest = [Int]()
     @State var onekHz_testCount: [Int] = [Int]()
     
-            //!!!!!Changes
-            @State var onekHz_pan: Float = Float()   // -1.0 = Left , 0.0 = Middle, 1.0 = Right
-            @State var onekHz_testPan = [Float]()  // -1.0 = Left , 0.0 = Middle, 1.0 = Right
-            //!!!Changes Above
+    //!!!!!Changes
+    @State var onekHz_pan: Float = Float()   // -1.0 = Left , 0.0 = Middle, 1.0 = Right
+    @State var onekHz_testPan = [Float]()  // -1.0 = Left , 0.0 = Middle, 1.0 = Right
+    //!!!Changes Above
     
     
     @State var onekHz_testTestGain = [Float]()
@@ -160,7 +160,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     @State var onekHz_reversalGain = [Float]()
     @State var onekHz_reversalDirection = Float()
     @State var onekHz_reversalDirectionArray = [Float]()
-
+    
     //!!!Changes
     @State var onekHz_averageGain = Float()
     @State var onekHz_averageGainRight = Float()
@@ -182,13 +182,13 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     
     @State var onekHz_HoldingLowestRightGainArray: [Float] = [Float]()
     @State var onekHz_HoldingLowestLeftGainArray: [Float] = [Float]()
-
+    
     
     //!!!!Changes
     
-
+    
     @State var onekHz_eptaSamplesCount = 7 // 3 //17
-
+    
     //These are/were csv json logging variables. No longer in code, but can be added back int
     @State var onekHz_finalStoredIndex: [Int] = [Int]()
     @State var onekHz_finalStoredTestPan: [Float] = [Float]()
@@ -200,24 +200,24 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     @State var onekHz_finalStoredFirstGain: [Float] = [Float]()
     @State var onekHz_finalStoredSecondGain: [Float] = [Float]()
     
-//    @State var final_Name = [String]()
-//    @State var final_Age = [Int]()
-//    @State var final_Sex = [Int]()
-//    @State var final_onekHzactiveFrequency = [String]()
-//    @State var final_RightEar1kHzdBFinal = [Float]()
-//    @State var final_LeftEar1kHzdBFinal = [Float]()
-//    @State var final_onekHzIntraEarDeltaHLFinal = [Float]()
-//    @State var final_onekHzFinalComboLRGains = [Float]()
-//    @State var final_RightEar1kHzdB1 = [Float]()
-//    @State var final_LeftEar1kHzdB1 = [Float]()
-//    @State var final_onekHzFinalLRGains1 = [Float]()
-//    @State var final_RightEar1kHzdB2 = [Float]()
-//    @State var final_LeftEar1kHzdB2 = [Float]()
-//    @State var final_onekHzFinalLRGains2 = [Float]()
-//    @State var final_onekHz_testPan = [Float]()
-//    @State var final_onekHz_indexForTest = [Int]()
-//    @State var final_onekHz_reversalGain = [Float]()
-//    @State var final_onekHz_testTestGain = [Float]()
+    //    @State var final_Name = [String]()
+    //    @State var final_Age = [Int]()
+    //    @State var final_Sex = [Int]()
+    //    @State var final_onekHzactiveFrequency = [String]()
+    //    @State var final_RightEar1kHzdBFinal = [Float]()
+    //    @State var final_LeftEar1kHzdBFinal = [Float]()
+    //    @State var final_onekHzIntraEarDeltaHLFinal = [Float]()
+    //    @State var final_onekHzFinalComboLRGains = [Float]()
+    //    @State var final_RightEar1kHzdB1 = [Float]()
+    //    @State var final_LeftEar1kHzdB1 = [Float]()
+    //    @State var final_onekHzFinalLRGains1 = [Float]()
+    //    @State var final_RightEar1kHzdB2 = [Float]()
+    //    @State var final_LeftEar1kHzdB2 = [Float]()
+    //    @State var final_onekHzFinalLRGains2 = [Float]()
+    //    @State var final_onekHz_testPan = [Float]()
+    //    @State var final_onekHz_indexForTest = [Int]()
+    //    @State var final_onekHz_reversalGain = [Float]()
+    //    @State var final_onekHz_testTestGain = [Float]()
     
     @State var final_onekHz_Name = [String]()
     @State var final_onekHz_Age = [Int]()
@@ -237,10 +237,10 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     @State var final_onekHz_averageLowestGainLeftArray = [Float]()
     @State var final_onekHz_HoldingLowestLeftGainArray = [Float]()
     
-            //!!!Changes
-            @State var onekHz_finalStoredAverageGain: [Float] = [Float]()
-            
-
+    //!!!Changes
+    @State var onekHz_finalStoredAverageGain: [Float] = [Float]()
+    
+    
     
     @State var onekHzidxForTest = Int() // = onekHz_indexForTest.count
     @State var onekHzidxForTestNet1 = Int() // = onekHz_indexForTest.count - 1
@@ -267,7 +267,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     @State var LeftEar1kHzdB2 = Float()
     @State var RightEar1kHzdBFinal = Float()
     @State var LeftEar1kHzdBFinal = Float()
-
+    
     @State var bilateral1kHzTestCompleted: Bool = false
     
     @State var continuePastBilateralTest: Bool = false
@@ -283,14 +283,13 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     let inputOnekHzDetailedCSVName = "InputDetailedOnekHzResultsCSV.csv"
     
     @State var onekHzsaveFinalResults: onekHzSaveFinalResults? = nil
-
+    
     let onekHzheardThread = DispatchQueue(label: "BackGroundThread", qos: .userInitiated)
     let onekHzarrayThread = DispatchQueue(label: "BackGroundPlayBack", qos: .background)
     let onekHzaudioThread = DispatchQueue(label: "AudioThread", qos: .background)
     let onekHzpreEventThread = DispatchQueue(label: "PreeventThread", qos: .userInitiated)
     
     var body: some View {
- 
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack {
@@ -317,7 +316,6 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                 .navigationDestination(isPresented: $bilateral1kHzTestCompleted) {
                     PostBilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)
                 }
-                
                 Spacer()
                 if onekHzTestStarted == false {
                     Button {
@@ -337,7 +335,6 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                     }
                     .padding(.top, 20)
                     .padding(.bottom, 20)
-                    
                     Text("")
                         .fontWeight(.bold)
                         .padding()
@@ -347,7 +344,6 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                         .cornerRadius(24)
                         .padding(.top, 20)
                         .padding(.bottom, 40)
-         
                 } else if onekHzTestStarted == true {
                     Button {
                         onekHzlocalPlaying = 0
@@ -383,8 +379,8 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                     }
                     .padding(.top, 20)
                     .padding(.bottom, 20)
-// Restart Button Issue
-                //Try thread change
+                    // Restart Button Issue
+                    //Try thread change
                     Button {
                         onekHzheardThread.async{
                             onekHz_heardArray.removeAll()
@@ -395,7 +391,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                             onekHzplayingStringColorIndex = 0
                             print("Start Button Clicked. Playing = \(onekHzlocalPlaying)")
                         }
-                        } label: {
+                    } label: {
                         Text(onekHzplayingString[onekHzplayingStringColorIndex])
                             .foregroundColor(onekHzplayingAlternateStringColor[onekHzplayingStringColorIndex+1])
                             .fontWeight(.semibold)
@@ -408,7 +404,6 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                     .padding(.top, 20)
                     .padding(.bottom, 40)
                 }
-     
                 Button {
                     onekHzheardThread.async{ self.onekHzlocalHeard = 1
                     }
@@ -423,8 +418,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                 }
                 .padding(.top, 20)
                 .padding(.bottom, 80)
-            
-            Spacer()
+                Spacer()
             }
             .fullScreenCover(isPresented: $onekHzshowTestCompletionSheet, content: {
                 ZStack{
@@ -483,13 +477,13 @@ struct Bilateral1kHzTestContent<Link: View>: View {
         })
         .onChange(of: onekHztestIsPlaying, perform: { onekHztestBoolValue in
             if onekHztestBoolValue == true && onekHzendTestSeries == false {
-            //User is starting test for first time
+                //User is starting test for first time
                 audioSessionModel.setAudioSession()
                 onekHzlocalPlaying = 1
                 onekHzplayingStringColorIndex = 0
                 onekHzuserPausedTest = false
             } else if onekHztestBoolValue == false && onekHzendTestSeries == false {
-            // User is pausing test for firts time
+                // User is pausing test for firts time
                 onekHzstop()
                 onekHzlocalPlaying = 0
                 onekHzplayingStringColorIndex = 1
@@ -510,9 +504,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
             onekHzlocalReversal = 0
             onekHzTestStarted = true
             if onekHzplayingValue == 1{
-                
                 onekHzSetPan()
-                
                 onekHzaudioThread.async {
                     onekHzloadAndTestPresentation(sample: onekHzactiveFrequency, gain: onekHz_testGain, pan: onekHz_pan)
                     while onekHztestPlayer!.isPlaying == true && self.onekHzlocalHeard == 0 { }
@@ -521,8 +513,8 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                         print("Stopped in while if: Returned Array \(onekHzlocalHeard)")
                     } else {
                         onekHztestPlayer!.stop()
-                    self.onekHzlocalHeard = -1
-                    print("Stopped naturally: Returned Array \(onekHzlocalHeard)")
+                        self.onekHzlocalHeard = -1
+                        print("Stopped naturally: Returned Array \(onekHzlocalHeard)")
                     }
                 }
                 onekHzpreEventThread.async {
@@ -579,7 +571,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                         await onekHzreversalsCompleteLogging()
                         await lowestAverageGainLogging()
                         await onekHzconcatenateFinalArrays()
-//                        await onekHzprintConcatenatedArrays()
+                        //                        await onekHzprintConcatenatedArrays()
                         await onekHzsaveFinalStoredArrays()
                         await onekHzendTestSeries()
                         await onekHznewTestCycle()
@@ -591,9 +583,17 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                 }
             }
         }
+        .onChange(of: isOkayToUpload) { uploadValue in
+            if uploadValue == true {
+                uploadUserDataEntry()
+            } else {
+                print("Fatal Error in uploadValue Change of Logic")
+            }
+        }
     }
+}
  
-    
+extension Bilateral1kHzTestContent {
 //MARK: - AudioPlayer Methods
     
     func onekHzpauseRestartTestCycle() {
@@ -750,19 +750,18 @@ struct Bilateral1kHzTestContent<Link: View>: View {
 }
 
 
-
-//MARK: - 1kHz Reversal Extension
 extension Bilateral1kHzTestContent {
+    //MARK: - 1kHz Reversal Extension
     enum onekHzLastErrors: Error {
         case onekHzlastError
         case onekHzlastUnexpected(code: Int)
     }
-
+    
     func onekHzcreateReversalHeardArray() async {
         onekHz_reversalHeard.append(onekHz_heardArray[onekHzidxHA-1])
         self.onekHzidxReversalHeardCount = onekHz_reversalHeard.count
     }
-        
+    
     func onekHzcreateReversalGainArray() async {
         onekHz_reversalGain.append(onekHz_testGain)
     }
@@ -902,15 +901,15 @@ extension Bilateral1kHzTestContent {
         }  else if onekHzidxReversalHeardCount == 2 {
             if onekHzidxReversalHeardCount == 2 && onekHzsecondHeardIsTrue == true {
                 await onekHzstartTooHighCheck()
-//            } else if onekHzidxReversalHeardCount == 2  && onekHzsecondHeardIsTrue == false {
-//                await onekHzreversalAction()
+                //            } else if onekHzidxReversalHeardCount == 2  && onekHzsecondHeardIsTrue == false {
+                //                await onekHzreversalAction()
                 
-//!!! Changes Below From Original Test Models
+                //!!! Changes Below From Original Test Models
             } else if onekHzidxReversalHeardCount == 2  && onekHzsecondHeardIsTrue == false && onekHzlocalSeriesNoResponses < 2 {
                 await onekHzreversalAction()
             } else if onekHzidxReversalHeardCount == 2  && onekHzsecondHeardIsTrue == false && onekHzlocalSeriesNoResponses == 2 {
                 await onekHzreversalOfFour()
-//!!! Changes Above From Original Test Models
+                //!!! Changes Above From Original Test Models
                 
             } else {
                 print("In reversal section == 2")
@@ -935,29 +934,29 @@ extension Bilateral1kHzTestContent {
         }
     }
     
-//    func onekHzprintReversalGain() async {
-//        print("Start onekHzprintReversalGain()")
-//        DispatchQueue.global(qos: .background).async {
-//            print("New Gain: \(onekHz_testGain)")
-//            print("Reversal Direcction: \(onekHz_reversalDirection)")
-//        }
-//    }
+    //    func onekHzprintReversalGain() async {
+    //        print("Start onekHzprintReversalGain()")
+    //        DispatchQueue.global(qos: .background).async {
+    //            print("New Gain: \(onekHz_testGain)")
+    //            print("Reversal Direcction: \(onekHz_reversalDirection)")
+    //        }
+    //    }
     
     func onekHzreversalHeardCount1() async {
-//        print("Start onekHzreversalHeardCount1()")
-       await onekHzreversalAction()
-   }
-            
+        //        print("Start onekHzreversalHeardCount1()")
+        await onekHzreversalAction()
+    }
+    
     func onekHzcheck2PositiveSeriesReversals() async {
-//        print("Start onekHzcheck2PositiveSeriesReversals()")
+        //        print("Start onekHzcheck2PositiveSeriesReversals()")
         if onekHz_reversalHeard[onekHzidxHA-2] == 1 && onekHz_reversalHeard[onekHzidxHA-1] == 1 {
             print("reversal - check2PositiveSeriesReversals")
             print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
         }
     }
-
+    
     func onekHzcheckTwoNegativeSeriesReversals() async {
-//        print("start onekHzcheckTwoNegativeSeriesReversals()")
+        //        print("start onekHzcheckTwoNegativeSeriesReversals()")
         if onekHz_reversalHeard.count >= 3 && onekHz_reversalHeard[onekHzidxHA-2] == 0 && onekHz_reversalHeard[onekHzidxHA-1] == 0 {
             await onekHzreversalOfFour()
         } else {
@@ -966,7 +965,7 @@ extension Bilateral1kHzTestContent {
     }
     
     func onekHzstartTooHighCheck() async {
-//        print(" Start onekHzstartTooHighCheck()")
+        //        print(" Start onekHzstartTooHighCheck()")
         if onekHzstartTooHigh == 0 && onekHzfirstHeardIsTrue == true && onekHzsecondHeardIsTrue == true {
             onekHzstartTooHigh = 1
             await onekHzreversalOfTen()
@@ -978,16 +977,16 @@ extension Bilateral1kHzTestContent {
     }
     
     func onekHzresetAfterTooHigh() async {
-
+        
         onekHzfirstHeardResponseIndex = Int()
         onekHzfirstHeardIsTrue = false
         onekHzsecondHeardResponseIndex = Int()
         onekHzsecondHeardIsTrue = false
         needToRepeatTesting = true
     }
-   
+    
     func onekHzreversalsCompleteLogging() async {
-//        print("loggingRight1 start")
+        //        print("loggingRight1 start")
         if onekHzsecondHeardIsTrue == true && onekHz_pan == 1.0 {
             print("in logging right 1 if")
             onekHzlocalReversalEnd = 1
@@ -995,10 +994,10 @@ extension Bilateral1kHzTestContent {
             onekHzfirstGain = onekHz_reversalGain[onekHzfirstHeardResponseIndex-1]
             onekHzsecondGain = onekHz_reversalGain[onekHzsecondHeardResponseIndex-1]
             print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
-
+            
             let onekHzdeltaRight = onekHzfirstGain - onekHzsecondGain
             let onekHzavgRight = (onekHzfirstGain + onekHzsecondGain)/2
-  
+            
             if onekHzdeltaRight == 0 {
                 onekHz_averageGain = onekHzsecondGain
                 onekHz_averageGainRightArray.append(onekHzsecondGain)
@@ -1022,10 +1021,10 @@ extension Bilateral1kHzTestContent {
             onekHzfirstGain = onekHz_reversalGain[onekHzfirstHeardResponseIndex-1]
             onekHzsecondGain = onekHz_reversalGain[onekHzsecondHeardResponseIndex-1]
             print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
-
+            
             let onekHzdeltaLeft = onekHzfirstGain - onekHzsecondGain
             let onekHzavgLeft = (onekHzfirstGain + onekHzsecondGain)/2
-  
+            
             if onekHzdeltaLeft == 0 {
                 onekHz_averageGain = onekHzsecondGain
                 onekHz_averageGainLeftArray.append(onekHzsecondGain)
@@ -1043,11 +1042,9 @@ extension Bilateral1kHzTestContent {
                 onekHz_averageGainLeftArray.append(onekHzavgLeft)
             }
         } else {
-                print("onekHzreversalsCompleteLoggingRight1() if not met")
+            print("onekHzreversalsCompleteLoggingRight1() if not met")
         }
     }
-    
-
     
     func lowestAverageGainLogging() async {
         print("====LowestAverageRightGain Start======")
@@ -1081,7 +1078,7 @@ extension Bilateral1kHzTestContent {
         print("onekHz_HoldingLowestLeftGainArray: \(onekHz_HoldingLowestLeftGainArray)")
     }
     
-        
+    
     func onekHzrestartPresentation() async {
         if onekHzendTestSeries == false {
             onekHzlocalPlaying = 1
@@ -1118,7 +1115,7 @@ extension Bilateral1kHzTestContent {
             print("onekHz_reversalGain: \(onekHz_reversalGain)")
         })
     }
-                    
+    
     
     func onekHznewTestCycle() async {
         if onekHzlocalMarkNewTestCycle == 1 && onekHzlocalReversalEnd == 1 && onekHz_index < onekHz_eptaSamplesCount && onekHzendTestSeries == false {
@@ -1129,16 +1126,16 @@ extension Bilateral1kHzTestContent {
             onekHz_index = onekHz_index + 1
             onekHz_testGain = 0.025
             onekHzendTestSeries = false
-         
+            
         } else if onekHzlocalMarkNewTestCycle == 1 && onekHzlocalReversalEnd == 1 && onekHz_index == onekHz_eptaSamplesCount && onekHzendTestSeries == false {
             onekHzendTestSeries = true
             onekHzlocalPlaying = -1
             bilateral1kHzTestCompleted = true
-                print("=============================")
-                print("!!!!! End of Test Series!!!!!!")
-                print("=============================")
+            print("=============================")
+            print("!!!!! End of Test Series!!!!!!")
+            print("=============================")
         } else {
-//                print("Reversal Limit Not Hit")
+            //                print("Reversal Limit Not Hit")
         }
     }
     
@@ -1158,12 +1155,12 @@ extension Bilateral1kHzTestContent {
         onekHzstop()
         onekHzuserPausedTest = true
         onekHzplayingStringColorIndex = 2
-//        onekHzaudioThread.async {
-//            onekHzlocalPlaying = 0
-//            onekHzstop()
-//            onekHzuserPausedTest = true
-//            onekHzplayingStringColorIndex = 2
-//        }
+        //        onekHzaudioThread.async {
+        //            onekHzlocalPlaying = 0
+        //            onekHzstop()
+        //            onekHzuserPausedTest = true
+        //            onekHzplayingStringColorIndex = 2
+        //        }
         DispatchQueue.main.async {
             onekHzlocalPlaying = 0
             onekHzstop()
@@ -1205,22 +1202,22 @@ extension Bilateral1kHzTestContent {
         }
     }
     
-//    func onekHzprintConcatenatedArrays() async {
-//        print("finalStoredIndex: \(onekHz_finalStoredIndex)")
-//        print("finalStoredTestPan: \(onekHz_finalStoredTestPan)")
-//        print("finalStoredTestTestGain: \(onekHz_finalStoredTestTestGain)")
-//        print("finalStoredFrequency: \(onekHz_finalStoredFrequency)")
-//        print("finalStoredTestCount: \(onekHz_finalStoredTestCount)")
-//        print("finalStoredHeardArray: \(onekHz_finalStoredHeardArray)")
-//        print("finalStoredReversalHeard: \(onekHz_finalStoredReversalHeard)")
-//        print("finalStoredFirstGain: \(onekHz_finalStoredFirstGain)")
-//        print("finalStoredSecondGain: \(onekHz_finalStoredSecondGain)")
-//        print("finalStoredAverageGain: \(onekHz_finalStoredAverageGain)")
-//    }
-        
+    //    func onekHzprintConcatenatedArrays() async {
+    //        print("finalStoredIndex: \(onekHz_finalStoredIndex)")
+    //        print("finalStoredTestPan: \(onekHz_finalStoredTestPan)")
+    //        print("finalStoredTestTestGain: \(onekHz_finalStoredTestTestGain)")
+    //        print("finalStoredFrequency: \(onekHz_finalStoredFrequency)")
+    //        print("finalStoredTestCount: \(onekHz_finalStoredTestCount)")
+    //        print("finalStoredHeardArray: \(onekHz_finalStoredHeardArray)")
+    //        print("finalStoredReversalHeard: \(onekHz_finalStoredReversalHeard)")
+    //        print("finalStoredFirstGain: \(onekHz_finalStoredFirstGain)")
+    //        print("finalStoredSecondGain: \(onekHz_finalStoredSecondGain)")
+    //        print("finalStoredAverageGain: \(onekHz_finalStoredAverageGain)")
+    //    }
+    
     func onekHzsaveFinalStoredArrays() async {
         if onekHzlocalMarkNewTestCycle == 1 && onekHzlocalReversalEnd == 1 {
-//        if onekHzFinalComboLRGains.count >= 2 {
+            //        if onekHzFinalComboLRGains.count >= 2 {
             DispatchQueue.global(qos: .userInitiated).async {
                 Task(priority: .userInitiated) {
                     await onekHzWriteDetailedResultsToCSV()
@@ -1229,17 +1226,20 @@ extension Bilateral1kHzTestContent {
                     await onekHzwriteInputSummarydResultsToCSV()
                     await onekHzGetData()
                     await onekHzSaveToJSON()
-        //                await onekHz_uploadSummaryResultsTest()
+                    //                await onekHz_uploadSummaryResultsTest()
+                    DispatchQueue.main.async(group: .none, qos: .userInteractive) {
+                        isOkayToUpload = true
+                    }
                 }
             }
         }
     }
     
-//    let fileOnekHzName = "SummaryOnekHzResults.json"
-//    let summaryOnekHzCSVName = "SummaryOnekHzResultsCSV.csv"
-//    let detailedOnekHzCSVName = "DetailedOnekHzResultsCSV.csv"
-//    let inputOnekHzSummaryCSVName = "InputSummaryOnekHzResultsCSV.csv"
-//    let inputOnekHzDetailedCSVName = "InputDetailedOnekHzResultsCSV.csv"
+    //    let fileOnekHzName = "SummaryOnekHzResults.json"
+    //    let summaryOnekHzCSVName = "SummaryOnekHzResultsCSV.csv"
+    //    let detailedOnekHzCSVName = "DetailedOnekHzResultsCSV.csv"
+    //    let inputOnekHzSummaryCSVName = "InputSummaryOnekHzResultsCSV.csv"
+    //    let inputOnekHzDetailedCSVName = "InputDetailedOnekHzResultsCSV.csv"
     
     func uploadUserDataEntry() {
         DispatchQueue.main.async(group: .none, qos: .background) {
@@ -1250,55 +1250,22 @@ extension Bilateral1kHzTestContent {
             uploadFile(fileName: inputOnekHzDetailedCSVName)
         }
     }
-    
-
-//MARK: -FireBase Storage Upload
-
-//    func getDirectoryPath() -> String {
-//        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-//        let documentsDirectory = paths[0]
-//        return documentsDirectory
-//    }
-//
-//    func uploadCSV() async {
-//        DispatchQueue.global(qos: .background).async {
-//            let storageRef = Storage.storage().reference()
-//            let setupCSVName = ["SetupResultsCSV.csv"]
-//            let fileManager = FileManager.default
-//            let csvPath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: setupCSVName)
-//            if fileManager.fileExists(atPath: csvPath[0]) {
-//                let filePath = URL(fileURLWithPath: csvPath[0])
-//                let localFile = filePath
-//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
-//                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
-//                    if error == nil && metadata == nil {
-//                        //TSave a reference to firestore database
-//                    }
-//                    return
-//                }
-//                print(uploadTask)
-//            } else {
-//                print("No File")
-//            }
-//        }
-//    }
-//}
-//
-//
-//extension EHATTSTestPart1View {
-//MARK: -JSON and CSV Writing
+}
+ 
+extension Bilateral1kHzTestContent {
+//MARK: -CSV/JSON Extension
     
     func onekHzGetData() async {
         guard let onekHzdata = await onekHzGetJSONData() else { return }
-//        print("onekHz Json Data:")
-//        print(onekHzdata)
+        //        print("onekHz Json Data:")
+        //        print(onekHzdata)
         let onekHzjsonString = String(data: onekHzdata, encoding: .utf8)
         onekHzjsonHoldingString = [onekHzjsonString!]
-//        print(onekHzjsonString!)
+        //        print(onekHzjsonString!)
         do {
-        self.onekHzsaveFinalResults = try JSONDecoder().decode(onekHzSaveFinalResults.self, from: onekHzdata)
-//            print("JSON GetData Run")
-//            print("data: \(onekHzdata)")
+            self.onekHzsaveFinalResults = try JSONDecoder().decode(onekHzSaveFinalResults.self, from: onekHzdata)
+            //            print("JSON GetData Run")
+            //            print("data: \(onekHzdata)")
         } catch let error {
             print("error decoding \(error)")
         }
@@ -1306,7 +1273,6 @@ extension Bilateral1kHzTestContent {
     
     func onekHzGetJSONData() async -> Data? {
         let onekHzsaveFinalResults = onekHzSaveFinalResults(
-
             json_onekHz_onekHzactiveFrequency: onekHzactiveFrequency,
             json_onekHz_onekHzfirstGain: onekHzfirstGain,
             json_onekHz_onekHzsecondGain: onekHzsecondGain,
@@ -1321,27 +1287,25 @@ extension Bilateral1kHzTestContent {
             json_onekHz_HoldingLowestRightGainArray: onekHz_HoldingLowestRightGainArray,
             json_onekHz_averageLowestGainLeftArray: onekHz_averageLowestGainLeftArray,
             json_onekHz_HoldingLowestLeftGainArray: onekHz_HoldingLowestLeftGainArray)
-
-
         let onekHzjsonData = try? JSONEncoder().encode(onekHzsaveFinalResults)
-//        print("saveFinalResults: \(onekHzsaveFinalResults)")
-//        print("Json Encoded \(onekHzjsonData!)")
+        //        print("saveFinalResults: \(onekHzsaveFinalResults)")
+        //        print("Json Encoded \(onekHzjsonData!)")
         return onekHzjsonData
     }
-
+    
     func onekHzSaveToJSON() async {
         // !!!This saves to device directory, whish is likely what is desired
         let onekHzpaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let onekHzDocumentsDirectory = onekHzpaths[0]
-//        print("onekHzDocumentsDirectory: \(onekHzDocumentsDirectory)")
+        //        print("onekHzDocumentsDirectory: \(onekHzDocumentsDirectory)")
         let onekHzFilePaths = onekHzDocumentsDirectory.appendingPathComponent(fileOnekHzName)
-//        print(onekHzFilePaths)
+        //        print(onekHzFilePaths)
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         do {
             let onekHzjsonData = try encoder.encode(onekHzsaveFinalResults)
             print(onekHzjsonData)
-          
+            
             try onekHzjsonData.write(to: onekHzFilePaths)
         } catch {
             print("Error writing 1kHZ to JSON file: \(error)")
@@ -1363,14 +1327,12 @@ extension Bilateral1kHzTestContent {
         let onekHzstringFinalHoldingLowestRightGainArray = "HoldingLowestRightGainArray," + onekHz_HoldingLowestRightGainArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalAverageLowestGainLeftArray = "averageLowestGainLeftArray," + onekHz_averageLowestGainLeftArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalHoldingLowestLeftGainArray = "HoldingLowestLeftGainArray," + onekHz_HoldingLowestLeftGainArray.map { String($0) }.joined(separator: ",")
-
         do {
             let csvonekHzDetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvonekHzDetailDocumentsDirectory = csvonekHzDetailPath
-//            print("CSV DocumentsDirectory: \(csvonekHzDetailDocumentsDirectory)")
+            //            print("CSV DocumentsDirectory: \(csvonekHzDetailDocumentsDirectory)")
             let csvonekHzDetailFilePath = csvonekHzDetailDocumentsDirectory.appendingPathComponent(detailedOnekHzCSVName)
-//            print(csvonekHzDetailFilePath)
-            
+            //            print(csvonekHzDetailFilePath)
             let writer = try CSVWriter(fileURL: csvonekHzDetailFilePath, append: false)
             try writer.write(row: [onekHzstringFinalOnekHzactiveFrequency])
             try writer.write(row: [onekHzstringFinalOnekHzfirstGain])
@@ -1386,13 +1348,12 @@ extension Bilateral1kHzTestContent {
             try writer.write(row: [onekHzstringFinalHoldingLowestRightGainArray])
             try writer.write(row: [onekHzstringFinalAverageLowestGainLeftArray])
             try writer.write(row: [onekHzstringFinalHoldingLowestLeftGainArray])
-
-//            print("CVS EHAP1 Detailed Writer Success")
+            //            print("CVS EHAP1 Detailed Writer Success")
         } catch {
             print("CVSWriter 1kHZ Detailed Error or Error Finding File for Detailed CSV \(error)")
         }
     }
-
+    
     func onekHzwriteSummarydResultsToCSV() async {
         let onekHzstringFinalOnekHzactiveFrequency = "finalStoredFrequency," + [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
         let onekHzstringFinalReversalGain = "reversalGain," + onekHz_reversalGain.map { String($0) }.joined(separator: ",")
@@ -1403,33 +1364,30 @@ extension Bilateral1kHzTestContent {
         let onekHzstringFinalHoldingLowestRightGainArray = "HoldingLowestRightGainArray," + onekHz_HoldingLowestRightGainArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalAverageLowestGainLeftArray = "averageLowestGainLeftArray," + onekHz_averageLowestGainLeftArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalHoldingLowestLeftGainArray = "HoldingLowestLeftGainArray," + onekHz_HoldingLowestLeftGainArray.map { String($0) }.joined(separator: ",")
-        
-         do {
-             let csvonekHzSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
-             let csvonekHzSummaryDocumentsDirectory = csvonekHzSummaryPath
-//             print("CSV Summary EHA Part 1 DocumentsDirectory: \(csvonekHzSummaryDocumentsDirectory)")
-             let csvonekHzSummaryFilePath = csvonekHzSummaryDocumentsDirectory.appendingPathComponent(summaryOnekHzCSVName)
-//             print(csvonekHzSummaryFilePath)
-             let writer = try CSVWriter(fileURL: csvonekHzSummaryFilePath, append: false)
-             try writer.write(row: [onekHzstringFinalOnekHzactiveFrequency])
-             try writer.write(row: [onekHzstringFinalReversalGain])
-             try writer.write(row: [onekHzstringFinalTestTestGain])
-             try writer.write(row: [onekHzstringFinalAverageGainRightArray])
-             try writer.write(row: [onekHzstringFinalAverageGainLeftArray])
-             try writer.write(row: [onekHzstringFinalAverageLowestGainRightArray])
-             try writer.write(row: [onekHzstringFinalHoldingLowestRightGainArray])
-             try writer.write(row: [onekHzstringFinalAverageLowestGainLeftArray])
-             try writer.write(row: [onekHzstringFinalHoldingLowestLeftGainArray])
-            
-//             print("CVS Summary EHA Part 1 Data Writer Success")
-         } catch {
-             print("CVSWriter Summary 1kHz Data Error or Error Finding File for Detailed CSV \(error)")
-         }
+        do {
+            let csvonekHzSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvonekHzSummaryDocumentsDirectory = csvonekHzSummaryPath
+            //             print("CSV Summary EHA Part 1 DocumentsDirectory: \(csvonekHzSummaryDocumentsDirectory)")
+            let csvonekHzSummaryFilePath = csvonekHzSummaryDocumentsDirectory.appendingPathComponent(summaryOnekHzCSVName)
+            //             print(csvonekHzSummaryFilePath)
+            let writer = try CSVWriter(fileURL: csvonekHzSummaryFilePath, append: false)
+            try writer.write(row: [onekHzstringFinalOnekHzactiveFrequency])
+            try writer.write(row: [onekHzstringFinalReversalGain])
+            try writer.write(row: [onekHzstringFinalTestTestGain])
+            try writer.write(row: [onekHzstringFinalAverageGainRightArray])
+            try writer.write(row: [onekHzstringFinalAverageGainLeftArray])
+            try writer.write(row: [onekHzstringFinalAverageLowestGainRightArray])
+            try writer.write(row: [onekHzstringFinalHoldingLowestRightGainArray])
+            try writer.write(row: [onekHzstringFinalAverageLowestGainLeftArray])
+            try writer.write(row: [onekHzstringFinalHoldingLowestLeftGainArray])
+            //             print("CVS Summary EHA Part 1 Data Writer Success")
+        } catch {
+            print("CVSWriter Summary 1kHz Data Error or Error Finding File for Detailed CSV \(error)")
+        }
     }
-
-
+    
+    
     func onekHzWriteInputDetailedResultsToCSV() async {
- 
         let onekHzstringFinalOnekHzactiveFrequency = [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
         let onekHzstringFinalOnekHzfirstGain = [onekHzfirstGain].map { String($0) }.joined(separator: ",")
         let onekHzstringFinalOnekHzsecondGain = [onekHzsecondGain].map { String($0) }.joined(separator: ",")
@@ -1444,13 +1402,12 @@ extension Bilateral1kHzTestContent {
         let onekHzstringFinalHoldingLowestRightGainArray = onekHz_HoldingLowestRightGainArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalAverageLowestGainLeftArray = onekHz_averageLowestGainLeftArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalHoldingLowestLeftGainArray = onekHz_HoldingLowestLeftGainArray.map { String($0) }.joined(separator: ",")
-
         do {
             let csvInputonekHzDetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvInputonekHzDetailDocumentsDirectory = csvInputonekHzDetailPath
-//            print("CSV Input EHAP1 Detail DocumentsDirectory: \(csvInputonekHzDetailDocumentsDirectory)")
+            //            print("CSV Input EHAP1 Detail DocumentsDirectory: \(csvInputonekHzDetailDocumentsDirectory)")
             let csvInputonekHzDetailFilePath = csvInputonekHzDetailDocumentsDirectory.appendingPathComponent(inputOnekHzDetailedCSVName)
-//            print(csvInputonekHzDetailFilePath)
+            //            print(csvInputonekHzDetailFilePath)
             let writer = try CSVWriter(fileURL: csvInputonekHzDetailFilePath, append: false)
             try writer.write(row: [onekHzstringFinalOnekHzactiveFrequency])
             try writer.write(row: [onekHzstringFinalOnekHzfirstGain])
@@ -1466,43 +1423,39 @@ extension Bilateral1kHzTestContent {
             try writer.write(row: [onekHzstringFinalHoldingLowestRightGainArray])
             try writer.write(row: [onekHzstringFinalAverageLowestGainLeftArray])
             try writer.write(row: [onekHzstringFinalHoldingLowestLeftGainArray])
-
-//            print("CVS Input EHA Part 1Detailed Writer Success")
+            //            print("CVS Input EHA Part 1Detailed Writer Success")
         } catch {
             print("CVSWriter Input 1kHZ Detailed Error or Error Finding File for Input Detailed CSV \(error)")
         }
     }
-
+    
     func onekHzwriteInputSummarydResultsToCSV() async {
-//        let onekHzstringFinalOnekHzactiveFrequency = [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
+        //        let onekHzstringFinalOnekHzactiveFrequency = [onekHzactiveFrequency].map { String($0) }.joined(separator: ",")
         let onekHzstringFinalAverageGainRightArray = onekHz_averageGainRightArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalAverageGainLeftArray = onekHz_averageGainLeftArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalAverageLowestGainRightArray = onekHz_averageLowestGainRightArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalHoldingLowestRightGainArray = onekHz_HoldingLowestRightGainArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalAverageLowestGainLeftArray = onekHz_averageLowestGainLeftArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalHoldingLowestLeftGainArray = onekHz_HoldingLowestLeftGainArray.map { String($0) }.joined(separator: ",")
-        
-         do {
-             let csvonekHzInputSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
-             let csvonekHzInputSummaryDocumentsDirectory = csvonekHzInputSummaryPath
-//             print("CSV Input onekHz Summary DocumentsDirectory: \(csvonekHzInputSummaryDocumentsDirectory)")
-             let csvonekHzInputSummaryFilePath = csvonekHzInputSummaryDocumentsDirectory.appendingPathComponent(inputOnekHzSummaryCSVName)
-             print(csvonekHzInputSummaryFilePath)
-             let writer = try CSVWriter(fileURL: csvonekHzInputSummaryFilePath, append: false)
-//             try writer.write(row: [onekHzstringFinalOnekHzactiveFrequency])
-             try writer.write(row: [onekHzstringFinalAverageGainRightArray])
-             try writer.write(row: [onekHzstringFinalAverageGainLeftArray])
-             try writer.write(row: [onekHzstringFinalAverageLowestGainRightArray])
-             try writer.write(row: [onekHzstringFinalHoldingLowestRightGainArray])
-             try writer.write(row: [onekHzstringFinalAverageLowestGainLeftArray])
-             try writer.write(row: [onekHzstringFinalHoldingLowestLeftGainArray])
-
-//             print("CVS Input EHA Part 1 Summary Data Writer Success")
-         } catch {
-             print("CVSWriter Input 1kHZ Summary Data Error or Error Finding File for Input Summary CSV \(error)")
-         }
+        do {
+            let csvonekHzInputSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let csvonekHzInputSummaryDocumentsDirectory = csvonekHzInputSummaryPath
+            //             print("CSV Input onekHz Summary DocumentsDirectory: \(csvonekHzInputSummaryDocumentsDirectory)")
+            let csvonekHzInputSummaryFilePath = csvonekHzInputSummaryDocumentsDirectory.appendingPathComponent(inputOnekHzSummaryCSVName)
+            print(csvonekHzInputSummaryFilePath)
+            let writer = try CSVWriter(fileURL: csvonekHzInputSummaryFilePath, append: false)
+            //             try writer.write(row: [onekHzstringFinalOnekHzactiveFrequency])
+            try writer.write(row: [onekHzstringFinalAverageGainRightArray])
+            try writer.write(row: [onekHzstringFinalAverageGainLeftArray])
+            try writer.write(row: [onekHzstringFinalAverageLowestGainRightArray])
+            try writer.write(row: [onekHzstringFinalHoldingLowestRightGainArray])
+            try writer.write(row: [onekHzstringFinalAverageLowestGainLeftArray])
+            try writer.write(row: [onekHzstringFinalHoldingLowestLeftGainArray])
+            //             print("CVS Input EHA Part 1 Summary Data Writer Success")
+        } catch {
+            print("CVSWriter Input 1kHZ Summary Data Error or Error Finding File for Input Summary CSV \(error)")
+        }
     }
-    
     
     private func getDirectoryPath() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
@@ -1515,7 +1468,7 @@ extension Bilateral1kHzTestContent {
         let documentsDirectory = dataLinkPaths[0]
         return documentsDirectory
     }
-        
+    
     func comparedLastNameCSVReader() async {
         let dataSetupName = inputFinalComparedLastNameCSV
         let fileSetupManager = FileManager.default
@@ -1571,19 +1524,21 @@ extension Bilateral1kHzTestContent {
             }
         }
     }
-    
-    
+}
+ 
+extension Bilateral1kHzTestContent {
+//MARK: -NavigationLink Extension
     private func linkTesting(testing: Testing) -> some View {
         EmptyView()
     }
 }
 
-struct Bilateral1kHzTestView_Previews: PreviewProvider {
-    static var previews: some View {
-        Bilateral1kHzTestView(testing: nil, relatedLinkTesting: linkTesting)
-    }
-
-    static func linkTesting(testing: Testing) -> some View {
-        EmptyView()
-    }
-}
+//struct Bilateral1kHzTestView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        Bilateral1kHzTestView(testing: nil, relatedLinkTesting: linkTesting)
+//    }
+//
+//    static func linkTesting(testing: Testing) -> some View {
+//        EmptyView()
+//    }
+//}

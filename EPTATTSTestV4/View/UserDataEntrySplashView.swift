@@ -12,7 +12,6 @@ struct UserDataEntrySplashView<Link: View>: View {
     var relatedLink: (Setup) -> Link
     
     var body: some View {
-        
         ZStack{
             if let setup = setup {
                 UserDataEntrySplashContent(setup: setup, relatedLink: relatedLink)
@@ -26,7 +25,6 @@ struct UserDataEntrySplashView<Link: View>: View {
 }
 
 struct UserDataEntrySplashContent<Link: View>: View {
-    
     var setup: Setup
     var dataModel = DataModel.shared
     var relatedLink: (Setup) -> Link
@@ -40,7 +38,6 @@ struct UserDataEntrySplashContent<Link: View>: View {
             VStack{
                 Spacer()
                 Spacer()
-            
                 Text("There Was An Issue Processing Your Entries. Please Return and Try Again. Ensure All Fields Are Completed Before Submitting Your Data")
                     .foregroundColor(.white)
                     .font(.title)
@@ -50,12 +47,10 @@ struct UserDataEntrySplashContent<Link: View>: View {
                     .padding(.leading)
                     .padding(.trailing)
                     .padding(.top, 20)
-            
                 Spacer()
                 NavigationLink {
                     UserDataEntryView(setup: setup, relatedLink: link)
                 } label: {
-                    
                     HStack {
                         Spacer()
                         Text("Return to User Sign-up or Login")
@@ -67,7 +62,6 @@ struct UserDataEntrySplashContent<Link: View>: View {
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(24)
-
                 }
                 .frame(width: 300, height: 50, alignment: .center)
                 .background(Color.blue)
@@ -77,18 +71,21 @@ struct UserDataEntrySplashContent<Link: View>: View {
             }
         }
     }
-    
+}
+
+extension UserDataEntrySplashContent{
+//MARK: -NavigationLink Method
     private func link(setup: Setup) -> some View {
         EmptyView()
     }
 }
 
-struct UserDataEntrySplashView_Previews: PreviewProvider {
-    static var previews: some View {
-        UserDataEntrySplashView(setup: nil, relatedLink: link)
-    }
-    
-    static func link(setup: Setup) -> some View {
-        EmptyView()
-    }
-}
+//struct UserDataEntrySplashView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        UserDataEntrySplashView(setup: nil, relatedLink: link)
+//    }
+//
+//    static func link(setup: Setup) -> some View {
+//        EmptyView()
+//    }
+//}

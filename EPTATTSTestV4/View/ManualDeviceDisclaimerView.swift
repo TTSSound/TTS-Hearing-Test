@@ -26,15 +26,14 @@ struct SaveFinalManualDisclaimerAgreement: Codable {  // This is a model
 
 
 struct ManualDeviceDisclaimerView: View {
-    
     var colorModel: ColorModel = ColorModel()
-    @State var uncalibratedAgreementModel: UncalibratedAgreementModel = UncalibratedAgreementModel()
+    @ObservedObject var uncalibratedAgreementModel: UncalibratedAgreementModel = UncalibratedAgreementModel()
     
     let setupCSVName = "SetupResultsCSV.csv"
     @State private var inputLastName = String()
     @State private var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
     @State private var isOkayToUpload = false
-
+    
     @State var uncalDisclaimerSetting = Bool()
     @State var uncalDisclaimerAgreement = Int()
     @State var unLinkColors: [Color] = [Color.clear, Color.green]
@@ -64,38 +63,38 @@ struct ManualDeviceDisclaimerView: View {
                 Spacer()
                 GroupBox(label:
                             Label("Uncalibrated Device Agreement", systemImage: "building.columns").foregroundColor(.black)
-                    ) {
-                        ScrollView(.vertical, showsIndicators: true) {
-                            Text(uncalibratedAgreementModel.uncalibratedAgreementText)
-                                .foregroundColor(.black)
-                                .font(.footnote)
-                        }
-                        .frame(height: 375)
-                        Toggle(isOn: $uncalUserAgreed) {
-                            Text("I agree to the above terms")
-                                .foregroundColor(.blue)
-                        }
-                        .padding(.trailing)
-                        .padding(.leading)
+                ) {
+                    ScrollView(.vertical, showsIndicators: true) {
+                        Text(uncalibratedAgreementModel.uncalibratedAgreementText)
+                            .foregroundColor(.black)
+                            .font(.footnote)
                     }
-                    .padding()
-                    .onAppear(perform: {
-                        loadUncalibratedAgreement()
-                    })
-                    .onChange(of: uncalUserAgreed) { _ in
-                        Task {
-                            unLinkColorIndex = 1
-                            uncalDisclaimerSetting = uncalUserAgreed
-                            uncalUserAgreedDate = Date.now
-                            await uncalCompareDisclaimerAgreement()
-                            await uncalDisclaimerResponse()
-                            await concentenateFinalUncalDisclaimerArrays()
-                            await saveManualDeviceDisclaimer()
-                            print("uncalDisclaimerSetting: \(uncalDisclaimerSetting)")
-                            print("uncalDisclaimerAgreement: \(uncalDisclaimerAgreement)")
-                            isOkayToUpload = true
-                        }
+                    .frame(height: 375)
+                    Toggle(isOn: $uncalUserAgreed) {
+                        Text("I agree to the above terms")
+                            .foregroundColor(.blue)
                     }
+                    .padding(.trailing)
+                    .padding(.leading)
+                }
+                .padding()
+                .onAppear(perform: {
+                    loadUncalibratedAgreement()
+                })
+                .onChange(of: uncalUserAgreed) { _ in
+                    Task {
+                        unLinkColorIndex = 1
+                        uncalDisclaimerSetting = uncalUserAgreed
+                        uncalUserAgreedDate = Date.now
+                        await uncalCompareDisclaimerAgreement()
+                        await uncalDisclaimerResponse()
+                        await concentenateFinalUncalDisclaimerArrays()
+                        await saveManualDeviceDisclaimer()
+                        print("uncalDisclaimerSetting: \(uncalDisclaimerSetting)")
+                        print("uncalDisclaimerAgreement: \(uncalDisclaimerAgreement)")
+                        isOkayToUpload = true
+                    }
+                }
                 Spacer()
                 if uncalUserAgreed == true {
                     NavigationLink(destination:
@@ -131,25 +130,28 @@ struct ManualDeviceDisclaimerView: View {
             Spacer()
         }
     }
+}
 
+extension ManualDeviceDisclaimerView {
+    //MARK: -Extension Methods
     func loadUncalibratedAgreement() {
         uncalibratedAgreementModel.load(file: uncalibratedAgreementModel.uncalibratedAgreementText)
     }
-
+    
     func uncalCompareDisclaimerAgreement() async {
         if uncalDisclaimerSetting == true {
-        uncalDisclaimerAgreement = 1
-        print("Disclaimer Response: \(uncalDisclaimerAgreement) & \(uncalDisclaimerSetting)")
-
+            uncalDisclaimerAgreement = 1
+            print("Disclaimer Response: \(uncalDisclaimerAgreement) & \(uncalDisclaimerSetting)")
+            
         } else if uncalDisclaimerSetting == false {
             uncalDisclaimerAgreement = 0
-        print("Disclaimer Response: \(uncalDisclaimerAgreement) & \(uncalDisclaimerSetting)")
+            print("Disclaimer Response: \(uncalDisclaimerAgreement) & \(uncalDisclaimerSetting)")
         } else {
             uncalDisclaimerAgreement = 2
-        print("Disclaimer Response: \(uncalDisclaimerAgreement) & \(uncalDisclaimerSetting)")
+            print("Disclaimer Response: \(uncalDisclaimerAgreement) & \(uncalDisclaimerSetting)")
         }
     }
-
+    
     func uncalDisclaimerResponse() async {
         uncalDisclaimerSetting = true
         if uncalibratedUserAgreement.count < 1 || uncalibratedUserAgreement.count > 1{
@@ -177,7 +179,7 @@ struct ManualDeviceDisclaimerView: View {
         await writeManualDisclaimerToCSV()
         await writeInputManualDisclaimerToCSV()
     }
-
+    
     func uploadManualDeviceDisclaimer() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, qos: .background) {
             uploadFile(fileName: manuaDisclaimerCSVName)
@@ -185,7 +187,10 @@ struct ManualDeviceDisclaimerView: View {
             uploadFile(fileName: "ManualDisclaimerAgreement.json")
         }
     }
-    
+}
+ 
+extension ManualDeviceDisclaimerView {
+//MARK: -Extenstion CSV/JSON Methods
     func getManualDisclaimerData() async {
         guard let manualDisclaimerAgreementData = await getManualDisclaimerJSONData() else { return }
         print("Json Manual Device Selection Data:")
@@ -251,19 +256,16 @@ struct ManualDeviceDisclaimerView: View {
         let stringFinalUncalibratedUserAgreementAgreed = "finalUncalibratedUserAgreementAgreed," + finalUncalibratedUserAgreementAgreed.map { String($0) }.joined(separator: ",")
         let stringFinalUncalibratedUserAgreementAgreedDate = "stringFinalUncalibratedUserAgreementAgreedDate," + stringFUUAADate
         let stringMapFinalUncalibratedUserAgreementAgreedDate = "finalUncalibratedUserAgreementAgreedDate," + stringFUUAADate.map { String($0) }.joined(separator: ",")
-    
         do {
             let csvManualDisclaimerPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvManualDisclaimerDocumentsDirectory = csvManualDisclaimerPath
             print("CSV Device Selection DocumentsDirectory: \(csvManualDisclaimerDocumentsDirectory)")
             let csvManualDisclaimerFilePath = csvManualDisclaimerDocumentsDirectory.appendingPathComponent(manuaDisclaimerCSVName)
             print(csvManualDisclaimerFilePath)
-            
             let writerSetup = try CSVWriter(fileURL: csvManualDisclaimerFilePath, append: false)
             try writerSetup.write(row: [stringFinalUncalibratedUserAgreementAgreed])
             try writerSetup.write(row: [stringFinalUncalibratedUserAgreementAgreedDate])
             try writerSetup.write(row: [stringMapFinalUncalibratedUserAgreementAgreedDate])
-
             print("CVS Manual Disclaimer Writer Success")
         } catch {
             print("CVSWriter Manual Disclaimer Error or Error Finding File for Manual Disclaimer CSV \(error.localizedDescription)")
@@ -292,7 +294,6 @@ struct ManualDeviceDisclaimerView: View {
             try writerSetup.write(row: [stringFinalUncalibratedUserAgreementAgreed])
             try writerSetup.write(row: [stringFinalUncalibratedUserAgreementAgreedDate])
             try writerSetup.write(row: [stringMapFinalUncalibratedUserAgreementAgreedDate])
-
             print("CVS Input Manual Disclaimer Writer Success")
         } catch {
             print("CVSWriter Input Manual Disclaimer Error or Error Finding File for Input Manual Disclaimer CSV \(error.localizedDescription)")
@@ -305,7 +306,7 @@ struct ManualDeviceDisclaimerView: View {
         return documentsDirectory
     }
 
-    // Only Use Files that have a pure string name assigned, not a name of ["String"]
+// Only Use Files that have a pure string name assigned, not a name of ["String"]
     private func uploadFile(fileName: String) {
         DispatchQueue.global(qos: .userInteractive).async {
             let storageRef = Storage.storage().reference()

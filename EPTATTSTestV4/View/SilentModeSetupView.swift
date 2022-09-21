@@ -8,11 +8,10 @@
 import SwiftUI
 
 struct SilentModeSetupView: View {
-    
-    @State var silentSetting = false
     var colorModel: ColorModel = ColorModel()
+    @State var silentSetting = false
+    
     var body: some View {
-
         ZStack{
             colorModel.colorBackgroundTopTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack(spacing: 5) {

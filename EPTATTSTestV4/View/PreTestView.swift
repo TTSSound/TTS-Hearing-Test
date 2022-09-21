@@ -28,17 +28,17 @@ struct PreTestContent<Link: View>: View {
     var dataModel = DataModel.shared
     var relatedLinkTesting: (Testing) -> Link
     @EnvironmentObject private var naviationModel: NavigationModel
-
-    @StateObject var colorModel: ColorModel = ColorModel()
-
+    
+    var colorModel: ColorModel = ColorModel()
+    
     @State var ehaLinkExists = Bool()
     @State var eptaLinkExists = Bool()
     @State var simpleLinkExists = Bool()
     @State var returnedTestSelected = 0
     @State var returnedTestSelectedArray = ["", "EHA Test", "EPTA Test", "Simple Test", "Error"]
- 
-
-
+    
+    
+    
     var body: some View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
@@ -47,10 +47,9 @@ struct PreTestContent<Link: View>: View {
                 Text(" Pre Test View for a break and to get user's phon and reference curve data/funtions. Then Start Practice Test")
                     .foregroundColor(.white)
                     .padding(.bottom, 40)
-                
                 Button {
                     Task {
-//                        await getTestLinkPath()
+                        //                        await getTestLinkPath()
                         await checkEHATestLik()
                         await checkEPTATestLik()
                         await checkSimpleTestLik()
@@ -80,19 +79,20 @@ struct PreTestContent<Link: View>: View {
                             .background(.green)
                             .foregroundColor(.white)
                             .cornerRadius(24)
-
+                        
                     }
                     .padding(.top, 40)
                     .padding(.bottom, 20)
-                
+                    
                 }
-                
-                
                 Spacer()
             }
         }
     }
-    
+}
+ 
+extension PreTestContent {
+    //MARK: -Extension Methods
     func returnTestSelected() async {
         if ehaLinkExists == true && eptaLinkExists == false && simpleLinkExists == false {
             returnedTestSelected = 1
@@ -120,7 +120,7 @@ struct PreTestContent<Link: View>: View {
         let documentsDirectory = testLinkPaths[0]
         return documentsDirectory
     }
-
+    
     func checkEHATestLik() async {
         let ehaName = ["EHA.csv"]
         let fileManager = FileManager.default
@@ -134,7 +134,7 @@ struct PreTestContent<Link: View>: View {
             }
         }
     }
-        
+    
     func checkEPTATestLik() async {
         let eptaName = ["EPTA.csv"]
         let fileManager = FileManager.default
@@ -162,29 +162,23 @@ struct PreTestContent<Link: View>: View {
             }
         }
     }
-    
+}
+
+extension PreTestContent {
+//MARK: -NavigationLink Extenstion
     private func linkTesting(testing: Testing) -> some View {
         EmptyView()
     }
     
 }
 
-// CSV DECODING NEEDED NOW TO POPULATE NEW DATA Set To Reference and Read Only
-//Button {
-//    Task{
-//        await jsonParserCombineViewModel.getLocalDirectoryPath()
 
+//struct PreTestView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PreTestView(testing: nil, relatedLinkTesting: linkTesting)
+//    }
+//    
+//    static func linkTesting(testing: Testing) -> some View {
+//        EmptyView()
+//    }
 //}
-
-
-
-struct PreTestView_Previews: PreviewProvider {
-    static var previews: some View {
-        PreTestView(testing: nil, relatedLinkTesting: linkTesting)
-    }
-    
-    static func linkTesting(testing: Testing) -> some View {
-        EmptyView()
-    }
-    
-}

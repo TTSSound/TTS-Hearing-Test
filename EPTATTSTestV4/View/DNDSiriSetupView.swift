@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct DNDSiriSetupView: View {
-    @State var doNotDisturbSetting = false
     var colorModel: ColorModel = ColorModel()
+    @State var doNotDisturbSetting = false
+    
     
     var body: some View {
         ZStack{

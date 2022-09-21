@@ -112,13 +112,12 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
     @State private var dataFileURLComparedLastName = URL(fileURLWithPath: "")   // General and Open
     @State private var isOkayToUpload = false
     let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
-
     
     
     @State var noResponses = [Int]()
     @State var sometimesResponses = [Int]()
     @State var yesResponses = [Int]()
-
+    
     
     @State var question1No: Bool = false
     @State var question1Sometimes: Bool = false
@@ -184,25 +183,25 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
     @State var finalSometimesResponses: [Int] = [Int]()
     @State var finalYesResponses: [Int] = [Int]()
     @State var finalSummaryResponseScore: [Int] = [Int]()
-
+    
     let fileSurveyName = ["SurveyResults.json"]
     let surveyCSVName = "SurveyResultsCSV.csv"
     let inputSurveyCSVName = "InputSurveyResultsCSV.csv"
     
     @State var saveSurveyAssessmentResults: SaveSurveyAssessmentResults? = nil
-
+    
     var body: some View {
         ZStack {
             colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
             VStack {
-            Text("Hearing Self Assessment")
+                Text("Hearing Self Assessment")
                     .foregroundColor(.white)
                     .font(.title2)
-            Divider()
-                .padding()
-                .frame(height: 2.0)
-                .foregroundColor(colorModel.tiffanyBlue)
-                .background(colorModel.tiffanyBlue)
+                Divider()
+                    .padding()
+                    .frame(height: 2.0)
+                    .foregroundColor(colorModel.tiffanyBlue)
+                    .background(colorModel.tiffanyBlue)
                 ScrollView {
                     VStack{
                         Text ("1. Does a hearing problem cause you to feel embarrassed when you meet new people?")
@@ -216,7 +215,7 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                                 .padding(.leading)
                                 .onChange(of: question1No) { q1No in
                                     if q1No == true {
-                                    noResponses.append(0)
+                                        noResponses.append(0)
                                     }
                                 }
                             Toggle("Sometimes", isOn: $question1Sometimes)
@@ -237,11 +236,10 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                                         yesResponses.append(4)
                                     }
                                 }
-                            }
                         }
+                    }
                     .padding(.bottom)
                     .background(colorModel.tiffanyBlue)
-                        
                     VStack{
                         Text ("2. Does a hearing probelm cause you to feel frustrated when talking to members of your family?")
                             .foregroundColor(.black)
@@ -254,7 +252,7 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                                 .padding(.leading)
                                 .onChange(of: question2No) { q2No in
                                     if q2No == true {
-                                    noResponses.append(0)
+                                        noResponses.append(0)
                                     }
                                 }
                             Toggle("Sometimes", isOn: $question2Sometimes)
@@ -275,11 +273,11 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                                         yesResponses.append(4)
                                     }
                                 }
-                            }
                         }
+                    }
                     .padding(.bottom)
                     .background(colorModel.limeGreen)
-
+                    
                     VStack{
                         Text ("3. Do you have difficulty hearing / understanding co-workers, clients, or customers?")
                             .foregroundColor(.white)
@@ -292,7 +290,7 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                                 .padding(.leading)
                                 .onChange(of: question3No) { q3No in
                                     if q3No == true {
-                                    noResponses.append(0)
+                                        noResponses.append(0)
                                     }
                                 }
                             Toggle("Sometimes", isOn: $question3Sometimes)
@@ -313,126 +311,121 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                                         yesResponses.append(4)
                                     }
                                 }
-                            }
                         }
+                    }
                     .padding(.bottom)
                     .background(colorModel.tiffanyBlue)
-                        
-                        VStack{
-                            Text ("4. Do you feel handicapped by a hearing problem?")
+                    VStack{
+                        Text ("4. Do you feel handicapped by a hearing problem?")
+                            .foregroundColor(.black)
+                            .multilineTextAlignment(.leading)
+                            .padding(.top)
+                        HStack{
+                            Toggle("No", isOn: self.$question4No)
                                 .foregroundColor(.black)
-                                .multilineTextAlignment(.leading)
-                                .padding(.top)
-                            HStack{
-                                Toggle("No", isOn: self.$question4No)
-                                    .foregroundColor(.black)
-                                    .font(.caption)
-                                    .padding(.leading)
-                                    .onChange(of: question4No) { q4No in
-                                        if q4No == true {
+                                .font(.caption)
+                                .padding(.leading)
+                                .onChange(of: question4No) { q4No in
+                                    if q4No == true {
                                         noResponses.append(0)
-                                        }
-                                    }
-                                Toggle("Sometimes", isOn: $question4Sometimes)
-                                    .padding(.horizontal)
-                                    .foregroundColor(.black)
-                                    .font(.caption)
-                                    .onChange(of: question4Sometimes) { q4Sometimes in
-                                        if q4Sometimes == true {
-                                            sometimesResponses.append(2)
-                                        }
-                                    }
-                                Toggle("Yes", isOn: $question4Yes)
-                                    .foregroundColor(.black)
-                                    .font(.caption)
-                                    .padding(.trailing)
-                                    .onChange(of: question4Yes) { q4Yes in
-                                        if q4Yes == true {
-                                            yesResponses.append(4)
-                                        }
                                     }
                                 }
-                            }
-                        .padding(.bottom)
-                        .background(colorModel.limeGreen)
-
-                        VStack{
-                            Text ("5. Does a hearing problem cause you difficulty when visiting friends, relatives or neighbors?")
+                            Toggle("Sometimes", isOn: $question4Sometimes)
+                                .padding(.horizontal)
+                                .foregroundColor(.black)
+                                .font(.caption)
+                                .onChange(of: question4Sometimes) { q4Sometimes in
+                                    if q4Sometimes == true {
+                                        sometimesResponses.append(2)
+                                    }
+                                }
+                            Toggle("Yes", isOn: $question4Yes)
+                                .foregroundColor(.black)
+                                .font(.caption)
+                                .padding(.trailing)
+                                .onChange(of: question4Yes) { q4Yes in
+                                    if q4Yes == true {
+                                        yesResponses.append(4)
+                                    }
+                                }
+                        }
+                    }
+                    .padding(.bottom)
+                    .background(colorModel.limeGreen)
+                    VStack{
+                        Text ("5. Does a hearing problem cause you difficulty when visiting friends, relatives or neighbors?")
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.leading)
+                            .padding(.top)
+                        HStack{
+                            Toggle("No", isOn: self.$question5No)
                                 .foregroundColor(.white)
-                                .multilineTextAlignment(.leading)
-                                .padding(.top)
-                            HStack{
-                                Toggle("No", isOn: self.$question5No)
-                                    .foregroundColor(.white)
-                                    .font(.caption)
-                                    .padding(.leading)
-                                    .onChange(of: question5No) { q5No in
-                                        if q5No == true {
+                                .font(.caption)
+                                .padding(.leading)
+                                .onChange(of: question5No) { q5No in
+                                    if q5No == true {
                                         noResponses.append(0)
-                                        }
-                                    }
-                                Toggle("Sometimes", isOn: $question5Sometimes)
-                                    .padding(.horizontal)
-                                    .foregroundColor(.white)
-                                    .font(.caption)
-                                    .onChange(of: question5Sometimes) { q5Sometimes in
-                                        if q5Sometimes == true {
-                                            sometimesResponses.append(2)
-                                        }
-                                    }
-                                Toggle("Yes", isOn: $question5Yes)
-                                    .foregroundColor(.white)
-                                    .font(.caption)
-                                    .padding(.trailing)
-                                    .onChange(of: question5Yes) { q5Yes in
-                                        if q5Yes == true {
-                                            yesResponses.append(4)
-                                        }
                                     }
                                 }
-                            }
-                        .padding(.bottom)
-                        .background(colorModel.tiffanyBlue)
-          
-                                    
-                        VStack{
-                            Text ("6. Does a hearing problem cause you difficulty in the movies or in the theater?")
+                            Toggle("Sometimes", isOn: $question5Sometimes)
+                                .padding(.horizontal)
+                                .foregroundColor(.white)
+                                .font(.caption)
+                                .onChange(of: question5Sometimes) { q5Sometimes in
+                                    if q5Sometimes == true {
+                                        sometimesResponses.append(2)
+                                    }
+                                }
+                            Toggle("Yes", isOn: $question5Yes)
+                                .foregroundColor(.white)
+                                .font(.caption)
+                                .padding(.trailing)
+                                .onChange(of: question5Yes) { q5Yes in
+                                    if q5Yes == true {
+                                        yesResponses.append(4)
+                                    }
+                                }
+                        }
+                    }
+                    .padding(.bottom)
+                    .background(colorModel.tiffanyBlue)
+                    VStack{
+                        Text ("6. Does a hearing problem cause you difficulty in the movies or in the theater?")
+                            .foregroundColor(.black)
+                            .multilineTextAlignment(.leading)
+                            .padding(.top)
+                        HStack{
+                            Toggle("No", isOn: self.$question6No)
                                 .foregroundColor(.black)
-                                .multilineTextAlignment(.leading)
-                                .padding(.top)
-                            HStack{
-                                Toggle("No", isOn: self.$question6No)
-                                    .foregroundColor(.black)
-                                    .font(.caption)
-                                    .padding(.leading)
-                                    .onChange(of: question6No) { q6No in
-                                        if q6No == true {
+                                .font(.caption)
+                                .padding(.leading)
+                                .onChange(of: question6No) { q6No in
+                                    if q6No == true {
                                         noResponses.append(0)
-                                        }
-                                    }
-                                Toggle("Sometimes", isOn: $question6Sometimes)
-                                    .padding(.horizontal)
-                                    .foregroundColor(.black)
-                                    .font(.caption)
-                                    .onChange(of: question6Sometimes) { q6Sometimes in
-                                        if q6Sometimes == true {
-                                            sometimesResponses.append(2)
-                                        }
-                                    }
-                                Toggle("Yes", isOn: $question6Yes)
-                                    .foregroundColor(.black)
-                                    .font(.caption)
-                                    .padding(.trailing)
-                                    .onChange(of: question6Yes) { q6Yes in
-                                        if q6Yes == true {
-                                            yesResponses.append(4)
-                                        }
                                     }
                                 }
-                            }
-                        .padding(.bottom)
-                        .background(colorModel.limeGreen)
-                        
+                            Toggle("Sometimes", isOn: $question6Sometimes)
+                                .padding(.horizontal)
+                                .foregroundColor(.black)
+                                .font(.caption)
+                                .onChange(of: question6Sometimes) { q6Sometimes in
+                                    if q6Sometimes == true {
+                                        sometimesResponses.append(2)
+                                    }
+                                }
+                            Toggle("Yes", isOn: $question6Yes)
+                                .foregroundColor(.black)
+                                .font(.caption)
+                                .padding(.trailing)
+                                .onChange(of: question6Yes) { q6Yes in
+                                    if q6Yes == true {
+                                        yesResponses.append(4)
+                                    }
+                                }
+                        }
+                    }
+                    .padding(.bottom)
+                    .background(colorModel.limeGreen)
                     VStack{
                         Text ("7. Does a hearing problem cause you to have arguments with family members?")
                             .foregroundColor(.white)
@@ -445,7 +438,7 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                                 .padding(.leading)
                                 .onChange(of: question7No) { q7No in
                                     if q7No == true {
-                                    noResponses.append(0)
+                                        noResponses.append(0)
                                     }
                                 }
                             Toggle("Sometimes", isOn: $question7Sometimes)
@@ -466,11 +459,10 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                                         yesResponses.append(4)
                                     }
                                 }
-                            }
                         }
+                    }
                     .padding(.bottom)
                     .background(colorModel.tiffanyBlue)
-                
                     VStack{
                         Text ("8. Does a hearing problem cause you difficulty when listenting to TV or music?")
                             .foregroundColor(.black)
@@ -483,7 +475,7 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                                 .padding(.leading)
                                 .onChange(of: question8No) { q8No in
                                     if q8No == true {
-                                    noResponses.append(0)
+                                        noResponses.append(0)
                                     }
                                 }
                             Toggle("Sometimes", isOn: $question8Sometimes)
@@ -504,11 +496,10 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                                         yesResponses.append(4)
                                     }
                                 }
-                            }
                         }
+                    }
                     .padding(.bottom)
                     .background(colorModel.limeGreen)
-                
                     VStack{
                         Text ("9. Do you feel that any difficulty with your hearing limits or hampers your personal or social life?")
                             .foregroundColor(.white)
@@ -521,7 +512,7 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                                 .padding(.leading)
                                 .onChange(of: question9No) { q9No in
                                     if q9No == true {
-                                    noResponses.append(0)
+                                        noResponses.append(0)
                                     }
                                 }
                             Toggle("Sometimes", isOn: $question9Sometimes)
@@ -542,11 +533,10 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                                         yesResponses.append(4)
                                     }
                                 }
-                            }
                         }
+                    }
                     .padding(.bottom)
                     .background(colorModel.tiffanyBlue)
-                
                     VStack{
                         Text ("10. Does a hearing problem cause you difficulty when in a restaurant with relatives or friends?")
                             .foregroundColor(.white)
@@ -559,7 +549,7 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                                 .padding(.leading)
                                 .onChange(of: question10No) { q10No in
                                     if q10No == true {
-                                    noResponses.append(0)
+                                        noResponses.append(0)
                                     }
                                 }
                             Toggle("Sometimes", isOn: $question10Sometimes)
@@ -580,7 +570,7 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                                         yesResponses.append(4)
                                     }
                                 }
-                            }
+                        }
                         VStack{
                             Spacer()
                             Text("SUBMIT SURVEY RESPONSES?")
@@ -634,7 +624,6 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                     .frame(height: 2.0)
                     .foregroundColor(colorModel.tiffanyBlue)
                     .background(colorModel.tiffanyBlue)
-                
                 if surveySubmitted == [1] {
                     NavigationLink(destination:
                                     surveySubmitted.first == 1 ? AnyView(PreTestView(testing: testing, relatedLinkTesting: linkTesting))
@@ -650,14 +639,19 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                     .padding(.top, 20)
                     .padding(.bottom, 20)
                 }
-                
-             
             }
+            .onAppear(perform: {
+                Task {
+                    await comparedLastNameCSVReader()
+                }
+            })
             .padding(.bottom, 40)
         }
-    
     }
-    
+}
+ 
+extension UserWrittenHearingAssessmentContent {
+    //MARK: -Extension Methods
     func calculateSurveryResponses() async {
         let noSum = noResponses.reduce(0, +)
         let sometimesSum = sometimesResponses.reduce(0,+)
@@ -667,9 +661,6 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
         hhsiSometimesResponses.append(contentsOf: sometimesResponses)
         hhsiYesResponses.append(contentsOf: yesResponses)
         hhsiScore.append(score)
-        
-       
-        
         print("noResponses: \(noResponses)")
         print("sometimesResponses: \(sometimesResponses)")
         print("yesResponses: \(yesResponses)")
@@ -679,7 +670,6 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
         print("noSum: \(noSum) sometimesSum: \(sometimesSum) yesSum: \(yesSum)")
         print("hhsi Score: \(score)")
     }
-    
     
     func finalQuestion1Array() async {
         //Question 1 Responses
@@ -806,7 +796,6 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
         }
     }
     
-    
     func finalQuestion6Array() async {
         //Question 6 Responses
         if question6No == false {
@@ -857,7 +846,6 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
         }
     }
     
-    
     func finalQuestion8Array() async {
         //Question 8 Responses
         if question8No == false {
@@ -883,7 +871,6 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
         }
     }
     
-    
     func finalQuestion9Array() async {
         //Question 9 Responses
         if question9No == false {
@@ -908,7 +895,6 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
             print("Error in questio9Yes Logic")
         }
     }
-     
     
     func finalQuestion10Array() async {
         //Question 10 Responses
@@ -938,7 +924,6 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
     func concantenateFinalSurveyResponseArrays() async {
         // Summary HHSI Score
         finalSummaryResponseScore.append(contentsOf: hhsiScore)
-        
         //Final No Responses
         finalNoResponses.append(finalQuestion1responses[0])
         finalNoResponses.append(finalQuestion2responses[0])
@@ -950,7 +935,6 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
         finalNoResponses.append(finalQuestion8responses[0])
         finalNoResponses.append(finalQuestion9responses[0])
         finalNoResponses.append(finalQuestion10responses[0])
-    
         // Final Sometimes Responses
         finalSometimesResponses.append(finalQuestion1responses[1])
         finalSometimesResponses.append(finalQuestion2responses[1])
@@ -962,7 +946,6 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
         finalSometimesResponses.append(finalQuestion8responses[1])
         finalSometimesResponses.append(finalQuestion9responses[1])
         finalSometimesResponses.append(finalQuestion10responses[1])
-        
         //Final Yes Responses
         finalYesResponses.append(finalQuestion1responses[2])
         finalYesResponses.append(finalQuestion2responses[2])
@@ -974,7 +957,6 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
         finalYesResponses.append(finalQuestion8responses[2])
         finalYesResponses.append(finalQuestion9responses[2])
         finalYesResponses.append(finalQuestion10responses[2])
-        
         print("finalSummaryResponseScore: \(finalSummaryResponseScore)")
         print("finalNoResponseArray: \(finalNoResponses)")
         print("finalSometimesResponseArray: \(finalSometimesResponses)")
@@ -996,11 +978,13 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
             uploadFile(fileName: "SurveyResults.json")
         }
     }
-    
+}
+
+extension UserWrittenHearingAssessmentContent {
+    //MARK: -Extension CSV/JSON Methods
     func getSurveyData() async {
         DispatchQueue.main.async {
             Task {
-                
                 guard let surveyData = await self.getSurveyJSONData() else { return }
                 print("Json Survey Data:")
                 print(surveyData)
@@ -1038,10 +1022,10 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
         print("Json Encoded \(jsonSurveyData!)")
         return jsonSurveyData
     }
-        
+    
     
     func saveSurveyToJSON() async {
-    // !!!This saves to device directory, whish is likely what is desired
+        // !!!This saves to device directory, whish is likely what is desired
         let surveyPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = surveyPaths[0]
         print("DocumentsDirectory: \(documentsDirectory)")
@@ -1052,7 +1036,7 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
         do {
             let jsonSurveyData = try encoder.encode(saveSurveyAssessmentResults)
             print(jsonSurveyData)
-          
+            
             try jsonSurveyData.write(to: surveyFilePaths)
         } catch {
             print("Error writing to JSON Survey file: \(error)")
@@ -1156,7 +1140,7 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
         let documentsDirectory = dataLinkPaths[0]
         return documentsDirectory
     }
-        
+    
     func comparedLastNameCSVReader() async {
         let dataSetupName = inputFinalComparedLastNameCSV
         let fileSetupManager = FileManager.default
@@ -1212,20 +1196,22 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
             }
         }
     }
-    
+}
+
+extension UserWrittenHearingAssessmentContent {
+//MARK: -NavigationLink Extension
     private func linkTesting(testing: Testing) -> some View {
         EmptyView()
     }
 }
 
 
-struct UserWrittenHearingAssessmentView_Previews: PreviewProvider {
-    static var previews: some View {
-        UserWrittenHearingAssessmentView(testing: nil, relatedLinkTesting: linkTesting)
-    }
-
-    static func linkTesting(testing: Testing) -> some View {
-        EmptyView()
-    }
-    
-}
+//struct UserWrittenHearingAssessmentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        UserWrittenHearingAssessmentView(testing: nil, relatedLinkTesting: linkTesting)
+//    }
+//
+//    static func linkTesting(testing: Testing) -> some View {
+//        EmptyView()
+//    }
+//}

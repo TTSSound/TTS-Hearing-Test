@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct SystemVolumeView: View {
-    @State var systemVolumeSetting = false
     var colorModel: ColorModel = ColorModel()
+    @State var systemVolumeSetting = false
     
     var body: some View {
         ZStack{

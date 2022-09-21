@@ -936,7 +936,7 @@ extension EHATTSTestPart1Content {
         case lastError
         case lastUnexpected(code: Int)
     }
-
+    
     func createReversalHeardArray() async {
         envDataObjectModel_reversalHeard.append(envDataObjectModel_heardArray[idxHA-1])
         self.idxReversalHeardCount = envDataObjectModel_reversalHeard.count
@@ -946,17 +946,17 @@ extension EHATTSTestPart1Content {
         envDataObjectModel_reversalHeard.append(envDataObjectModel_heardArray[idxHA-1])
         self.idxReversalHeardCount = envDataObjectModel_reversalHeard.count
     }
-
-
-        
+    
+    
+    
     func createReversalGainArray() async {
-//        envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
+        //        envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
         envDataObjectModel_reversalGain.append(envDataObjectModel_testGain)
     }
     
-
-//New Function for Max Gain Non Response Catch
-// Not in EHAP2
+    
+    //New Function for Max Gain Non Response Catch
+    // Not in EHAP2
     func createReversalGainArrayNonResponse() async {
         if envDataObjectModel_testGain < 0.995 {
             //        envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
@@ -968,7 +968,7 @@ extension EHATTSTestPart1Content {
     
     func checkHeardReversalArrays() async {
         if idxHA - idxReversalHeardCount == 0 {
-//            print("Success, Arrays match")
+            //            print("Success, Arrays match")
         } else if idxHA - idxReversalHeardCount < 0 && idxHA - idxReversalHeardCount > 0{
             fatalError("Fatal Error in HeardArrayCount - ReversalHeardArrayCount")
         } else {
@@ -1101,15 +1101,15 @@ extension EHATTSTestPart1Content {
         }  else if idxReversalHeardCount == 2 {
             if idxReversalHeardCount == 2 && secondHeardIsTrue == true {
                 await startTooHighCheck()
-//            } else if idxReversalHeardCount == 2  && secondHeardIsTrue == false {
-//                await reversalAction()
+                //            } else if idxReversalHeardCount == 2  && secondHeardIsTrue == false {
+                //                await reversalAction()
                 
-// !!! Changes Below from Original Test Models
+                // !!! Changes Below from Original Test Models
             } else if idxReversalHeardCount == 2  && secondHeardIsTrue == false && localSeriesNoResponses < 2 {
                 await reversalAction()
             } else if idxReversalHeardCount == 2  && secondHeardIsTrue == false && localSeriesNoResponses == 2 {
-              await reversalOfFour()
-// !!! Changes Above from Original Test Models
+                await reversalOfFour()
+                // !!! Changes Above from Original Test Models
                 
             } else {
                 print("In reversal section == 2")
@@ -1124,9 +1124,9 @@ extension EHATTSTestPart1Content {
                 //                print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
                 
                 
-// Changed this to >=3 instead of ==3
-// Untested Change!!!!
-// Not in EHAP2
+                // Changed this to >=3 instead of ==3
+                // Untested Change!!!!
+                // Not in EHAP2
             } else if localSeriesNoResponses >= 3 {
                 await reversalOfTen()
             } else if localSeriesNoResponses == 2 {
@@ -1139,24 +1139,24 @@ extension EHATTSTestPart1Content {
         }
     }
     
-//    func printReversalGain() async {
-//        DispatchQueue.global(qos: .background).async {
-//            print("New Gain: \(envDataObjectModel_testGain)")
-//            print("Reversal Direcction: \(envDataObjectModel_reversalDirection)")
-//        }
-//    }
+    //    func printReversalGain() async {
+    //        DispatchQueue.global(qos: .background).async {
+    //            print("New Gain: \(envDataObjectModel_testGain)")
+    //            print("Reversal Direcction: \(envDataObjectModel_reversalDirection)")
+    //        }
+    //    }
     
     func reversalHeardCount1() async {
-       await reversalAction()
-   }
-            
+        await reversalAction()
+    }
+    
     func check2PositiveSeriesReversals() async {
         if envDataObjectModel_reversalHeard[idxHA-2] == 1 && envDataObjectModel_reversalHeard[idxHA-1] == 1 {
             print("reversal - check2PositiveSeriesReversals")
             print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
         }
     }
-
+    
     func checkTwoNegativeSeriesReversals() async {
         if envDataObjectModel_reversalHeard.count >= 3 && envDataObjectModel_reversalHeard[idxHA-2] == 0 && envDataObjectModel_reversalHeard[idxHA-1] == 0 {
             await reversalOfFour()
@@ -1170,7 +1170,7 @@ extension EHATTSTestPart1Content {
             startTooHigh = 1
             await reversalOfTen()
             await resetAfterTooHigh()
-//            print("Too High Found")
+            //            print("Too High Found")
         } else {
             await reversalAction()
         }
@@ -1183,8 +1183,8 @@ extension EHATTSTestPart1Content {
         secondHeardIsTrue = false
     }
     
- 
-
+    
+    
     func reversalsCompleteLogging() async {
         if secondHeardIsTrue == true {
             self.localReversalEnd = 1
@@ -1192,41 +1192,41 @@ extension EHATTSTestPart1Content {
             self.firstGain = envDataObjectModel_reversalGain[firstHeardResponseIndex-1]
             self.secondGain = envDataObjectModel_reversalGain[secondHeardResponseIndex-1]
             print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
-
+            
             let delta = firstGain - secondGain
             let avg = (firstGain + secondGain)/2
             
             if delta == 0 {
                 envDataObjectModel_averageGain = secondGain
-//                print("average Gain: \(envDataObjectModel_averageGain)")
+                //                print("average Gain: \(envDataObjectModel_averageGain)")
             } else if delta >= 0.05 {
                 envDataObjectModel_averageGain = secondGain
-//                print("SecondGain: \(firstGain)")
-//                print("SecondGain: \(secondGain)")
-//                print("average Gain: \(envDataObjectModel_averageGain)")
+                //                print("SecondGain: \(firstGain)")
+                //                print("SecondGain: \(secondGain)")
+                //                print("average Gain: \(envDataObjectModel_averageGain)")
             } else if delta <= -0.05 {
                 envDataObjectModel_averageGain = firstGain
-//                print("SecondGain: \(firstGain)")
-//                print("SecondGain: \(secondGain)")
-//                print("average Gain: \(envDataObjectModel_averageGain)")
+                //                print("SecondGain: \(firstGain)")
+                //                print("SecondGain: \(secondGain)")
+                //                print("average Gain: \(envDataObjectModel_averageGain)")
             } else if delta < 0.05 && delta > -0.05 {
                 envDataObjectModel_averageGain = avg
-//                print("SecondGain: \(firstGain)")
-//                print("SecondGain: \(secondGain)")
-//                print("average Gain: \(envDataObjectModel_averageGain)")
+                //                print("SecondGain: \(firstGain)")
+                //                print("SecondGain: \(secondGain)")
+                //                print("average Gain: \(envDataObjectModel_averageGain)")
             } else {
                 envDataObjectModel_averageGain = avg
-//                print("SecondGain: \(firstGain)")
-//                print("SecondGain: \(secondGain)")
-//                print("average Gain: \(envDataObjectModel_averageGain)")
+                //                print("SecondGain: \(firstGain)")
+                //                print("SecondGain: \(secondGain)")
+                //                print("average Gain: \(envDataObjectModel_averageGain)")
             }
         } else if secondHeardIsTrue == false {
-//                print("Contine, second hear is true = false")
+            //                print("Contine, second hear is true = false")
         } else {
-                print("Critical error in reversalsCompletLogging Logic")
+            print("Critical error in reversalsCompletLogging Logic")
         }
     }
-        
+    
     func assignLRAverageSampleGains() async {
         if localMarkNewTestCycle == 1 && localReversalEnd == 1 && localPan == 1.0 {
             //go through each assignment based on index
@@ -1373,22 +1373,22 @@ extension EHATTSTestPart1Content {
             print("Coninue, not ready to log in assignLRAverageSampleGains")
         }
     }
-
-//    func printReversalData() async {
-//        print("--------Reversal Values Logged-------------")
-//        print("indexForTest: \(envDataObjectModel_indexForTest)")
-//        print("Test Pan: \(envDataObjectModel_testPan)")
-//        print("New TestGain: \(envDataObjectModel_testTestGain)")
-//        print("reversalFrequency: \(activeFrequency)")
-//        print("testCount: \(envDataObjectModel_testCount)")
-//        print("heardArray: \(envDataObjectModel_heardArray)")
-//        print("reversalHeard: \(envDataObjectModel_reversalHeard)")
-//        print("FirstGain: \(firstGain)")
-//        print("SecondGain: \(secondGain)")
-//        print("AverageGain: \(envDataObjectModel_averageGain)")
-//        print("------------------------------------------")
-//    }
-        
+    
+    //    func printReversalData() async {
+    //        print("--------Reversal Values Logged-------------")
+    //        print("indexForTest: \(envDataObjectModel_indexForTest)")
+    //        print("Test Pan: \(envDataObjectModel_testPan)")
+    //        print("New TestGain: \(envDataObjectModel_testTestGain)")
+    //        print("reversalFrequency: \(activeFrequency)")
+    //        print("testCount: \(envDataObjectModel_testCount)")
+    //        print("heardArray: \(envDataObjectModel_heardArray)")
+    //        print("reversalHeard: \(envDataObjectModel_reversalHeard)")
+    //        print("FirstGain: \(firstGain)")
+    //        print("SecondGain: \(secondGain)")
+    //        print("AverageGain: \(envDataObjectModel_averageGain)")
+    //        print("------------------------------------------")
+    //    }
+    
     func restartPresentation() async {
         if endTestSeriesValue == false {
             localPlaying = 1
@@ -1428,20 +1428,20 @@ extension EHATTSTestPart1Content {
         localMarkNewTestCycle = 0
         localReversalEnd = 0
         envDataObjectModel_index = envDataObjectModel_index + 1
-//        envDataObjectModel_eptaSamplesCountArrayIdx += 1
+        //        envDataObjectModel_eptaSamplesCountArrayIdx += 1
         envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]       // Add code to reset starting test gain by linking to table of expected HL
         endTestSeriesValue = false
         showTestCompletionSheet = false
         testIsPlaying = true
         userPausedTest = false
         playingStringColorIndex = 2
-//        envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
+        //        envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
         print(envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index])
         localPlaying = 1
     }
     
     func newTestCycle() async {
-//        if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCount && endTestSeriesValue == false {
+        //        if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCount && endTestSeriesValue == false {
         if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index < envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index] && endTestSeriesValue == false {
             startTooHigh = 0
             localMarkNewTestCycle = 0
@@ -1450,15 +1450,15 @@ extension EHATTSTestPart1Content {
             envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]       // Add code to reset starting test gain by linking to table of expected HL
             endTestSeriesValue = false
             await wipeArrays()
-//        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCount && endTestSeriesValue == false {
+            //        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCount && endTestSeriesValue == false {
         } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index] && endTestSeriesValue == false {
-                endTestSeriesValue = true
-                localPlaying = -1
-//                envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
-                envDataObjectModel_eptaSamplesCountArrayIdx += 1
-                print("=============================")
-                print("!!!!! End of Test Series!!!!!!")
-                print("=============================")
+            endTestSeriesValue = true
+            localPlaying = -1
+            //                envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
+            envDataObjectModel_eptaSamplesCountArrayIdx += 1
+            print("=============================")
+            print("!!!!! End of Test Series!!!!!!")
+            print("=============================")
             if ehaP1fullTestCompleted == true {
                 ehaP1fullTestCompleted = true
                 endTestSeriesValue = true
@@ -1476,15 +1476,15 @@ extension EHATTSTestPart1Content {
             }
             
         } else {
-//                print("Reversal Limit Not Hit")
-
+            //                print("Reversal Limit Not Hit")
+            
         }
     }
     
     func endTestSeriesFunc() async {
         if endTestSeriesValue == false {
             //Do Nothing and continue
-//            print("end Test Series = \(endTestSeriesValue)")
+            //            print("end Test Series = \(endTestSeriesValue)")
         } else if endTestSeriesValue == true {
             showTestCompletionSheet = true
             envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
@@ -1503,30 +1503,30 @@ extension EHATTSTestPart1Content {
             playingStringColorIndex2 = 1
         }
         
-//        audioThread.async {
-//            localPlaying = 0
-//            stop()
-//            userPausedTest = true
-//            playingStringColorIndex = 2
-//        }
-//        DispatchQueue.main.async {
-//            localPlaying = 0
-//            stop()
-//            userPausedTest = true
-//            playingStringColorIndex = 2
-//        }
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, qos: .userInitiated) {
-//            localPlaying = 0
-//            stop()
-//            userPausedTest = true
-//            playingStringColorIndex = 2
-//        }
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 3, qos: .userInitiated) {
-//            localPlaying = -1
-//            stop()
-//            userPausedTest = true
-//            playingStringColorIndex = 2
-//        }
+        //        audioThread.async {
+        //            localPlaying = 0
+        //            stop()
+        //            userPausedTest = true
+        //            playingStringColorIndex = 2
+        //        }
+        //        DispatchQueue.main.async {
+        //            localPlaying = 0
+        //            stop()
+        //            userPausedTest = true
+        //            playingStringColorIndex = 2
+        //        }
+        //        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, qos: .userInitiated) {
+        //            localPlaying = 0
+        //            stop()
+        //            userPausedTest = true
+        //            playingStringColorIndex = 2
+        //        }
+        //        DispatchQueue.main.asyncAfter(deadline: .now() + 3, qos: .userInitiated) {
+        //            localPlaying = -1
+        //            stop()
+        //            userPausedTest = true
+        //            playingStringColorIndex = 2
+        //        }
     }
     
     func concatenateFinalArrays() async {
@@ -1548,23 +1548,23 @@ extension EHATTSTestPart1Content {
         }
     }
     
-//    func printConcatenatedArrays() async {
-//        print("finalStoredIndex: \(envDataObjectModel_finalStoredIndex)")
-//        print("finalStoredTestPan: \(envDataObjectModel_finalStoredTestPan)")
-//        print("finalStoredTestTestGain: \(envDataObjectModel_finalStoredTestTestGain)")
-//        print("finalStoredFrequency: \(envDataObjectModel_finalStoredFrequency)")
-//        print("finalStoredTestCount: \(envDataObjectModel_finalStoredTestCount)")
-//        print("finalStoredHeardArray: \(envDataObjectModel_finalStoredHeardArray)")
-//        print("finalStoredReversalHeard: \(envDataObjectModel_finalStoredReversalHeard)")
-//        print("finalStoredFirstGain: \(envDataObjectModel_finalStoredFirstGain)")
-//        print("finalStoredSecondGain: \(envDataObjectModel_finalStoredSecondGain)")
-//        print("finalStoredAverageGain: \(envDataObjectModel_finalStoredAverageGain)")
-//        print("rightFinalGainsArray: \(rightFinalGainsArray)")
-//        print("finalStoredRightFinalGainsArray: \(finalStoredRightFinalGainsArray)")
-//        print("leftFinalGainsArray: \(leftFinalGainsArray)")
-//        print("finalStoredleftFinalGainsArray: \(finalStoredleftFinalGainsArray)")
-//    }
-        
+    //    func printConcatenatedArrays() async {
+    //        print("finalStoredIndex: \(envDataObjectModel_finalStoredIndex)")
+    //        print("finalStoredTestPan: \(envDataObjectModel_finalStoredTestPan)")
+    //        print("finalStoredTestTestGain: \(envDataObjectModel_finalStoredTestTestGain)")
+    //        print("finalStoredFrequency: \(envDataObjectModel_finalStoredFrequency)")
+    //        print("finalStoredTestCount: \(envDataObjectModel_finalStoredTestCount)")
+    //        print("finalStoredHeardArray: \(envDataObjectModel_finalStoredHeardArray)")
+    //        print("finalStoredReversalHeard: \(envDataObjectModel_finalStoredReversalHeard)")
+    //        print("finalStoredFirstGain: \(envDataObjectModel_finalStoredFirstGain)")
+    //        print("finalStoredSecondGain: \(envDataObjectModel_finalStoredSecondGain)")
+    //        print("finalStoredAverageGain: \(envDataObjectModel_finalStoredAverageGain)")
+    //        print("rightFinalGainsArray: \(rightFinalGainsArray)")
+    //        print("finalStoredRightFinalGainsArray: \(finalStoredRightFinalGainsArray)")
+    //        print("leftFinalGainsArray: \(leftFinalGainsArray)")
+    //        print("finalStoredleftFinalGainsArray: \(finalStoredleftFinalGainsArray)")
+    //    }
+    
     func saveFinalStoredArrays() async {
         if localMarkNewTestCycle == 1 && localReversalEnd == 1 {
             DispatchQueue.global(qos: .userInitiated).async {
@@ -1578,7 +1578,7 @@ extension EHATTSTestPart1Content {
                         await writeEHA1SummarydResultsToCSV()
                         await writeEHA1InputDetailedResultsToCSV()
                         await writeEHA1InputDetailedResultsToCSV()
-
+                        
                         await writeEHA1RightLeftResultsToCSV()
                         await writeEHA1RightResultsToCSV()
                         await writeEHA1LeftResultsToCSV()
@@ -1588,51 +1588,16 @@ extension EHATTSTestPart1Content {
                         
                         await getEHAP1Data()
                         await saveEHA1ToJSON()
-            //                await envDataObjectModel_uploadSummaryResultsTest()
+                        //                await envDataObjectModel_uploadSummaryResultsTest()
                     }
                 }
             }
         }
     }
+}
     
-
-    
-
-//MARK: -FireBase Storage Upload
-
-//    func getDirectoryPath() -> String {
-//        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-//        let documentsDirectory = paths[0]
-//        return documentsDirectory
-//    }
-//
-//    func uploadCSV() {
-//        DispatchQueue.global(qos: .background).async {
-//            let storageRef = Storage.storage().reference()
-//            let setupCSVName = ["SetupResultsCSV.csv"]
-//            let fileManager = FileManager.default
-//            let csvPath = (self.getDirectoryPath() as NSString).strings(byAppendingPaths: setupCSVName)
-//            if fileManager.fileExists(atPath: csvPath[0]) {
-//                let filePath = URL(fileURLWithPath: csvPath[0])
-//                let localFile = filePath
-//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
-//                let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
-//                    if error == nil && metadata == nil {
-//                        //TSave a reference to firestore database
-//                    }
-//                    return
-//                }
-//                print(uploadTask)
-//            } else {
-//                print("No File")
-//            }
-//        }
-//    }
-//}
-//
-//
-//extension EHATTSTestPart1Content {
-//MARK: -JSON and CSV Writing
+extension EHATTSTestPart1Content {
+//MARK: -CSV/JSON Methods Extension
     
     func getEHAP1Data() async {
         guard let data = await getEHAP1JSONData() else { return }
@@ -1780,7 +1745,6 @@ extension EHATTSTestPart1Content {
              print("CVSWriter Summary EHA Part 1 Data Error or Error Finding File for Detailed CSV \(error)")
          }
     }
-
 
     func writeEHA1InputDetailedResultsToCSV() async {
         let stringFinalStoredIndex = envDataObjectModel_finalStoredIndex.map { String($0) }.joined(separator: ",")
@@ -1938,7 +1902,6 @@ extension EHATTSTestPart1Content {
          }
     }
     
-    
     func writeEHA1InputRightResultsToCSV() async {
         let stringFinalrightFinalGainsArray = rightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
@@ -1974,12 +1937,10 @@ extension EHATTSTestPart1Content {
              print("CVSWriter Summary EHA Part 1 Left Input Data Error or Error Finding File for Detailed CSV \(error)")
          }
     }
-    
 }
 
 extension EHATTSTestPart1Content {
-//MARK: Extension for Gain Link File Checking
-    
+    //MARK: Extension for Gain Link File Checking
     
     func gainCurveAssignment() async {
         if gainEHAP1SettingArrayLink == 2.5 {
@@ -2026,17 +1987,14 @@ extension EHATTSTestPart1Content {
             gainEHAP1PhonIsSet = false
             print("!!!! Fatal Error in gainCurveAssignment() Logic")
         }
-   
+        
     }
-    
-    
     
     func getGainEHAP1DataLinkPath() async -> String {
         let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = dataLinkPaths[0]
         return documentsDirectory
     }
-
     
     func checkGainEHAP1_2_5DataLink() async {
         let dataGainEHAP1_2_5Name = ["2_5.csv"]
@@ -2117,7 +2075,7 @@ extension EHATTSTestPart1Content {
             }
         }
     }
-
+    
     func checkGainEHAP1_8DataLink() async {
         let dataGainEHAP1_8Name = ["8.csv"]
         let fileGainEHAP1_8Manager = FileManager.default
@@ -2137,7 +2095,7 @@ extension EHATTSTestPart1Content {
             }
         }
     }
-
+    
     func checkGainEHAP1_11DataLink() async {
         let dataGainEHAP1_11Name = ["11.csv"]
         let fileGainEHAP1_11Manager = FileManager.default
@@ -2217,7 +2175,7 @@ extension EHATTSTestPart1Content {
             }
         }
     }
-
+    
     func checkGainEHAP1_27DataLink() async {
         let dataGainEHAP1_27Name = ["27.csv"]
         let fileGainEHAP1_27Manager = FileManager.default
@@ -2237,22 +2195,23 @@ extension EHATTSTestPart1Content {
             }
         }
     }
-    
+}
+ 
+extension EHATTSTestPart1Content {
+//MARK: -NavigationLink Extension
     private func linkTesting(testing: Testing) -> some View {
         EmptyView()
     }
-    
 }
 
-//MARK: - Preview View Struct
 
-struct EHATTSTestPart1View_Previews: PreviewProvider {
-    static var previews: some View {
-        EHATTSTestPart1View(testing: nil, relatedLinkTesting: linkTesting)
-    }
-    
-    static func linkTesting(testing: Testing) -> some View {
-        EmptyView()
-    }
-}
+//struct EHATTSTestPart1View_Previews: PreviewProvider {
+//    static var previews: some View {
+//        EHATTSTestPart1View(testing: nil, relatedLinkTesting: linkTesting)
+//    }
+//
+//    static func linkTesting(testing: Testing) -> some View {
+//        EmptyView()
+//    }
+//}
 

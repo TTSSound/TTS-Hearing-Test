@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct ManualDeviceEntryInformationView: View {
-    
-    @Environment(\.presentationMode) var presentationMode
     var colorModel: ColorModel = ColorModel()
+    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         ZStack{

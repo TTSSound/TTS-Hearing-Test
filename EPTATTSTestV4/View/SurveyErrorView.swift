@@ -26,9 +26,9 @@ struct SurveyErrorContent<Link: View>: View {
     var dataModel = DataModel.shared
     var relatedLinkTesting: (Testing) -> Link
     @EnvironmentObject private var naviationModel: NavigationModel
- 
+    
     var colorModel: ColorModel = ColorModel()
-
+    
     var body: some View {
         ZStack{
             colorModel.colorBackgroundRed.ignoresSafeArea(.all, edges: .top)
@@ -44,18 +44,21 @@ struct SurveyErrorContent<Link: View>: View {
             }
         }
     }
-    
+}
+
+extension SurveyErrorContent {
+//MARK: -NavigationLink Extension
     private func linkTesting(testing: Testing) -> some View {
         EmptyView()
     }
 }
 
-struct SurveyErrorView_Previews: PreviewProvider {
-    static var previews: some View {
-        SurveyErrorView(testing: nil, relatedLinkTesting: linkTesting)
-    }
-    
-    static func linkTesting(testing: Testing) -> some View {
-        EmptyView()
-    }
-}
+//struct SurveyErrorView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SurveyErrorView(testing: nil, relatedLinkTesting: linkTesting)
+//    }
+//
+//    static func linkTesting(testing: Testing) -> some View {
+//        EmptyView()
+//    }
+//}

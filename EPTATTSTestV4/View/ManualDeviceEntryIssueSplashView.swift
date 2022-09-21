@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ManualDeviceEntryIssueSplashView: View {
-
     var colorModel: ColorModel = ColorModel()
     
     var body: some View {

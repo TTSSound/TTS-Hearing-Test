@@ -69,9 +69,6 @@ struct UserLoginView<Link: View>: View {
 }
 
 
-
-
-// This is modeled after the RecipeDetail file in the Apple Docs
 struct UserLoginContent<Link: View>: View {
     var setup: Setup
     var dataModel = DataModel.shared
@@ -221,7 +218,6 @@ struct UserLoginContent<Link: View>: View {
                         .foregroundColor(.blue)
                     Spacer()
                 }
-                
                 HStack{
                     Spacer()
                     Text("Password")
@@ -235,58 +231,55 @@ struct UserLoginContent<Link: View>: View {
                     Spacer()
                 }
                 Spacer()
-                    if userDataSubmitted == false && userLoggedInSuccessful == false {
-                        HStack{
-                            Spacer()
-                            Button {
-                                loginUser2()
-                                presentLoginFullScreen = true
-                                print("Data Submission Pressed. Function Need to be created")
-                            } label: {
-                                HStack{
-                                    Spacer()
-                                    Text("Login")
-                                    Spacer()
-                                    Image(systemName: "arrow.up.doc.fill")
-                                    Spacer()
-                                }
-                                .frame(width: 300, height: 50, alignment: .center)
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(24)
+                if userDataSubmitted == false && userLoggedInSuccessful == false {
+                    HStack{
+                        Spacer()
+                        Button {
+                            loginUser2()
+                            presentLoginFullScreen = true
+                            print("Data Submission Pressed. Function Need to be created")
+                        } label: {
+                            HStack{
+                                Spacer()
+                                Text("Login")
+                                Spacer()
+                                Image(systemName: "arrow.up.doc.fill")
+                                Spacer()
                             }
                             .frame(width: 300, height: 50, alignment: .center)
+                            .background(Color.blue)
+                            .foregroundColor(.white)
                             .cornerRadius(24)
-                            Spacer()
                         }
-//                        .padding(.bottom, 60)
-                        
-                    } else if userDataSubmitted == true || userLoggedInSuccessful == true  {
-                        HStack{
-                            Spacer()
-                            NavigationLink {
-                                userLoggedInAndSubmitted == false && userDataSubmitted == false ? AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
-                                : userLoggedInAndSubmitted == true && userDataSubmitted == true ? AnyView(ExplanationView(setup: setup, relatedLink: link))
-                                : AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
-                            } label: {
-                                HStack{
-                                    Spacer()
-                                    Text("Check Profile and Continue")
-                                    Spacer()
-                                    Image(systemName: "arrowshape.bounce.right")
-                                    Spacer()
-                                }
-                                .frame(width: 300, height: 50, alignment: .center)
-                                .background(Color.green)
-                                .foregroundColor(.white)
-                                .cornerRadius(24)
-                            }
-                            .frame(width: 300, height: 50, alignment: .center)
-                            .cornerRadius(24)
-                            Spacer()
-                        }
-//                        .padding(.bottom, 60)
+                        .frame(width: 300, height: 50, alignment: .center)
+                        .cornerRadius(24)
+                        Spacer()
                     }
+                } else if userDataSubmitted == true || userLoggedInSuccessful == true  {
+                    HStack{
+                        Spacer()
+                        NavigationLink {
+                            userLoggedInAndSubmitted == false && userDataSubmitted == false ? AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
+                            : userLoggedInAndSubmitted == true && userDataSubmitted == true ? AnyView(ExplanationView(setup: setup, relatedLink: link))
+                            : AnyView(UserDataEntrySplashView(setup: setup, relatedLink: link))
+                        } label: {
+                            HStack{
+                                Spacer()
+                                Text("Check Profile and Continue")
+                                Spacer()
+                                Image(systemName: "arrowshape.bounce.right")
+                                Spacer()
+                            }
+                            .frame(width: 300, height: 50, alignment: .center)
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(24)
+                        }
+                        .frame(width: 300, height: 50, alignment: .center)
+                        .cornerRadius(24)
+                        Spacer()
+                    }
+                }
                 HStack{
                     NavigationLink("ExplanationView", destination: ExplanationView(setup: setup, relatedLink: link))
                         .foregroundColor(.clear)
@@ -318,7 +311,6 @@ struct UserLoginContent<Link: View>: View {
                                 .foregroundColor(.blue)
                             Spacer()
                         }
-                        
                         HStack{
                             Spacer()
                             Text("Last Name")
@@ -387,7 +379,7 @@ struct UserLoginContent<Link: View>: View {
                             HStack{
                                 Spacer()
                                 Button {
-                                    userDataSubmitted = true 
+                                    userDataSubmitted = true
                                     DispatchQueue.main.async(group: .none, qos: .userInitiated) {
                                         Task(priority: .userInitiated, operation: {
                                             await assignSex2()
@@ -466,6 +458,36 @@ struct UserLoginContent<Link: View>: View {
             .navigationTitle("")
         }
     }
+}
+
+extension UserLoginContent {
+//MARK: -Extenstion Authorization Methods
+    private func loginUser2() {
+        Auth.auth().signIn(withEmail: email, password: password) { result, err in
+            if let err = err {
+                print("Failed due to error:", err)
+                return
+            }
+            print("Successfully logged in with ID: \(result?.user.uid ?? "")")
+            userLoggedInSuccessful = true
+            print("userLoggedInSuccessful: \(userLoggedInSuccessful)")
+        }
+    }
+    
+    private func createUser2() {
+        Auth.auth().createUser(withEmail: email, password: password, completion: { result, err in
+            if let err = err {
+                print("Failed due to error:", err)
+                return
+            }
+            print("Successfully created account with ID: \(result?.user.uid ?? "")")
+        })
+    }
+}
+
+
+extension UserLoginContent {
+//MARK: -Extension Methods
     
     func loginAndDataSuccessful() async {
         if userLoggedInSuccessful == true && userDataSubmitted == true {
@@ -483,30 +505,6 @@ struct UserLoginContent<Link: View>: View {
         }
     }
     
-    
-    private func loginUser2() {
-            Auth.auth().signIn(withEmail: email, password: password) { result, err in
-                if let err = err {
-                    print("Failed due to error:", err)
-                    return
-                }
-                print("Successfully logged in with ID: \(result?.user.uid ?? "")")
-                userLoggedInSuccessful = true
-                print("userLoggedInSuccessful: \(userLoggedInSuccessful)")
-            }
-        }
-        
-    private func createUser2() {
-        Auth.auth().createUser(withEmail: email, password: password, completion: { result, err in
-            if let err = err {
-                print("Failed due to error:", err)
-                return
-            }
-            print("Successfully created account with ID: \(result?.user.uid ?? "")")
-        })
-    }
-    
-    
     func assignSex2() async {
         if genderIdx == 0 {
             sex.append(0) // Female
@@ -518,9 +516,7 @@ struct UserLoginContent<Link: View>: View {
         }
     }
     
-    
     func areDemoFieldsEmpty2() async {
-        
         if firtsName.count > 0 && lastName.count > 0 && email.count > 0 && password.count > 0 && genderIdx >= 0 {
             userDataSubmitted = true
             udLinkColorIndex = 1
@@ -571,7 +567,7 @@ struct UserLoginContent<Link: View>: View {
         print("SetupModel genderIdx: \(userGenderIndex)")
         print("SetupModel sex: \(userSex)")
         print("SetupModel userUUIDString: \(userUUIDString)")
-      }
+    }
     
     
     func concatenateDemoFinalArrays2() async {
@@ -587,7 +583,6 @@ struct UserLoginContent<Link: View>: View {
     }
     
     func printFinalDemoArrays2() async {
-        
         print("finalFirstName: \(finalFirstName)")
         print("finalLastName: \(finalLastName)")
         print("finalEmail: \(finalEmail)")
@@ -618,7 +613,10 @@ struct UserLoginContent<Link: View>: View {
             uploadFile2(fileName: "SetupResults.json")
         }
     }
-    
+}
+
+extension UserLoginContent {
+//MARK: -Extension CSV/JSON Methods
     func getSetupData2() async {
         guard let setupData = await self.getDemoJSONData2() else { return }
         print("Json Setup Data 2:")
@@ -635,7 +633,6 @@ struct UserLoginContent<Link: View>: View {
     }
     
     func getDemoJSONData2() async -> Data? {
-        
         let saveFinalSetupResults2 = SaveFinalSetupResults2 (
             jsonFinalFirstName: finalFirstName,
             jsonFinalLastName: finalLastName,
@@ -646,7 +643,6 @@ struct UserLoginContent<Link: View>: View {
             jsonFinalGenderIndex: finalGenderIndex,
             jsonFinalSex: finalSex,
             jsonUserUUID: finalUserUUIDString)
-        
         let jsonSetupData = try? JSONEncoder().encode(saveFinalSetupResults2)
         print("saveFinalResults: \(saveFinalSetupResults2)")
         print("Json Encoded \(jsonSetupData!)")
@@ -673,10 +669,8 @@ struct UserLoginContent<Link: View>: View {
         }
     }
 
-    
     func writeSetupResultsToCSV2() async {
         print("writeSetupResultsToCSV2 Start")
-        
         let stringFinalFirstName = "finalFirstName," + finalFirstName.map { String($0) }.joined(separator: ",")
         let stringFinalLastName = "finalLastName," + finalLastName.map { String($0) }.joined(separator: ",")
         let stringFinalEmail = "finalEmail," + finalEmail.map { String($0) }.joined(separator: ",")
@@ -686,16 +680,13 @@ struct UserLoginContent<Link: View>: View {
         let stringFinalGenderIndex = "finalGenderIndex," + finalGenderIndex.map { String($0) }.joined(separator: ",")
         let stringFinalSex = "finalSex," + finalSex.map { String($0) }.joined(separator: ",")
         let stringFinalUserUUIDString = "finalUserUUIDString," + finalUserUUIDString.map { String($0) }.joined(separator: ",")
-        
         do {
             let csvSetupPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvSetupDocumentsDirectory = csvSetupPath
             print("CSV Setup DocumentsDirectory 2: \(csvSetupDocumentsDirectory)")
             let csvSetupFilePath = csvSetupDocumentsDirectory.appendingPathComponent(setupCSVName)
             print(csvSetupFilePath)
-            
             let writerSetup = try CSVWriter(fileURL: csvSetupFilePath, append: false)
-        
             try writerSetup.write(row: [stringFinalFirstName])
             try writerSetup.write(row: [stringFinalLastName])
             try writerSetup.write(row: [stringFinalEmail])
@@ -705,7 +696,6 @@ struct UserLoginContent<Link: View>: View {
             try writerSetup.write(row: [stringFinalGenderIndex])
             try writerSetup.write(row: [stringFinalSex])
             try writerSetup.write(row: [stringFinalUserUUIDString])
-        
             print("CVS Setup Writer 2 Success")
         } catch {
             print("CVSWriter Setup 2 Error or Error Finding File for Setup 2 CSV \(error.localizedDescription)")
@@ -714,7 +704,6 @@ struct UserLoginContent<Link: View>: View {
     
     func writeInputSetupResultsToCSV2() async {
         print("writeInputSetupResultsToCSV2 Start")
-        
         let stringFinalFirstName = finalFirstName.map { String($0) }.joined(separator: ",")
         let stringFinalLastName = finalLastName.map { String($0) }.joined(separator: ",")
         let stringFinalEmail = finalEmail.map { String($0) }.joined(separator: ",")
@@ -839,17 +828,18 @@ struct UserLoginContent<Link: View>: View {
         }
     }
 
+//MARK: -NavigationLink Method
     private func link(setup: Setup) -> some View {
         EmptyView()
     }
 }
 
-struct UserLoginView_Previews: PreviewProvider {
-    static var previews: some View {
-        UserLoginView(setup: nil, relatedLink: link)
-    }
-    
-    static func link(setup: Setup) -> some View {
-        EmptyView()
-    }
-}
+//struct UserLoginView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        UserLoginView(setup: nil, relatedLink: link)
+//    }
+//
+//    static func link(setup: Setup) -> some View {
+//        EmptyView()
+//    }
+//}

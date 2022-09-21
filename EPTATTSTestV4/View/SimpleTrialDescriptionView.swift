@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct SimpleTrialDescriptionView: View {
-    
     var colorModel: ColorModel = ColorModel()
     @ObservedObject var simpleTrialDescriptionModel: SimpleTrialDescriptionModel = SimpleTrialDescriptionModel()
   
@@ -42,7 +41,6 @@ struct SimpleTrialDescriptionView: View {
                 }
                 Spacer()
             }
-         
         }
     }
 }

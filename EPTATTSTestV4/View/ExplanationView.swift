@@ -35,16 +35,13 @@ struct ExplanationContent<Link: View>: View {
     var relatedLink: (Setup) -> Link
     @EnvironmentObject private var navigationModel: NavigationModel
     
-    
     var colorModel: ColorModel = ColorModel()
     let videoExplanationLink = "KzQ4cYPZnfo"
-
-//    let youtubeURL =  URL(string: "https://www.youtube.com/embed/KzQ4cYPZnfo")
-//    @ObservedObject var webViewModel = WebViewModel(url: "https://www.youtube.com/embed/KzQ4cYPZnfo")
-
-   
+    
+    //    let youtubeURL =  URL(string: "https://www.youtube.com/embed/KzQ4cYPZnfo")
+    //    @ObservedObject var webViewModel = WebViewModel(url: "https://www.youtube.com/embed/KzQ4cYPZnfo")
+    
     var body: some View {
-        
         ZStack {
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack {
@@ -84,7 +81,10 @@ struct ExplanationContent<Link: View>: View {
             }
         }
     }
-    
+}
+
+extension ExplanationContent {
+//MARK: - NavigationLink Methods Extension
     private func link(setup: Setup) -> some View {
         EmptyView()
     }
@@ -92,11 +92,9 @@ struct ExplanationContent<Link: View>: View {
 
 
 struct VideoView: UIViewRepresentable {
-
     let videoID: String
     //KzQ4cYPZnfo
     let videoThread = DispatchQueue(label: "BackGroundVideoThread", qos: .userInitiated)
-    
     
     func makeUIView(context: Context) -> WKWebView {
         return WKWebView(frame: CGRect(x: 0.0, y: 0.0, width: 0.1, height: 0.1))
@@ -110,15 +108,15 @@ struct VideoView: UIViewRepresentable {
 }
 
 
-struct ExplanationView_Previews: PreviewProvider {
-    static var previews: some View {
-        ExplanationView(setup: nil, relatedLink: link)
-    }
-    
-    static func link(setup: Setup) -> some View {
-        EmptyView()
-    }
-}
+//struct ExplanationView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ExplanationView(setup: nil, relatedLink: link)
+//    }
+//
+//    static func link(setup: Setup) -> some View {
+//        EmptyView()
+//    }
+//}
 
 
 

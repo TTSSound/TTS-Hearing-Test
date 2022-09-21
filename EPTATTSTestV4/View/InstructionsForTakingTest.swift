@@ -10,7 +10,6 @@ import AVKit
 import WebKit
 
 struct InstructionsForTakingTest: View {
-    
     var colorModel: ColorModel = ColorModel()
     let videoInstructionLink = "KzQ4cYPZnfo"
     
@@ -51,11 +50,7 @@ struct InstructionsForTakingTest: View {
     }
 }
 
-
-
-
 struct VideoInstructionView: UIViewRepresentable {
-    
     let videoInstructionID: String
     //KzQ4cYPZnfo
     
