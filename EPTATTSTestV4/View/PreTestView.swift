@@ -29,7 +29,7 @@ struct PreTestContent<Link: View>: View {
     var relatedLinkTesting: (Testing) -> Link
     @EnvironmentObject private var naviationModel: NavigationModel
     
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     
     @State var ehaLinkExists = Bool()
     @State var eptaLinkExists = Bool()

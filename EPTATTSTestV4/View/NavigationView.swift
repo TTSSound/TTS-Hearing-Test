@@ -319,7 +319,7 @@ struct NavigationView: View {
     var dataModel = DataModel.shared
     @StateObject private var navigationModel = NavigationModel()
     
-    var colorModel = ColorModel()
+    @StateObject var colorModel = ColorModel()
     @State var selectedTab: Int = 0
     
     @State var firstTestingTabEnabled: Bool = false

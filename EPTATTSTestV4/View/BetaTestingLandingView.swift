@@ -37,8 +37,10 @@ struct BetaTestingLandingContent<Link: View>: View {
     var relatedLinkTesting: (Testing) -> Link
     @EnvironmentObject private var naviationModel: NavigationModel
     
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     
+    @State private var finalLastName = [String]()
+    @State private var userLastName = [String]()
     @State private var inputLastName = String()
     @State private var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
     @State private var isOkayToUpload = false
@@ -51,7 +53,9 @@ struct BetaTestingLandingContent<Link: View>: View {
     @State var betaSexTitle = "Sex"
     @State var betaAgeIdx = Int()
     @State var betaTestSelectionIdx = Int()
-    @State var betaTestSelectionName = String()
+    @State var betaTestSelectionName = [String]()
+    @State var betaTestSelection = [String]()
+    @State var betaTestName = String()
     @State var betaSelectionsSubmitted: Bool = false
     
     @State var betaFemale: Bool = false
@@ -74,7 +78,9 @@ struct BetaTestingLandingContent<Link: View>: View {
     
     let inputBetaSummaryCSVName = "InputBetaSummaryCSV.csv"
     
-    @State var inputBetaAgeCSVName = String()
+    @State var inputBetaAgeCSVName = [String]()
+    @State var inputBetaAgeName = [String]()
+    @State var inputBetaAge = String()
     // <= 27").tag(0)   age0.csv
     // 28-39").tag(2)   age1.csv
     // 40-49").tag(3)   age2.csv
@@ -83,7 +89,9 @@ struct BetaTestingLandingContent<Link: View>: View {
     // 70-79").tag(6)   age5.csv
     // 80-89").tag(7)   age6.csv
     
-    @State var inputBetaSexCSVName = String()
+    @State var inputBetaSexCSVName = [String]()
+    @State var inputBetaSexName = [String]()
+    @State var inputBetaSex = String()
     // 0 idx  = female.csv
     // 1 idx = male.csv
     
@@ -192,153 +200,90 @@ struct BetaTestingLandingContent<Link: View>: View {
                 //End Vstack
             }
             .fullScreenCover(isPresented: $showBetaNameScreen) {
+                ZStack{
                 colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
-                VStack(alignment: .leading) {
-                    Text("This Is A Shortcut For App Testing Use To Surpass the Main Setup Process, While Still Entering The Key Demographic Variables Needed For The Actual Test")
-                        .font(.title3)
-                        .foregroundColor(.white)
-                        .padding(.top, 40)
-                        .padding(.bottom, 10)
-                    
-                    Text("If you completed the full setup process, still enter the information requested")
-                        .foregroundColor(.white)
-                        .padding(.bottom, 10)
-                    
-                    HStack{
-                        Spacer()
-                        Text("Last Name")
+                    VStack(alignment: .leading) {
+                        Text("This Is A Shortcut For App Testing Use To Surpass the Main Setup Process, While Still Entering The Key Demographic Variables Needed For The Actual Test")
+                            .font(.title3)
                             .foregroundColor(.white)
-                        Spacer()
-                        TextField("Last Name", text: $inputLastName)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .autocapitalization(.none)
-                            .disableAutocorrection(true)
-                            .foregroundColor(.blue)
-                        Spacer()
-                    }
-                    
-                    Text(" Use The Tester Profile Info Below To Login.")
-                        .font(.title3)
-                        .foregroundColor(.white)
-                        .padding(.top, 10)
-                        .padding(.bottom, 2)
-                    Text("Tester@TrueToSourceSound.com")
-                        .foregroundColor(.blue)
-                        .padding(.leading)
-                        .padding(.top, 2)
-                        .padding(.bottom, 2)
-                    Text("password")
-                        .foregroundColor(.blue)
-                        .padding(.leading)
-                        .padding(.top, 2)
-                        .padding(.bottom, 10)
-                    
-                    HStack{
-                        Spacer()
-                        Text("Email  ")
+                            .padding(.top, 40)
+                            .padding(.bottom, 10)
+                        
+                        Text("If you completed the full setup process, still enter the information requested")
                             .foregroundColor(.white)
-                        Spacer()
-                        TextField("Enter_Email@Here.com", text: $email)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .autocapitalization(.none)
-                            .disableAutocorrection(true)
-                            .foregroundColor(.blue)
-                        Spacer()
-                    }
-                    
-                    HStack{
-                        Spacer()
-                        Text("Password")
-                            .foregroundColor(.white)
-                        Spacer()
-                        TextField("Enter Your Password", text: $password)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .autocapitalization(.none)
-                            .disableAutocorrection(true)
-                            .foregroundColor(.blue)
-                        Spacer()
-                    }
-                    
-                    if logInAttempt == false {
+                            .padding(.bottom, 10)
+                        
                         HStack{
                             Spacer()
-                            Button {
-                                loginUser3()
-                                logInAttempt = true
-                            } label: {
-                                HStack{
-                                    Spacer()
-                                    Text("Login")
-                                    Spacer()
-                                    Image(systemName: "arrow.up.doc.fill")
-                                    Spacer()
-                                }
-                                .frame(width: 300, height: 50, alignment: .center)
-                                .background(Color.blue)
+                            Text("Last Name")
                                 .foregroundColor(.white)
-                                .cornerRadius(24)
-                            }
-                            .frame(width: 300, height: 50, alignment: .center)
-                            .cornerRadius(24)
+                            Spacer()
+                            TextField("Last Name", text: $inputLastName)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .autocapitalization(.none)
+                                .disableAutocorrection(true)
+                                .foregroundColor(.blue)
                             Spacer()
                         }
-                        .frame(width: 350, height: 250, alignment: .center)
-                        .foregroundColor(.clear)
-                        .background(Color.clear)
-                        .cornerRadius(24)
-                        .padding(.bottom, 20)
-                    } else if logInAttempt == true {
-                        if userLoggedInSuccessful == false {
-                            HStack {
-                                VStack{
-                                    Text("Login Error!! Try Again!")
-                                        .foregroundColor(.red)
-                                        .padding()
-                                    HStack{
-                                        Spacer()
-                                        Button {
-                                            loginUser3()
-                                        } label: {
-                                            HStack{
-                                                Spacer()
-                                                Text("Press To Reset")
-                                                Spacer()
-                                                Image(systemName: "arrowshape.turn.up.backward.2")
-                                                Spacer()
-                                            }
-                                            .frame(width: 300, height: 50, alignment: .center)
-                                            .background(Color.red)
-                                            .foregroundColor(.white)
-                                            .cornerRadius(24)
-                                        }
-                                        .frame(width: 300, height: 50, alignment: .center)
-                                        .cornerRadius(24)
-                                        Spacer()
-                                    }
-                                }
-                            }
-                            .frame(width: 350, height: 250, alignment: .center)
-                            .foregroundColor(.clear)
-                            .background(Color.clear)
-                            .cornerRadius(24)
-                            .padding(.bottom, 20)
-                        } else if userLoggedInSuccessful == true {
+                        
+                        Text(" Use The Tester Profile Info Below To Login.")
+                            .font(.title3)
+                            .foregroundColor(.white)
+                            .padding(.top, 10)
+                            .padding(.bottom, 2)
+                        Text("Tester@TrueToSourceSound.com")
+                            .foregroundColor(.blue)
+                            .padding(.leading)
+                            .padding(.top, 2)
+                            .padding(.bottom, 2)
+                        Text("password")
+                            .foregroundColor(.blue)
+                            .padding(.leading)
+                            .padding(.top, 2)
+                            .padding(.bottom, 10)
+                        
+                        HStack{
+                            Spacer()
+                            Text("Email  ")
+                                .foregroundColor(.white)
+                            Spacer()
+                            TextField("Enter_Email@Here.com", text: $email)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .autocapitalization(.none)
+                                .disableAutocorrection(true)
+                                .foregroundColor(.blue)
+                            Spacer()
+                        }
+                        
+                        HStack{
+                            Spacer()
+                            Text("Password")
+                                .foregroundColor(.white)
+                            Spacer()
+                            TextField("Enter Your Password", text: $password)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .autocapitalization(.none)
+                                .disableAutocorrection(true)
+                                .foregroundColor(.blue)
+                            Spacer()
+                        }
+                        
+                        if logInAttempt == false {
                             HStack{
                                 Spacer()
                                 Button {
-                                    showBetaNameScreen.toggle()
-                                    logInAttempt = false
-                                    userLoggedInSuccessful = true
+                                    loginUser3()
+                                    logInAttempt = true
                                 } label: {
                                     HStack{
                                         Spacer()
-                                        Text("Continue")
+                                        Text("Login")
                                         Spacer()
-                                        Image(systemName: "arrowshape.bounce.right")
+                                        Image(systemName: "arrow.up.doc.fill")
                                         Spacer()
                                     }
                                     .frame(width: 300, height: 50, alignment: .center)
-                                    .background(Color.green)
+                                    .background(Color.blue)
                                     .foregroundColor(.white)
                                     .cornerRadius(24)
                                 }
@@ -351,14 +296,79 @@ struct BetaTestingLandingContent<Link: View>: View {
                             .background(Color.clear)
                             .cornerRadius(24)
                             .padding(.bottom, 20)
+                        } else if logInAttempt == true {
+                            if userLoggedInSuccessful == false {
+                                HStack {
+                                    VStack{
+                                        Text(" Checking Possible Login Error!!")
+                                            .foregroundColor(.red)
+                                            .padding()
+                                        HStack{
+                                            Spacer()
+                                            Button {
+                                                loginUser3()
+                                            } label: {
+                                                HStack{
+                                                    Spacer()
+                                                    Text("Press To Reset")
+                                                    Spacer()
+                                                    Image(systemName: "arrowshape.turn.up.backward.2")
+                                                    Spacer()
+                                                }
+                                                .frame(width: 300, height: 50, alignment: .center)
+                                                .background(Color.red)
+                                                .foregroundColor(.white)
+                                                .cornerRadius(24)
+                                            }
+                                            .frame(width: 300, height: 50, alignment: .center)
+                                            .cornerRadius(24)
+                                            Spacer()
+                                        }
+                                    }
+                                }
+                                .frame(width: 350, height: 250, alignment: .center)
+                                .foregroundColor(.clear)
+                                .background(Color.clear)
+                                .cornerRadius(24)
+                                .padding(.bottom, 20)
+                            } else if userLoggedInSuccessful == true {
+                                HStack{
+                                    Spacer()
+                                    Button {
+                                        showBetaNameScreen.toggle()
+                                        logInAttempt = false
+                                        userLoggedInSuccessful = true
+                                    } label: {
+                                        HStack{
+                                            Spacer()
+                                            Text("Continue")
+                                            Spacer()
+                                            Image(systemName: "arrowshape.bounce.right")
+                                            Spacer()
+                                        }
+                                        .frame(width: 300, height: 50, alignment: .center)
+                                        .background(Color.green)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(24)
+                                    }
+                                    .frame(width: 300, height: 50, alignment: .center)
+                                    .cornerRadius(24)
+                                    Spacer()
+                                }
+                                .frame(width: 350, height: 250, alignment: .center)
+                                .foregroundColor(.clear)
+                                .background(Color.clear)
+                                .cornerRadius(24)
+                                .padding(.bottom, 20)
+                            }
+                        } else {
+                            Text("Fatal Error in Toggle Sub Stack")
+                                .frame(width: 350, height: 250, alignment: .center)
+                                .foregroundColor(.red)
+                                .background(Color.black)
+                                .cornerRadius(24)
+                                .padding(.bottom, 20)
                         }
-                    } else {
-                        Text("Fatal Error in Toggle Sub Stack")
-                            .frame(width: 350, height: 250, alignment: .center)
-                            .foregroundColor(.red)
-                            .background(Color.black)
-                            .cornerRadius(24)
-                            .padding(.bottom, 20)
                     }
                 }
             }
@@ -415,19 +425,19 @@ extension BetaTestingLandingContent {
     //MARK: -Extension Methods
     func assignBetaAge() async {
         if age0 == true {
-            inputBetaAgeCSVName = "age0.csv"
+            inputBetaAge = "age0.csv"
         } else if age1 == true {
-            inputBetaAgeCSVName = "age1.csv"
+            inputBetaAge = "age1.csv"
         } else if age2 == true {
-            inputBetaAgeCSVName = "age2.csv"
+            inputBetaAge = "age2.csv"
         } else if age3 == true {
-            inputBetaAgeCSVName = "age3.csv"
+            inputBetaAge = "age3.csv"
         } else if age4 == true {
-            inputBetaAgeCSVName = "age4.csv"
+            inputBetaAge = "age4.csv"
         } else if age5 == true {
-            inputBetaAgeCSVName = "age5.csv"
+            inputBetaAge = "age5.csv"
         } else if age6 == true {
-            inputBetaAgeCSVName = "age6.csv"
+            inputBetaAge = "age6.csv"
         } else {
             print("Error in assignBetaAge Logic")
         }
@@ -435,9 +445,9 @@ extension BetaTestingLandingContent {
     
     func assignBetaSex() async {
         if betaFemale == true {
-            inputBetaSexCSVName = "female.csv"
+            inputBetaSex = "female.csv"
         } else if betaMale == true {
-            inputBetaSexCSVName = "male.csv"
+            inputBetaSex = "male.csv"
         } else {
             print("Error in assignBetaSex Logic")
         }
@@ -456,10 +466,10 @@ extension BetaTestingLandingContent {
     func writeBetaTest() async {
         if betaEPTA == true && betaEHA == false {
             await writeBetaEPTAInputTestSelectionToCSV()
-            betaTestSelectionName = "EPTA.csv"
+            betaTestName = "EPTA.csv"
         } else if betaEPTA == false && betaEHA == true {
             await writeBetaEHAInputTestSelectionToCSV()
-            betaTestSelectionName = "EHA.csv"
+            betaTestName = "EHA.csv"
         } else {
             print("critical error in writeBetaTest Logic")
         }
@@ -495,7 +505,7 @@ extension BetaTestingLandingContent {
 extension BetaTestingLandingContent{
     //MARK: -Extension CSV/JSON Methods
     func writeBetaAge0InputTestSelectionToCSV() async {
-        let betaAge0 = "age0" + "age0"
+        let betaAge0 = "age0," + "age0"
         print("writeBetaAge0InputTestSelectionToCSV Start")
         do {
             let csvBetaAge0InputTestPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -512,7 +522,7 @@ extension BetaTestingLandingContent{
     }
     
     func writeBetaAge1InputTestSelectionToCSV() async {
-        let betaAge1 = "age1" + "age1"
+        let betaAge1 = "age1," + "age1"
         print("writeBetaAge1InputTestSelectionToCSV Start")
         do {
             let csvBetaAge1InputTestPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -529,7 +539,7 @@ extension BetaTestingLandingContent{
     }
     
     func writeBetaAge2InputTestSelectionToCSV() async {
-        let betaAge2 = "age2" + "age2"
+        let betaAge2 = "age2," + "age2"
         print("writeBetaAge2InputTestSelectionToCSV Start")
         do {
             let csvBetaAge2InputTestPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -546,7 +556,7 @@ extension BetaTestingLandingContent{
     }
     
     func writeBetaAge3InputTestSelectionToCSV() async {
-        let betaAge3 = "age3" + "age3"
+        let betaAge3 = "age3," + "age3"
         print("writeBetaAge3InputTestSelectionToCSV Start")
         do {
             let csvBetaAge3InputTestPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -563,7 +573,7 @@ extension BetaTestingLandingContent{
     }
     
     func writeBetaAge4InputTestSelectionToCSV() async {
-        let betaAge4 = "age4" + "age4"
+        let betaAge4 = "age4," + "age4"
         print("writeBetaAge4InputTestSelectionToCSV Start")
         do {
             let csvBetaAge4InputTestPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -580,7 +590,7 @@ extension BetaTestingLandingContent{
     }
     
     func writeBetaAge5InputTestSelectionToCSV() async {
-        let betaAge5 = "age5" + "age5"
+        let betaAge5 = "age5," + "age5"
         print("writeBetaAge5InputTestSelectionToCSV Start")
         do {
             let csvBetaAge5InputTestPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -597,7 +607,7 @@ extension BetaTestingLandingContent{
     }
     
     func writeBetaAge6InputTestSelectionToCSV() async {
-        let betaAge6 = "age6" + "age6"
+        let betaAge6 = "age6," + "age6"
         print("writeBetaAge6InputTestSelectionToCSV Start")
         do {
             let csvBetaAge6InputTestPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -614,7 +624,7 @@ extension BetaTestingLandingContent{
     }
     
     func writeBetaSexMaleInputTestSelectionToCSV() async {
-        let betaMaleSelected = "male" + "male"
+        let betaMaleSelected = "male," + "male"
         print("writeBetaSexMaleInputTestSelectionToCSV Start")
         do {
             let csvBetaSexMaleInputTestPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -631,7 +641,7 @@ extension BetaTestingLandingContent{
     }
     
     func writeBetaSexFemaleInputTestSelectionToCSV() async {
-        let betaFemaleSelected = "female" + "female"
+        let betaFemaleSelected = "female," + "female"
         print("writeBetaSexFemaleInputTestSelectionToCSV Start")
         do {
             let csvBetaSexFemaleInputTestPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -648,7 +658,7 @@ extension BetaTestingLandingContent{
     }
     
     func writeBetaEPTAInputTestSelectionToCSV() async {
-        let selectedBetaEPTATest = "EPTA" + "EPTA"
+        let selectedBetaEPTATest = "EPTA," + "EPTA"
         print("writeBetaEPTAInputTestSelectionToCSV Start")
         do {
             let csvBetaEPTAInputTestPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -683,8 +693,16 @@ extension BetaTestingLandingContent{
     }
     
     func writeBetaInputSummaryToCSV() async {
+        userLastName.append(inputLastName)
+        finalLastName.append(contentsOf: userLastName)
+        betaTestSelection.append(betaTestName)
+        betaTestSelectionName.append(contentsOf: betaTestSelection)
+        inputBetaAgeName.append(inputBetaAge)
+        inputBetaAgeCSVName.append(contentsOf: inputBetaAgeName)
+        inputBetaSexName.append(inputBetaSex)
+        inputBetaSexCSVName.append(contentsOf: inputBetaSexName)
         print("writeBetaEHAInputSummaryToCSV Start")
-        let stringFinalInputLastName = inputLastName.map { String($0) }.joined(separator: ",")
+        let stringFinalInputLastName = finalLastName.map { String($0) }.joined(separator: ",")
         let stringFinalBetaTestSelection = betaTestSelectionName.map { String($0) }.joined(separator: ",")
         let stringFinalInputBetaAge = inputBetaAgeCSVName.map { String($0) }.joined(separator: ",")
         let stringFinalInputBetaSex = inputBetaSexCSVName.map { String($0) }.joined(separator: ",")

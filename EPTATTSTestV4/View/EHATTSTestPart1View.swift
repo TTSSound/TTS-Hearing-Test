@@ -84,7 +84,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
     }
     
     var audioSessionModel = AudioSessionModel()
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     @StateObject var gainReferenceModel: GainReferenceModel = GainReferenceModel()
     
     @State private var inputLastName = String()

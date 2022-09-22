@@ -30,7 +30,7 @@ struct SaveFinalTestSelection: Codable {  // This is a model
 }
 
 struct TestSelectionView: View {
-    var colorModel = ColorModel()
+    @StateObject var colorModel = ColorModel()
     
  
     let setupCSVName = "SetupResultsCSV.csv"

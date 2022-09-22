@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SystemVolumeView: View {
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     @State var systemVolumeSetting = false
     
     var body: some View {

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DNDSiriSetupView: View {
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     @State var doNotDisturbSetting = false
     
     

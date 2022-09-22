@@ -75,7 +75,7 @@ struct UserLoginContent<Link: View>: View {
     var relatedLink: (Setup) -> Link
     @EnvironmentObject private var navigationModel: NavigationModel
     
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     
     @State private var accountCreatedAndLoggedIn2: Bool = false
     @State private var inputLastName = String()

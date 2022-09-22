@@ -79,7 +79,7 @@ struct TrainingTestContent<Link: View>: View {
     }
     
     var audioSessionModel = AudioSessionModel()
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     
     @State var traininglocalHeard = 0
     @State var traininglocalPlaying = Int()    // Playing = 1. Stopped = -1

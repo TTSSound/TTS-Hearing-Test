@@ -28,7 +28,7 @@ struct PostSimpleTestContent<Link: View>: View {
     @EnvironmentObject private var naviationModel: NavigationModel
     
     //    var audioSessionModel = AudioSessionModel()
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     //    @State var volumePostSimpleTest = Float()
 
     var body: some View {

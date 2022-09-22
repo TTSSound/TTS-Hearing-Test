@@ -81,7 +81,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
     }
     
     var audioSessionModel = AudioSessionModel()
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     @StateObject var gainReferenceModel: GainReferenceModel = GainReferenceModel()
     
     @State private var inputLastName = String()
@@ -350,13 +350,13 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                                   false, false, false, false, false, false, false, false, false,
                                                   false, false, false, false, false, false, false, false, false,
                                                   false, false, false, false, false, false, false,
-                                                  false, false, false, false, false, false, false, true]   // Adding one false here
+                                                  false, false, false, false, false, false, true]
     
     @State var ehaP2fullTestCompletedMono: [Bool] = [false, false, false, false, false, false, false, false, false,
                                                      false, false, false, false, false, false, false, false, false,
                                                      false, false, false, false, false, false, false, false, false,
                                                      false, false, false, false, false, false, false, false, false,
-                                                     false, false, false, false, false, false, false, true]     // adding one false here
+                                                     false, false, false, false, false, false, true]
     
     
     @State var ehaP2fullTestCompletedTestingArray: [Bool] = [false, false, true]
@@ -712,6 +712,10 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                    .padding()
                                Spacer()
                                Text("You have completed \(ehaP2TestingPhases) of TEN test phases.")
+                                   .foregroundColor(.white)
+                                   .font(.title)
+                                   .padding()
+                               Spacer()
                                HStack{
                                    Spacer()
                                    Button(action: {
@@ -2666,7 +2670,7 @@ extension EHATTSTestPart2Content {
             ehaP2endTestSeriesValue = true
             ehaP2localPlaying = -1
             ehaP2_eptaSamplesCountArrayIdx += 1
-            //            ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
+            ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]    // Enabling This for Testing ending test error
             if ehaP2fullTestCompleted == true {
                 ehaP2localPlaying = -1
                 ehaP2stop()

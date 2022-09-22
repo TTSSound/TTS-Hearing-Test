@@ -46,7 +46,7 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
     
     
     var audioSessionModel = AudioSessionModel()
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     
     @State private var inputLastName = String()
     @State private var dataFileURLComparedLastName = URL(fileURLWithPath: "")   // General and Open

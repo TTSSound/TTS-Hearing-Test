@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CorrectiveFiltersExplanationView: View {
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     @ObservedObject var correctiveFiltersExplanationModel: CorrectiveFiltersExplanationModel = CorrectiveFiltersExplanationModel()
   
     var body: some View {

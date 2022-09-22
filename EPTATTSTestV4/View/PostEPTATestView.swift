@@ -30,7 +30,7 @@ struct PostEPTATestContent<Link: View>: View {
     @EnvironmentObject private var naviationModel: NavigationModel
     
     //    var audioSessionModel = AudioSessionModel()
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     
     @State var volumeEPTAPostTest = Float()
     

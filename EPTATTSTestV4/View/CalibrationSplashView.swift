@@ -11,7 +11,7 @@ import SwiftUI
 // ADD BUTTON TO RETURN TO HOME SCREEN
 
 struct CalibrationSplashView: View {
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
 
     var body: some View {
         ZStack{

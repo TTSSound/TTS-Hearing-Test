@@ -9,7 +9,7 @@ import SwiftUI
 //import MediaPlayer
 
 struct ManualSetupView: View {
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     
     var body: some View {
         ZStack{

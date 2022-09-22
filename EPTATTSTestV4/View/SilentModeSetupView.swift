@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SilentModeSetupView: View {
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     @State var silentSetting = false
     
     var body: some View {

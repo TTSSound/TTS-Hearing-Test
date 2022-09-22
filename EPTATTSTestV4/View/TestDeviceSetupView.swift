@@ -31,11 +31,13 @@ struct SaveSystemSettings: Codable {  // This is a model
 }
 
 struct TestDeviceSetupView: View {
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     var audioSessionModel = AudioSessionModel()
     
     
     let setupCSVName = "SetupResultsCSV.csv"
+    let inputSetupCSVName = "InputSetupResultsCSV.csv"
+    
     @State private var inputLastName = String()
     @State private var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
     @State private var isOkayToUpload = false

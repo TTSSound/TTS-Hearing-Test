@@ -10,7 +10,7 @@ import AVKit
 import WebKit
 
 struct InstructionsForTakingTest: View {
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     let videoInstructionLink = "KzQ4cYPZnfo"
     
     var body: some View {

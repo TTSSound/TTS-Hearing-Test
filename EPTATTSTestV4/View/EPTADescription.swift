@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EPTADescription: View {
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     @ObservedObject var ePTADescriptionModel: EPTADescriptionModel = EPTADescriptionModel()
   
     var body: some View {

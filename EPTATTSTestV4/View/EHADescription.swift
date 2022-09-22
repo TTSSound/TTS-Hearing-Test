@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EHADescription: View {
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     @ObservedObject var ehaDescriptionModel: EHADescriptionModel = EHADescriptionModel()
   
     var body: some View {

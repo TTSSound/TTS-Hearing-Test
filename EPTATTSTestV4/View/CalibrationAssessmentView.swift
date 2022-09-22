@@ -89,10 +89,15 @@ struct HeadphoneModels: Identifiable, Hashable {
 }
 
 struct CalibrationAssessmentView: View {
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     
-    
+    let inputSetupCSVName = "InputSetupResultsCSV.csv"  // let fieldLastName: String = results[row: 1, column: 0]
+    //lastName-> userLastName.append(lastName) -> finalLastName.Append(contentsOf:UserLastName)
+    //Sting() -> [String]() -> [String]()
     let setupCSVName = "SetupResultsCSV.csv"
+//    dataSetupName = "InputSetupResultsCSV.csv"
+//    let fileSetupManager = FileManager.default
+//    let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
     @State private var inputLastName = String()
     @State private var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
     @State private var isOkayToUpload = false
@@ -179,77 +184,82 @@ struct CalibrationAssessmentView: View {
                         .foregroundColor(colorModel.neonGreen)
                 })
                 Spacer()
-                    .fullScreenCover(isPresented: $showDeviceSheet, content: {
-                        VStack(alignment: .leading) {
-                            
-                            Button(action: {
-                                showDeviceSheet.toggle()
-                            }, label: {
-                                Image(systemName: "xmark")
-                                    .font(.headline)
-                                    .padding(10)
-                                    .foregroundColor(.red)
-                            })
-                            List {
-                                ForEach(headphones.indices, id: \.self) {index in
-                                    HStack {
-                                        
-                                        Text("\(self.headphones[index].name)")
-                                            .foregroundColor(.blue)
-                                        
-                                        Toggle("", isOn: self.$headphones[index].isToggledH)
-                                            .foregroundColor(.blue)
-                                            .onChange(of: self.headphones[index].isToggledH) { nameIndex in
-                                                Task(priority: .userInitiated, operation: {
-                                                    deviceSelectionIndex.removeAll()
-                                                    selectedDeviceName.append(self.headphones[index].name)
-                                                    selectedDeviceUUID.append(self.headphones[index].id)
-                                                    
-                                                    deviceApprovalFinding = index
-                                                    multipleDevicesCheck.append(deviceApprovalFinding)
-                                                    userSelectedDeviceName.append(headphones[index].name)
-                                                    userSelectedDeviceUUID.append(headphones[index].id)
-                                                    userSelectedDeviceIndex.append(index)
-                                                    headphoneModelsUnknownIndex.append(self.headphones.count)
-                                                    deviceSelectionIndex.append(index)
-                                                    
-                                                    print("isokaytoproceed: \(isOkayToProceed)")
-                                                    print("multipledevices: \(multipleDevicesCheck)")
-                                                    print(index)
-                                                    print(nameIndex)
-                                                    print(selectedDeviceName)
-                                                    print(selectedDeviceUUID)
-                                                    print(self.headphones[index].name)
-                                                    print(self.headphones[index].id)
-                                                    print(self.headphones[0].id)
-                                                    print(deviceSelectionIndex)
-                                                    print(userSelectedDeviceName)
-                                                    print(userSelectedDeviceUUID)
-                                                    print(userSelectedDeviceIndex)
-                                                })
-                                            }
+                    .fullScreenCover(isPresented: $showDeviceSheet) {
+                        ZStack{
+                            colorModel.colorBackgroundBottomTiffanyBlue.ignoresSafeArea()
+                            VStack(alignment: .leading) {
+                                
+                                Button(action: {
+                                    showDeviceSheet.toggle()
+                                }, label: {
+                                    Image(systemName: "xmark")
+                                        .font(.headline)
+                                        .padding(10)
+                                        .foregroundColor(.red)
+                                })
+                                List {
+                                    ForEach(headphones.indices, id: \.self) {index in
+                                        HStack {
+                                            
+                                            Text("\(self.headphones[index].name)")
+                                                .foregroundColor(.blue)
+                                            
+                                            
+                                            Toggle("", isOn: self.$headphones[index].isToggledH)
+                                                .foregroundColor(.blue)
+                                            
+                                                .onChange(of: self.headphones[index].isToggledH) { nameIndex in
+                                                    Task(priority: .userInitiated) {
+                                                        deviceSelectionIndex.removeAll()
+                                                        selectedDeviceName.append(self.headphones[index].name)
+                                                        selectedDeviceUUID.append(self.headphones[index].id)
+                                                        
+                                                        deviceApprovalFinding = index
+                                                        multipleDevicesCheck.append(deviceApprovalFinding)
+                                                        userSelectedDeviceName.append(headphones[index].name)
+                                                        userSelectedDeviceUUID.append(headphones[index].id)
+                                                        userSelectedDeviceIndex.append(index)
+                                                        headphoneModelsUnknownIndex.append(self.headphones.count)
+                                                        deviceSelectionIndex.append(index)
+                                                        
+                                                        print("isokaytoproceed: \(isOkayToProceed)")
+                                                        print("multipledevices: \(multipleDevicesCheck)")
+                                                        print(index)
+                                                        print(nameIndex)
+                                                        print(selectedDeviceName)
+                                                        print(selectedDeviceUUID)
+                                                        print(self.headphones[index].name)
+                                                        print(self.headphones[index].id)
+                                                        print(self.headphones[0].id)
+                                                        print(deviceSelectionIndex)
+                                                        print(userSelectedDeviceName)
+                                                        print(userSelectedDeviceUUID)
+                                                        print(userSelectedDeviceIndex)
+                                                    }
+                                                }
+                                        }
+                                    }
+                                }
+                                .onAppear {
+                                    Task(priority: .userInitiated) {
+                                        deviceApprovalFinding = Int()
+                                        isSubmitted = false
+                                        notifyOfMultipleDevices = Int()
+                                        isOkayToProceed = false
+                                        deviceApprovalFinding = Int()
+                                        selectedDeviceName.removeAll()
+                                        selectedDeviceUUID.removeAll()
+                                        userSelectedDeviceName.removeAll()
+                                        userSelectedDeviceUUID.removeAll()
+                                        userSelectedDeviceIndex.removeAll()
+                                        headphoneModelsUnknownIndex.removeAll()
+                                        deviceSelectionIndex.removeAll()
+                                        deviceSelection.removeAll()
                                     }
                                 }
                             }
-                            .onAppear {
-                                Task(priority: .userInitiated, operation: {
-                                    deviceApprovalFinding = Int()
-                                    isSubmitted = false
-                                    notifyOfMultipleDevices = Int()
-                                    isOkayToProceed = false
-                                    deviceApprovalFinding = Int()
-                                    selectedDeviceName.removeAll()
-                                    selectedDeviceUUID.removeAll()
-                                    userSelectedDeviceName.removeAll()
-                                    userSelectedDeviceUUID.removeAll()
-                                    userSelectedDeviceIndex.removeAll()
-                                    headphoneModelsUnknownIndex.removeAll()
-                                    deviceSelectionIndex.removeAll()
-                                    deviceSelection.removeAll()
-                                })
-                            }
                         }
-                    })
+                    }
                 HStack{
                     Spacer()
                     Toggle("Submit Selection", isOn: $isSubmitted)

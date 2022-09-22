@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EPTAResultsDisplayView: View {
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     
     var body: some View {
         ZStack{

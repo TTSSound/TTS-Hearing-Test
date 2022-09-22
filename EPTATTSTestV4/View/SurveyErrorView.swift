@@ -27,7 +27,7 @@ struct SurveyErrorContent<Link: View>: View {
     var relatedLinkTesting: (Testing) -> Link
     @EnvironmentObject private var naviationModel: NavigationModel
     
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     
     var body: some View {
         ZStack{

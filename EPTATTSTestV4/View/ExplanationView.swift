@@ -35,7 +35,7 @@ struct ExplanationContent<Link: View>: View {
     var relatedLink: (Setup) -> Link
     @EnvironmentObject private var navigationModel: NavigationModel
     
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     let videoExplanationLink = "KzQ4cYPZnfo"
     
     //    let youtubeURL =  URL(string: "https://www.youtube.com/embed/KzQ4cYPZnfo")

@@ -28,12 +28,12 @@ struct SaveFinalTestPurchase: Codable {  // This is a model
 }
 
 struct InAppPurchaseView: View {
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     
     @State private var inputLastName = String()
     @State private var inputSetupLastName = String()
     @State private var inputBetaLastName = String()
-    @State private var dataFileURLComparedLastName = URL(fileURLWithPath: "")   // General and Open
+//    @State private var dataFileURLComparedLastName = URL(fileURLWithPath: "")   // General and Open
     @State private var dataFileURLLastName = URL(fileURLWithPath: "")
     @State private var isOkayToUpload = false
     let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
@@ -163,8 +163,8 @@ struct InAppPurchaseView: View {
             .onAppear {
                 Task{
                     await setupCSVReader()
-                    await comparedLastNameCSVReader()
-                    await compareLastNames()
+//                    await comparedLastNameCSVReader()
+//                    await compareLastNames()
                 }
             }
             .onChange(of: isOkayToUpload) { uploadValue in
@@ -398,35 +398,35 @@ extension InAppPurchaseView {
         return documentsDirectory
     }
     
-    func comparedLastNameCSVReader() async {
-        let dataSetupName = inputFinalComparedLastNameCSV
-        let fileSetupManager = FileManager.default
-        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
-        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
-            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
-            if dataSetupFilePath.isFileURL  {
-                dataFileURLComparedLastName = dataSetupFilePath
-                print("dataSetupFilePath: \(dataSetupFilePath)")
-                print("dataFileURL1: \(dataFileURLComparedLastName)")
-                print("Setup Input File Exists")
-            } else {
-                print("Setup Data File Path Does Not Exist")
-            }
-        }
-        do {
-            let results = try CSVReader.decode(input: dataFileURLComparedLastName)
-            print(results)
-            print("Setup Results Read")
-            let rows = results.columns
-            print("rows: \(rows)")
-            let fieldLastName: String = results[row: 0, column: 0]
-            print("fieldLastName: \(fieldLastName)")
-            inputBetaLastName = fieldLastName
-            print("inputLastName: \(inputLastName)")
-        } catch {
-            print("Error in reading Last Name results")
-        }
-    }
+//    func comparedLastNameCSVReader() async {
+//        let dataSetupName = inputFinalComparedLastNameCSV
+//        let fileSetupManager = FileManager.default
+//        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
+//        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
+//            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
+//            if dataSetupFilePath.isFileURL  {
+//                dataFileURLComparedLastName = dataSetupFilePath
+//                print("dataSetupFilePath: \(dataSetupFilePath)")
+//                print("dataFileURL1: \(dataFileURLComparedLastName)")
+//                print("Setup Input File Exists")
+//            } else {
+//                print("Setup Data File Path Does Not Exist")
+//            }
+//        }
+//        do {
+//            let results = try CSVReader.decode(input: dataFileURLComparedLastName)
+//            print(results)
+//            print("Setup Results Read")
+//            let rows = results.columns
+//            print("rows: \(rows)")
+//            let fieldLastName: String = results[row: 0, column: 0]
+//            print("fieldLastName: \(fieldLastName)")
+//            inputBetaLastName = fieldLastName
+//            print("inputLastName: \(inputLastName)")
+//        } catch {
+//            print("Error in reading Last Name results")
+//        }
+//    }
     
     private func setupCSVReader() async {
         let dataSetupName = "InputSetupResultsCSV.csv"
@@ -451,23 +451,23 @@ extension InAppPurchaseView {
             print("rows: \(rows)")
             let fieldLastName: String = results[row: 1, column: 0]
             print("fieldLastName: \(fieldLastName)")
-            inputSetupLastName = fieldLastName
+            inputLastName = fieldLastName
             print("inputLastName: \(inputLastName)")
         } catch {
             print("Error in reading Last Name results")
         }
     }
     
-    func compareLastNames() async {
-        if inputSetupLastName == inputBetaLastName && inputSetupLastName != "" {
-            inputLastName = inputSetupLastName
-        } else if inputLastName != inputBetaLastName && inputLastName != "" {
-            inputLastName = inputSetupLastName
-        } else {
-            inputLastName = "ErrorLastName"
-            print("Fatal Error in input or beta last name")
-        }
-    }
+//    func compareLastNames() async {
+//        if inputSetupLastName == inputBetaLastName && inputSetupLastName != "" {
+//            inputLastName = inputSetupLastName
+//        } else if inputLastName != inputBetaLastName && inputLastName != "" {
+//            inputLastName = inputSetupLastName
+//        } else {
+//            inputLastName = "ErrorLastName"
+//            print("Fatal Error in input or beta last name")
+//        }
+//    }
     
     private func uploadFile(fileName: String) {
         DispatchQueue.global(qos: .userInteractive).async {

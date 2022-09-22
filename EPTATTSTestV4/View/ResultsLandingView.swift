@@ -30,7 +30,7 @@ struct ResultsLandingContent<Link: View>: View {
     var relatedLinkClosing: (Closing) -> Link
     @EnvironmentObject private var naviationModel: NavigationModel
     
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     
     
     @State var results_TestTaken = Int() // 1 = EPTA / 2 = EHA / 3 = Simple

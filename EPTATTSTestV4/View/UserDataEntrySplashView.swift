@@ -30,7 +30,7 @@ struct UserDataEntrySplashContent<Link: View>: View {
     var relatedLink: (Setup) -> Link
     @EnvironmentObject private var navigationModel: NavigationModel
     
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     
     var body: some View {
         ZStack{

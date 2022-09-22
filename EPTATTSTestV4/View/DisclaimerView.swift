@@ -49,7 +49,7 @@ struct DisclaimerContent<Link: View>: View {
     var relatedLink: (Setup) -> Link
     @EnvironmentObject private var naviationModel: NavigationModel
     
-    var colorModel = ColorModel()
+    @StateObject var colorModel = ColorModel()
     
     //    @Binding var selectedTab: Int
     

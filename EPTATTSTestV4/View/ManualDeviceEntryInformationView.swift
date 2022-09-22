@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ManualDeviceEntryInformationView: View {
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {

@@ -31,18 +31,23 @@ struct TestIDInputContent<Link: View>: View {
     var relatedLinkTesting: (Testing) -> Link
     @EnvironmentObject private var naviationModel: NavigationModel
     
-    var colorModel: ColorModel = ColorModel()
+    @StateObject var colorModel: ColorModel = ColorModel()
     
     @State private var inputBetaLastName = String()
     @State private var inputLastName = String()
     @State private var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
     @State private var dataFileURLBetaLastName = URL(fileURLWithPath: "")
     @State private var isOkayToUpload = false
-    @State private var finalComparedLastName = String()
+    @State private var comparedLastName = String()
+    @State private var comparedUserLastName = [String]()
+    @State private var finalComparedLastName = [String]()
     
     
     let inputBetaSummaryCSVName = "InputBetaSummaryCSV.csv"
+    
     let setupCSVName = "SetupResultsCSV.csv"
+    let inputSetupCSVName = "InputSetupResultsCSV.csv"
+    
     let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
     
     @State var testIDKey: String = ""
@@ -110,7 +115,7 @@ struct TestIDInputContent<Link: View>: View {
 extension TestIDInputContent {
 //MARK: -Extension CSV/JSON Methods
     private func setupLastNameCSVReader() async {
-        let dataSetupName = setupCSVName
+        let dataSetupName = inputSetupCSVName
         let fileSetupManager = FileManager.default
         let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
         if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
@@ -118,7 +123,7 @@ extension TestIDInputContent {
             if dataSetupFilePath.isFileURL  {
                 dataFileURLLastName = dataSetupFilePath
                 print("dataSetupFilePath: \(dataSetupFilePath)")
-                print("dataFileURL1: \(dataFileURLLastName)")
+                print("dataFileURLLastName: \(dataFileURLLastName)")
                 print("Setup Input File Exists")
             } else {
                 print("Setup Data File Path Does Not Exist")
@@ -170,12 +175,21 @@ extension TestIDInputContent {
     }
     
     func compareLastNames() async {
+        print("inputLastName: \(inputLastName)")
+        print("inputBetaLastName: \(inputBetaLastName)")
+        print("finalComparedLastName: \(finalComparedLastName)")
         if inputLastName == inputBetaLastName && inputLastName != "" {
-            finalComparedLastName = inputLastName
+            comparedLastName = inputLastName
+            comparedUserLastName.append(comparedLastName)
+            finalComparedLastName.append(contentsOf: comparedUserLastName)
         } else if inputLastName != inputBetaLastName && inputLastName != "" {
-            finalComparedLastName = inputLastName
+            comparedLastName = inputLastName
+            comparedUserLastName.append(comparedLastName)
+            finalComparedLastName.append(contentsOf: comparedUserLastName)
         } else {
-            finalComparedLastName = "ErrorLastName"
+            comparedLastName = "ErrorLastName"
+            comparedUserLastName.append(comparedLastName)
+            finalComparedLastName.append(contentsOf: comparedUserLastName)
             print("Fatal Error in input or beta last name")
         }
     }

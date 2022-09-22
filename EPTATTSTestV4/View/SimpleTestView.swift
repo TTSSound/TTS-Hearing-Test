@@ -77,7 +77,7 @@ struct SimpleTestContent<Link: View>: View {
     enum simpleFirebaseErrors: Error {
         case simpleunknownFileURL
     }
-    
+    @StateObject var colorModel: ColorModel = ColorModel()
     var audioSessionModel = AudioSessionModel()
 
     @State var simplelocalHeard = 0
