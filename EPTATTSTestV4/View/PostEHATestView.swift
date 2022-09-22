@@ -67,14 +67,16 @@ struct PostEHATestContent<Link: View>: View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack{
-                
+                Spacer()
                 Text("View for Completion of EHA Full Test")
                     .foregroundColor(.white)
+                    .font(.title)
                     .padding(.top,40)
                     .padding(.bottom, 20)
                 Spacer()
                 Text("Great Work!")
                     .foregroundColor(.white)
+                    .font(.title3)
                 Spacer()
                 Text("Give Us A Moment To Calculate and Format Your Results")
                     .foregroundColor(.white)
@@ -83,8 +85,9 @@ struct PostEHATestContent<Link: View>: View {
                 Text("Return Home to Navigate To Results")
                     .font(.title)
                     .foregroundColor(.red)
+                    .padding(.bottom, 40)
+                Spacer()
             }
-            Spacer()
         }
         .onAppear {
             Task{

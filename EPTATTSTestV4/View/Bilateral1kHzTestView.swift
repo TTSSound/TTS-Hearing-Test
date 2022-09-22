@@ -1003,13 +1003,13 @@ extension Bilateral1kHzTestContent {
             if onekHzdeltaRight == 0 {
                 onekHz_averageGain = onekHzsecondGain
                 onekHz_averageGainRightArray.append(onekHzsecondGain)
-            } else if onekHzdeltaRight >= 0.05 {
+            } else if onekHzdeltaRight >= 0.04 {
                 onekHz_averageGain = onekHzsecondGain
                 onekHz_averageGainRightArray.append(onekHzsecondGain)
-            } else if onekHzdeltaRight <= -0.05 {
+            } else if onekHzdeltaRight <= -0.04 {
                 onekHz_averageGain = onekHzfirstGain
                 onekHz_averageGainRightArray.append(onekHzfirstGain)
-            } else if onekHzdeltaRight < 0.05 && onekHzdeltaRight > -0.05 {
+            } else if onekHzdeltaRight < 0.04 && onekHzdeltaRight > -0.04 {
                 onekHz_averageGain = onekHzavgRight
                 onekHz_averageGainRightArray.append(onekHzavgRight)
             } else {
@@ -1030,13 +1030,13 @@ extension Bilateral1kHzTestContent {
             if onekHzdeltaLeft == 0 {
                 onekHz_averageGain = onekHzsecondGain
                 onekHz_averageGainLeftArray.append(onekHzsecondGain)
-            } else if onekHzdeltaLeft >= 0.05 {
+            } else if onekHzdeltaLeft >= 0.04 {
                 onekHz_averageGain = onekHzsecondGain
                 onekHz_averageGainLeftArray.append(onekHzsecondGain)
-            } else if onekHzdeltaLeft <= -0.05 {
+            } else if onekHzdeltaLeft <= -0.04 {
                 onekHz_averageGain = onekHzfirstGain
                 onekHz_averageGainLeftArray.append(onekHzfirstGain)
-            } else if onekHzdeltaLeft < 0.05 && onekHzdeltaLeft > -0.05 {
+            } else if onekHzdeltaLeft < 0.04 && onekHzdeltaLeft > -0.04 {
                 onekHz_averageGain = onekHzavgLeft
                 onekHz_averageGainLeftArray.append(onekHzavgLeft)
             } else {

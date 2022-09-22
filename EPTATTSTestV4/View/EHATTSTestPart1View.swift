@@ -191,7 +191,10 @@ struct EHATTSTestPart1Content<Link: View>: View {
     @State var envDataObjectModel_averageGain = Float()
 
     @State var envDataObjectModel_eptaSamplesCount = 8 //17
-    @State var envDataObjectModel_eptaSamplesCountArray = [7, 7, 7, 7, 7, 7, 7, 7, 15, 15, 15, 15, 15, 15, 15, 15, 23, 23, 23, 23, 23, 23, 23, 23, 31, 31, 31, 31, 31, 31, 31, 31]
+    @State var envDataObjectModel_eptaSamplesCountArray = [7, 7, 7, 7, 7, 7, 7, 7,
+                                                           15, 15, 15, 15, 15, 15, 15, 15,
+                                                           23, 23, 23, 23, 23, 23, 23, 23,
+                                                           31, 31, 31, 31, 31, 31, 31, 31]
     @State var envDataObjectModel_eptaSamplesCountArrayIdx = 0  //[0, 1, 2, 3]
     
     @State var envDataObjectModel_finalStoredIndex: [Int] = [Int]()
@@ -230,7 +233,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
     @State var ehaP1fullTestCompletedHoldingArray: [Bool] = [false, false, false, false, false, false, false, false,
                                                              false, false, false, false, false, false, false, false,
                                                              false, false, false, false, false, false, false, false,
-                                                             false, false, false, false, false, false, false, true]
+                                                             false, false, false, false, false, false, false, false, true]
     
     
     
@@ -1219,17 +1222,17 @@ extension EHATTSTestPart1Content {
             if delta == 0 {
                 envDataObjectModel_averageGain = secondGain
                 //                print("average Gain: \(envDataObjectModel_averageGain)")
-            } else if delta >= 0.05 {
+            } else if delta >= 0.04 {
                 envDataObjectModel_averageGain = secondGain
                 //                print("SecondGain: \(firstGain)")
                 //                print("SecondGain: \(secondGain)")
                 //                print("average Gain: \(envDataObjectModel_averageGain)")
-            } else if delta <= -0.05 {
+            } else if delta <= -0.04 {
                 envDataObjectModel_averageGain = firstGain
                 //                print("SecondGain: \(firstGain)")
                 //                print("SecondGain: \(secondGain)")
                 //                print("average Gain: \(envDataObjectModel_averageGain)")
-            } else if delta < 0.05 && delta > -0.05 {
+            } else if delta < 0.04 && delta > -0.04 {
                 envDataObjectModel_averageGain = avg
                 //                print("SecondGain: \(firstGain)")
                 //                print("SecondGain: \(secondGain)")
@@ -1476,6 +1479,7 @@ extension EHATTSTestPart1Content {
             localPlaying = -1
             //                envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
             envDataObjectModel_eptaSamplesCountArrayIdx += 1
+            ehaP1fullTestCompleted = ehaP1fullTestCompletedHoldingArray[envDataObjectModel_index+1]
             print("=============================")
             print("!!!!! End of Test Series!!!!!!")
             print("=============================")

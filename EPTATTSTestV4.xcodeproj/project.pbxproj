@@ -125,6 +125,8 @@
 		7C7986C228AEDB4D00888A74 /* JSONandCoreDataFuncsNotes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7CD23A7028AE056000AEBB02 /* JSONandCoreDataFuncsNotes.txt */; };
 		7C7986C328AEDB5000888A74 /* CoreDataAttemptNotes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7C7986C028AEDB3C00888A74 /* CoreDataAttemptNotes.txt */; };
 		7C7986E528AF038200888A74 /* TestDeviceSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7986E428AF038200888A74 /* TestDeviceSetupView.swift */; };
+		7C7A7F7D28DCC00C005B426C /* PreSilence.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7C7A7F7B28DCC00C005B426C /* PreSilence.wav */; };
+		7C7A7F7E28DCC00C005B426C /* PostSilence.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7C7A7F7C28DCC00C005B426C /* PostSilence.wav */; };
 		7C7A94F428B6F43200DD8FAC /* CorrectiveFiltersExplanationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7A94F328B6F43200DD8FAC /* CorrectiveFiltersExplanationView.swift */; };
 		7C7A94F628B6F90E00DD8FAC /* whyDoWeAskForThisText.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7C7A94F528B6F90E00DD8FAC /* whyDoWeAskForThisText.txt */; };
 		7C7A94FA28B7007300DD8FAC /* EHADescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7A94F928B7007300DD8FAC /* EHADescription.swift */; };
@@ -320,6 +322,8 @@
 		7C76E42428BBFB5A009BC082 /* SimpleVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleVideoPlayer.swift; sourceTree = "<group>"; };
 		7C7986C028AEDB3C00888A74 /* CoreDataAttemptNotes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CoreDataAttemptNotes.txt; sourceTree = "<group>"; };
 		7C7986E428AF038200888A74 /* TestDeviceSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDeviceSetupView.swift; sourceTree = "<group>"; };
+		7C7A7F7B28DCC00C005B426C /* PreSilence.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = PreSilence.wav; sourceTree = "<group>"; };
+		7C7A7F7C28DCC00C005B426C /* PostSilence.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = PostSilence.wav; sourceTree = "<group>"; };
 		7C7A94F328B6F43200DD8FAC /* CorrectiveFiltersExplanationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectiveFiltersExplanationView.swift; sourceTree = "<group>"; };
 		7C7A94F528B6F90E00DD8FAC /* whyDoWeAskForThisText.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = whyDoWeAskForThisText.txt; path = EPTATTSTestV4/Model/whyDoWeAskForThisText.txt; sourceTree = SOURCE_ROOT; };
 		7C7A94F728B6FA9F00DD8FAC /* WhyDoWeAskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhyDoWeAskView.swift; sourceTree = "<group>"; };
@@ -529,6 +533,8 @@
 				7C4CDB4628CEEE050051B9EE /* Sample57.wav */,
 				7C4CDB3028CEEE040051B9EE /* Sample58.wav */,
 				7C4CDB3528CEEE040051B9EE /* Sample59.wav */,
+				7C7A7F7C28DCC00C005B426C /* PostSilence.wav */,
+				7C7A7F7B28DCC00C005B426C /* PreSilence.wav */,
 			);
 			path = Samples;
 			sourceTree = "<group>";
@@ -885,8 +891,10 @@
 				7C7A94F628B6F90E00DD8FAC /* whyDoWeAskForThisText.txt in Resources */,
 				7C4CDB7528CEEE060051B9EE /* Sample21.wav in Resources */,
 				7C4EF1BB28B3D7CF008C81D6 /* ConditionalNavigation.txt in Resources */,
+				7C7A7F7D28DCC00C005B426C /* PreSilence.wav in Resources */,
 				7C4CDB6228CEEE060051B9EE /* Sample25.wav in Resources */,
 				7C4CDB8428CEEE060051B9EE /* Sample55.wav in Resources */,
+				7C7A7F7E28DCC00C005B426C /* PostSilence.wav in Resources */,
 				7C4CDB6B28CEEE060051B9EE /* Sample28.wav in Resources */,
 				7C51F16828C81FAC00FF5F0F /* Sample9.wav in Resources */,
 				7C14A7F728ACA77900601602 /* SummaryResults.json in Resources */,

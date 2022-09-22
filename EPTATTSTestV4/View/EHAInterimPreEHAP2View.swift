@@ -82,6 +82,7 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
     
     @State var saveSystemSettingsInterimPreEHAP2: SaveSystemSettingsInterimPreEHAP2? = nil
     
+    @State var nowShowSubmission: Bool = false
     
     var body: some View {
         ZStack{
@@ -100,6 +101,7 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
                             audioSessionModel.setAudioSession()
                             await recheckPreEHAP2SystemVolume()
                             await recheckPreEHAP2SilentMode()
+                            nowShowSubmission = true
                         }
                     } label: {
                         Text("Recheck Settings Before Proceeding")
@@ -160,7 +162,7 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
                     Spacer()
                 }
                 .padding(.trailing)
-                if interimPreEHAP2ResultsSubmitted == false {
+                if interimPreEHAP2ResultsSubmitted == false && nowShowSubmission == true {
                     HStack{
                         Spacer()
                         Button {
@@ -180,9 +182,9 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
                         }
                         Spacer()
                     }
-                    .padding(.top, 100)
-                    .padding(.bottom, 20)
-                } else if interimPreEHAP2ResultsSubmitted == true {
+                    .padding(.top, 80)
+                    .padding(.bottom, 40)
+                } else if interimPreEHAP2ResultsSubmitted == true && nowShowSubmission == true {
                     HStack{
                         Spacer()
                         NavigationLink {

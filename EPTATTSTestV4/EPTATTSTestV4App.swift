@@ -29,7 +29,6 @@ struct EPTATTSTestV4App: App {
     
     var body: some Scene {
         WindowGroup {
-//            EPTATTSTestV4List()
 //            DeviceSetupView()
 //            WelcomeSetupView()
 //            //SetupListActionView()

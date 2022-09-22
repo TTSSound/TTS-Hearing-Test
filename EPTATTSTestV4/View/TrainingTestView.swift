@@ -331,7 +331,7 @@ struct TrainingTestContent<Link: View>: View {
                             Image(systemName: "xmark")
                                 .font(.headline)
                                 .padding(10)
-                                .foregroundColor(.red)
+                                .foregroundColor(.clear)
                         })
                         if trainingfullTestCompleted == false {
                             Spacer()
@@ -340,13 +340,18 @@ struct TrainingTestContent<Link: View>: View {
                                 .font(.title)
                                 .padding()
                             Spacer()
-                            Text("Let's continue")
-                                .foregroundColor(.green)
-                                .font(.title)
-                                .padding()
-                                .onTapGesture {
-                                    trainingshowTestCompletionSheet.toggle()
-                                }
+                            HStack{
+                                Spacer()
+                                Text("Let's continue")
+                                    .frame(width: 300, height: 50, alignment: .center)
+                                    .foregroundColor(.white)
+                                    .background(Color.green)
+                                    .font(.title)
+                                    .onTapGesture {
+                                        trainingshowTestCompletionSheet.toggle()
+                                    }
+                                Spacer()
+                            }
                         } else if trainingfullTestCompleted == true {
                             Spacer()
                             Text("Hopefully, you now have an idea of what you will hear and how to respond.")

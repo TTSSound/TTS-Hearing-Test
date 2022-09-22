@@ -91,7 +91,7 @@ struct TestIDInputContent<Link: View>: View {
                 NavigationLink {
                     UserWrittenHearingAssessmentView(testing: testing, relatedLinkTesting: linkTesting)
                 } label: {
-                    Text("Continue To Start Hering Assessment")
+                    Text("Continue To Start Test")
                         .padding()
                         .frame(width: 300, height: 50, alignment: .center)
                         .foregroundColor(.white)

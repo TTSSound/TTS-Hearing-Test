@@ -267,7 +267,7 @@ struct BetaTestingLandingContent<Link: View>: View {
                                 .foregroundColor(.blue)
                             Spacer()
                         }
-                        
+                        .padding(.bottom, 40)
                         if logInAttempt == false {
                             HStack{
                                 Spacer()
@@ -282,54 +282,36 @@ struct BetaTestingLandingContent<Link: View>: View {
                                         Image(systemName: "arrow.up.doc.fill")
                                         Spacer()
                                     }
-                                    .frame(width: 300, height: 50, alignment: .center)
-                                    .background(Color.blue)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(24)
                                 }
                                 .frame(width: 300, height: 50, alignment: .center)
+                                .foregroundColor(.white)
+                                .background(Color.blue)
                                 .cornerRadius(24)
                                 Spacer()
                             }
-                            .frame(width: 350, height: 250, alignment: .center)
-                            .foregroundColor(.clear)
-                            .background(Color.clear)
-                            .cornerRadius(24)
                             .padding(.bottom, 20)
                         } else if logInAttempt == true {
                             if userLoggedInSuccessful == false {
                                 HStack {
-                                    VStack{
-                                        Text(" Checking Possible Login Error!!")
-                                            .foregroundColor(.red)
-                                            .padding()
+                                    Spacer()
+                                    Button {
+                                        loginUser3()
+                                    } label: {
                                         HStack{
                                             Spacer()
-                                            Button {
-                                                loginUser3()
-                                            } label: {
-                                                HStack{
-                                                    Spacer()
-                                                    Text("Press To Reset")
-                                                    Spacer()
-                                                    Image(systemName: "arrowshape.turn.up.backward.2")
-                                                    Spacer()
-                                                }
-                                                .frame(width: 300, height: 50, alignment: .center)
-                                                .background(Color.red)
-                                                .foregroundColor(.white)
-                                                .cornerRadius(24)
-                                            }
-                                            .frame(width: 300, height: 50, alignment: .center)
-                                            .cornerRadius(24)
+                                            Text("Checking Login for Error.\nPress To Reset")
+                                                .font(.caption)
+                                            Spacer()
+                                            Image(systemName: "arrowshape.turn.up.backward.2")
                                             Spacer()
                                         }
+                                        .frame(width: 300, height: 50, alignment: .center)
+                                        .foregroundColor(.black)
+                                        .background(Color.yellow)
+                                        .cornerRadius(24)
                                     }
+                                    Spacer()
                                 }
-                                .frame(width: 350, height: 250, alignment: .center)
-                                .foregroundColor(.clear)
-                                .background(Color.clear)
-                                .cornerRadius(24)
                                 .padding(.bottom, 20)
                             } else if userLoggedInSuccessful == true {
                                 HStack{
@@ -351,14 +333,8 @@ struct BetaTestingLandingContent<Link: View>: View {
                                         .foregroundColor(.white)
                                         .cornerRadius(24)
                                     }
-                                    .frame(width: 300, height: 50, alignment: .center)
-                                    .cornerRadius(24)
                                     Spacer()
                                 }
-                                .frame(width: 350, height: 250, alignment: .center)
-                                .foregroundColor(.clear)
-                                .background(Color.clear)
-                                .cornerRadius(24)
                                 .padding(.bottom, 20)
                             }
                         } else {
@@ -370,6 +346,7 @@ struct BetaTestingLandingContent<Link: View>: View {
                                 .padding(.bottom, 20)
                         }
                     }
+//                    .padding(.bottom, 20)
                 }
             }
         }

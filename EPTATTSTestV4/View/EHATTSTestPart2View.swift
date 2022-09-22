@@ -121,14 +121,14 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                           "Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52",
                                           "Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52",
                                           "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59",
-                                          "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59"]
+                                          "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59", "PreSilence"]
     
    
     @State var ehaP2_monoSamples: [String] = ["Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
-                                              "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34",
+                                              "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34", "PreSilence",
                                               "Sample35", "Sample36", "Sample37", "Sample38", "Sample39", "Sample40", "Sample41", "Sample42", "Sample43",
                                               "Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52",
-                                              "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59"]
+                                              "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59", "PreSilence"]
     
     
     @State var ehaP2panArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
@@ -304,7 +304,16 @@ struct EHATTSTestPart2Content<Link: View>: View {
 
     @State var ehaP2_eptaSamplesCount = 86 //8 //17
 //    @State var ehaP2_eptaSamplesCountArray = [2, 2, 2]
-    @State var ehaP2_eptaSamplesCountArray = [8, 8, 8, 8, 8, 8, 8, 8, 8, 17, 17, 17, 17, 17, 17, 17, 17, 17, 26, 26, 26, 26, 26, 26, 26, 26, 26, 35, 35, 35, 35, 35, 35, 35, 35, 35, 44, 44, 44, 44, 44, 44, 44, 44, 44, 53, 53, 53, 53, 53, 53, 53, 53, 53, 62, 62, 62, 62, 62, 62, 62, 62, 62, 71, 71, 71, 71, 71, 71, 71, 71, 71, 78, 78, 78, 78, 78, 78, 78, 85, 85, 85, 85, 85, 85, 85]
+    @State var ehaP2_eptaSamplesCountArray = [8, 8, 8, 8, 8, 8, 8, 8, 8,
+                                              17, 17, 17, 17, 17, 17, 17, 17, 17,
+                                              26, 26, 26, 26, 26, 26, 26, 26, 26,
+                                              35, 35, 35, 35, 35, 35, 35, 35, 35,
+                                              44, 44, 44, 44, 44, 44, 44, 44, 44,
+                                              53, 53, 53, 53, 53, 53, 53, 53, 53,
+                                              62, 62, 62, 62, 62, 62, 62, 62, 62,
+                                              71, 71, 71, 71, 71, 71, 71, 71, 71,
+                                              78, 78, 78, 78, 78, 78, 78,
+                                              85, 85, 85, 85, 85, 85, 85]
     @State var ehaP2_eptaSamplesCountArrayIdx = 0  //[0, 1, 2, 3]
 
     @State var ehaP2_finalStoredIndex: [Int] = [Int]()
@@ -339,7 +348,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
     @State var ehaP2playingStringColorIndex2 = 0
     @State var ehaP2userPausedTest: Bool = false
     
-                @State var ehaP2fullTestCompleted: Bool = false
+    @State var ehaP2fullTestCompleted: Bool = false
     @State var ehaP2fullTestCompletedHoldingArray: [Bool] = [Bool]()
     @State var ehaP2fullTestCompletedLR: [Bool] = [false, false, false, false, false, false, false, false, false,
                                                   false, false, false, false, false, false, false, false, false,
@@ -350,20 +359,19 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                                   false, false, false, false, false, false, false, false, false,
                                                   false, false, false, false, false, false, false, false, false,
                                                   false, false, false, false, false, false, false,
-                                                  false, false, false, false, false, false, true]
+                                                  false, false, false, false, false, false, false, true]
     
     @State var ehaP2fullTestCompletedMono: [Bool] = [false, false, false, false, false, false, false, false, false,
                                                      false, false, false, false, false, false, false, false, false,
                                                      false, false, false, false, false, false, false, false, false,
                                                      false, false, false, false, false, false, false, false, false,
-                                                     false, false, false, false, false, false, true]
+                                                     false, false, false, false, false, false, false, true]
     
     
-    @State var ehaP2fullTestCompletedTestingArray: [Bool] = [false, false, true]
+
                                                      
     @State var ehaP2TestingPhases = 0
-    
-    //ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
+    @State var displayGainData: Bool = false
     
     @State var dataFileURLEHAP2Gain1 = URL(fileURLWithPath: "")
     @State var dataFileURLEHAP2Gain2 = URL(fileURLWithPath: "")
@@ -453,6 +461,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                    }
                    Spacer()
                }
+//               .frame(width: 380, height: 50, alignment: .center)
                .padding(.top, 5)
                .padding(.bottom, 5)
                .onChange(of: ehaP2MonoRightTest, perform: { rightValue in
@@ -496,61 +505,32 @@ struct EHATTSTestPart2Content<Link: View>: View {
                        //do nothing
                    }
                })
-//               .onChange(of: ehaP2MonoTest) { monoValue in
-//                   if monoValue == true {
-//                       if ehaP2MonoRightTest == true {
-//                           // Set Pan to 1.0
-//                           ehaP2localPanHoldingArray = ehaP2panRightArray
-//                           ehaP2totalCount = ehaP2MonoTotalCount
-//                           ehaP2_samples = ehaP2_monoSamples
-//                           ehaP2MonoRightTest = true
-//                           ehaP2MonoLeftTest = false
-//                           ehaP2MonoBilateralTest = false
-//                       } else if ehaP2MonoLeftTest == true {
-//                           //set pan to -1.0
-//                           ehaP2localPanHoldingArray = ehaP2panLeftArray
-//                           ehaP2totalCount = ehaP2MonoTotalCount
-//                           ehaP2_samples = ehaP2_monoSamples
-//                           ehaP2MonoRightTest = false
-//                           ehaP2MonoLeftTest = true
-//                           ehaP2MonoBilateralTest = false
-//                       } else if ehaP2MonoBilateralTest == true {
-//                           // Set pan to 0.0
-//                           ehaP2localPanHoldingArray = ehaP2panBilateralArray
-//                           ehaP2totalCount = ehaP2MonoTotalCount
-//                           ehaP2_samples = ehaP2_monoSamples
-//                           ehaP2MonoRightTest = false
-//                           ehaP2MonoLeftTest = false
-//                           ehaP2MonoBilateralTest = true
-//                       } else {
-//                           ehaP2localPanHoldingArray = ehaP2panArray
-//                           ehaP2totalCount = ehaP2DualTotalCount
-//                           ehaP2_samples = ehaP2_dualSamples
-//
-//                           print("!!!Critical error in ehaP2MonoTest setting logic")
-//                       }
-//                   } else {
-//                       // mono not set
-//                       ehaP2localPanHoldingArray = ehaP2panArray
-//                       ehaP2totalCount = ehaP2DualTotalCount
-//                       ehaP2_samples = ehaP2_dualSamples
-//                   }
-//               }
                HStack{
                    Spacer()
-                   Text("Gain: \(ehaP2_testGain)")
-                   Spacer()
-                   Text("Pan: \(ehaP2_pan)")
-                   Spacer()
-                   Text("phon: \(gainEHAP2SettingArrayLink)")
+                   Toggle("Show\nData", isOn: $displayGainData)
+                       .font(.caption)
+                       .foregroundColor(.white)
+//                   Spacer()
+                   if displayGainData == true {
+                       Text("Gain:\n\(ehaP2_testGain)")
+                           .font(.caption)
+                           .foregroundColor(.white)
+                       Spacer()
+                       Text("Pan:\n\(ehaP2_pan)")
+                           .font(.caption)
+                           .foregroundColor(.white)
+                       Spacer()
+                       Text("phon:\n\(gainEHAP2SettingArrayLink)")
+                           .font(.caption)
+                           .foregroundColor(.white)
+//                       Spacer()
+                    }
                    Spacer()
                }
-               .font(.caption)
                .frame(width: 380, height: 50, alignment: .center)
-               .background(Color .clear)
-               .foregroundColor(.white)
                .padding(.top, 5)
                .padding(.bottom, 5)
+        
                Spacer()
                if ehaP2TestStarted == false {
                    Button {
@@ -657,7 +637,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                }
                .fullScreenCover(isPresented: $ehaP2showTestCompletionSheet, content: {
                    ZStack{
-                       colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+                       colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all)//, edges: .top)
                        VStack(alignment: .leading) {
                            Button(action: {
                                if ehaP2fullTestCompleted == true {
@@ -676,11 +656,11 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                Image(systemName: "xmark")
                                    .font(.headline)
                                    .padding(10)
-                                   .foregroundColor(.red)
+                                   .foregroundColor(.clear)
                            })
                            if ehaP2fullTestCompleted == false && ehaP2TestingPhases < 1 {
                                Spacer()
-                               Text("You are now going to take the full extended hearing assessment. The test is completed in TEN phases and will take about 25 minutes to complete.")
+                               Text("You are now going to take the full extended hearing assessment. The test is completed in TEN(10) phases and will take about 25 minutes to complete.")
                                    .foregroundColor(.white)
                                    .font(.title)
                                    .padding()
@@ -741,7 +721,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                Spacer()
                                }
                            } else if ehaP2fullTestCompleted == true && ehaP2TestingPhases >= 1 {
-                               Text("Test Phase Complete, Let's Proceed.")
+                               Text("Full Test Completed! Let's Proceed.")
                                    .foregroundColor(.green)
                                    .font(.title)
                                    .padding()
@@ -917,9 +897,10 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                await ehaP2saveFinalStoredArrays()
                                await ehaP2endTestSeriesFunc()
                                await ehaP2newTestCycle()
-                               await ehaP2restartPresentation()
+                               
                                print("End of Reversals")
                                print("Prepare to Start Next Presentation")
+                               await ehaP2restartPresentation()
                            } else if ehaP2MonoTest == true {
                                //                        await ehaP2createReversalHeardArray()
                                //                        await ehaP2createReversalGainArray()
@@ -937,9 +918,10 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                await ehaP2saveFinalStoredArrays()
                                await ehaP2endTestSeriesFunc()
                                await ehaP2newTestCycle()
-                               await ehaP2restartPresentation()
+                              
                                print("End of Reversals")
                                print("Prepare to Start Next Presentation")
+                               await ehaP2restartPresentation()
                            } else {
                                print("!!!Fatal error in ehaP2ReversalValue ehaP2MonoTest Logic")
                            }
@@ -1018,7 +1000,6 @@ struct EHATTSTestPart2Content<Link: View>: View {
         if ehaP2MonoTest == false && ehaP2VariableArraysSet == false {
             ehaP2localPanHoldingArray = ehaP2panArray
             ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedLR
-//            ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedTestingArray
             ehaP2totalCount = ehaP2DualTotalCount
             ehaP2_samples = ehaP2_dualSamples
             ehaP2VariableArraysSet = true
@@ -1500,19 +1481,19 @@ extension EHATTSTestPart2Content {
                 print("in second if")
                 ehaP2_averageGain = ehaP2secondGain
                 print("average Gain: \(ehaP2_averageGain)")
-            } else if ehaP2delta >= 0.05 {
+            } else if ehaP2delta >= 0.04 {
                 print("in first else if")
                 ehaP2_averageGain = ehaP2secondGain
                 print("FirstGain: \(ehaP2firstGain)")
                 print("SecondGain: \(ehaP2secondGain)")
                 print("average Gain: \(ehaP2_averageGain)")
-            } else if ehaP2delta <= -0.05 {
+            } else if ehaP2delta <= -0.04 {
                 print("in second else if")
                 ehaP2_averageGain = ehaP2firstGain
                 print("FirstGain: \(ehaP2firstGain)")
                 print("SecondGain: \(ehaP2secondGain)")
                 print("average Gain: \(ehaP2_averageGain)")
-            } else if ehaP2delta < 0.05 && ehaP2delta > -0.05 {
+            } else if ehaP2delta < 0.04 && ehaP2delta > -0.04 {
                 print("in third else if")
                 ehaP2_averageGain = ehaP2avg
                 print("FirstGain: \(ehaP2firstGain)")
@@ -2650,7 +2631,7 @@ extension EHATTSTestPart2Content {
     
     func ehaP2newTestCycle() async {
         //        if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index < ehaP2_eptaSamplesCount && ehaP2endTestSeriesValue == false {
-        if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index < ehaP2_eptaSamplesCountArray[ehaP2_index] && ehaP2endTestSeriesValue == false {
+        if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2_index < ehaP2_eptaSamplesCountArray[ehaP2_index] && ehaP2endTestSeriesValue == false {//} && ehaP2fullTestCompletedHoldingArray[ehaP2_index] == false {
             print("New Test Cycle Triggered")
             await ehaP2wipeArrays()
             ehaP2startTooHigh = 0
@@ -2670,8 +2651,8 @@ extension EHATTSTestPart2Content {
             ehaP2endTestSeriesValue = true
             ehaP2localPlaying = -1
             ehaP2_eptaSamplesCountArrayIdx += 1
-            ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]    // Enabling This for Testing ending test error
-            if ehaP2fullTestCompleted == true {
+            ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index+1]    // Enabling This for Testing ending test error
+            if  ehaP2fullTestCompleted == true {
                 ehaP2localPlaying = -1
                 ehaP2stop()
                 ehaP2fullTestCompleted = true
@@ -2702,6 +2683,7 @@ extension EHATTSTestPart2Content {
         } else if ehaP2endTestSeriesValue == true {
             ehaP2showTestCompletionSheet = true
             ehaP2_eptaSamplesCount = ehaP2_eptaSamplesCountArray[ehaP2_index]
+            ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
             //            ehaP2_eptaSamplesCount = ehaP2_eptaSamplesCount + 8
             await ehaP2endTestSeriesStop()
         }
