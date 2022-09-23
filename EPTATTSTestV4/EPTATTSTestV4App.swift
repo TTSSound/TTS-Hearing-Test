@@ -31,7 +31,7 @@ struct EPTATTSTestV4App: App {
         WindowGroup {
 //            DeviceSetupView()
 //            WelcomeSetupView()
-//            //SetupListActionView()
+//            SetupListActionView()
 //            TestDeviceSetupView()
 //            SiriSetupView()
 //            CalibrationAssessmentView()
@@ -54,8 +54,8 @@ struct EPTATTSTestV4App: App {
 //            PostBilateral1kHzTestView()
 //            EHATTSTestPart2View()
 //            EarSimulatorManual1View()
-            EarSimulatorManual2View()
-//            NavigationView()
+//            EarSimulatorManual2View()
+            NavigationView()
 
         }
     }

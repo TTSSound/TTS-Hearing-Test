@@ -163,7 +163,7 @@ struct EarSimulatorManual2View: View {
     
     var body: some View {
         ZStack {
-            colorModel.colorBackgroundBottomTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+            colorModel.colorBackgroundBottomDarkNeonGreen.ignoresSafeArea(.all)
             VStack{
                 HStack{
                     Spacer()

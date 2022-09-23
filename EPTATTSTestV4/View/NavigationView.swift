@@ -14,6 +14,7 @@ class DataModel: ObservableObject {
     @Published var testings: [Testing] = []
     @Published var ehaTestings: [EHATesting] = []
     @Published var closings: [Closing] = []
+    @Published var earSimulators: [EarSimulator] = []
     
     
     private var setupsById: [Setup.ID: Setup]? = nil
@@ -27,6 +28,9 @@ class DataModel: ObservableObject {
 
     private var closingsById: [Closing.ID: Closing]? = nil
     private var closingsCancellables: [AnyCancellable] = []
+    
+    private var earSimulatorsById: [EarSimulator.ID: EarSimulator]? = nil
+    private var earSimulatorsCancellables: [AnyCancellable] = []
 
     static let shared: DataModel = DataModel()
     
@@ -58,6 +62,13 @@ class DataModel: ObservableObject {
                 self?.closingsById = nil
             }
             .store(in: &closingsCancellables)
+        
+        earSimulators = builtInEarSimulators
+        $earSimulators
+            .sink { [weak self] _ in
+                self?.earSimulatorsById = nil
+            }
+            .store(in: &earSimulatorsCancellables)
     }
     
     func setups(relatedTo setup: Setup) -> [Setup] {
@@ -115,8 +126,20 @@ class DataModel: ObservableObject {
         }
         return closingsById![closingId]
     }
+
+    func earSimulators(relatedTo earSimulator: EarSimulator) -> [EarSimulator] {
+        earSimulators
+            .filter { earSimulator.related.contains($0.id) }
+            .sorted { $0.name < $1.name }
+    }
     
-    
+    subscript(earSimulatorId: EarSimulator.ID) -> EarSimulator? {
+        if earSimulatorsById == nil {
+            earSimulatorsById = Dictionary(
+                uniqueKeysWithValues: earSimulators.map { ($0.id, $0) })
+        }
+        return earSimulatorsById![earSimulatorId]
+    }
 }
     
 private let builtInSetups: [Setup] = {
@@ -285,6 +308,16 @@ private let builtInClosings: [Closing] = {
     
     return Array(closings.values)
 }()
+
+private let builtInEarSimulators: [EarSimulator] = {
+    var earSimulators = [
+        "Ear Simulator Landing": EarSimulator(id: 20.0, name: "Ear Simulator Landing", related: []),
+        "Ear Simulator Manual 1": EarSimulator(id: 20.1, name: "Ear Simulator Manual 1", related: []),
+        "Ear Simulator Manual 2": EarSimulator(id: 20.2, name: "Ear Simulator Manual 2", related: [])
+    ]
+    
+    return Array(earSimulators.values)
+}()
     
 
 struct Setup: Hashable, Identifiable {
@@ -311,6 +344,12 @@ struct Closing: Hashable, Identifiable {
     var related: [Closing.ID] = []
 }
 
+struct EarSimulator: Hashable, Identifiable {
+    let id: Double
+    var name: String
+    var related: [EarSimulator.ID] = []
+}
+
 
 
 // StructContentView in Apple Sample Project
@@ -333,7 +372,9 @@ struct NavigationView: View {
     @State var closingTabEnabled: Bool = false
     @State var closingTabValueArray = [nil, EPTATTSTestV4.Closing(id: 15.0, name: "Results Landing View", related: [])]
     @State var closingTabValue = EPTATTSTestV4.Closing(id: 0.0, name: "", related: [])
-
+    
+    @State var showEarSimulator: Bool = false
+    
     var body: some View {
         //        NavigationStack(path: $navigationModel.setupPath) {
         //
@@ -362,18 +403,42 @@ struct NavigationView: View {
                 VStack(alignment: .leading) {
                     Spacer()
                     HStack{
-                        Text("PROCESS FLOW OF APP FOR ALPHA USE.\n\nCOMPLETE TABS IN THIS ORDER")
-                            .foregroundColor(.white)
-                            .font(.title3)
-                            .padding(.leading)
-                            .padding(.trailing)
+                        Spacer()
+                        Button {
+                            showEarSimulator = true
+                        } label: {
+                            Image(systemName: "waveform.and.magnifyingglass")
+                                .foregroundColor(colorModel.tiffanyBlue)
+                                .opacity(0.85)
+                                .font(.title3)
+                                .padding(.trailing, 20)
+                        }
+                        
+                    }
+                    .padding(.trailing)
+                    .padding(.bottom, 20)
+                    HStack{
+                        VStack(alignment: .leading) {
+                            Text("PROCESS FLOW OF APP FOR ALPHA USE.")
+                                .foregroundColor(.white)
+                                .font(.title2)
+                                .padding(.leading)
+                                .padding(.bottom, 10)
+                            Text("COMPLETE TABS IN THIS ORDER")
+                                .foregroundColor(.white)
+                                .font(.title2)
+                                .padding(.leading)
+                                
+                        }
                     }
                     .padding(.bottom, 20)
                     Text("1. Setup Tab\n2. 1st Testing Tab\n3. 2nd Testing Tab\n4. Results Tab")
                         .foregroundColor(.green)
+                        .padding(.leading)
                         .padding(.bottom, 20)
                     Text("2nd, 3rd, & 4th tab disabled as default, enable them as prior tab is completed")
                         .foregroundColor(.white)
+                        .padding(.leading)
                         .padding(.bottom, 20)
                     Spacer()
                     
@@ -456,6 +521,41 @@ struct NavigationView: View {
                 }
                 .padding()
             }
+            .fullScreenCover(isPresented: $showEarSimulator, content: {
+                NavigationStack(path: $navigationModel.earSimulatorPath) {
+                    ZStack{
+                        colorModel.colorBackgroundBottomLimeGreen.ignoresSafeArea(.all)
+                        VStack(alignment: .leading, spacing: 20) {
+                            Button {
+                                showEarSimulator.toggle()
+                            } label: {
+                                Image(systemName: "xmark")
+                                    .font(.headline)
+                                    .opacity(0.7)
+                                    .padding(10)
+                                    .foregroundColor(.red)
+                            }
+                            Spacer()
+                            HStack{
+                                Spacer()
+                                NavigationLink("Ear Simulators", value: EPTATTSTestV4.EarSimulator(id: 20.0, name: "Ear Simulator Landing", related: []))
+                                    .font(.title)
+                                    .padding()
+                                    .frame(width: 300, height: 100, alignment: .center)
+                                    .background(colorModel.limeGreen)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(24)
+                                    .hoverEffect()
+                                    .navigationDestination(for: EarSimulator.self) { earSimulator in
+                                        EarSimulatorLandingView(earSimulator: earSimulator, relatedLinkEarSimulator: linkEarSimulator)
+                                    }
+                                Spacer()
+                            }
+                            Spacer()
+                        }
+                    }
+                }
+            })
             .environmentObject(navigationModel)
             .onAppear {
                 getLinks()
@@ -593,6 +693,32 @@ struct NavigationView: View {
                     .background(Color.blue)
             }
             .tag(4)
+            
+//            NavigationStack(path: $navigationModel.earSimulatorPath) {
+//                ZStack{
+//                    colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+//                    NavigationLink("Ear Simulators", value: EPTATTSTestV4.EarSimulator(id: 20.0, name: "Ear Simulator Landing", related: []))
+//                        .font(.title)
+//                        .padding()
+//                        .frame(width: 300, height: 100, alignment: .center)
+//                        .background(colorModel.tiffanyBlue)
+//                        .foregroundColor(.white)
+//                        .cornerRadius(24)
+//                        .hoverEffect()
+//                        .navigationDestination(for: EarSimulator.self) { earSimulator in
+//                            EarSimulatorLandingView(earSimulator: earSimulator, relatedLinkEarSimulator: linkEarSimulator)
+//                        }
+//                }
+//            }
+//            .tabItem {
+//                Image(systemName: "list.bullet.clipboard.fill")
+//                    .foregroundColor(.blue)
+//                    .background(Color.blue)
+//                Text("4. Results")
+//                    .foregroundColor(.blue)
+//                    .background(Color.blue)
+//            }
+//            .tag(5)
         }
     }
 
@@ -673,6 +799,10 @@ struct NavigationView: View {
     private func linkClosing(closing: Closing) -> some View {
         EmptyView()
     }
+    
+    private func linkEarSimulator(earSimulator: EarSimulator) -> some View {
+        EmptyView()
+    }
 }
 
 struct NavigationView_Previews: PreviewProvider {
@@ -722,6 +852,7 @@ final class NavigationModel: ObservableObject, Codable {
     @Published var testingPath: [Testing]
     @Published var ehaTestingPath: [EHATesting]
     @Published var closingPath: [Closing]
+    @Published var earSimulatorPath: [EarSimulator]
     
     private lazy var decoder = JSONDecoder()
     private lazy var encoder = JSONEncoder()
@@ -735,12 +866,16 @@ final class NavigationModel: ObservableObject, Codable {
     private lazy var decoderClosing = JSONDecoder()
     private lazy var encoderClosing = JSONEncoder()
     
-    init(setupPath: [Setup] = [], testingPath: [Testing] = [], ehaTestingPath: [EHATesting] = [], closingPath: [Closing] = []
+    private lazy var decoderEarSimulator = JSONDecoder()
+    private lazy var encoderEarSimulator = JSONEncoder()
+    
+    init(setupPath: [Setup] = [], testingPath: [Testing] = [], ehaTestingPath: [EHATesting] = [], closingPath: [Closing] = [], earSimulatorPath: [EarSimulator] = []
     ) {
         self.setupPath = setupPath
         self.testingPath = testingPath
         self.ehaTestingPath = ehaTestingPath
         self.closingPath = closingPath
+        self.earSimulatorPath = earSimulatorPath
     }
     
     var selectedSetup: Setup? {
@@ -763,7 +898,10 @@ final class NavigationModel: ObservableObject, Codable {
         set { closingPath = [newValue].compactMap { $0 } }
     }
     
-    
+    var selectedEarSimulator: EarSimulator? {
+        get { earSimulatorPath.first }
+        set { earSimulatorPath = [newValue].compactMap { $0 } }
+    }
     
     var jsonData: Data? {
         get { try? encoder.encode(self) }
@@ -774,7 +912,6 @@ final class NavigationModel: ObservableObject, Codable {
             setupPath = model.setupPath
         }
     }
-    
     
     var jsonDataTesting: Data? {
         get { try? encoder.encode(self) }
@@ -796,7 +933,6 @@ final class NavigationModel: ObservableObject, Codable {
         }
     }
     
-    
     var jsonDataClosing: Data? {
         get { try? encoder.encode(self) }
         set {
@@ -807,6 +943,15 @@ final class NavigationModel: ObservableObject, Codable {
         }
     }
     
+    var jsonDataEarSimulator: Data? {
+        get { try? encoderEarSimulator.encode(self) }
+        set {
+            guard let dataEarSimulator = newValue,
+                  let model = try? decoderEarSimulator.decode(Self.self, from: dataEarSimulator)
+            else { return }
+            earSimulatorPath = model.earSimulatorPath
+        }
+    }
     
     var objectWillChangeSequence: AsyncPublisher<Publishers.Buffer<ObservableObjectPublisher>> {
         objectWillChange
@@ -825,11 +970,14 @@ final class NavigationModel: ObservableObject, Codable {
             [EHATesting.ID].self, forKey: .ehaTestingPathIds)
         let closingPathIds = try container.decode(
             [Closing.ID].self, forKey: .closingPathIds)
-        
+        let earSimulatorPathIds = try container.decode(
+            [EarSimulator.ID].self, forKey: .ehaTestingPathIds)
+            
         self.setupPath = setupPathIds.compactMap { DataModel.shared[$0] }
         self.testingPath = testingPathIds.compactMap { DataModel.shared[$0] }
         self.ehaTestingPath = ehaTestingPathIds.compactMap { DataModel.shared[$0] }
         self.closingPath = closingPathIds.compactMap { DataModel.shared[$0] }
+        self.earSimulatorPath = earSimulatorPathIds.compactMap { DataModel.shared[$0] }
     }
 
     func encode(to encoder: Encoder) throws {
@@ -838,6 +986,7 @@ final class NavigationModel: ObservableObject, Codable {
         try container.encode(testingPath.map(\.id), forKey: .testingPathIds)
         try container.encode(ehaTestingPath.map(\.id), forKey: .ehaTestingPathIds)
         try container.encode(closingPath.map(\.id), forKey: .closingPathIds)
+        try container.encode(earSimulatorPath.map(\.id), forKey: .earSimulatorPathIds)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -845,6 +994,6 @@ final class NavigationModel: ObservableObject, Codable {
         case testingPathIds
         case ehaTestingPathIds
         case closingPathIds
+        case earSimulatorPathIds
     }
-    
 }
