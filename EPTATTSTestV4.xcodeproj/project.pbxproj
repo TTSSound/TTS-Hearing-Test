@@ -158,6 +158,9 @@
 		7CAC41CC28B5B60100AE72F6 /* EHAInterimPostEPTAView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAC41CB28B5B60100AE72F6 /* EHAInterimPostEPTAView.swift */; };
 		7CB202BC28BD5D240058C752 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB202BB28BD5D240058C752 /* Alamofire */; };
 		7CB202BE28BD90C30058C752 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7CB202BD28BD90C30058C752 /* GoogleService-Info.plist */; };
+		7CB2A01228DD0966008132DE /* EarSimulatorLandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB2A01128DD0966008132DE /* EarSimulatorLandingView.swift */; };
+		7CB2A01428DD0994008132DE /* EarSimulatorManual1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB2A01328DD0994008132DE /* EarSimulatorManual1View.swift */; };
+		7CB2A01628DD09AF008132DE /* EarSimulatorManual2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB2A01528DD09AF008132DE /* EarSimulatorManual2View.swift */; };
 		7CC4CCF128D6387F00E6203B /* ButtonViewTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC4CCF028D6387F00E6203B /* ButtonViewTemplates.swift */; };
 		7CC4CCF528D654B300E6203B /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC4CCF428D654B300E6203B /* NavigationView.swift */; };
 		7CD23A6E28ADAA9300AEBB02 /* DetailedResultsCSV.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7CD23A6D28ADAA9300AEBB02 /* DetailedResultsCSV.csv */; };
@@ -367,6 +370,9 @@
 		7CB202B628BD162E0058C752 /* DownloadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadService.swift; sourceTree = "<group>"; };
 		7CB202B828BD169E0058C752 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7CB202BD28BD90C30058C752 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7CB2A01128DD0966008132DE /* EarSimulatorLandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarSimulatorLandingView.swift; sourceTree = "<group>"; };
+		7CB2A01328DD0994008132DE /* EarSimulatorManual1View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarSimulatorManual1View.swift; sourceTree = "<group>"; };
+		7CB2A01528DD09AF008132DE /* EarSimulatorManual2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarSimulatorManual2View.swift; sourceTree = "<group>"; };
 		7CB876F228A1FF2200528455 /* AudioSessionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionModel.swift; sourceTree = "<group>"; };
 		7CB876F328A1FF6300528455 /* EnvDataObjectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvDataObjectModel.swift; sourceTree = "<group>"; };
 		7CC4CCF028D6387F00E6203B /* ButtonViewTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonViewTemplates.swift; sourceTree = "<group>"; };
@@ -632,6 +638,9 @@
 				7C76D5F328B18BA30044958B /* PurchaseView.swift */,
 				7C76D5F128B18AE50044958B /* ClosingView.swift */,
 				7C179FEC28B81B7500964AAC /* InAppPurchaseView.swift */,
+				7CB2A01128DD0966008132DE /* EarSimulatorLandingView.swift */,
+				7CB2A01328DD0994008132DE /* EarSimulatorManual1View.swift */,
+				7CB2A01528DD09AF008132DE /* EarSimulatorManual2View.swift */,
 				7C99A16B28C95D0800E46C65 /* DONOTChangeReferenceEHATest.swift */,
 				7C0AE96C28CCF55D00A4F652 /* DONOTChangeReferenceEPTATTSTestV4List.swift */,
 				7CCB2B2C28D4C5CD00056C49 /* DONOTChangeReferenceEHAP2TestView.swift */,
@@ -924,6 +933,7 @@
 				7C4D019828C283AE00361559 /* HoldingCSVInputModel.swift in Sources */,
 				7C3E16BA28BC214F003A0DA9 /* TestVideoPlayerView.swift in Sources */,
 				7C666D9C28B5D00E007707AC /* UserDataEntryView.swift in Sources */,
+				7CB2A01228DD0966008132DE /* EarSimulatorLandingView.swift in Sources */,
 				7C4D018C28C1728D00361559 /* SimpleTestView.swift in Sources */,
 				7C7A94FA28B7007300DD8FAC /* EHADescription.swift in Sources */,
 				7C24C1F028BF0886006E77DD /* StorageManager.swift in Sources */,
@@ -935,6 +945,7 @@
 				7C901FC028B9A359007E1336 /* SetupListActionView.swift in Sources */,
 				7C76D5EA28B189090044958B /* InstructionsForTakingTest.swift in Sources */,
 				7C4CDB2F28CE6CED0051B9EE /* ManualDeviceEntryIssueSplashView.swift in Sources */,
+				7CB2A01428DD0994008132DE /* EarSimulatorManual1View.swift in Sources */,
 				7C7A94F428B6F43200DD8FAC /* CorrectiveFiltersExplanationView.swift in Sources */,
 				7C76D5F228B18AE50044958B /* ClosingView.swift in Sources */,
 				7CECF1EC28C9859900B5A99E /* TrainingTestView.swift in Sources */,
@@ -987,6 +998,7 @@
 				7C1F1E3128D8C0CC00B672B1 /* ResultsLandingView.swift in Sources */,
 				7C901FC828B9BA1E007E1336 /* DNDSiriSetupView.swift in Sources */,
 				7C666D9D28B67505007707AC /* CalibrationAssessmentView.swift in Sources */,
+				7CB2A01628DD09AF008132DE /* EarSimulatorManual2View.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

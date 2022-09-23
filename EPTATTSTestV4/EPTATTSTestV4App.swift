@@ -53,7 +53,8 @@ struct EPTATTSTestV4App: App {
 //            EHATTSTestView()
 //            PostBilateral1kHzTestView()
 //            EHATTSTestPart2View()
-            NavigationView()
+            EarSimulatorManual1View()
+//            NavigationView()
 
         }
     }
