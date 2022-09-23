@@ -46,64 +46,99 @@ struct EarSimulatorManual1View: View {
         SamplesList(name: "Sample16")
     ]
     
-    @State var sampleSelected = [Int]()
-    @State var sampleSelectionIndex = [Int]()
-    @State var sampleSelectedName = [String]()
-    @State var sampleSelectedID = [UUID]()
+    @State private var sampleSelected = [Int]()
+    @State private var sampleSelectionIndex = [Int]()
+    @State private var sampleSelectedName = [String]()
+    @State private var sampleSelectedID = [UUID]()
     
     
     var audioSessionModel = AudioSessionModel()
     @StateObject var colorModel: ColorModel = ColorModel()
     
-    @State var earSimulatorM1localPlaying = Int()
-    @State var earSimulatorM1localMarkNewTestCycle = Int()
-    @State var earSimulatorM1testPlayer: AVAudioPlayer?
+    @State private var traininglocalHeard = 0
+    @State private var traininglocalPlaying = Int()    // Playing = 1. Stopped = -1
+    @State private var traininglocalReversal = Int()
+    @State private var traininglocalReversalEnd = Int()
+    @State private var traininglocalMarkNewTestCycle = Int()
+    @State private var trainingtestPlayer: AVAudioPlayer?
     
-    @State var earSimulatorM1localTestCount = 0
+    @State private var traininglocalTestCount = 0
+    @State private var traininglocalStartingNonHeardArraySet: Bool = false
+    @State private var traininglocalReversalHeardLast = Int()
+    @State private var traininglocalSeriesNoResponses = Int()
+    @State private var trainingfirstHeardResponseIndex = Int()
+    @State private var trainingfirstHeardIsTrue: Bool = false
+    @State private var trainingsecondHeardResponseIndex = Int()
+    @State private var trainingsecondHeardIsTrue: Bool = false
+    @State private var trainingstartTooHigh = 0
+    @State private var trainingfirstGain = Float()
+    @State private var trainingsecondGain = Float()
+    @State private var trainingendTestSeriesValue: Bool = false
+    @State private var trainingshowTestCompletionSheet: Bool = false
     
-    @State var earSimulatorM1_volume: Float = Float()
+    @State private var training_samples: [String] = ["Sample0", "Sample1"]
+    @State private var training_index: Int = 0
+    @State private var training_testGain: Float = 0
+    @State private var training_heardArray: [Int] = [Int]()
+    @State private var training_indexForTest = [Int]()
+    @State private var training_testCount: [Int] = [Int]()
+    @State private var training_pan: Float = Float()
+    @State private var training_testPan = [Float]()
+    @State private var training_testTestGain = [Float]()
+    @State private var training_frequency = [String]()
+    @State private var training_reversalHeard = [Int]()
+    @State private var training_reversalGain = [Float]()
+    @State private var training_reversalFrequency = [String]()
+    @State private var training_reversalDirection = Float()
+    @State private var training_reversalDirectionArray = [Float]()
     
-    @State var earSimulatorM1_samples: [String] = ["Sample0", "Sample1"]
-    @State var earSimulatorM1_index: Int = 0
-    @State var earSimulatorM1_testGain: Float = 0.2
-    @State var earSimulatorM1_indexForTest = [Int]()
-    @State var earSimulatorM1_testCount: [Int] = [Int]()
-    @State var earSimulatorM1_pan: Float = Float()
-    @State var earSimulatorM1_testPan = [Float]()
-    @State var earSimulatorM1_testTestGain = [Float]()
-    @State var earSimulatorM1_frequency = [String]()
+    @State private var training_averageGain = Float()
     
-    @State var earSimulatorM1localReversal = Int()
+    @State private var training_eptaSamplesCount = 1 //17
+    @State private var training_SamplesCountArray = [1, 1]
+    @State private var training_SamplesCountArrayIdx = 0
     
-    @State var earSimulatorM1_eptaSamplesCount = 1
-    @State var earSimulatorM1_SamplesCountArray = [1, 1]
-    @State var earSimulatorM1_SamplesCountArrayIdx = 0
+    @State private var training_finalStoredIndex: [Int] = [Int]()
+    @State private var training_finalStoredTestPan: [Float] = [Float]()
+    @State private var training_finalStoredTestTestGain: [Float] = [Float]()
+    @State private var training_finalStoredFrequency: [String] = [String]()
+    @State private var training_finalStoredTestCount: [Int] = [Int]()
+    @State private var training_finalStoredHeardArray: [Int] = [Int]()
+    @State private var training_finalStoredReversalHeard: [Int] = [Int]()
+    @State private var training_finalStoredFirstGain: [Float] = [Float]()
+    @State private var training_finalStoredSecondGain: [Float] = [Float]()
+    @State private var training_finalStoredAverageGain: [Float] = [Float]()
     
-    @State var earSimulatorM1_finalStoredIndex: [Int] = [Int]()
-    @State var earSimulatorM1_finalStoredTestPan: [Int] = [Int]()
-    @State var earSimulatorM1_finalStoredTestTestGain: [Float] = [Float]()
-    @State var earSimulatorM1_finalStoredFrequency: [String] = [String]()
-    @State var earSimulatorM1_finalStoredTestCount: [Int] = [Int]()
+    @State private var trainingidxForTest = Int() // = training_indexForTest.count
+    @State private var trainingidxForTestNet1 = Int() // = training_indexForTest.count - 1
+    @State private var trainingidxTestCount = Int() // = training_TestCount.count
+    @State private var trainingidxTestCountUpdated = Int() // = training_TestCount.count + 1
+    @State private var trainingactiveFrequency = String()
+    @State private var trainingidxHA = Int()    // idx = training_heardArray.count
+    @State private var trainingidxReversalHeardCount = Int()
+    @State private var trainingidxHAZero = Int()    //  idxZero = idx - idx
+    @State private var trainingidxHAFirst = Int()   // idxFirst = idx - idx + 1
+    @State private var trainingisCountSame = Int()
+    @State private var trainingheardArrayIdxAfnet1 = Int()
+    @State private var trainingtestIsPlaying: Bool = false
+    @State private var trainingplayingString: [String] = ["", "Restart Test", "Great Job, You've Completed This Test Segment"]
+    @State private var trainingplayingStringColor: [Color] = [Color.clear, Color.yellow, Color.green]
     
-   
-    @State var earSimulatorM1idxTestCount = Int() // = earSimulatorM1_TestCount.count
-    @State var earSimulatorM1idxTestCountUpdated = Int() // = earSimulatorM1_TestCount.count + 1
-    @State var earSimulatorM1activeFrequency = String()
-    @State var earSimulatorM1testIsPlaying: Bool = false
-
-    @State var earSimulatorM1userPausedTest: Bool = false
+    @State private var trainingplayingAlternateStringColor: [Color] = [Color.clear, Color(red: 0.06666666666666667, green: 0.6549019607843137, blue: 0.7333333333333333), Color.white, Color.green]
+    @State private var trainingTappingColorIndex = 0
+    @State private var trainingTappingGesture: Bool = false
     
-    @State var earSimulatorM1TestCompleted: Bool = false
+    @State private var trainingplayingStringColorIndex = 0
+    @State private var traininguserPausedTest: Bool = false
     
-    @State var earSimulatorM1fullTestCompleted: Bool = false
-    @State var earSimulatorM1TestStarted: Bool = false
+    @State private var trainingTestCompleted: Bool = false
+    
+    @State private var trainingfullTestCompleted: Bool = false
+    @State private var trainingfullTestCompletedHoldingArray: [Bool] = [false, false, true]
+    @State private var trainingTestStarted: Bool = false
     
     
-    let fileearSimulatorM1Name = "SummaryearSimulatorM1Results.json"
-    let summaryearSimulatorM1CSVName = "SummaryearSimulatorM1ResultsCSV.csv"
-    let detailedearSimulatorM1CSVName = "DetailedearSimulatorM1ResultsCSV.csv"
-    let inputearSimulatorM1SummaryCSVName = "InputSummaryearSimulatorM1ResultsCSV.csv"
-    let inputearSimulatorM1DetailedCSVName = "InputDetailedearSimulatorM1ResultsCSV.csv"
+    let inputESM1CSVName = "InputDetailedEarSimulatorM1ResultsCSV.csv"
     
     
     let earSimulatorM1heardThread = DispatchQueue(label: "BackGroundThread", qos: .userInitiated)
@@ -111,7 +146,12 @@ struct EarSimulatorManual1View: View {
     let earSimulatorM1audioThread = DispatchQueue(label: "AudioThread", qos: .background)
     let earSimulatorM1preEventThread = DispatchQueue(label: "PreeventThread", qos: .userInitiated)
     
-    @State var earSimulatorM1showTestCompletionSheet: Bool = false
+    @State private var earSimulatorM1testPlayerlocalHeard = Int()
+    @State private var earSimulatorM1_volume = Float()
+    @State private var newactiveFrequency = String()
+    @State private var earSimulatorM1Cycle: Bool = false
+    
+    @State private var earSimulatorM1showTestCompletionSheet: Bool = false
     
     var body: some View {
         ZStack {
@@ -119,72 +159,103 @@ struct EarSimulatorManual1View: View {
             VStack{
                 HStack{
                     Spacer()
-                    Text("\(earSimulatorM1activeFrequency)")
-                        .foregroundColor(.white)
+                    Button {
+                        earSimulatorM1showTestCompletionSheet = true
+                        trainingstop()
+                    } label: {
+                        Text("\(trainingactiveFrequency)")
+                    }
+                    .frame(width: 180, height: 30, alignment: .center)
+                    .foregroundColor(.white)
+                    .background(Color.blue)
+                    .cornerRadius(24)
+                    Spacer()
+                    Toggle(isOn: $earSimulatorM1Cycle) {
+                        HStack{
+                            Spacer()
+                            Text("Cycle")
+                            Spacer()
+                        }
+                    }
+                    .frame(width: 180, height: 30, alignment: .center)
+                    .foregroundColor(.white)
+                    .background(Color.gray)
+                    .cornerRadius(24)
                     Spacer()
                 }
-                    .padding(.top, 40)
-                    .padding(.bottom, 20)
-                
-                Button {    // Start Button
-                    Task(priority: .userInitiated) {
-                        audioSessionModel.setAudioSession()
-                        earSimulatorM1localPlaying = 1
-                        print("Start Button Clicked. Playing = \(earSimulatorM1localPlaying)")
-                    }
-                } label: {
-                    Text("Click to Start")
-                        .fontWeight(.bold)
-                        .padding()
-                        .frame(width: 200, height: 40, alignment: .center)
-                        .background(colorModel.tiffanyBlue)
-                        .foregroundColor(.white)
-                        .cornerRadius(24)
-                }
-                .padding(.top, 20)
+                .padding(.top, 40)
                 .padding(.bottom, 20)
-                
-                HStack{
-                    Spacer()
-                    Button {    // Pause Button
-                        earSimulatorM1localPlaying = 0
-                        earSimulatorM1stop()
-                        earSimulatorM1userPausedTest = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.4, qos: .userInitiated) {
-                            earSimulatorM1localPlaying = 0
-                            earSimulatorM1stop()
-                            earSimulatorM1userPausedTest = true
+                if trainingTestStarted == false {
+                    Button {    // Start Button
+                        Task(priority: .userInitiated) {
+                            audioSessionModel.setAudioSession()
+                            traininglocalPlaying = 1
+                            trainingendTestSeriesValue = false
+                            print("Start Button Clicked. Playing = \(traininglocalPlaying)")
                         }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.9, qos: .userInitiated) {
-                            earSimulatorM1localPlaying = 0
-                            earSimulatorM1stop()
-                            earSimulatorM1userPausedTest = true
-                        }
-
                     } label: {
-                        Text("Pause")
-                            .frame(width: 100, height: 40, alignment: .center)
-                            .background(Color .yellow)
-                            .foregroundColor(.black)
-                            .cornerRadius(12)
-                        
-                    }
-                    Spacer()
-                    Button {    //Restart Button
-                        earSimulatorM1pauseRestartTestCycle()
-                        audioSessionModel.setAudioSession()
-                        earSimulatorM1localPlaying = 1
-                        earSimulatorM1userPausedTest = false
-                    } label: {
-                        Text("Restart")
-                            .frame(width: 100, height: 40, alignment: .center)
+                        Text("Click to Start")
+                            .fontWeight(.bold)
+                            .padding()
+                            .frame(width: 200, height: 40, alignment: .center)
+                            .background(colorModel.tiffanyBlue)
                             .foregroundColor(.white)
-                            .background(.blue)
-                            .cornerRadius(12)
+                            .cornerRadius(24)
                     }
-                    Spacer()
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
+                } else if trainingTestStarted == true {
+                    HStack{
+                        Spacer()
+                        Button {    // Pause Button
+                            traininglocalPlaying = 0
+                            trainingstop()
+                            traininguserPausedTest = true
+                            trainingplayingStringColorIndex = 1
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.2, qos: .userInitiated) {
+                                traininglocalPlaying = 0
+                                trainingstop()
+                                traininguserPausedTest = true
+                                trainingplayingStringColorIndex = 1
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3.6, qos: .userInitiated) {
+                                traininglocalPlaying = 0
+                                trainingstop()
+                                traininguserPausedTest = true
+                                trainingplayingStringColorIndex = 1
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 5.4, qos: .userInitiated) {
+                                traininglocalPlaying = 0
+                                trainingstop()
+                                traininguserPausedTest = true
+                                trainingplayingStringColorIndex = 1
+                            }
+                        } label: {
+                            Text("Pause")
+                                .frame(width: 100, height: 40, alignment: .center)
+                                .background(Color .yellow)
+                                .foregroundColor(.black)
+                                .cornerRadius(12)
+                            
+                        }
+                        Spacer()
+                        Button {    //Restart Button
+                            training_heardArray.removeAll()
+                            trainingpauseRestartTestCycle()
+                            audioSessionModel.setAudioSession()
+                            traininglocalPlaying = 1
+                            traininguserPausedTest = false
+                            trainingplayingStringColorIndex = 0
+                        } label: {
+                            Text("Restart")
+                                .frame(width: 100, height: 40, alignment: .center)
+                                .foregroundColor(.white)
+                                .background(.blue)
+                                .cornerRadius(12)
+                        }
+                        Spacer()
+                    }
                 }
-                
                 //View System Volume and Reset Audio Session to View Updated System Volume (2 wide Hstack)
                 HStack{
                     Spacer()
@@ -203,11 +274,10 @@ struct EarSimulatorManual1View: View {
                 .cornerRadius(24)
                 .padding(.top, 20)
                 .padding(.bottom, 20)
-
                 //View Current Gain
                 HStack{
                     Spacer()
-                    Text("Gain: \(earSimulatorM1_testGain)")
+                    Text("Gain: \(training_testGain)")
                     Spacer()
                 }
                 .frame(width: 300, height: 30, alignment: .center)
@@ -221,13 +291,13 @@ struct EarSimulatorManual1View: View {
                     Spacer()
                     Button {
                         Task{
-                            let newGain: Float = earSimulatorM1_testGain - 0.1
+                            let newGain: Float = training_testGain - 0.1
                             if newGain > 0.0 {
-                                earSimulatorM1_testGain -= 0.1
+                                training_testGain -= 0.1
                             } else if newGain == 0.0 {
-                                earSimulatorM1_testGain -= 0.1
+                                training_testGain -= 0.1
                             } else {
-                                earSimulatorM1_testGain = 0.0
+                                training_testGain = 0.0
                             }
                         }
                     } label: {
@@ -240,13 +310,13 @@ struct EarSimulatorManual1View: View {
                     Spacer()
                     Button {
                         Task {
-                            let newGain: Float = earSimulatorM1_testGain + 0.1
+                            let newGain: Float = training_testGain + 0.1
                             if newGain < 1.0 {
-                                earSimulatorM1_testGain += 0.1
+                                training_testGain += 0.1
                             } else if newGain == 1.0 {
-                                earSimulatorM1_testGain += 0.1
+                                training_testGain += 0.1
                             } else {
-                                earSimulatorM1_testGain = 1.0
+                                training_testGain = 1.0
                             }
                         }
                     } label: {
@@ -259,19 +329,17 @@ struct EarSimulatorManual1View: View {
                 .background(Color.clear)
                 .cornerRadius(12)
                 .padding(.bottom, 20)
-                    
-                HStack{
-                    // Button for gain Change of 0.05 (5% / 5 db?)
+                HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
                     Spacer()
                     Button {
                         Task {
-                            let newGain: Float = earSimulatorM1_testGain - 0.05
+                            let newGain: Float = training_testGain - 0.05
                             if newGain > 0.0 {
-                                earSimulatorM1_testGain -= 0.05
+                                training_testGain -= 0.05
                             } else if newGain == 0.0 {
-                                earSimulatorM1_testGain -= 0.05
+                                training_testGain -= 0.05
                             } else {
-                                earSimulatorM1_testGain = 0.0
+                                training_testGain = 0.0
                             }
                         }
                     } label: {
@@ -284,13 +352,13 @@ struct EarSimulatorManual1View: View {
                     Spacer()
                     Button {
                         Task {
-                            let newGain: Float = earSimulatorM1_testGain + 0.05
+                            let newGain: Float = training_testGain + 0.05
                             if newGain < 1.0 {
-                                earSimulatorM1_testGain += 0.05
+                                training_testGain += 0.05
                             } else if newGain == 1.0 {
-                                earSimulatorM1_testGain += 0.05
+                                training_testGain += 0.05
                             } else {
-                                earSimulatorM1_testGain = 1.0
+                                training_testGain = 1.0
                             }
                         }
                     } label: {
@@ -303,19 +371,17 @@ struct EarSimulatorManual1View: View {
                 .background(Color.clear)
                 .cornerRadius(12)
                 .padding(.bottom, 20)
-
-                HStack{
-                    // Button for gain change of 0.01 (1% / 1db)
+                HStack{ // Button for gain change of 0.01 (1% / 1db)
                     Spacer()
                     Button {
                         Task {
-                            let newGain: Float = earSimulatorM1_testGain - 0.01
+                            let newGain: Float = training_testGain - 0.01
                             if newGain > 0.0 {
-                                earSimulatorM1_testGain -= 0.01
+                                training_testGain -= 0.01
                             } else if newGain == 0.0 {
-                                earSimulatorM1_testGain -= 0.01
+                                training_testGain -= 0.01
                             } else {
-                                earSimulatorM1_testGain = 0.0
+                                training_testGain = 0.0
                             }
                         }
                     } label: {
@@ -328,13 +394,13 @@ struct EarSimulatorManual1View: View {
                     Spacer()
                     Button {
                         Task {
-                            let newGain: Float = earSimulatorM1_testGain + 0.01
+                            let newGain: Float = training_testGain + 0.01
                             if newGain < 1.0 {
-                                earSimulatorM1_testGain += 0.01
+                                training_testGain += 0.01
                             } else if newGain == 1.0 {
-                                earSimulatorM1_testGain += 0.01
+                                training_testGain += 0.01
                             } else {
-                                earSimulatorM1_testGain = 1.0
+                                training_testGain = 1.0
                             }
                         }
                     } label: {
@@ -347,19 +413,17 @@ struct EarSimulatorManual1View: View {
                 .background(Color.clear)
                 .cornerRadius(12)
                 .padding(.bottom, 20)
-                
-                HStack{
-                    // Button for gain change of 0.001 (0.1% 0.1dB?)
+                HStack{     // Button for gain change of 0.001 (0.1% 0.1dB?)
                     Spacer()
                     Button {
                         Task {
-                            let newGain: Float = earSimulatorM1_testGain - 0.001
+                            let newGain: Float = training_testGain - 0.001
                             if newGain > 0.0 {
-                                earSimulatorM1_testGain -= 0.001
+                                training_testGain -= 0.001
                             } else if newGain == 0.0 {
-                                earSimulatorM1_testGain -= 0.001
+                                training_testGain -= 0.001
                             } else {
-                                earSimulatorM1_testGain = 0.0
+                                training_testGain = 0.0
                             }
                         }
                     } label: {
@@ -374,13 +438,13 @@ struct EarSimulatorManual1View: View {
                     Spacer()
                     Button {
                         Task {
-                            let newGain: Float = earSimulatorM1_testGain + 0.001
+                            let newGain: Float = training_testGain + 0.001
                             if newGain < 1.0 {
-                                earSimulatorM1_testGain += 0.001
+                                training_testGain += 0.001
                             } else if newGain == 1.0 {
-                                earSimulatorM1_testGain += 0.001
+                                training_testGain += 0.001
                             } else {
-                                earSimulatorM1_testGain = 1.0
+                                training_testGain = 1.0
                             }
                         }
                     } label: {
@@ -396,26 +460,22 @@ struct EarSimulatorManual1View: View {
             
                 HStack{
                     Spacer()
-                    // Left Pan
-                    Button {
-                        earSimulatorM1_pan = -1.0
+                    Button {    // Left Pan
+                        training_pan = -1.0
                     } label: {
                         Text("Left Pan")
                             .foregroundColor(.red)
                     }
                     Spacer()
-                    
-                    // Middle Pan
-                    Button {
-                        earSimulatorM1_pan = 0.0
+                    Button {    // Middle Pan
+                        training_pan = 0.0
                     } label: {
                         Text("Middle Pan")
                             .foregroundColor(.yellow)
                     }
                     Spacer()
-                    // Right Pan
-                    Button {
-                        earSimulatorM1_pan = 1.0
+                    Button {    // Right Pan
+                        training_pan = 1.0
                     } label: {
                         Text("Right Pan")
                             .foregroundColor(.green)
@@ -427,12 +487,10 @@ struct EarSimulatorManual1View: View {
                 .background(Color.clear)
                 .cornerRadius(24)
                 .padding(.bottom, 40)
-
             }
             .onAppear(perform: {
                 earSimulatorM1showTestCompletionSheet = true
              })
-            
             .fullScreenCover(isPresented: $earSimulatorM1showTestCompletionSheet, content: {
                 ZStack{
                     colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all)
@@ -458,10 +516,10 @@ struct EarSimulatorManual1View: View {
                                             sampleSelectedName.append(self.samples[index].name)
                                             sampleSelectedID.append(self.samples[index].id)
                                             sampleSelectionIndex.append(index)
-                                            earSimulatorM1activeFrequency = sampleSelectedName[0]
+                                            trainingactiveFrequency = sampleSelectedName[0]
                                             print(".samples[index].name: \(samples[index].name)")
                                             print("sampleSelectedName: \(sampleSelectedName)")
-                                            print("earSimulatorM1activeFrequency: \(earSimulatorM1activeFrequency)")
+                                            print("earSimulatorM1activeFrequency: \(trainingactiveFrequency)")
                                             print("index: \(index)")
                                         }
                                 }
@@ -476,6 +534,7 @@ struct EarSimulatorManual1View: View {
                         HStack{
                             Spacer()
                             Button("Dismiss and Start") {
+                                training_samples.removeAll()
                                 earSimulatorM1showTestCompletionSheet.toggle()
                             }
                             .frame(width: 200, height: 50, alignment: .center)
@@ -486,49 +545,96 @@ struct EarSimulatorManual1View: View {
                         }
                         Spacer()
                     }
-                    
                 }
             })
-            
-            .onChange(of: earSimulatorM1localPlaying) { earSimulatorM1playingValue in
-                
-                //Change This To Picker Frequency Selection
-                    //earSimulatorM1activeFrequency is keyed into formula
-                earSimulatorM1activeFrequency = earSimulatorM1activeFrequency
-
-                // GAIN SETTING Bound to Gain Change Buttons
-                earSimulatorM1_testGain = earSimulatorM1_testGain
-                
-                // Pan Setting
-                    // earSimulatorM1_pan is bound to play function
-                earSimulatorM1_pan = earSimulatorM1_pan
-                
-                earSimulatorM1TestStarted = true
-                if earSimulatorM1playingValue == 1{
-                    
+            .onChange(of: trainingtestIsPlaying, perform: { trainingtestBoolValue in
+                if trainingtestBoolValue == true && trainingendTestSeriesValue == false {
+                    //User is starting test for first time
+                    audioSessionModel.setAudioSession()
+                    traininglocalPlaying = 1
+                    trainingplayingStringColorIndex = 0
+                    traininguserPausedTest = false
+                } else if trainingtestBoolValue == false && trainingendTestSeriesValue == false {
+                    // User is pausing test for firts time
+                    trainingstop()
+                    traininglocalPlaying = 0
+                    trainingplayingStringColorIndex = 1
+                    traininguserPausedTest = true
+                } else if trainingtestBoolValue == true && trainingendTestSeriesValue == true {
+                    trainingstop()
+                    traininglocalPlaying = -1
+                    trainingplayingStringColorIndex = 2
+                    traininguserPausedTest = true
+                } else {
+                    print("Critical error in pause logic")
+                }
+            })
+            .onChange(of: traininglocalPlaying) { trainingplayingValue in
+//                //Change This To Picker Frequency Selection   //earSimulatorM1activeFrequency is keyed into formula
+//                earSimulatorM1activeFrequency = earSimulatorM1activeFrequency
+//                // GAIN SETTING Bound to Gain Change Buttons
+//                earSimulatorM1_testGain = earSimulatorM1_testGain
+//                // Pan Setting // earSimulatorM1_pan is bound to play function
+//                earSimulatorM1_pan = earSimulatorM1_pan
+                training_samples.append(trainingactiveFrequency)
+                traininglocalHeard = 0
+                traininglocalReversal = 0
+                newactiveFrequency = training_samples[training_index]
+                trainingTestStarted = true
+                if trainingplayingValue == 1{
+                    //Play Sample
                     earSimulatorM1audioThread.async {
-                        earSimulatorM1loadAndTestPresentation(sample: earSimulatorM1activeFrequency, gain: earSimulatorM1_testGain, pan: earSimulatorM1_pan)
+                        trainingloadAndTestPresentation(sample: trainingactiveFrequency, gain: training_testGain, pan: training_pan)
+                        while trainingtestPlayer!.isPlaying == true && self.traininglocalHeard == 0 { }
+                        if traininglocalHeard == 1 {
+                            trainingtestPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(traininglocalHeard)")
+                        } else {
+                            trainingtestPlayer!.stop()
+                            self.traininglocalHeard = -1
+                            print("Stopped naturally: Returned Array \(traininglocalHeard)")
                         }
                     }
+                    //Event Logging
                     earSimulatorM1preEventThread.async {
-                        earSimulatorM1preEventLogging()
+                        trainingpreEventLogging()
                     }
                     
-                DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3.0) {
-                        earSimulatorM1localTestCount += 1
+                    DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3.6) {
+                        traininglocalTestCount += 1
                         Task(priority: .userInitiated) {
-                            await earSimulatorM1count()
-                            await earSimulatorM1resetPlaying()
-                            await earSimulatorM1reversalStart()
+                            await trainingheardArrayNormalize()
+                            
+                            await trainingcount()
+                            await traininglogNotPlaying()
+                            await trainingresetPlaying()
+                            
+                            await trainingresetHeard()
+//                            await trainingnonResponseCounting()
+                            await trainingcreateReversalHeardArray()
+                            await trainingcreateReversalSampleArray()
+//                            await createReversalGainArrayNonResponse()
+//                            await trainingcheckHeardReversalArrays()
+                       
+
+                            await trainingreversalStart()
+
                         }
                     }
                 }
+            }
             // end of first .onChange of
-            .onChange(of: earSimulatorM1localReversal) { earSimulatorM1reversalValue in
-                if earSimulatorM1reversalValue == 1 {
-                    DispatchQueue.global(qos: .userInitiated).async {
+            .onChange(of: traininglocalReversal) { trainingreversalValue in
+                if trainingreversalValue == 1 {
+                    DispatchQueue.global(qos: .background).async {
                         Task(priority: .userInitiated) {
-                            await earSimulatorM1restartPresentation()
+//                            await trainingreversalDirection()
+//                            await trainingreversalComplexAction()
+//                            await trainingreversalsCompleteLogging()
+//                            await trainingendTestSeries()
+//                            await trainingnewTestCycle()
+                            await writeESM1ResultsToCSV()
+                            await trainingrestartPresentation()
                             print("Prepare to Start Next Presentation")
                         }
                     }
@@ -540,90 +646,514 @@ struct EarSimulatorManual1View: View {
 
 
 extension EarSimulatorManual1View {
-    enum earSimulatorM1LastErrors: Error {
-        case earSimulatorM1lastError
+    enum trainingSampleErrors: Error {
+        case trainingnotFound
         case earSimulatorM1lastUnexpected(code: Int)
     }
-    
-    func earSimulatorM1pauseRestartTestCycle() {
-        earSimulatorM1localMarkNewTestCycle = 0
-        earSimulatorM1_index = earSimulatorM1_index
-        earSimulatorM1_testGain = earSimulatorM1_testGain // May Need To Modify This Code
-        earSimulatorM1testIsPlaying = false
-        earSimulatorM1localPlaying = 0
+
+    private func trainingpauseRestartTestCycle() {
+        traininglocalMarkNewTestCycle = 0
+        traininglocalReversalEnd = 0
+        training_index = 0
+        training_samples.removeAll()
+        training_samples.append(trainingactiveFrequency)
+        newactiveFrequency = training_samples[training_index]
+        training_testGain = training_testGain
+        trainingtestIsPlaying = false
+        traininglocalPlaying = 0
+        training_testCount.removeAll()
+        training_reversalHeard.removeAll()
+        training_averageGain = Float()
+        training_reversalDirection = Float()
+        traininglocalStartingNonHeardArraySet = false
+        trainingfirstHeardResponseIndex = Int()
+        trainingfirstHeardIsTrue = false
+        trainingsecondHeardResponseIndex = Int()
+        trainingsecondHeardIsTrue = false
+        traininglocalTestCount = 0
+        traininglocalReversalHeardLast = Int()
+        trainingstartTooHigh = 0
     }
     
-    func earSimulatorM1loadAndTestPresentation(sample: String, gain: Float, pan: Float) {
-        do{
-            let earSimulatorM1urlSample = Bundle.main.path(forResource: earSimulatorM1activeFrequency, ofType: ".wav")
-            guard let earSimulatorM1urlSample = earSimulatorM1urlSample else { return print(earSimulatorM1LastErrors.earSimulatorM1lastError) }
-            earSimulatorM1testPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: earSimulatorM1urlSample))
-            guard let earSimulatorM1testPlayer = earSimulatorM1testPlayer else { return }
-            earSimulatorM1testPlayer.prepareToPlay()    // Test Player Prepare to Play
-            earSimulatorM1testPlayer.setVolume(earSimulatorM1_testGain, fadeDuration: 0)      // Set Gain for Playback
-            earSimulatorM1testPlayer.pan = earSimulatorM1_pan
-            earSimulatorM1testPlayer.play()   // Start Playback
-        } catch { print("Error in playerSessionSetUp Function Execution") }
+    private func trainingloadAndTestPresentation(sample: String, gain: Float, pan: Float) {
+            do{
+                let trainingurlSample = Bundle.main.path(forResource: newactiveFrequency, ofType: ".wav")
+                guard let trainingurlSample = trainingurlSample else { return print(trainingSampleErrors.trainingnotFound) }
+                trainingtestPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: trainingurlSample))
+                guard let trainingtestPlayer = trainingtestPlayer else { return }
+                trainingtestPlayer.prepareToPlay()    // Test Player Prepare to Play
+                trainingtestPlayer.setVolume(training_testGain, fadeDuration: 0)      // Set Gain for Playback
+                trainingtestPlayer.pan = training_pan
+                trainingtestPlayer.play()   // Start Playback
+            } catch { print("Error in playerSessionSetUp Function Execution") }
     }
     
-    func earSimulatorM1stop() {
-        do{
-            let earSimulatorM1urlSample = Bundle.main.path(forResource: "Sample0", ofType: ".wav")
-            guard let earSimulatorM1urlSample = earSimulatorM1urlSample else { return print(earSimulatorM1LastErrors.earSimulatorM1lastError) }
-            earSimulatorM1testPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: earSimulatorM1urlSample))
-            guard let earSimulatorM1testPlayer = earSimulatorM1testPlayer else { return }
-            earSimulatorM1testPlayer.stop()
-        } catch { print("Error in Player Stop Function") }
-    }
+    private func trainingstop() {
+      do{
+          let trainingurlSample = Bundle.main.path(forResource: "Sample0", ofType: ".wav")
+          guard let trainingurlSample = trainingurlSample else { return print(trainingSampleErrors.trainingnotFound) }
+          trainingtestPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: trainingurlSample))
+          guard let trainingtestPlayer = trainingtestPlayer else { return }
+          trainingtestPlayer.stop()
+      } catch { print("Error in Player Stop Function") }
+  }
     
-    func earSimulatorM1resetPlaying() async { self.earSimulatorM1localPlaying = 0 }
+    private func trainingresetNonResponseCount() async {traininglocalSeriesNoResponses = 0 }
     
-    func earSimulatorM1logNotPlaying() async { self.earSimulatorM1localPlaying = -1 }
+    private func trainingnonResponseCounting() async {traininglocalSeriesNoResponses += 1 }
+     
+    private func trainingresetPlaying() async { self.traininglocalPlaying = 0 }
     
-    func earSimulatorM1reversalStart() async { self.earSimulatorM1localReversal = 1}
+    private func traininglogNotPlaying() async { self.traininglocalPlaying = -1 }
     
-    func earSimulatorM1preEventLogging() {
+    private func trainingresetHeard() async { self.traininglocalHeard = 0 }
+    
+    private func trainingreversalStart() async { self.traininglocalReversal = 1}
+  
+    private func trainingpreEventLogging() {
         DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
-            earSimulatorM1_indexForTest.append(earSimulatorM1_index)
+            training_indexForTest.append(training_index)
         }
         DispatchQueue.global(qos: .default).async {
-            earSimulatorM1_testTestGain.append(earSimulatorM1_testGain)
+            training_testTestGain.append(training_testGain)
         }
         DispatchQueue.global(qos: .background).async {
-            earSimulatorM1_frequency.append(earSimulatorM1activeFrequency)
-            earSimulatorM1_testPan.append(earSimulatorM1_pan)
+            training_frequency.append(trainingactiveFrequency)
+            training_testPan.append(training_pan)
         }
     }
     
-    func earSimulatorM1count() async {
-        earSimulatorM1idxTestCountUpdated = earSimulatorM1_testCount.count + 1
-        earSimulatorM1_testCount.append(earSimulatorM1idxTestCountUpdated)
+    private func trainingresponseHeardArray() async {
+        training_heardArray.append(1)
+        self.trainingidxHA = training_heardArray.count
+        self.traininglocalStartingNonHeardArraySet = true
+    }
+
+    private func traininglocalResponseTracking() async {
+        if trainingfirstHeardIsTrue == false {
+            trainingfirstHeardResponseIndex = traininglocalTestCount
+            trainingfirstHeardIsTrue = true
+        } else if trainingfirstHeardIsTrue == true {
+            trainingsecondHeardResponseIndex = traininglocalTestCount
+            trainingsecondHeardIsTrue = true
+            print("Second Heard Is True Logged!")
+
+        } else {
+            print("Error in localResponseTrackingLogic")
+        }
+    }
+    
+    private func trainingheardArrayNormalize() async {
+        trainingidxHA = training_heardArray.count
+        trainingidxForTest = training_indexForTest.count
+        trainingidxForTestNet1 = trainingidxForTest - 1
+        trainingisCountSame = trainingidxHA - trainingidxForTest
+        trainingheardArrayIdxAfnet1 = training_heardArray.index(after: trainingidxForTestNet1)
+        
+        if traininglocalStartingNonHeardArraySet == false {
+            training_heardArray.append(0)
+            self.traininglocalStartingNonHeardArraySet = true
+            trainingidxHA = training_heardArray.count
+            trainingidxHAZero = trainingidxHA - trainingidxHA
+            trainingidxHAFirst = trainingidxHAZero + 1
+            trainingisCountSame = trainingidxHA - trainingidxForTest
+            trainingheardArrayIdxAfnet1 = training_heardArray.index(after: trainingidxForTestNet1)
+            } else {
+                print("Error in arrayNormalization else if isCountSame && heardAIAFnet1 if segment")
+            }
     }
     
     
-    func earSimulatorM1restartPresentation() async {
-        earSimulatorM1localPlaying = 1
+    private func trainingcount() async {
+        trainingidxTestCountUpdated = training_testCount.count + 1
+        training_testCount.append(trainingidxTestCountUpdated)
     }
 }
 
 
 extension EarSimulatorManual1View {
 //MARK: -Extension Methods Reversals
-
-    func earSimulatorM1reversalOfATenth() async {
-        earSimulatorM1_testGain += 0.001
+    
+    private func trainingcreateReversalHeardArray() async {
+        training_reversalHeard.append(training_heardArray[trainingidxHA-1])
+        self.trainingidxReversalHeardCount = training_reversalHeard.count
     }
     
-    func earSimulatorM1reversalOfOne() async {
-        earSimulatorM1_testGain += 0.01
+    private func trainingcreateReversalGainArray() async {
+        training_reversalGain.append(training_testGain)
     }
     
-    func earSimulatorM1reversalOfFive() async {
-        earSimulatorM1_testGain += 0.05
+    private func trainingcreateReversalSampleArray() async {
+        training_frequency.append(newactiveFrequency)
     }
     
-    func earSimulatorM1reversalOfTen() async {
-        earSimulatorM1_testGain += 0.1
+    private func createReversalGainArrayNonResponse() async {
+        if training_testGain < 0.995 {
+            training_reversalGain.append(training_testGain)
+        } else if training_testGain >= 0.995 {
+            training_reversalGain.append(1.0)
+        }
+    }
+    
+    private func trainingcheckHeardReversalArrays() async {
+        if trainingidxHA - trainingidxReversalHeardCount == 0 {
+            print("Success, Arrays match")
+        } else if trainingidxHA - trainingidxReversalHeardCount < 0 && trainingidxHA - trainingidxReversalHeardCount > 0{
+            fatalError("Fatal Error in HeardArrayCount - ReversalHeardArrayCount")
+        } else {
+            fatalError("hit else in check reversal arrays")
+        }
+    }
+    
+    private func trainingreversalDirection() async {
+        traininglocalReversalHeardLast = training_reversalHeard.last ?? -999
+        if traininglocalReversalHeardLast == 1 {
+            training_reversalDirection = -1.0
+            training_reversalDirectionArray.append(-1.0)
+        } else if traininglocalReversalHeardLast == 0 {
+            training_reversalDirection = 1.0
+            training_reversalDirectionArray.append(1.0)
+        } else {
+            print("Error in Reversal Direction reversalHeardArray Count")
+        }
+    }
+    
+    private func trainingreversalOfOne() async {
+        let trainingrO1Direction = 0.01 * training_reversalDirection
+        let trainingr01NewGain = training_testGain + trainingrO1Direction
+        if trainingr01NewGain > 0.00001 && trainingr01NewGain < 1.0 {
+            training_testGain = roundf(trainingr01NewGain * 100000) / 100000
+        } else if trainingr01NewGain <= 0.0 {
+            training_testGain = 0.00001
+            print("!!!Fatal Zero Gain Catch")
+        } else if trainingr01NewGain >= 0.995 {
+            training_testGain = 0.995
+            print("!!!Fatal 1.0 Gain Catch")
+        } else {
+            print("!!!Fatal Error in reversalOfOne Logic")
+        }
+    }
+    
+    private func trainingreversalOfTwo() async {
+        let trainingrO2Direction = 0.02 * training_reversalDirection
+        let trainingr02NewGain = training_testGain + trainingrO2Direction
+        if trainingr02NewGain > 0.00001 && trainingr02NewGain < 1.0 {
+            training_testGain = roundf(trainingr02NewGain * 100000) / 100000
+        } else if trainingr02NewGain <= 0.0 {
+            training_testGain = 0.00001
+            print("!!!Fatal Zero Gain Catch")
+        } else if trainingr02NewGain >= 0.995 {
+            training_testGain = 0.995
+            print("!!!Fatal 1.0 Gain Catch")
+        } else {
+            print("!!!Fatal Error in reversalOfTwo Logic")
+        }
+    }
+    
+    private func trainingreversalOfThree() async {
+        let trainingrO3Direction = 0.03 * training_reversalDirection
+        let trainingr03NewGain = training_testGain + trainingrO3Direction
+        if trainingr03NewGain > 0.00001 && trainingr03NewGain < 1.0 {
+            training_testGain = roundf(trainingr03NewGain * 100000) / 100000
+        } else if trainingr03NewGain <= 0.0 {
+            training_testGain = 0.00001
+            print("!!!Fatal Zero Gain Catch")
+        } else if trainingr03NewGain >= 0.995 {
+            training_testGain = 0.995
+            print("!!!Fatal 1.0 Gain Catch")
+        } else {
+            print("!!!Fatal Error in reversalOfThree Logic")
+        }
+    }
+    
+    private func trainingreversalOfFour() async {
+        let trainingrO4Direction = 0.04 * training_reversalDirection
+        let trainingr04NewGain = training_testGain + trainingrO4Direction
+        if trainingr04NewGain > 0.00001 && trainingr04NewGain < 1.0 {
+            training_testGain = roundf(trainingr04NewGain * 100000) / 100000
+        } else if trainingr04NewGain <= 0.0 {
+            training_testGain = 0.00001
+            print("!!!Fatal Zero Gain Catch")
+        } else if trainingr04NewGain >= 0.995 {
+            training_testGain = 0.995
+            print("!!!Fatal 1.0 Gain Catch")
+        } else {
+            print("!!!Fatal Error in reversalOfFour Logic")
+        }
+    }
+    
+    private func trainingreversalOfFive() async {
+        let trainingrO5Direction = 0.05 * training_reversalDirection
+        let trainingr05NewGain = training_testGain + trainingrO5Direction
+        if trainingr05NewGain > 0.00001 && trainingr05NewGain < 1.0 {
+            training_testGain = roundf(trainingr05NewGain * 100000) / 100000
+        } else if trainingr05NewGain <= 0.0 {
+            training_testGain = 0.00001
+            print("!!!Fatal Zero Gain Catch")
+        } else if trainingr05NewGain >= 0.995 {
+            training_testGain = 0.995
+            print("!!!Fatal 1.0 Gain Catch")
+        } else {
+            print("!!!Fatal Error in reversalOfFive Logic")
+        }
+    }
+    
+    private func trainingreversalOfTen() async {
+        let trainingr10Direction = 0.10 * training_reversalDirection
+        let trainingr10NewGain = training_testGain + trainingr10Direction
+        if trainingr10NewGain > 0.00001 && trainingr10NewGain < 1.0 {
+            training_testGain = roundf(trainingr10NewGain * 100000) / 100000
+        } else if trainingr10NewGain <= 0.0 {
+            training_testGain = 0.00001
+            print("!!!Fatal Zero Gain Catch")
+        } else if trainingr10NewGain >= 0.995 {
+            training_testGain = 0.995
+            print("!!!Fatal 1.0 Gain Catch")
+        } else {
+            print("!!!Fatal Error in reversalOfTen Logic")
+        }
+    }
+    
+    private func trainingreversalAction() async {
+        if traininglocalReversalHeardLast == 1 {
+            await trainingreversalOfFive()
+        } else if traininglocalReversalHeardLast == 0 {
+            await trainingreversalOfTwo()
+        } else {
+            print("!!!Critical error in Reversal Action")
+        }
+    }
+    
+    private func trainingreversalComplexAction() async {
+        if trainingidxReversalHeardCount <= 1 && trainingidxHA <= 1 {
+            await trainingreversalAction()
+        }  else if trainingidxReversalHeardCount == 2 {
+            if trainingidxReversalHeardCount == 2 && trainingsecondHeardIsTrue == true {
+                await trainingstartTooHighCheck()
+            } else if trainingidxReversalHeardCount == 2  && trainingsecondHeardIsTrue == false {
+                await trainingreversalAction()
+            } else {
+                print("In reversal section == 2")
+                print("Failed reversal section startTooHigh")
+                print("!!Fatal Error in reversalHeard and Heard Array Counts")
+            }
+        } else if trainingidxReversalHeardCount >= 3 {
+            print("reversal section >= 3")
+            if trainingsecondHeardResponseIndex - trainingfirstHeardResponseIndex == 1 {
+                print("reversal section >= 3")
+                print("In first if section sHRI - fHRI == 1")
+                print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
+            } else if traininglocalSeriesNoResponses == 3 {
+                await trainingreversalOfTen()
+            } else if traininglocalSeriesNoResponses == 2 {
+                await trainingreversalOfFour()
+            } else {
+                await trainingreversalAction()
+            }
+        } else {
+            print("Fatal Error in complex reversal logic for if idxRHC >=3, hit else segment")
+        }
+    }
+    
+    private func trainingreversalHeardCount1() async {
+        await trainingreversalAction()
+    }
+    
+    private func trainingcheck2PositiveSeriesReversals() async {
+        if training_reversalHeard[trainingidxHA-2] == 1 && training_reversalHeard[trainingidxHA-1] == 1 {
+            print("reversal - check2PositiveSeriesReversals")
+            print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
+        }
+    }
+    
+    private func trainingcheckTwoNegativeSeriesReversals() async {
+        if training_reversalHeard.count >= 3 && training_reversalHeard[trainingidxHA-2] == 0 && training_reversalHeard[trainingidxHA-1] == 0 {
+            await trainingreversalOfFour()
+        } else {
+            await trainingreversalAction()
+        }
+    }
+    
+    private func trainingstartTooHighCheck() async {
+        if trainingstartTooHigh == 0 && trainingfirstHeardIsTrue == true && trainingsecondHeardIsTrue == true {
+            trainingstartTooHigh = 1
+            await trainingreversalOfTen()
+            await trainingresetAfterTooHigh()
+            print("Too High Found")
+        } else {
+            await trainingreversalAction()
+        }
+    }
+    
+    private func trainingresetAfterTooHigh() async {
+        trainingfirstHeardResponseIndex = Int()
+        trainingfirstHeardIsTrue = false
+        trainingsecondHeardResponseIndex = Int()
+        trainingsecondHeardIsTrue = false
+    }
+    
+    private func trainingreversalsCompleteLogging() async {
+        if trainingsecondHeardIsTrue == true {
+            self.traininglocalReversalEnd = 1
+            self.traininglocalMarkNewTestCycle = 1
+            self.trainingfirstGain = training_reversalGain[trainingfirstHeardResponseIndex-1]
+            self.trainingsecondGain = training_reversalGain[trainingsecondHeardResponseIndex-1]
+            print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
+            let trainingdelta = trainingfirstGain - trainingsecondGain
+            let trainingavg = (trainingfirstGain + trainingsecondGain)/2
+            if trainingdelta == 0 {
+                training_averageGain = trainingsecondGain
+                print("average Gain: \(training_averageGain)")
+            } else if trainingdelta >= 0.05 {
+                training_averageGain = trainingsecondGain
+                print("SecondGain: \(trainingfirstGain)")
+                print("SecondGain: \(trainingsecondGain)")
+                print("average Gain: \(training_averageGain)")
+            } else if trainingdelta <= -0.05 {
+                training_averageGain = trainingfirstGain
+                print("SecondGain: \(trainingfirstGain)")
+                print("SecondGain: \(trainingsecondGain)")
+                print("average Gain: \(training_averageGain)")
+            } else if trainingdelta < 0.05 && trainingdelta > -0.05 {
+                training_averageGain = trainingavg
+                print("SecondGain: \(trainingfirstGain)")
+                print("SecondGain: \(trainingsecondGain)")
+                print("average Gain: \(training_averageGain)")
+            } else {
+                training_averageGain = trainingavg
+                print("SecondGain: \(trainingfirstGain)")
+                print("SecondGain: \(trainingsecondGain)")
+                print("average Gain: \(training_averageGain)")
+            }
+        } else if trainingsecondHeardIsTrue == false {
+            print("Contine, second hear is true = false")
+        } else {
+            print("Critical error in reversalsCompletLogging Logic")
+        }
+    }
+    
+    private func trainingrestartPresentation() async {
+        if trainingendTestSeriesValue == false && traininguserPausedTest == false && earSimulatorM1Cycle == true {
+            traininglocalPlaying = 1
+            trainingendTestSeriesValue = false
+        } else if trainingendTestSeriesValue == true && traininguserPausedTest == true && earSimulatorM1Cycle == true {
+            traininglocalPlaying = -1
+            trainingendTestSeriesValue = true
+            trainingshowTestCompletionSheet = true
+            trainingplayingStringColorIndex = 2
+        }  else if earSimulatorM1Cycle == false { //trainingendTestSeriesValue == true || traininguserPausedTest == true || earSimulatorM1Cycle == false {
+            traininglocalPlaying = -1
+            trainingendTestSeriesValue = true
+            trainingshowTestCompletionSheet = true
+            trainingplayingStringColorIndex = 2
+        }
+    }
+    
+    private func trainingwipeArrays() async {
+        DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier, execute: {
+            training_heardArray.removeAll()
+            training_testCount.removeAll()
+            training_reversalHeard.removeAll()
+            training_reversalGain.removeAll()
+            training_averageGain = Float()
+            training_reversalDirection = Float()
+            traininglocalStartingNonHeardArraySet = false
+            trainingfirstHeardResponseIndex = Int()
+            trainingfirstHeardIsTrue = false
+            trainingsecondHeardResponseIndex = Int()
+            trainingsecondHeardIsTrue = false
+            traininglocalTestCount = 0
+            traininglocalReversalHeardLast = Int()
+            trainingstartTooHigh = 0
+            traininglocalSeriesNoResponses = Int()
+        })
+    }
+    
+    private func startNextTestCycle() async {
+        await trainingwipeArrays()
+        trainingshowTestCompletionSheet.toggle()
+        trainingstartTooHigh = 0
+        traininglocalMarkNewTestCycle = 0
+        traininglocalReversalEnd = 0
+        training_index = training_index + 1
+        training_testGain = training_testGain
+        trainingendTestSeriesValue = false
+        trainingshowTestCompletionSheet = false
+        trainingtestIsPlaying = true
+        traininguserPausedTest = false
+        trainingplayingStringColorIndex = 2
+        print(training_SamplesCountArray[training_index])
+        traininglocalPlaying = 1
+    }
+    
+    private func trainingnewTestCycle() async {
+        if traininglocalMarkNewTestCycle == 1 && traininglocalReversalEnd == 1 && training_index < training_SamplesCountArray[training_index] && trainingendTestSeriesValue == false {
+            trainingstartTooHigh = 0
+            traininglocalMarkNewTestCycle = 0
+            traininglocalReversalEnd = 0
+            training_index = training_index + 1
+            training_testGain = training_testGain
+            trainingendTestSeriesValue = false
+            await trainingwipeArrays()
+        } else if traininglocalMarkNewTestCycle == 1 && traininglocalReversalEnd == 1 && training_index == training_SamplesCountArray[training_index] && trainingendTestSeriesValue == false {
+            trainingendTestSeriesValue = true
+            trainingfullTestCompleted = true
+            traininglocalPlaying = -1
+            training_SamplesCountArrayIdx += 1
+            print("=============================")
+            print("!!!!! End of Test Series!!!!!!")
+            print("=============================")
+            if trainingfullTestCompleted == true {
+                trainingfullTestCompleted = true
+                trainingendTestSeriesValue = true
+                traininglocalPlaying = -1
+                print("*****************************")
+                print("=============================")
+                print("^^^^^^End of Full Test Series^^^^^^")
+                print("=============================")
+                print("*****************************")
+            } else if trainingfullTestCompleted == false {
+                trainingfullTestCompleted = false
+                trainingendTestSeriesValue = true
+                traininglocalPlaying = -1
+                training_SamplesCountArrayIdx += 1
+            }
+        } else {
+            //                print("Reversal Limit Not Hit")
+        }
+    }
+    
+    private func trainingendTestSeries() async {
+        if trainingendTestSeriesValue == false {
+            //Do Nothing and continue
+            print("end Test Series = \(trainingendTestSeriesValue)")
+        } else if trainingendTestSeriesValue == true {
+            trainingshowTestCompletionSheet = true
+            training_eptaSamplesCount = training_eptaSamplesCount + 1
+            await trainingendTestSeriesStop()
+        }
+    }
+    
+    private func trainingendTestSeriesStop() async {
+        traininglocalPlaying = -1
+        trainingstop()
+        traininguserPausedTest = true
+        trainingplayingStringColorIndex = 2
+    }
+    
+    func writeESM1ResultsToCSV() async {
+        let stringFinalESM1GainsArray = training_reversalGain.map { String($0) }.joined(separator: ",")
+        let stringFinalESM1SamplesArray = training_frequency.map { String($0) }.joined(separator: ",")
+         do {
+             let csvESM1Path = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+             let csvESM1DocumentsDirectory = csvESM1Path
+             let csvESM1FilePath = csvESM1DocumentsDirectory.appendingPathComponent(inputESM1CSVName)
+             let writer = try CSVWriter(fileURL: csvESM1FilePath, append: false)
+             try writer.write(row: [stringFinalESM1GainsArray])
+             try writer.write(row: [stringFinalESM1SamplesArray])
+         } catch {
+             print("CVSWriter ESM1 Data Error or Error Finding File for ESM1 CSV \(error)")
+         }
     }
 }
 
