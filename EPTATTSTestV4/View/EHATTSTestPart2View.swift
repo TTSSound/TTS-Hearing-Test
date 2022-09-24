@@ -112,24 +112,69 @@ struct EHATTSTestPart2Content<Link: View>: View {
     
     @State var ehaP2_samples: [String] = [String]()
     
-    @State var ehaP2_dualSamples: [String] = ["Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
-                                          "Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
-                                          "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34",
-                                          "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34",
-                                          "Sample35", "Sample36", "Sample37", "Sample38", "Sample39", "Sample40", "Sample41", "Sample42", "Sample43",
-                                          "Sample35", "Sample36", "Sample37", "Sample38", "Sample39", "Sample40", "Sample41", "Sample42", "Sample43",
-                                          "Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52",
-                                          "Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52",
-                                          "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59",
-                                          "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59", "PreSilence"]
+    @State var ehaP2_dualSamples: [String] = [String]()
+    
+    
+    @State private var highResStdSamples: [String] = ["Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
+                                                      "Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
+                                                      "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34",
+                                                      "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34",
+                                                      "Sample35", "Sample36", "Sample37", "Sample38", "Sample39", "Sample40", "Sample41", "Sample42", "Sample43",
+                                                      "Sample35", "Sample36", "Sample37", "Sample38", "Sample39", "Sample40", "Sample41", "Sample42", "Sample43",
+                                                      "Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52",
+                                                      "Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52",
+                                                      "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59",
+                                                      "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59", "PreSilence"]
+    
+    
+    @State private var highResFadedSamples: [String] = ["FSample17", "FSample18", "FSample19", "FSample20", "FSample21", "FSample22", "FSample23", "FSample24", "FSample25",
+                                                        "FSample17", "FSample18", "FSample19", "FSample20", "FSample21", "FSample22", "FSample23", "FSample24", "FSample25",
+                                                        "FSample26", "FSample27", "FSample28", "FSample29", "FSample30", "FSample31", "FSample32", "FSample33", "FSample34",
+                                                        "FSample26", "FSample27", "FSample28", "FSample29", "FSample30", "FSample31", "FSample32", "FSample33", "FSample34",
+                                                        "FSample35", "FSample36", "FSample37", "FSample38", "FSample39", "FSample40", "FSample41", "FSample42", "FSample43",
+                                                        "FSample35", "FSample36", "FSample37", "FSample38", "FSample39", "FSample40", "FSample41", "FSample42", "FSample43",
+                                                        "FSample44", "FSample45", "FSample46", "FSample47", "FSample48", "FSample49", "FSample50", "FSample51", "FSample52",
+                                                        "FSample44", "FSample45", "FSample46", "FSample47", "FSample48", "FSample49", "FSample50", "FSample51", "FSample52",
+                                                        "FSample53", "FSample54", "FSample55", "FSample56", "FSample57", "FSample58", "FSample59",
+                                                        "FSample53", "FSample54", "FSample55", "FSample56", "FSample57", "FSample58", "FSample59", "PreSilence"]
+    
+    
+    @State private var cdFadedDitheredSamples: [String] = ["FDSample17", "FDSample18", "FDSample19", "FDSample20", "FDSample21", "FDSample22", "FDSample23", "FDSample24", "FDSample25",
+                                                           "FDSample17", "FDSample18", "FDSample19", "FDSample20", "FDSample21", "FDSample22", "FDSample23", "FDSample24", "FDSample25",
+                                                           "FDSample26", "FDSample27", "FDSample28", "FDSample29", "FDSample30", "FDSample31", "FDSample32", "FDSample33", "FDSample34",
+                                                           "FDSample26", "FDSample27", "FDSample28", "FDSample29", "FDSample30", "FDSample31", "FDSample32", "FDSample33", "FDSample34",
+                                                           "FDSample35", "FDSample36", "FDSample37", "FDSample38", "FDSample39", "FDSample40", "FDSample41", "FDSample42", "FDSample43",
+                                                           "FDSample35", "FDSample36", "FDSample37", "FDSample38", "FDSample39", "FDSample40", "FDSample41", "FDSample42", "FDSample43",
+                                                           "FDSample44", "FDSample45", "FDSample46", "FDSample47", "FDSample48", "FDSample49", "FDSample50", "FDSample51", "FDSample52",
+                                                           "FDSample44", "FDSample45", "FDSample46", "FDSample47", "FDSample48", "FDSample49", "FDSample50", "FDSample51", "FDSample52",
+                                                           "FDSample53", "FDSample54", "FDSample55", "FDSample56", "FDSample57", "FDSample58", "FDSample59",
+                                                           "FDSample53", "FDSample54", "FDSample55", "FDSample56", "FDSample57", "FDSample58", "FDSample59", "PreSilence"]
+    
     
    
-    @State var ehaP2_monoSamples: [String] = ["Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
-                                              "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34", "PreSilence",
-                                              "Sample35", "Sample36", "Sample37", "Sample38", "Sample39", "Sample40", "Sample41", "Sample42", "Sample43",
-                                              "Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52",
-                                              "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59", "PreSilence"]
+    @State var ehaP2_monoSamples: [String] = [String]()
     
+    @State private var highResStdMonoSamples: [String] = ["Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
+                                                          "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34",
+                                                          "Sample35", "Sample36", "Sample37", "Sample38", "Sample39", "Sample40", "Sample41", "Sample42", "Sample43",
+                                                          "Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52",
+                                                          "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59", "PreSilence"]
+    
+    
+    @State private var highResFadedMonoSamples: [String] = ["FSample17", "FSample18", "FSample19", "FSample20", "FSample21", "FSample22", "FSample23", "FSample24", "FSample25",
+                                                            "FSample26", "FSample27", "FSample28", "FSample29", "FSample30", "FSample31", "FSample32", "FSample33", "FSample34",
+                                                            "FSample35", "FSample36", "FSample37", "FSample38", "FSample39", "FSample40", "FSample41", "FSample42", "FSample43",
+                                                            "FSample44", "FSample45", "FSample46", "FSample47", "FSample48", "FSample49", "FSample50", "FSample51", "FSample52",
+                                                            "FSample53", "FSample54", "FSample55", "FSample56", "FSample57", "FSample58", "FFSample59", "PreSilence"]
+    
+    
+    @State private var cdFadedDitheredMonoSamples: [String] = ["FDSample17", "FDSample18", "FDSample19", "FDSample20", "FDSample21", "FDSample22", "FDSample23", "FDSample24", "FDSample25",
+                                                               "FDSample26", "FDSample27", "FDSample28", "FDSample29", "FDSample30", "FDSample31", "FDSample32", "FDSample33", "FDSample34",
+                                                               "FDSample35", "FDSample36", "FDSample37", "FDSample38", "FDSample39", "FDSample40", "FDSample41", "FDSample42", "FDSample43",
+                                                               "FDSample44", "FDSample45", "FDSample46", "FDSample47", "FDSample48", "FDSample49", "FDSample50", "FDSample51", "FDSample52",
+                                                               "FDSample53", "FDSample54", "FDSample55", "FDSample56", "FDSample57", "FDSample58", "FDSample59", "PreSilence"]
+    
+
     
     @State var ehaP2panArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
                                          -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
@@ -414,6 +459,11 @@ struct EHATTSTestPart2Content<Link: View>: View {
     let ehaP2audioThread = DispatchQueue(label: "AudioThread", qos: .background)
     let ehaP2preEventThread = DispatchQueue(label: "PreeventThread", qos: .userInitiated)
   
+    @State private var changeSampleArray: Bool = false
+    @State private var highResStandard: Bool = false
+    @State private var highResFaded: Bool = false
+    @State private var cdFadedDithered: Bool = false
+    @State private var sampleArraySet: Bool = false
     
     var body: some View {
        ZStack{
@@ -505,6 +555,99 @@ struct EHATTSTestPart2Content<Link: View>: View {
                        //do nothing
                    }
                })
+               
+               Spacer()
+               HStack{
+                   Spacer()
+                   VStack{
+                       Toggle("ChangeSampleType ", isOn: $changeSampleArray)
+                           .foregroundColor(.white)
+                           .font(.caption)
+                           .padding(.leading)
+                           .padding(.trailing)
+                       Spacer()
+                       if changeSampleArray == true {
+                           HStack{
+                               Toggle("High Res Std", isOn: $highResStandard)
+                                   .foregroundColor(.white)
+                                   .font(.caption)
+                                   .padding()
+                               Spacer()
+                               Toggle("High Res Faded", isOn: $highResFaded)
+                                   .foregroundColor(.white)
+                                   .font(.caption)
+                                   .padding()
+                               Spacer()
+                               Toggle("CD Dither Faded", isOn: $cdFadedDithered)
+                                   .foregroundColor(.white)
+                                   .font(.caption)
+                                   .padding()
+                           }
+                           Spacer()
+                       }
+                       Spacer()
+                   }
+               }
+               .onChange(of: changeSampleArray) { change in
+                   if change == true {
+                       sampleArraySet = false
+                   } else if change == false {
+                       sampleArraySet = true
+                   }
+               }
+               .onChange(of: highResStandard) { highResValue in
+                   sampleArraySet = false
+                   if highResValue == true && sampleArraySet == false {
+                       //remove array values
+                       ehaP2_dualSamples.removeAll()
+                       ehaP2_monoSamples.removeAll()
+                       //set other toggles to fales
+                       highResFaded = false
+                       cdFadedDithered = false
+                       sampleArraySet = true
+                       //append new highresstd values
+                       ehaP2_dualSamples.append(contentsOf: highResStdSamples)
+                       ehaP2_monoSamples.append(contentsOf: highResStdMonoSamples)
+                       print("ehaP2_samples: \(ehaP2_dualSamples)")
+                       print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
+                   }
+
+               }
+               .onChange(of: highResFaded) { highResFadedValue in
+                   sampleArraySet = false
+                   if highResFadedValue == true && sampleArraySet == false {
+                       //remove array values
+                       ehaP2_dualSamples.removeAll()
+                       ehaP2_monoSamples.removeAll()
+                       //set other toggles to fales
+                       highResStandard = false
+                       cdFadedDithered = false
+                       sampleArraySet = true
+                       //append new highresstd values
+                       ehaP2_dualSamples.append(contentsOf: highResFadedSamples)
+                       ehaP2_monoSamples.append(contentsOf: highResFadedMonoSamples)
+                       print("ehaP2_samples: \(ehaP2_dualSamples)")
+                       print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
+                   }
+               }
+               .onChange(of: cdFadedDithered) { cdFadedDitheredValue in
+                   sampleArraySet = false
+                   if cdFadedDitheredValue == true && sampleArraySet == false {
+                       //remove array values
+                       ehaP2_dualSamples.removeAll()
+                       ehaP2_monoSamples.removeAll()
+                       //set other toggles to fales
+                       highResStandard = false
+                       highResFaded = false
+                       sampleArraySet = true
+                       //append new highresstd values
+                       ehaP2_dualSamples.append(contentsOf: cdFadedDitheredSamples)
+                       ehaP2_monoSamples.append(contentsOf: cdFadedDitheredMonoSamples)
+                       print("ehaP2_samples: \(ehaP2_dualSamples)")
+                       print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
+                   }
+               }
+               
                HStack{
                    Spacer()
                    Toggle("Show\nData", isOn: $displayGainData)
@@ -539,6 +682,8 @@ struct EHATTSTestPart2Content<Link: View>: View {
                            ehaP2setDualMonoVariables()
                            ehaP2localPlaying = 1
                            ehaP2endTestSeriesValue = false
+                           changeSampleArray = false
+                           ehaP2MonoTest = false
                            print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
                        }
                    } label: {
@@ -768,7 +913,15 @@ struct EHATTSTestPart2Content<Link: View>: View {
                        ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]
                        await comparedLastNameCSVReader()
                        gainEHAP2PhonIsSet = true
+                       highResStandard = true
+                       //append highresstd to array
+                       ehaP2_dualSamples.append(contentsOf: highResStdSamples)
+                       ehaP2_monoSamples.append(contentsOf: highResStdMonoSamples)
+                       sampleArraySet = true
+                       print("ehaP2_dualSamples: \(ehaP2_dualSamples)")
+                       print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
                        ehaP2showTestCompletionSheet = true
+                       
                    } else if gainEHAP2PhonIsSet == true {
                        print("Gain Already Set")
                    } else {

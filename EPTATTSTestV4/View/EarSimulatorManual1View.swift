@@ -27,7 +27,9 @@ struct SamplesESM1List: Identifiable, Hashable {
 
 struct EarSimulatorManual1View: View {
     
-    @State private var samples = [
+    @State private var samples = [SamplesESM1List]()
+    
+    @State private var samplesHighResStd = [
         SamplesESM1List(name: "Sample1"),
         SamplesESM1List(name: "Sample2"),
         SamplesESM1List(name: "Sample3"),
@@ -45,6 +47,45 @@ struct EarSimulatorManual1View: View {
         SamplesESM1List(name: "Sample15"),
         SamplesESM1List(name: "Sample16")
     ]
+    
+    @State private var samplesHighResFaded = [
+        SamplesESM1List(name: "FSample1"),
+        SamplesESM1List(name: "FSample2"),
+        SamplesESM1List(name: "FSample3"),
+        SamplesESM1List(name: "FSample4"),
+        SamplesESM1List(name: "FSample5"),
+        SamplesESM1List(name: "FSample6"),
+        SamplesESM1List(name: "FSample7"),
+        SamplesESM1List(name: "FSample8"),
+        SamplesESM1List(name: "FSample9"),
+        SamplesESM1List(name: "FSample10"),
+        SamplesESM1List(name: "FSample11"),
+        SamplesESM1List(name: "FSample12"),
+        SamplesESM1List(name: "FSample13"),
+        SamplesESM1List(name: "FSample14"),
+        SamplesESM1List(name: "FSample15"),
+        SamplesESM1List(name: "FSample16")
+    ]
+    
+    @State private var samplesCDDitheredFaded = [
+        SamplesESM1List(name: "FDSample1"),
+        SamplesESM1List(name: "FDSample2"),
+        SamplesESM1List(name: "FDSample3"),
+        SamplesESM1List(name: "FDSample4"),
+        SamplesESM1List(name: "FDSample5"),
+        SamplesESM1List(name: "FDSample6"),
+        SamplesESM1List(name: "FDSample7"),
+        SamplesESM1List(name: "FDSample8"),
+        SamplesESM1List(name: "FDSample9"),
+        SamplesESM1List(name: "FDSample10"),
+        SamplesESM1List(name: "FDSample11"),
+        SamplesESM1List(name: "FDSample12"),
+        SamplesESM1List(name: "FDSample13"),
+        SamplesESM1List(name: "FDSample14"),
+        SamplesESM1List(name: "FDSample15"),
+        SamplesESM1List(name: "FDSample16")
+    ]
+    
     
     @State private var sampleSelected = [Int]()
     @State private var sampleSelectionIndex = [Int]()
@@ -76,7 +117,17 @@ struct EarSimulatorManual1View: View {
     @State private var ESM1endTestSeriesValue: Bool = false
     @State private var ESM1showTestCompletionSheet: Bool = false
     
-    @State private var ESM1_samples: [String] = ["Sample0", "Sample1"]
+    @State private var ESM1_samples: [String] = [String]()
+    
+    @State private var highResStdSamples: [String] =  ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8",
+                                                       "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
+    
+    @State private var highResFadedSamples: [String] =  ["FSample1", "FSample2", "FSample3", "FSample4", "FSample5", "FSample6", "FSample7", "FSample8",
+                                                         "FSample9", "FSample10", "FSample11", "FSample12", "FSample13", "FSample14", "FSample15", "FSample16"]
+    
+    @State private var cdFadedDitheredSamples: [String] =  ["FDSample1", "FDSample2", "FDSample3", "FDSample4", "FDSample5", "FDSample6", "FDSample7", "FDSample8",
+                                                            "FDSample9", "FDSample10", "FDSample11", "FDSample12", "FDSample13", "FDSample14", "FDSample15", "FDSample16"]
+    
     @State private var ESM1_index: Int = 0
     @State private var ESM1_testGain: Float = 0
     @State private var ESM1_heardArray: [Int] = [Int]()
@@ -151,6 +202,12 @@ struct EarSimulatorManual1View: View {
     @State private var newactiveFrequency = String()
     @State private var earSimulatorM1Cycle: Bool = false
     
+    @State private var changeSampleArray: Bool = false
+    @State private var highResStandard: Bool = false
+    @State private var highResFaded: Bool = false
+    @State private var cdFadedDithered: Bool = false
+    @State private var sampleArraySet: Bool = false
+    
     @State private var earSimulatorM1showTestCompletionSheet: Bool = false
     
     var body: some View {
@@ -160,6 +217,12 @@ struct EarSimulatorManual1View: View {
                 HStack{
                     Spacer()
                     Button {
+                        if changeSampleArray == true {
+                            self.highResStandard = highResStandard
+                            self.highResFaded = highResFaded
+                            self.cdFadedDithered = cdFadedDithered
+                            self.sampleArraySet = sampleArraySet
+                        }
                         earSimulatorM1showTestCompletionSheet = true
                         ESM1stop()
                     } label: {
@@ -504,6 +567,88 @@ struct EarSimulatorManual1View: View {
                                 .padding(10)
                                 .foregroundColor(.red)
                         })
+                        
+                        HStack{
+                            Spacer()
+                            VStack{
+                                Toggle("Select Sample Type ", isOn: $changeSampleArray)
+                                    .foregroundColor(.white)
+                                    .padding(.leading)
+                                    .padding(.trailing)
+                               
+                                if changeSampleArray == true {
+                                    HStack{
+                                        Toggle("High Res Std", isOn: $highResStandard)
+                                            .foregroundColor(.white)
+                                            .font(.caption)
+                                            .padding()
+//                                        Spacer()
+                                        Toggle("High Res Faded", isOn: $highResFaded)
+                                            .foregroundColor(.white)
+                                            .font(.caption)
+                                            .padding()
+//                                        Spacer()
+                                        Toggle("CD Dither Faded", isOn: $cdFadedDithered)
+                                            .foregroundColor(.white)
+                                            .font(.caption)
+                                            .padding()
+                                    }
+                                }
+                            }
+                            Spacer()
+                        }
+                        .onChange(of: changeSampleArray) { change in
+                            if change == true {
+                                sampleArraySet = false
+                            } else if change == false {
+                                sampleArraySet = true
+                            }
+                        }
+                        .onChange(of: highResStandard) { highResValue in
+                            sampleArraySet = false
+                            if highResValue == true && sampleArraySet == false {
+                                //remove array values
+                                samples.removeAll()
+                                //set other toggles to fales
+                                highResFaded = false
+                                cdFadedDithered = false
+                                sampleArraySet = true
+                                //append new highresstd values
+                                samples.append(contentsOf: samplesHighResStd)
+                                print("samples: \(samples)")
+                            }
+
+                        }
+                        .onChange(of: highResFaded) { highResFadedValue in
+                            sampleArraySet = false
+                            if highResFadedValue == true && sampleArraySet == false {
+                                //remove array values
+                                samples.removeAll()
+                                //set other toggles to fales
+                                highResStandard = false
+                                cdFadedDithered = false
+                                sampleArraySet = true
+                                //append new highresstd values
+                                samples.append(contentsOf: samplesHighResFaded)
+                                print("samples: \(samples)")
+                            }
+                        }
+                        .onChange(of: cdFadedDithered) { cdFadedDitheredValue in
+                            sampleArraySet = false
+                            if cdFadedDitheredValue == true && sampleArraySet == false {
+                                //remove array values
+                                samples.removeAll()
+                                //set other toggles to fales
+                                highResStandard = false
+                                highResFaded = false
+                                sampleArraySet = true
+                                //append new highresstd values
+                                samples.append(contentsOf: samplesCDDitheredFaded)
+                                print("samples: \(samples)")
+                            }
+                        }
+                        Spacer()
+                        
                         List {
                             ForEach(samples.indices, id: \.self) { index in
                                 HStack {
@@ -529,6 +674,35 @@ struct EarSimulatorManual1View: View {
                             sampleSelectionIndex.removeAll()
                             sampleSelectedName.removeAll()
                             sampleSelectedID.removeAll()
+                            if sampleArraySet == false && highResStandard == false && highResFaded == false && cdFadedDithered == false {
+                                highResStandard = true
+                                highResFaded = false
+                                cdFadedDithered = false
+                                //append highresstd to array
+                                samples.append(contentsOf: samplesHighResStd)
+                                sampleArraySet = true
+                            } else if sampleArraySet == false && highResStandard == true && highResFaded == false && cdFadedDithered == false {
+                                highResStandard = true
+                                highResFaded = false
+                                cdFadedDithered = false
+                                //append highresstd to array
+                                samples.append(contentsOf: samplesHighResStd)
+                                sampleArraySet = true
+                            } else if sampleArraySet == false && highResStandard == false && highResFaded == true && cdFadedDithered == false {
+                                highResStandard = false
+                                highResFaded = true
+                                cdFadedDithered = false
+                                //append highresstd to array
+                                samples.append(contentsOf: samplesHighResFaded)
+                                sampleArraySet = true
+                            } else if sampleArraySet == false && highResStandard == false && highResFaded == false && cdFadedDithered == true {
+                                highResStandard = false
+                                highResFaded = false
+                                cdFadedDithered = true
+                                //append highresstd to array
+                                samples.append(contentsOf: samplesCDDitheredFaded)
+                                sampleArraySet = true
+                            }
                         }
                         Spacer()
                         HStack{

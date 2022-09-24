@@ -115,10 +115,23 @@ struct EHATTSTestPart1Content<Link: View>: View {
     
 //    @State var envDataObjectModel_samples: [String] = ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16", "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
     
-    @State var envDataObjectModel_samples: [String] = ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8",
+    @State var envDataObjectModel_samples: [String] = [String]()
+    
+    @State private var highResStdSamples: [String] =  ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8",
                                                        "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8",
                                                        "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16",
                                                        "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
+    
+    @State private var highResFadedSamples: [String] =  ["FSample1", "FSample2", "FSample3", "FSample4", "FSample5", "FSample6", "FSample7", "FSample8",
+                                                         "FSample1", "FSample2", "FSample3", "FSample4", "FSample5", "FSample6", "FSample7", "FSample8",
+                                                         "FSample9", "FSample10", "FSample11", "FSample12", "FSample13", "FSample14", "FSample15", "FSample16",
+                                                         "FSample9", "FSample10", "FSample11", "FSample12", "FSample13", "FSample14", "FSample15", "FSample16"]
+    
+    @State private var cdFadedDitheredSamples: [String] =  ["FDSample1", "FDSample2", "FDSample3", "FDSample4", "FDSample5", "FDSample6", "FDSample7", "FDSample8",
+                                                            "FDSample1", "FDSample2", "FDSample3", "FDSample4", "FDSample5", "FDSample6", "FDSample7", "FDSample8",
+                                                            "FDSample9", "FDSample10", "FDSample11", "FDSample12", "FDSample13", "FDSample14", "FDSample15", "FDSample16",
+                                                            "FDSample9", "FDSample10", "FDSample11", "FDSample12", "FDSample13", "FDSample14", "FDSample15", "FDSample16"]
+    
     @State var panArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
     @State var totalCount = 32
     @State var localPan: Float = Float()
@@ -279,6 +292,12 @@ struct EHATTSTestPart1Content<Link: View>: View {
     let audioThread = DispatchQueue(label: "AudioThread", qos: .background)
     let preEventThread = DispatchQueue(label: "PreeventThread", qos: .userInitiated)
     
+    @State private var changeSampleArray: Bool = false
+    @State private var highResStandard: Bool = false
+    @State private var highResFaded: Bool = false
+    @State private var cdFadedDithered: Bool = false
+    @State private var sampleArraySet: Bool = false
+    
     var body: some View {
         
         ZStack{
@@ -307,6 +326,87 @@ struct EHATTSTestPart1Content<Link: View>: View {
                 }
                 .navigationDestination(isPresented: $ehaP1fullTestCompleted) {
                     PostAllTestsSplashView(testing: testing, relatedLinkTesting: linkTesting)
+                }
+                HStack{
+                    Spacer()
+                    VStack{
+                        Toggle("ChangeSampleType ", isOn: $changeSampleArray)
+                            .foregroundColor(.white)
+                            .font(.caption)
+                            .padding(.leading)
+                            .padding(.trailing)
+                        Spacer()
+                        if changeSampleArray == true {
+                            HStack{
+                                Toggle("High Res Std", isOn: $highResStandard)
+                                    .foregroundColor(.white)
+                                    .font(.caption)
+                                    .padding()
+                                Spacer()
+                                Toggle("High Res Faded", isOn: $highResFaded)
+                                    .foregroundColor(.white)
+                                    .font(.caption)
+                                    .padding()
+                                Spacer()
+                                Toggle("CD Dither Faded", isOn: $cdFadedDithered)
+                                    .foregroundColor(.white)
+                                    .font(.caption)
+                                    .padding()
+                            }
+                            Spacer()
+                        }
+                        Spacer()
+                    }
+                }
+                .onChange(of: changeSampleArray) { change in
+                    if change == true {
+                        sampleArraySet = false
+                    } else if change == false {
+                        sampleArraySet = true
+                    }
+                }
+                .onChange(of: highResStandard) { highResValue in
+                    sampleArraySet = false
+                    if highResValue == true && sampleArraySet == false {
+                        //remove array values
+                        envDataObjectModel_samples.removeAll()
+                        //set other toggles to fales
+                        highResFaded = false
+                        cdFadedDithered = false
+                        sampleArraySet = true
+                        //append new highresstd values
+                        envDataObjectModel_samples.append(contentsOf: highResStdSamples)
+                        print("training_samples: \(envDataObjectModel_samples)")
+                    }
+
+                }
+                .onChange(of: highResFaded) { highResFadedValue in
+                    sampleArraySet = false
+                    if highResFadedValue == true && sampleArraySet == false {
+                        //remove array values
+                        envDataObjectModel_samples.removeAll()
+                        //set other toggles to fales
+                        highResStandard = false
+                        cdFadedDithered = false
+                        sampleArraySet = true
+                        //append new highresstd values
+                        envDataObjectModel_samples.append(contentsOf: highResFadedSamples)
+                        print("training_samples: \(envDataObjectModel_samples)")
+                    }
+                }
+                .onChange(of: cdFadedDithered) { cdFadedDitheredValue in
+                    sampleArraySet = false
+                    if cdFadedDitheredValue == true && sampleArraySet == false {
+                        //remove array values
+                        envDataObjectModel_samples.removeAll()
+                        //set other toggles to fales
+                        highResStandard = false
+                        highResFaded = false
+                        sampleArraySet = true
+                        //append new highresstd values
+                        envDataObjectModel_samples.append(contentsOf: cdFadedDitheredSamples)
+                        print("training_samples: \(envDataObjectModel_samples)")
+                    }
                 }
                 
                 Spacer()
@@ -521,6 +621,11 @@ struct EHATTSTestPart1Content<Link: View>: View {
                     await comparedLastNameCSVReader()
                     envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]
                     gainEHAP1PhonIsSet = true
+                    highResStandard = true
+                    //append highresstd to array
+                    envDataObjectModel_samples.append(contentsOf: highResStdSamples)
+                    sampleArraySet = true
+                    print("training_samples: \(envDataObjectModel_samples)")
                 } else if gainEHAP1PhonIsSet == true {
                     print("Gain Already Set")
                 } else {

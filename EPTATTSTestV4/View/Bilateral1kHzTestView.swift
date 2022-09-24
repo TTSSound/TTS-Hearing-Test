@@ -137,7 +137,12 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     @State var onekHzshowTestCompletionSheet: Bool = false
     
     //!!!!!!Changes
-    @State var onekHz_samples: [String] = ["Sample0", "Sample0", "Sample0", "Sample0","Sample0", "Sample0", "Sample0", "Sample0"]
+    @State var onekHz_samples: [String] = [String]()
+    
+    @State private var highResStdSamples: [String] = ["Sample0", "Sample0", "Sample0", "Sample0", "Sample0", "Sample0", "Sample0", "Sample0"]
+    @State private var highResFadedSamples: [String] = ["FSample0", "FSample0", "FSample0", "FSample0", "FSample0", "FSample0", "FSample0", "FSample0"]
+    @State private var cdFadedDitheredSamples: [String] = ["FDSample0", "FDSample0", "FDSample0", "FDSample0", "FDSample0", "FDSample0", "FDSample0", "FDSample0"]
+    
     @State var onekHz_panSettingArray: [Float] = [1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0]    // -1.0 = Left , 0.0 = Middle, 1.0 = Right
     @State var pan: Float = 1.0
     //!!!!! Changes Above
@@ -289,6 +294,12 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     let onekHzaudioThread = DispatchQueue(label: "AudioThread", qos: .background)
     let onekHzpreEventThread = DispatchQueue(label: "PreeventThread", qos: .userInitiated)
     
+    @State private var changeSampleArray: Bool = false
+    @State private var highResStandard: Bool = false
+    @State private var highResFaded: Bool = false
+    @State private var cdFadedDithered: Bool = false
+    @State private var sampleArraySet: Bool = false
+    
     var body: some View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
@@ -316,6 +327,89 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                 .navigationDestination(isPresented: $bilateral1kHzTestCompleted) {
                     PostBilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)
                 }
+                
+                HStack{
+                    Spacer()
+                    VStack{
+                        Toggle("ChangeSampleType ", isOn: $changeSampleArray)
+                            .foregroundColor(.white)
+                            .font(.caption)
+                            .padding(.leading)
+                            .padding(.trailing)
+                        Spacer()
+                        if changeSampleArray == true {
+                            HStack{
+                                Toggle("High Res Std", isOn: $highResStandard)
+                                    .foregroundColor(.white)
+                                    .font(.caption)
+                                    .padding()
+                                Spacer()
+                                Toggle("High Res Faded", isOn: $highResFaded)
+                                    .foregroundColor(.white)
+                                    .font(.caption)
+                                    .padding()
+                                Spacer()
+                                Toggle("CD Dither Faded", isOn: $cdFadedDithered)
+                                    .foregroundColor(.white)
+                                    .font(.caption)
+                                    .padding()
+                            }
+                            Spacer()
+                        }
+                        Spacer()
+                    }
+                }
+                .onChange(of: changeSampleArray) { change in
+                    if change == true {
+                        sampleArraySet = false
+                    } else if change == false {
+                        sampleArraySet = true
+                    }
+                }
+                .onChange(of: highResStandard) { highResValue in
+                    sampleArraySet = false
+                    if highResValue == true && sampleArraySet == false {
+                        //remove array values
+                        onekHz_samples.removeAll()
+                        //set other toggles to fales
+                        highResFaded = false
+                        cdFadedDithered = false
+                        sampleArraySet = true
+                        //append new highresstd values
+                        onekHz_samples.append(contentsOf: highResStdSamples)
+                        print("training_samples: \(onekHz_samples)")
+                    }
+
+                }
+                .onChange(of: highResFaded) { highResFadedValue in
+                    sampleArraySet = false
+                    if highResFadedValue == true && sampleArraySet == false {
+                        //remove array values
+                        onekHz_samples.removeAll()
+                        //set other toggles to fales
+                        highResStandard = false
+                        cdFadedDithered = false
+                        sampleArraySet = true
+                        //append new highresstd values
+                        onekHz_samples.append(contentsOf: highResFadedSamples)
+                        print("training_samples: \(onekHz_samples)")
+                    }
+                }
+                .onChange(of: cdFadedDithered) { cdFadedDitheredValue in
+                    sampleArraySet = false
+                    if cdFadedDitheredValue == true && sampleArraySet == false {
+                        //remove array values
+                        onekHz_samples.removeAll()
+                        //set other toggles to fales
+                        highResStandard = false
+                        highResFaded = false
+                        sampleArraySet = true
+                        //append new highresstd values
+                        onekHz_samples.append(contentsOf: cdFadedDitheredSamples)
+                        print("training_samples: \(onekHz_samples)")
+                    }
+                }
+                
                 Spacer()
                 if onekHzTestStarted == false {
                     Button {
@@ -474,6 +568,11 @@ struct Bilateral1kHzTestContent<Link: View>: View {
             Task{
                 await comparedLastNameCSVReader()
             }
+            highResStandard = true
+            //append highresstd to array
+            onekHz_samples.append(contentsOf: highResStdSamples)
+            sampleArraySet = true
+            print("training_samples: \(onekHz_samples)")
         })
         .onChange(of: onekHztestIsPlaying, perform: { onekHztestBoolValue in
             if onekHztestBoolValue == true && onekHzendTestSeries == false {

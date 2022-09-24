@@ -102,7 +102,10 @@ struct TrainingTestContent<Link: View>: View {
     @State var trainingendTestSeriesValue: Bool = false
     @State var trainingshowTestCompletionSheet: Bool = false
     
-    @State var training_samples: [String] = ["Sample0", "Sample1"]
+    @State var training_samples: [String] = [String]()
+    @State private var highResStdSamples: [String] = ["Sample0", "Sample1"]
+    @State private var highResFadedSamples: [String] = ["FSample0", "FSample1"]
+    @State private var cdFadedDitheredSamples: [String] = ["FDSample0", "FDSample1"]
     @State var training_index: Int = 0
     @State var training_testGain: Float = 0.2
     @State var training_heardArray: [Int] = [Int]()
@@ -179,6 +182,12 @@ struct TrainingTestContent<Link: View>: View {
     
     @State var P: Testing?
     
+    @State private var changeSampleArray: Bool = false
+    @State private var highResStandard: Bool = false
+    @State private var highResFaded: Bool = false
+    @State private var cdFadedDithered: Bool = false
+    @State private var sampleArraySet: Bool = false
+    
     var body: some View {
         
         ZStack{
@@ -210,6 +219,87 @@ struct TrainingTestContent<Link: View>: View {
                     }
                     
                 }
+                HStack{
+                    Spacer()
+                    VStack{
+                        Toggle("ChangeSampleType ", isOn: $changeSampleArray)
+                            .foregroundColor(.white)
+                            .font(.caption)
+                            .padding(.leading)
+                            .padding(.trailing)
+                        Spacer()
+                        if changeSampleArray == true {
+                            HStack{
+                                Toggle("High Res Std", isOn: $highResStandard)
+                                    .foregroundColor(.white)
+                                    .font(.caption)
+                                    .padding()
+                                Spacer()
+                                Toggle("High Res Faded", isOn: $highResFaded)
+                                    .foregroundColor(.white)
+                                    .font(.caption)
+                                    .padding()
+                                Spacer()
+                                Toggle("CD Dither Faded", isOn: $cdFadedDithered)
+                                    .foregroundColor(.white)
+                                    .font(.caption)
+                                    .padding()
+                            }
+                            Spacer()
+                        }
+                        Spacer()
+                    }
+                }
+                .onChange(of: changeSampleArray) { change in
+                    if change == true {
+                        sampleArraySet = false
+                    } else if change == false {
+                        sampleArraySet = true
+                    }
+                }
+                .onChange(of: highResStandard) { highResValue in
+                    sampleArraySet = false
+                    if highResValue == true && sampleArraySet == false {
+                        //remove array values
+                        training_samples.removeAll()
+                        //set other toggles to fales
+                        highResFaded = false
+                        cdFadedDithered = false
+                        sampleArraySet = true
+                        //append new highresstd values
+                        training_samples.append(contentsOf: highResStdSamples)
+                        print("training_samples: \(training_samples)")
+                    }
+
+                }
+                .onChange(of: highResFaded) { highResFadedValue in
+                    sampleArraySet = false
+                    if highResFadedValue == true && sampleArraySet == false {
+                        //remove array values
+                        training_samples.removeAll()
+                        //set other toggles to fales
+                        highResStandard = false
+                        cdFadedDithered = false
+                        sampleArraySet = true
+                        //append new highresstd values
+                        training_samples.append(contentsOf: highResFadedSamples)
+                        print("training_samples: \(training_samples)")
+                    }
+                }
+                .onChange(of: cdFadedDithered) { cdFadedDitheredValue in
+                    sampleArraySet = false
+                    if cdFadedDitheredValue == true && sampleArraySet == false {
+                        //remove array values
+                        training_samples.removeAll()
+                        //set other toggles to fales
+                        highResStandard = false
+                        highResFaded = false
+                        sampleArraySet = true
+                        //append new highresstd values
+                        training_samples.append(contentsOf: cdFadedDitheredSamples)
+                        print("training_samples: \(training_samples)")
+                    }
+                }
                 
                 Spacer()
                 if trainingTestStarted == false {
@@ -217,6 +307,7 @@ struct TrainingTestContent<Link: View>: View {
                         Task(priority: .userInitiated) {
                             audioSessionModel.setAudioSession()
                             traininglocalPlaying = 1
+                            changeSampleArray = false
                             print("Start Button Clicked. Playing = \(traininglocalPlaying)")
                         }
                     } label: {
@@ -319,6 +410,11 @@ struct TrainingTestContent<Link: View>: View {
             }
             .onAppear(perform: {
                 trainingshowTestCompletionSheet = true
+                highResStandard = true
+                //append highresstd to array
+                training_samples.append(contentsOf: highResStdSamples)
+                sampleArraySet = true
+                print("training_samples: \(training_samples)")
             })
             .fullScreenCover(isPresented: $trainingshowTestCompletionSheet, content: {
                 ZStack{
@@ -347,6 +443,7 @@ struct TrainingTestContent<Link: View>: View {
                                     .foregroundColor(.white)
                                     .background(Color.green)
                                     .font(.title)
+                                    .cornerRadius(24)
                                     .onTapGesture {
                                         trainingshowTestCompletionSheet.toggle()
                                     }

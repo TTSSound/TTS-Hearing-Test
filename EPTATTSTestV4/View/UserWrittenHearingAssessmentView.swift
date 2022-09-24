@@ -190,6 +190,8 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
     
     @State var saveSurveyAssessmentResults: SaveSurveyAssessmentResults? = nil
     
+    @State var incompleteQuestion: Bool = false
+    
     var body: some View {
         ZStack {
             colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
@@ -591,6 +593,9 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                         .padding(.top)
                         .padding(.bottom)
                         .background(.black)
+                        .onAppear {
+                            incompleteQuestion = false
+                        }
                         .onChange(of: submitSurvey) { _ in
                             Task(priority: .userInitiated, operation: {
                                 await calculateSurveryResponses()
@@ -628,8 +633,9 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                     .background(colorModel.tiffanyBlue)
                 if surveySubmitted == [1] {
                     NavigationLink(destination:
-                                    surveySubmitted.first == 1 ? AnyView(PreTestView(testing: testing, relatedLinkTesting: linkTesting))
-                                   : surveySubmitted.first != 1 ? AnyView(SurveyErrorView(testing: testing, relatedLinkTesting: linkTesting))
+                                    surveySubmitted.first == 1 && incompleteQuestion == false ? AnyView(PreTestView(testing: testing, relatedLinkTesting: linkTesting))
+//                                   : surveySubmitted.first != 1 ? AnyView(SurveyErrorView(testing: testing, relatedLinkTesting: linkTesting))
+                                   : incompleteQuestion == true ? AnyView(SurveyErrorView(testing: testing, relatedLinkTesting: linkTesting))
                                    : AnyView(TestIDInputView(testing: testing, relatedLinkTesting: linkTesting))
                     ){
                         Text("Press to Contine!")
@@ -696,6 +702,11 @@ extension UserWrittenHearingAssessmentContent {
         } else {
             print("Error in question1Yes Logic")
         }
+        
+        if question1No == false && question1Sometimes == false && question1Yes == false {
+            incompleteQuestion = true
+            print("incompleteQuestion: \(incompleteQuestion)")
+        }
     }
     
     func finalQuestion2Array() async {
@@ -720,6 +731,11 @@ extension UserWrittenHearingAssessmentContent {
             finalQuestion2responses.append(4)
         } else {
             print("Error in questio2Yes Logic")
+        }
+        
+        if question2No == false && question2Sometimes == false && question2Yes == false {
+            incompleteQuestion = true
+            print("incompleteQuestion: \(incompleteQuestion)")
         }
     }
     
@@ -746,6 +762,11 @@ extension UserWrittenHearingAssessmentContent {
         } else {
             print("Error in questio3Yes Logic")
         }
+        
+        if question3No == false && question3Sometimes == false && question3Yes == false {
+            incompleteQuestion = true
+            print("incompleteQuestion: \(incompleteQuestion)")
+        }
     }
     
     func finalQuestion4Array() async {
@@ -770,6 +791,11 @@ extension UserWrittenHearingAssessmentContent {
             finalQuestion4responses.append(4)
         } else {
             print("Error in questio4Yes Logic")
+        }
+        
+        if question4No == false && question4Sometimes == false && question4Yes == false {
+            incompleteQuestion = true
+            print("incompleteQuestion: \(incompleteQuestion)")
         }
     }
     
@@ -796,6 +822,11 @@ extension UserWrittenHearingAssessmentContent {
         } else {
             print("Error in questio5Yes Logic")
         }
+        
+        if question5No == false && question5Sometimes == false && question5Yes == false {
+            incompleteQuestion = true
+            print("incompleteQuestion: \(incompleteQuestion)")
+        }
     }
     
     func finalQuestion6Array() async {
@@ -820,6 +851,11 @@ extension UserWrittenHearingAssessmentContent {
             finalQuestion6responses.append(4)
         } else {
             print("Error in questio6Yes Logic")
+        }
+        
+        if question6No == false && question6Sometimes == false && question6Yes == false {
+            incompleteQuestion = true
+            print("incompleteQuestion: \(incompleteQuestion)")
         }
     }
     
@@ -846,6 +882,11 @@ extension UserWrittenHearingAssessmentContent {
         } else {
             print("Error in questio7Yes Logic")
         }
+        
+        if question7No == false && question7Sometimes == false && question7Yes == false {
+            incompleteQuestion = true
+            print("incompleteQuestion: \(incompleteQuestion)")
+        }
     }
     
     func finalQuestion8Array() async {
@@ -870,6 +911,11 @@ extension UserWrittenHearingAssessmentContent {
             finalQuestion8responses.append(4)
         } else {
             print("Error in questio8Yes Logic")
+        }
+        
+        if question8No == false && question8Sometimes == false && question8Yes == false {
+            incompleteQuestion = true
+            print("incompleteQuestion: \(incompleteQuestion)")
         }
     }
     
@@ -896,6 +942,11 @@ extension UserWrittenHearingAssessmentContent {
         } else {
             print("Error in questio9Yes Logic")
         }
+        
+        if question9No == false && question9Sometimes == false && question9Yes == false {
+            incompleteQuestion = true
+            print("incompleteQuestion: \(incompleteQuestion)")
+        }
     }
     
     func finalQuestion10Array() async {
@@ -920,6 +971,11 @@ extension UserWrittenHearingAssessmentContent {
             finalQuestion10responses.append(4)
         } else {
             print("Error in questio10Yes Logic")
+        }
+        
+        if question10No == false && question10Sometimes == false && question10Yes == false {
+            incompleteQuestion = true
+            print("incompleteQuestion: \(incompleteQuestion)")
         }
     }
     
@@ -964,6 +1020,8 @@ extension UserWrittenHearingAssessmentContent {
         print("finalSometimesResponseArray: \(finalSometimesResponses)")
         print("finalYesResponseArray: \(finalYesResponses)")
     }
+    
+    
     
     func saveWrittenHearingTest() async {
         await getSurveyData()
