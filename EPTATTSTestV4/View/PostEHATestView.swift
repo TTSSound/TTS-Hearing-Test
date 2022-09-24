@@ -296,12 +296,12 @@ extension EHATTSTestPart2Content {
 }
 
 
-struct PostEHATestView_Previews: PreviewProvider {
-    static var previews: some View {
-        PostEHATestView(ehaTesting: nil, relatedLinkEHATesting: linkEHATesting)
-    }
-    
-    static func linkEHATesting(ehaTesting: EHATesting) -> some View {
-        EmptyView()
-    }
-}
+//struct PostEHATestView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PostEHATestView(ehaTesting: nil, relatedLinkEHATesting: linkEHATesting)
+//    }
+//
+//    static func linkEHATesting(ehaTesting: EHATesting) -> some View {
+//        EmptyView()
+//    }
+//}

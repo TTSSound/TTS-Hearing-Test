@@ -84,7 +84,7 @@ struct TestSelectionLandingView: View {
                 .padding(.bottom, 10)
                 HStack {
                     Spacer()
-                    Text("Trial Our Technology With Our Simplest Hearing Test")
+                    Text("See How To Trial Our Technology With Our Simplest Hearing Test")
                         .foregroundColor(colorModel.tiffanyBlue)
                     Spacer()
                     NavigationLink {

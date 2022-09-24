@@ -260,7 +260,7 @@ struct EarSimulatorManual1View: View {
                         Text("Click to Start")
                             .fontWeight(.bold)
                             .padding()
-                            .frame(width: 200, height: 40, alignment: .center)
+                            .frame(width: 300, height: 40, alignment: .center)
                             .background(colorModel.tiffanyBlue)
                             .foregroundColor(.white)
                             .cornerRadius(24)
@@ -327,7 +327,7 @@ struct EarSimulatorManual1View: View {
                         earSimulatorM1_volume = audioSessionModel.audioSession.outputVolume
                         //                    audioSessionModel.cancelAudioSession()
                     } label: {
-                        Text("Volume: \(earSimulatorM1_volume)")
+                        Text("Check Volume: \(earSimulatorM1_volume)")
                     }
                     Spacer()
                 }
@@ -341,6 +341,8 @@ struct EarSimulatorManual1View: View {
                 HStack{
                     Spacer()
                     Text("Gain: \(ESM1_testGain)")
+                    Spacer()
+                    Text("Pan: \(ESM1_pan)")
                     Spacer()
                 }
                 .frame(width: 300, height: 30, alignment: .center)
@@ -368,7 +370,7 @@ struct EarSimulatorManual1View: View {
                             .foregroundColor(.red)
                     }
                     Spacer()
-                    Text("0.1")
+                    Text("Gain: 0.1")
                         .foregroundColor(.white)
                     Spacer()
                     Button {
@@ -410,7 +412,7 @@ struct EarSimulatorManual1View: View {
                             .foregroundColor(.red)
                     }
                     Spacer()
-                    Text("0.05")
+                    Text("Gain: 0.05")
                         .foregroundColor(.white)
                     Spacer()
                     Button {
@@ -452,7 +454,7 @@ struct EarSimulatorManual1View: View {
                             .foregroundColor(.red)
                     }
                     Spacer()
-                    Text("0.01")
+                    Text("Gain: 0.01")
                         .foregroundColor(.white)
                     Spacer()
                     Button {
@@ -496,7 +498,7 @@ struct EarSimulatorManual1View: View {
                         }
                     }
                     Spacer()
-                    Text("0.001")
+                    Text("Gain: 0.001")
                         .foregroundColor(.white)
                     Spacer()
                     Button {
@@ -647,15 +649,17 @@ struct EarSimulatorManual1View: View {
                                 print("samples: \(samples)")
                             }
                         }
-                        Spacer()
                         
                         List {
                             ForEach(samples.indices, id: \.self) { index in
                                 HStack {
                                     Text("\(self.samples[index].name)")
                                         .foregroundColor(.blue)
+                                        .padding(.leading)
                                     Toggle("", isOn: self.$samples[index].isToggledS)
                                         .foregroundColor(.blue)
+                                        .background(Color.clear)
+                                        .padding(.trailing)
                                         .onChange(of: self.samples[index].isToggledS) { nameIndex in
                                             sampleSelectionIndex.removeAll()
                                             sampleSelectedName.append(self.samples[index].name)
@@ -668,6 +672,8 @@ struct EarSimulatorManual1View: View {
                                             print("index: \(index)")
                                         }
                                 }
+                                .background(Color.black)
+                                .cornerRadius(12)
                             }
                         }
                         .onAppear {
@@ -1339,8 +1345,8 @@ extension EarSimulatorManual1View {
 
 }
 
-struct EarSimulatorManual1View_Previews: PreviewProvider {
-    static var previews: some View {
-        EarSimulatorManual1View()
-    }
-}
+//struct EarSimulatorManual1View_Previews: PreviewProvider {
+//    static var previews: some View {
+//        EarSimulatorManual1View()
+//    }
+//}

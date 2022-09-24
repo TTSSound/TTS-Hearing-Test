@@ -71,12 +71,12 @@ struct EarSimulatorLandingContent<Link: View>: View {
     }
 }
 
-struct EarSimulatorLandingView_Previews: PreviewProvider {
-    static var previews: some View {
-        EarSimulatorLandingView(earSimulator: nil, relatedLinkEarSimulator: linkEarSimulator)
-    }
-    
-    static func linkEarSimulator(earSimulator: EarSimulator) -> some View {
-        EmptyView()
-    }
-}
+//struct EarSimulatorLandingView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        EarSimulatorLandingView(earSimulator: nil, relatedLinkEarSimulator: linkEarSimulator)
+//    }
+//
+//    static func linkEarSimulator(earSimulator: EarSimulator) -> some View {
+//        EmptyView()
+//    }
+//}

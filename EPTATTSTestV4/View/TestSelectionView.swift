@@ -32,7 +32,7 @@ struct SaveFinalTestSelection: Codable {  // This is a model
 struct TestSelectionView: View {
     @StateObject var colorModel = ColorModel()
     
- 
+    
     let setupCSVName = "SetupResultsCSV.csv"
     @State private var inputLastName = String()
     @State private var dataFileURLLastName = URL(fileURLWithPath: "")   // General and Open
@@ -55,7 +55,7 @@ struct TestSelectionView: View {
     @State var tsLinkColors: [Color] = [Color.clear, Color.green]
     @State var tsLinkColorIndex = Int()
     
- 
+    
     @State var finalSelectedEHATest: [Int] = [Int]()
     @State var finalSelectedEPTATest: [Int] = [Int]()
     @State var finalSelectedSimpleTest: [Int] = [Int]()
@@ -73,9 +73,9 @@ struct TestSelectionView: View {
     @State var saveFinalTestSelection: SaveFinalTestSelection? = nil
     
     var body: some View {
-
-// Marketing and info on EPTA vs EHA Tests
-// Direction that EHA test be taken in two parts at two different times and days
+        
+        // Marketing and info on EPTA vs EHA Tests
+        // Direction that EHA test be taken in two parts at two different times and days
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack {
@@ -89,7 +89,7 @@ struct TestSelectionView: View {
                     .background(.blue)
                     .foregroundColor(.gray)
                 Toggle(isOn: $selectedEHA) {
-                    Text("I Want the Gold Standard! Give Me The EHA!")
+                    Text("I Want the Full Enhanced Hearing Assessment!")
                         .frame(width: 200, height: 50, alignment: .center)
                     
                 }
@@ -116,7 +116,7 @@ struct TestSelectionView: View {
                     .background(.gray)
                     .foregroundColor(.gray)
                 Toggle(isOn: $selectedEPTA) {
-                    Text("I Want The Shorter Test. Give Me The EPTA")
+                    Text("I Want The Shorter, Extended Audiogram Test")
                         .frame(width: 200, height: 50, alignment: .center)
                 }
                 .padding(.leading)
@@ -142,7 +142,7 @@ struct TestSelectionView: View {
                     .background(.gray)
                     .foregroundColor(.gray)
                 Toggle(isOn: $selectedSimple) {
-                    Text("I Only Want A Trial. Give me the Simple Test.")
+                    Text("I Only Want A Trial. Give me the Simple Augiogram.")
                         .frame(width: 200, height: 50, alignment: .center)
                 }
                 .padding(.leading)
@@ -276,7 +276,10 @@ struct TestSelectionView: View {
             }
         }
     }
-    
+}
+
+extension TestSelectionView {
+    //MARK: -Methods Extension
     func singleSelection() async {
         if selectedEHA == true {
             singleEHA = 1
@@ -307,7 +310,7 @@ struct TestSelectionView: View {
             print("Simple UUID Assigned")
         }
     }
-     
+    
     func checkMultipleSelections() async {
         sumSelection = singleEHA + singleEPTA + singleSimple
         print("sumSelection: \(sumSelection)")
@@ -361,9 +364,9 @@ struct TestSelectionView: View {
         print("testSelectionModel finalSelectedSimpleTest: \(finalSelectedSimpleTest)")
         print("UUID: \(simpleTestUUIDString)")
         print("testSelectionModel simpleTestUUID: \(finalSelectedSimpleTestUUID)")
-
+        
     }
-
+    
     func saveTestSelection() async {
         await getTestSelectionData()
         await saveTestSelectionToJSON()
@@ -399,10 +402,10 @@ struct TestSelectionView: View {
             uploadFile(fileName: "TestSelection.json")
         }
     }
+}
     
-    
-    
-//MARK: -TestSelectionModel Funcst
+extension TestSelectionView {
+    //MARK: -CSV/JSON Methods Extension
     
     func getTestSelectionData() async {
         guard let testSelectionData = await getTestSelectionJSONData() else { return }
@@ -411,14 +414,14 @@ struct TestSelectionView: View {
         let jsonTestSelectionString = String(data: testSelectionData, encoding: .utf8)
         print(jsonTestSelectionString!)
         do {
-        self.saveFinalTestSelection = try JSONDecoder().decode(SaveFinalTestSelection.self, from: testSelectionData)
+            self.saveFinalTestSelection = try JSONDecoder().decode(SaveFinalTestSelection.self, from: testSelectionData)
             print("JSON GetTestSelectionData Run")
             print("data: \(testSelectionData)")
         } catch let error {
             print("!!!Error decoding test selection json data: \(error)")
         }
     }
- 
+    
     func getTestSelectionJSONData() async -> Data? {
         let saveFinalTestSelection = SaveFinalTestSelection (
             jsonFinalSelectedEHATest: finalSelectedEHATest,
@@ -426,7 +429,7 @@ struct TestSelectionView: View {
             jsonFinalSelectedSimpleTest: finalSelectedSimpleTest,
             jsonSelectedSimpleTestUUID: finalSelectedSimpleTestUUID,
             jsonFinalTestSelected: finalTestSelected)
-
+        
         let jsonTestSelectionData = try? JSONEncoder().encode(saveFinalTestSelection)
         print("saveTestSelection: \(saveFinalTestSelection)")
         print("Json Encoded \(jsonTestSelectionData!)")
@@ -434,7 +437,7 @@ struct TestSelectionView: View {
     }
     
     func saveTestSelectionToJSON() async {
-    // !!!This saves to device directory, whish is likely what is desired
+        // !!!This saves to device directory, whish is likely what is desired
         let testSelectionPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = testSelectionPaths[0]
         print("DocumentsDirectory: \(documentsDirectory)")
@@ -445,7 +448,7 @@ struct TestSelectionView: View {
         do {
             let jsonTestSelectionData = try encoder.encode(saveFinalTestSelection)
             print(jsonTestSelectionData)
-          
+            
             try jsonTestSelectionData.write(to: testSelectionFilePaths)
         } catch {
             print("Error writing to JSON Test Selection file: \(error)")
@@ -503,7 +506,7 @@ struct TestSelectionView: View {
     }
     
     
-//MARK: -TestSelectionLinkModel Funcs
+    //MARK: -TestSelectionLinkModel Funcs
     func writeEHATestLinkToCSV() async {
         print("writeEHATestSelectionLinkToCSV Start")
         let selectedEHATest = "EHA," + "EHA"
@@ -560,7 +563,7 @@ struct TestSelectionView: View {
         let documentsDirectory = paths[0]
         return documentsDirectory
     }
-
+    
     // Only Use Files that have a pure string name assigned, not a name of ["String"]
     private func uploadFile(fileName: String) {
         DispatchQueue.global(qos: .userInteractive).async {
@@ -572,7 +575,7 @@ struct TestSelectionView: View {
             if fileManager.fileExists(atPath: filePath[0]) {
                 let filePath = URL(fileURLWithPath: filePath[0])
                 let localFile = filePath
-//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
                 let fileRef = lastNameRef.child("\(fileName)")
                 let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
                     if error == nil && metadata == nil {
@@ -616,8 +619,10 @@ struct TestSelectionView: View {
             print("Error in reading Last Name results")
         }
     }
-    
-    
+}
+ 
+extension TestSelectionView{
+//MARK: -Navigation View Extention
     private func getDataLinkPath() async -> String {
         let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = dataLinkPaths[0]

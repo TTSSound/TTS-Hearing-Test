@@ -61,18 +61,22 @@ struct ResultsSplashContent<Link: View>: View {
             }
         }
     }
-    
+}
+
+extension ResultsSplashContent {
+//MARK: -NavigationLink Method Extension
+
     private func linkClosing(closing: Closing) -> some View {
         EmptyView()
     }
 }
 
-struct ResultsSplashView_Previews: PreviewProvider {
-    static var previews: some View {
-        ResultsSplashView(closing: nil, relatedLinkClosing: linkClosing)
-    }
-    
-    static func linkClosing(closing: Closing) -> some View {
-        EmptyView()
-    }
-}
+//struct ResultsSplashView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ResultsSplashView(closing: nil, relatedLinkClosing: linkClosing)
+//    }
+//
+//    static func linkClosing(closing: Closing) -> some View {
+//        EmptyView()
+//    }
+//}

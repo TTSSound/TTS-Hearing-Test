@@ -3621,19 +3621,19 @@ extension EHATTSTestPart2Content {
 }
 
 extension EHATTSTestPart2Content {
-//MAKR: -NavigationLink Extension
+//MARK: -NavigationLink Extension
     private func linkEHATesting(ehaTesting: EHATesting) -> some View {
         EmptyView()
     }
 }
 
 
-struct EHATTSTestPart2View_Previews: PreviewProvider {
-    static var previews: some View {
-        EHATTSTestPart2View(ehaTesting: nil, relatedLinkEHATesting: linkEHATesting)
-    }
-    
-    static func linkEHATesting(ehaTesting: EHATesting) -> some View {
-        EmptyView()
-    }
-}
+//struct EHATTSTestPart2View_Previews: PreviewProvider {
+//    static var previews: some View {
+//        EHATTSTestPart2View(ehaTesting: nil, relatedLinkEHATesting: linkEHATesting)
+//    }
+//
+//    static func linkEHATesting(ehaTesting: EHATesting) -> some View {
+//        EmptyView()
+//    }
+//}

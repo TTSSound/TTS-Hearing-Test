@@ -201,7 +201,7 @@ struct BetaTestingLandingContent<Link: View>: View {
             }
             .fullScreenCover(isPresented: $showBetaNameScreen) {
                 ZStack{
-                colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+                colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all)
                     VStack(alignment: .leading) {
                         Text("This Is A Shortcut For App Testing Use To Surpass the Main Setup Process, While Still Entering The Key Demographic Variables Needed For The Actual Test")
                             .font(.title3)

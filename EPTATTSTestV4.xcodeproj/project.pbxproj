@@ -310,7 +310,6 @@
 		7C179FEA28B8146D00964AAC /* correctiveFiltersExplanationText.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = correctiveFiltersExplanationText.txt; sourceTree = "<group>"; };
 		7C179FEC28B81B7500964AAC /* InAppPurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseView.swift; sourceTree = "<group>"; };
 		7C179FEE28B852CA00964AAC /* CalibrationIssueSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationIssueSplashView.swift; sourceTree = "<group>"; };
-		7C179FF028B859BC00964AAC /* ReadyForSiriSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadyForSiriSetup.swift; sourceTree = "<group>"; };
 		7C179FF428B8848900964AAC /* ColorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorModel.swift; sourceTree = "<group>"; };
 		7C1F1E3028D8C0CC00B672B1 /* ResultsLandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsLandingView.swift; sourceTree = "<group>"; };
 		7C1F1E3228D8C2AD00B672B1 /* ResultsSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsSplashView.swift; sourceTree = "<group>"; };
@@ -833,7 +832,6 @@
 				7C901FBC28B98517007E1336 /* ManualDeviceEntryView.swift */,
 				7C901FBE28B9A31D007E1336 /* ManualDeviceEntryIssueSplashView.swift */,
 				7C76D5E928B189090044958B /* InstructionsForTakingTest.swift */,
-				7C179FF028B859BC00964AAC /* ReadyForSiriSetup.swift */,
 				7C76D5DE28B1328D0044958B /* SiriSetupView.swift */,
 				7C901FC928B9BAC9007E1336 /* SilentModeSetupView.swift */,
 				7C901FC728B9BA1E007E1336 /* DNDSiriSetupView.swift */,
@@ -871,10 +869,7 @@
 				7CB2A01128DD0966008132DE /* EarSimulatorLandingView.swift */,
 				7CB2A01328DD0994008132DE /* EarSimulatorManual1View.swift */,
 				7CB2A01528DD09AF008132DE /* EarSimulatorManual2View.swift */,
-				7C99A16B28C95D0800E46C65 /* DONOTChangeReferenceEHATest.swift */,
-				7C0AE96C28CCF55D00A4F652 /* DONOTChangeReferenceEPTATTSTestV4List.swift */,
-				7CCB2B2C28D4C5CD00056C49 /* DONOTChangeReferenceEHAP2TestView.swift */,
-				7C3D20AE289DADCB0039EDA6 /* EPTATTSTestV4List.swift */,
+				7CF0DD9D28DF88FD0002718C /* DONOTChangeReferences */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1134,6 +1129,17 @@
 				7CAC41C628B5235300AE72F6 /* IndividualViewFilesToLanding */,
 			);
 			path = ArchiveAndInactive;
+			sourceTree = "<group>";
+		};
+		7CF0DD9D28DF88FD0002718C /* DONOTChangeReferences */ = {
+			isa = PBXGroup;
+			children = (
+				7C99A16B28C95D0800E46C65 /* DONOTChangeReferenceEHATest.swift */,
+				7C0AE96C28CCF55D00A4F652 /* DONOTChangeReferenceEPTATTSTestV4List.swift */,
+				7CCB2B2C28D4C5CD00056C49 /* DONOTChangeReferenceEHAP2TestView.swift */,
+				7C3D20AE289DADCB0039EDA6 /* EPTATTSTestV4List.swift */,
+			);
+			path = DONOTChangeReferences;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

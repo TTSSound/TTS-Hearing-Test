@@ -9,350 +9,7 @@ import SwiftUI
 import Combine
 //import Firebase
 
-class DataModel: ObservableObject {
-    @Published var setups: [Setup] = []
-    @Published var testings: [Testing] = []
-    @Published var ehaTestings: [EHATesting] = []
-    @Published var closings: [Closing] = []
-    @Published var earSimulators: [EarSimulator] = []
-    
-    
-    private var setupsById: [Setup.ID: Setup]? = nil
-    private var cancellables: [AnyCancellable] = []
-    
-    private var testingsById: [Testing.ID: Testing]? = nil
-    private var testingsCancellables: [AnyCancellable] = []
 
-    private var ehaTestingsById: [EHATesting.ID: EHATesting]? = nil
-    private var ehaTestingsCancellables: [AnyCancellable] = []
-
-    private var closingsById: [Closing.ID: Closing]? = nil
-    private var closingsCancellables: [AnyCancellable] = []
-    
-    private var earSimulatorsById: [EarSimulator.ID: EarSimulator]? = nil
-    private var earSimulatorsCancellables: [AnyCancellable] = []
-
-    static let shared: DataModel = DataModel()
-    
-    private init() {
-        setups = builtInSetups
-        $setups
-            .sink { [weak self] _ in
-                self?.setupsById = nil
-            }
-            .store(in: &cancellables)
-        
-        testings = builtInTestings
-        $testings
-            .sink { [weak self] _ in
-                self?.testingsById = nil
-            }
-            .store(in: &testingsCancellables)
-        
-        ehaTestings = builtInEHATestings
-        $ehaTestings
-            .sink { [weak self] _ in
-                self?.ehaTestingsById = nil
-            }
-            .store(in: &ehaTestingsCancellables)
-        
-        closings = builtInClosings
-        $closings
-            .sink { [weak self] _ in
-                self?.closingsById = nil
-            }
-            .store(in: &closingsCancellables)
-        
-        earSimulators = builtInEarSimulators
-        $earSimulators
-            .sink { [weak self] _ in
-                self?.earSimulatorsById = nil
-            }
-            .store(in: &earSimulatorsCancellables)
-    }
-    
-    func setups(relatedTo setup: Setup) -> [Setup] {
-        setups
-            .filter { setup.related.contains($0.id) }
-            .sorted { $0.name < $1.name }
-    }
-    
-    subscript(setupId: Setup.ID) -> Setup? {
-        if setupsById == nil {
-            setupsById = Dictionary(
-                uniqueKeysWithValues: setups.map { ($0.id, $0) })
-        }
-        return setupsById![setupId]
-    }
-    
-    func testings(relatedTo testing: Testing) -> [Testing] {
-        testings
-            .filter { testing.related.contains($0.id) }
-            .sorted { $0.name < $1.name }
-    }
-    
-    subscript(testingId: Testing.ID) -> Testing? {
-        if testingsById == nil {
-            testingsById = Dictionary(
-                uniqueKeysWithValues: testings.map { ($0.id, $0) })
-        }
-        return testingsById![testingId]
-    }
-    
-    func ehaTestings(relatedTo ehaTesting: EHATesting) -> [EHATesting] {
-        ehaTestings
-            .filter { ehaTesting.related.contains($0.id) }
-            .sorted { $0.name < $1.name }
-    }
-    
-    subscript(ehaTestingId: EHATesting.ID) -> EHATesting? {
-        if ehaTestingsById == nil {
-            ehaTestingsById = Dictionary(
-                uniqueKeysWithValues: ehaTestings.map { ($0.id, $0) })
-        }
-        return ehaTestingsById![ehaTestingId]
-    }
-    
-    func closings(relatedTo closing: Closing) -> [Closing] {
-        closings
-            .filter { closing.related.contains($0.id) }
-            .sorted { $0.name < $1.name }
-    }
-    
-    subscript(closingId: Closing.ID) -> Closing? {
-        if closingsById == nil {
-            closingsById = Dictionary(
-                uniqueKeysWithValues: closings.map { ($0.id, $0) })
-        }
-        return closingsById![closingId]
-    }
-
-    func earSimulators(relatedTo earSimulator: EarSimulator) -> [EarSimulator] {
-        earSimulators
-            .filter { earSimulator.related.contains($0.id) }
-            .sorted { $0.name < $1.name }
-    }
-    
-    subscript(earSimulatorId: EarSimulator.ID) -> EarSimulator? {
-        if earSimulatorsById == nil {
-            earSimulatorsById = Dictionary(
-                uniqueKeysWithValues: earSimulators.map { ($0.id, $0) })
-        }
-        return earSimulatorsById![earSimulatorId]
-    }
-}
-    
-private let builtInSetups: [Setup] = {
-    var setups = [
-        "Disclaimer": Setup(id: 1.0, name: "Disclaimer", related: []),
-        "User Setup": Setup(id: 2.0, name: "User Setup", related: []),
-        "User Login": Setup(id: 2.01, name: "User Login", related: []),
-        "UserDataSplash": Setup(id: 2.02, name: "UserDataSplash", related: []),
-        "Test Explanation": Setup(id: 3.0, name: "Test Explanation", related: []),
-        "Test Selection Home": Setup(id: 4.0, name: "Test Selection Home", related: []),
-        "Test Selection": Setup(id: 4.2, name: "Test Selection", related: []),
-        "TestSelectionSplash": Setup(id: 4.21, name: "TestSelectionSplash", related: []),
-        "EHA Description": Setup(id: 4.01, name: "EHA Description", related: []),
-        "Corrective Filters": Setup(id: 4.02, name: "Corrective Filters", related: []),
-        "EPTA Description": Setup(id: 4.03, name: "EPTA Description", related: []),
-        "Simple Trial Description": Setup(id: 4.04, name: "Simple Trial Description", related: []),
-        "Calibrated Devices": Setup(id: 5.0, name: "Calibrated Devices", related: []),
-        "CalibratedDevicesSplash": Setup(id: 5.01, name: "CalibratedDevicesSplash", related: []),
-        "CalibratedDevicesIssue": Setup(id: 5.02, name: "CalibratedDevicesIssue", related: []),
-        "Manual Device Information": Setup(id: 5.1, name: "Manual Device Information", related: []),
-        "Disclaimer Manual Device": Setup(id: 5.11, name: "Disclaimer Manual Device", related: []),
-        "Manual Device Entry": Setup(id: 5.12, name: "Manual Device Entry", related: []),
-        "ManualDeviceEntrySplash": Setup(id: 5.13, name: "ManualDeviceEntrySplash", related: []),
-        "Test Instructions": Setup(id: 6.0, name: "Test Instructions", related: []),
-        "Siri Setup": Setup(id: 7.0, name: "Siri Setup", related: []),
-        "Silent Mode": Setup(id: 7.01, name: "Silent Mode", related: []),
-        "Do Not Disturb Mode": Setup(id: 7.02, name: "Do Not Disturb Mode", related: []),
-        "System Volume Mode": Setup(id: 7.03, name: "System Volume Mode", related: []),
-        "Manual System Setup": Setup(id: 7.1, name: "Manual System Setup", related: []),
-        "Manual Setup Instructions": Setup(id: 7.11, name: "Manual Setup Instructions", related: []),
-        "Test Device Settings": Setup(id: 7.2, name: "Test Device Settings", related: []),
-        "In App Purchase": Setup(id: 4.1, name: "In App Purchase", related: [])
-    ]
-    
-//    setups["User Setup"]!.related = [
-  //        setups["User Login"]!.id,
-  //        setups["UserDataSplash"]!.id
-  //    ]
-  //
-  //    setups["User Login"]!.related = [setups["UserDataSplash"]!.id]
-  //    setups["UserDataSplash"]!.related = [setups["User Login"]!.id]
-  //
-  //
-  //    setups["Test Selection Home"]!.related = [
-  //        setups["Test Selection"]!.id,
-  //        //        setups["TestSelectionSplash"]!.id,
-  //        setups["EHA Description"]!.id,
-  //        setups["Corrective Filters"]!.id,
-  //        setups["EPTA Description"]!.id,
-  //        setups["Simple Trial Description"]!.id,
-  //        setups["In App Purchase"]!.id,
-  //        //        setups["Calibrated Devices"]!.id
-  //    ]
-  //
-  //    setups["Test Selection"]!.related = [setups["Test Selection Home"]!.id]
-  //
-  //    //    setups["Test Selection Home"]!.related = [setups["EHA Description"]!.id]
-  //    setups["EHA Description"]!.related = [setups["Test Selection Home"]!.id]
-  //    setups["EHA Description"]!.related = [setups["In App Purchase"]!.id]
-  //    setups["In App Purchase"]!.related = [setups["EHA Description"]!.id]
-  //
-  //    //    setups["Test Selection Home"]!.related = [setups["Corrective Filters"]!.id]
-  //    setups["Corrective Filters"]!.related = [setups["Test Selection Home"]!.id]
-  //    setups["Corrective Filters"]!.related = [setups["In App Purchase"]!.id]
-  //    setups["In App Purchase"]!.related = [setups["Corrective Filters"]!.id]
-  //
-  //    //    setups["Test Selection Home"]!.related = [setups["EPTA Description"]!.id]
-  //    setups["EPTA Description"]!.related = [setups["Test Selection Home"]!.id]
-  //    setups["EPTA Description"]!.related = [setups["In App Purchase"]!.id]
-  //    setups["In App Purchase"]!.related = [setups["EPTA Description"]!.id]
-  //
-  //    //    setups["Test Selection Home"]!.related = [setups["Simple Trial Description"]!.id]
-  //    setups["Simple Trial Description"]!.related = [setups["Test Selection Home"]!.id]
-  //    setups["Simple Trial Description"]!.related = [setups["In App Purchase"]!.id]
-  //    setups["In App Purchase"]!.related = [setups["Simple Trial Description"]!.id]
-  //
-  //
-  //    setups["Test Selection"]!.related = [
-  //        setups["TestSelectionSplash"]!.id,
-  //        //        setups["EHA Description"]!.id,
-  //        //        setups["Corrective Filters"]!.id,
-  //        //        setups["EPTA Description"]!.id,
-  //        //        setups["Simple Trial Description"]!.id,
-  //        //        setups["In App Purchase"]!.id,
-  //        setups["Calibrated Devices"]!.id
-  //    ]
-  //
-  //    setups["TestSelectionSplash"]!.related = [setups["Test Selection"]!.id]
-  //    setups["Calibrated Devices"]!.related = [setups["Test Selection"]!.id]
-  //
-  //    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  //    //Stopping Here for Relationships to Test Navigation Thus Far
-  //
-  //
-  //    setups["Calibrated Devices"]!.related = [
-  //        setups["CalibratedDevicesSplash"]!.id,
-  //        setups["CalibratedDevicesIssue"]!.id,
-  //        setups["Manual Device Information"]!.id,
-  //        setups["Disclaimer Manual Device"]!.id,
-  //        setups["Manual Device Entry"]!.id,
-  //        setups["ManualDeviceEntrySplash"]!.id
-  //    ]
-  //
-  //    setups["Siri Setup"]!.related = [
-  //        setups["Silent Mode"]!.id,
-  //        setups["Do Not Disturb Mode"]!.id,
-  //        setups["System Volume Mode"]!.id,
-  //        setups["Manual System Setup"]!.id,
-  //        setups["Manual Setup Instructions"]!.id
-  //    ]
-    
-    return Array(setups.values)
-    
-}()
-        
-        
-private let builtInTestings: [Testing] = {
-    var testings = [
-        "Beta Testing Home": Testing(id: 8.0, name: "Beta Testing Home", related: []),
-        "Test ID Entry": Testing(id: 9.0, name: "Test ID Entry", related: []),
-        "Hearing Survey": Testing(id: 10.0, name: "Hearing Survey", related: []),
-        "SurveyErrorView": Testing(id: 10.01, name: "SurveyErrorView", related: []),
-        "Pre Test Landing": Testing(id: 11, name: "Pre Test Landing", related: []),
-        "Training Test": Testing(id: 11.1, name: "Training Test", related: []),
-        "Training Test Holding": Testing(id: 11.11, name: "Training Test Holding", related: []),
-        "1kHz Test": Testing(id: 11.2, name: "1kHz Test", related: []),
-        "Post 1kHz Test": Testing(id: 11.21, name: "Post 1kHz Test", related: []),
-        "EPTA EHA Part 1 Test": Testing(id: 12.0, name: "EPTA EHAP1 Test", related: []),
-        "Simple Test": Testing(id: 12.1, name: "Simple Test", related: []),
-        "Post All Test Landing": Testing(id: 13.0, name: "Post All Test Landing", related:[]),
-        "Post Test Director": Testing(id: 13.1, name: "Post Test Director", related: []),
-        "Post EPTA Test": Testing(id: 13.2, name: "Post EPTA Test", related: []),
-        "Post Simple Test": Testing(id: 13.3, name: "Post Simple Test", related: []),
-        "EHA Interim Post Test": Testing(id: 14.0, name: "EHA Interim Post Test", related: [])
-    ]
-    
-    return Array(testings.values)
-}()
-
-private let builtInEHATestings: [EHATesting] = {
-    var ehaTestings = [
-        "EHA Interim Pre Part 2 Test": EHATesting(id: 14.1, name: "EHA Interim Pre Part 2 Test", related: []),
-        "EHA Part 2 Test": EHATesting(id: 14.1, name: "EHA Part 2 Test", related: []),
-        "Post EHA Part 2 Test": EHATesting(id: 14.2, name: "Post EHA Part 2 Test", related: [])
-    ]
-    
-    return Array(ehaTestings.values)
-}()
-    
-private let builtInClosings: [Closing] = {
-    var closings = [
-        "Test Results Landing": Closing(id: 15.0, name: "Test Results Landing", related: []),
-        "EPTA Test Results": Closing(id: 15.1, name: "EPTA Test Results", related: []),
-        "EHA Test Results": Closing(id: 15.2, name: "EHA Test Results", related: []),
-        "Simple Test Results": Closing(id: 15.3, name: "Simple Test Results", related: []),
-        "Test Results Holding 1": Closing(id: 15.4, name: "Test Results Holding 1", related: []),
-        "Test Results Holding 2": Closing(id: 15.5, name: "Test Results Holding 2", related: []),
-        "Test Results Holding 3": Closing(id: 15.6, name: "Test Results Holding 3", related: []),
-        "Post Test Purchse": Closing(id: 16.0, name: "Post Test Purchse", related: []),
-        "Post Test Purchse Holding 1": Closing(id: 16.1, name: "Post Test Purchse Holding 1", related: []),
-        "Post Test Purchse Holding 2": Closing(id: 16.1, name: "Post Test Purchse Holding 2", related: []),
-        "Closing": Closing(id: 17.0, name: "Closing", related: []),
-        "Closing Holding 1": Closing(id: 17.1, name: "Closing Holding 1", related: []),
-        "Closing Holding 2": Closing(id: 17.2, name: "Closing Holding 2", related: [])
-    ]
-    
-    return Array(closings.values)
-}()
-
-private let builtInEarSimulators: [EarSimulator] = {
-    var earSimulators = [
-        "Ear Simulator Landing": EarSimulator(id: 20.0, name: "Ear Simulator Landing", related: []),
-        "Ear Simulator Manual 1": EarSimulator(id: 20.1, name: "Ear Simulator Manual 1", related: []),
-        "Ear Simulator Manual 2": EarSimulator(id: 20.2, name: "Ear Simulator Manual 2", related: [])
-    ]
-    
-    return Array(earSimulators.values)
-}()
-    
-
-struct Setup: Hashable, Identifiable {
-    let id: Double
-    var name: String
-    var related: [Setup.ID] = []
-}
-
-struct Testing: Hashable, Identifiable {
-    let id: Double
-    var name: String
-    var related: [Testing.ID] = []
-}
-
-struct EHATesting: Hashable, Identifiable {
-    let id: Double
-    var name: String
-    var related: [EHATesting.ID] = []
-}
-
-struct Closing: Hashable, Identifiable {
-    let id: Double
-    var name: String
-    var related: [Closing.ID] = []
-}
-
-struct EarSimulator: Hashable, Identifiable {
-    let id: Double
-    var name: String
-    var related: [EarSimulator.ID] = []
-}
-
-
-
-// StructContentView in Apple Sample Project
 struct NavigationView: View {
 
     var dataModel = DataModel.shared
@@ -805,12 +462,14 @@ struct NavigationView: View {
     }
 }
 
+/*
 struct NavigationView_Previews: PreviewProvider {
     
     static var previews: some View {
         NavigationView()
     }
 }
+*/
 
 
 //====================================================
@@ -843,6 +502,347 @@ struct NavigationView_Previews: PreviewProvider {
 //====================================================
 
 
+
+class DataModel: ObservableObject {
+    @Published var setups: [Setup] = []
+    @Published var testings: [Testing] = []
+    @Published var ehaTestings: [EHATesting] = []
+    @Published var closings: [Closing] = []
+    @Published var earSimulators: [EarSimulator] = []
+    
+    
+    private var setupsById: [Setup.ID: Setup]? = nil
+    private var cancellables: [AnyCancellable] = []
+    
+    private var testingsById: [Testing.ID: Testing]? = nil
+    private var testingsCancellables: [AnyCancellable] = []
+
+    private var ehaTestingsById: [EHATesting.ID: EHATesting]? = nil
+    private var ehaTestingsCancellables: [AnyCancellable] = []
+
+    private var closingsById: [Closing.ID: Closing]? = nil
+    private var closingsCancellables: [AnyCancellable] = []
+    
+    private var earSimulatorsById: [EarSimulator.ID: EarSimulator]? = nil
+    private var earSimulatorsCancellables: [AnyCancellable] = []
+
+    static let shared: DataModel = DataModel()
+    
+    private init() {
+        setups = builtInSetups
+        $setups
+            .sink { [weak self] _ in
+                self?.setupsById = nil
+            }
+            .store(in: &cancellables)
+        
+        testings = builtInTestings
+        $testings
+            .sink { [weak self] _ in
+                self?.testingsById = nil
+            }
+            .store(in: &testingsCancellables)
+        
+        ehaTestings = builtInEHATestings
+        $ehaTestings
+            .sink { [weak self] _ in
+                self?.ehaTestingsById = nil
+            }
+            .store(in: &ehaTestingsCancellables)
+        
+        closings = builtInClosings
+        $closings
+            .sink { [weak self] _ in
+                self?.closingsById = nil
+            }
+            .store(in: &closingsCancellables)
+        
+        earSimulators = builtInEarSimulators
+        $earSimulators
+            .sink { [weak self] _ in
+                self?.earSimulatorsById = nil
+            }
+            .store(in: &earSimulatorsCancellables)
+    }
+    
+    func setups(relatedTo setup: Setup) -> [Setup] {
+        setups
+            .filter { setup.related.contains($0.id) }
+            .sorted { $0.name < $1.name }
+    }
+    
+    subscript(setupId: Setup.ID) -> Setup? {
+        if setupsById == nil {
+            setupsById = Dictionary(
+                uniqueKeysWithValues: setups.map { ($0.id, $0) })
+        }
+        return setupsById![setupId]
+    }
+    
+    func testings(relatedTo testing: Testing) -> [Testing] {
+        testings
+            .filter { testing.related.contains($0.id) }
+            .sorted { $0.name < $1.name }
+    }
+    
+    subscript(testingId: Testing.ID) -> Testing? {
+        if testingsById == nil {
+            testingsById = Dictionary(
+                uniqueKeysWithValues: testings.map { ($0.id, $0) })
+        }
+        return testingsById![testingId]
+    }
+    
+    func ehaTestings(relatedTo ehaTesting: EHATesting) -> [EHATesting] {
+        ehaTestings
+            .filter { ehaTesting.related.contains($0.id) }
+            .sorted { $0.name < $1.name }
+    }
+    
+    subscript(ehaTestingId: EHATesting.ID) -> EHATesting? {
+        if ehaTestingsById == nil {
+            ehaTestingsById = Dictionary(
+                uniqueKeysWithValues: ehaTestings.map { ($0.id, $0) })
+        }
+        return ehaTestingsById![ehaTestingId]
+    }
+    
+    func closings(relatedTo closing: Closing) -> [Closing] {
+        closings
+            .filter { closing.related.contains($0.id) }
+            .sorted { $0.name < $1.name }
+    }
+    
+    subscript(closingId: Closing.ID) -> Closing? {
+        if closingsById == nil {
+            closingsById = Dictionary(
+                uniqueKeysWithValues: closings.map { ($0.id, $0) })
+        }
+        return closingsById![closingId]
+    }
+
+    func earSimulators(relatedTo earSimulator: EarSimulator) -> [EarSimulator] {
+        earSimulators
+            .filter { earSimulator.related.contains($0.id) }
+            .sorted { $0.name < $1.name }
+    }
+    
+    subscript(earSimulatorId: EarSimulator.ID) -> EarSimulator? {
+        if earSimulatorsById == nil {
+            earSimulatorsById = Dictionary(
+                uniqueKeysWithValues: earSimulators.map { ($0.id, $0) })
+        }
+        return earSimulatorsById![earSimulatorId]
+    }
+}
+    
+private let builtInSetups: [Setup] = {
+    var setups = [
+        "Disclaimer": Setup(id: 1.0, name: "Disclaimer", related: []),
+        "User Setup": Setup(id: 2.0, name: "User Setup", related: []),
+        "User Login": Setup(id: 2.01, name: "User Login", related: []),
+        "UserDataSplash": Setup(id: 2.02, name: "UserDataSplash", related: []),
+        "Test Explanation": Setup(id: 3.0, name: "Test Explanation", related: []),
+        "Test Selection Home": Setup(id: 4.0, name: "Test Selection Home", related: []),
+        "Test Selection": Setup(id: 4.2, name: "Test Selection", related: []),
+        "TestSelectionSplash": Setup(id: 4.21, name: "TestSelectionSplash", related: []),
+        "EHA Description": Setup(id: 4.01, name: "EHA Description", related: []),
+        "Corrective Filters": Setup(id: 4.02, name: "Corrective Filters", related: []),
+        "EPTA Description": Setup(id: 4.03, name: "EPTA Description", related: []),
+        "Simple Trial Description": Setup(id: 4.04, name: "Simple Trial Description", related: []),
+        "Calibrated Devices": Setup(id: 5.0, name: "Calibrated Devices", related: []),
+        "CalibratedDevicesSplash": Setup(id: 5.01, name: "CalibratedDevicesSplash", related: []),
+        "CalibratedDevicesIssue": Setup(id: 5.02, name: "CalibratedDevicesIssue", related: []),
+        "Manual Device Information": Setup(id: 5.1, name: "Manual Device Information", related: []),
+        "Disclaimer Manual Device": Setup(id: 5.11, name: "Disclaimer Manual Device", related: []),
+        "Manual Device Entry": Setup(id: 5.12, name: "Manual Device Entry", related: []),
+        "ManualDeviceEntrySplash": Setup(id: 5.13, name: "ManualDeviceEntrySplash", related: []),
+        "Test Instructions": Setup(id: 6.0, name: "Test Instructions", related: []),
+        "Siri Setup": Setup(id: 7.0, name: "Siri Setup", related: []),
+        "Silent Mode": Setup(id: 7.01, name: "Silent Mode", related: []),
+        "Do Not Disturb Mode": Setup(id: 7.02, name: "Do Not Disturb Mode", related: []),
+        "System Volume Mode": Setup(id: 7.03, name: "System Volume Mode", related: []),
+        "Manual System Setup": Setup(id: 7.1, name: "Manual System Setup", related: []),
+        "Manual Setup Instructions": Setup(id: 7.11, name: "Manual Setup Instructions", related: []),
+        "Test Device Settings": Setup(id: 7.2, name: "Test Device Settings", related: []),
+        "In App Purchase": Setup(id: 4.1, name: "In App Purchase", related: [])
+    ]
+    
+//    setups["User Setup"]!.related = [
+  //        setups["User Login"]!.id,
+  //        setups["UserDataSplash"]!.id
+  //    ]
+  //
+  //    setups["User Login"]!.related = [setups["UserDataSplash"]!.id]
+  //    setups["UserDataSplash"]!.related = [setups["User Login"]!.id]
+  //
+  //
+  //    setups["Test Selection Home"]!.related = [
+  //        setups["Test Selection"]!.id,
+  //        //        setups["TestSelectionSplash"]!.id,
+  //        setups["EHA Description"]!.id,
+  //        setups["Corrective Filters"]!.id,
+  //        setups["EPTA Description"]!.id,
+  //        setups["Simple Trial Description"]!.id,
+  //        setups["In App Purchase"]!.id,
+  //        //        setups["Calibrated Devices"]!.id
+  //    ]
+  //
+  //    setups["Test Selection"]!.related = [setups["Test Selection Home"]!.id]
+  //
+  //    //    setups["Test Selection Home"]!.related = [setups["EHA Description"]!.id]
+  //    setups["EHA Description"]!.related = [setups["Test Selection Home"]!.id]
+  //    setups["EHA Description"]!.related = [setups["In App Purchase"]!.id]
+  //    setups["In App Purchase"]!.related = [setups["EHA Description"]!.id]
+  //
+  //    //    setups["Test Selection Home"]!.related = [setups["Corrective Filters"]!.id]
+  //    setups["Corrective Filters"]!.related = [setups["Test Selection Home"]!.id]
+  //    setups["Corrective Filters"]!.related = [setups["In App Purchase"]!.id]
+  //    setups["In App Purchase"]!.related = [setups["Corrective Filters"]!.id]
+  //
+  //    //    setups["Test Selection Home"]!.related = [setups["EPTA Description"]!.id]
+  //    setups["EPTA Description"]!.related = [setups["Test Selection Home"]!.id]
+  //    setups["EPTA Description"]!.related = [setups["In App Purchase"]!.id]
+  //    setups["In App Purchase"]!.related = [setups["EPTA Description"]!.id]
+  //
+  //    //    setups["Test Selection Home"]!.related = [setups["Simple Trial Description"]!.id]
+  //    setups["Simple Trial Description"]!.related = [setups["Test Selection Home"]!.id]
+  //    setups["Simple Trial Description"]!.related = [setups["In App Purchase"]!.id]
+  //    setups["In App Purchase"]!.related = [setups["Simple Trial Description"]!.id]
+  //
+  //
+  //    setups["Test Selection"]!.related = [
+  //        setups["TestSelectionSplash"]!.id,
+  //        //        setups["EHA Description"]!.id,
+  //        //        setups["Corrective Filters"]!.id,
+  //        //        setups["EPTA Description"]!.id,
+  //        //        setups["Simple Trial Description"]!.id,
+  //        //        setups["In App Purchase"]!.id,
+  //        setups["Calibrated Devices"]!.id
+  //    ]
+  //
+  //    setups["TestSelectionSplash"]!.related = [setups["Test Selection"]!.id]
+  //    setups["Calibrated Devices"]!.related = [setups["Test Selection"]!.id]
+  //
+  //    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //    //Stopping Here for Relationships to Test Navigation Thus Far
+  //
+  //
+  //    setups["Calibrated Devices"]!.related = [
+  //        setups["CalibratedDevicesSplash"]!.id,
+  //        setups["CalibratedDevicesIssue"]!.id,
+  //        setups["Manual Device Information"]!.id,
+  //        setups["Disclaimer Manual Device"]!.id,
+  //        setups["Manual Device Entry"]!.id,
+  //        setups["ManualDeviceEntrySplash"]!.id
+  //    ]
+  //
+  //    setups["Siri Setup"]!.related = [
+  //        setups["Silent Mode"]!.id,
+  //        setups["Do Not Disturb Mode"]!.id,
+  //        setups["System Volume Mode"]!.id,
+  //        setups["Manual System Setup"]!.id,
+  //        setups["Manual Setup Instructions"]!.id
+  //    ]
+    
+    return Array(setups.values)
+    
+}()
+        
+        
+private let builtInTestings: [Testing] = {
+    var testings = [
+        "Beta Testing Home": Testing(id: 8.0, name: "Beta Testing Home", related: []),
+        "Test ID Entry": Testing(id: 9.0, name: "Test ID Entry", related: []),
+        "Hearing Survey": Testing(id: 10.0, name: "Hearing Survey", related: []),
+        "SurveyErrorView": Testing(id: 10.01, name: "SurveyErrorView", related: []),
+        "Pre Test Landing": Testing(id: 11, name: "Pre Test Landing", related: []),
+        "Training Test": Testing(id: 11.1, name: "Training Test", related: []),
+        "Training Test Holding": Testing(id: 11.11, name: "Training Test Holding", related: []),
+        "1kHz Test": Testing(id: 11.2, name: "1kHz Test", related: []),
+        "Post 1kHz Test": Testing(id: 11.21, name: "Post 1kHz Test", related: []),
+        "EPTA EHA Part 1 Test": Testing(id: 12.0, name: "EPTA EHAP1 Test", related: []),
+        "Simple Test": Testing(id: 12.1, name: "Simple Test", related: []),
+        "Post All Test Landing": Testing(id: 13.0, name: "Post All Test Landing", related:[]),
+        "Post Test Director": Testing(id: 13.1, name: "Post Test Director", related: []),
+        "Post EPTA Test": Testing(id: 13.2, name: "Post EPTA Test", related: []),
+        "Post Simple Test": Testing(id: 13.3, name: "Post Simple Test", related: []),
+        "EHA Interim Post Test": Testing(id: 14.0, name: "EHA Interim Post Test", related: [])
+    ]
+    
+    return Array(testings.values)
+}()
+
+private let builtInEHATestings: [EHATesting] = {
+    var ehaTestings = [
+        "EHA Interim Pre Part 2 Test": EHATesting(id: 14.1, name: "EHA Interim Pre Part 2 Test", related: []),
+        "EHA Part 2 Test": EHATesting(id: 14.1, name: "EHA Part 2 Test", related: []),
+        "Post EHA Part 2 Test": EHATesting(id: 14.2, name: "Post EHA Part 2 Test", related: [])
+    ]
+    
+    return Array(ehaTestings.values)
+}()
+    
+private let builtInClosings: [Closing] = {
+    var closings = [
+        "Test Results Landing": Closing(id: 15.0, name: "Test Results Landing", related: []),
+        "EPTA Test Results": Closing(id: 15.1, name: "EPTA Test Results", related: []),
+        "EHA Test Results": Closing(id: 15.2, name: "EHA Test Results", related: []),
+        "Simple Test Results": Closing(id: 15.3, name: "Simple Test Results", related: []),
+        "Test Results Holding 1": Closing(id: 15.4, name: "Test Results Holding 1", related: []),
+        "Test Results Holding 2": Closing(id: 15.5, name: "Test Results Holding 2", related: []),
+        "Test Results Holding 3": Closing(id: 15.6, name: "Test Results Holding 3", related: []),
+        "Post Test Purchse": Closing(id: 16.0, name: "Post Test Purchse", related: []),
+        "Post Test Purchse Holding 1": Closing(id: 16.1, name: "Post Test Purchse Holding 1", related: []),
+        "Post Test Purchse Holding 2": Closing(id: 16.1, name: "Post Test Purchse Holding 2", related: []),
+        "Closing": Closing(id: 17.0, name: "Closing", related: []),
+        "Closing Holding 1": Closing(id: 17.1, name: "Closing Holding 1", related: []),
+        "Closing Holding 2": Closing(id: 17.2, name: "Closing Holding 2", related: [])
+    ]
+    
+    return Array(closings.values)
+}()
+
+private let builtInEarSimulators: [EarSimulator] = {
+    var earSimulators = [
+        "Ear Simulator Landing": EarSimulator(id: 20.0, name: "Ear Simulator Landing", related: []),
+        "Ear Simulator Manual 1": EarSimulator(id: 20.1, name: "Ear Simulator Manual 1", related: []),
+        "Ear Simulator Manual 2": EarSimulator(id: 20.2, name: "Ear Simulator Manual 2", related: [])
+    ]
+    
+    return Array(earSimulators.values)
+}()
+    
+
+struct Setup: Hashable, Identifiable {
+    let id: Double
+    var name: String
+    var related: [Setup.ID] = []
+}
+
+struct Testing: Hashable, Identifiable {
+    let id: Double
+    var name: String
+    var related: [Testing.ID] = []
+}
+
+struct EHATesting: Hashable, Identifiable {
+    let id: Double
+    var name: String
+    var related: [EHATesting.ID] = []
+}
+
+struct Closing: Hashable, Identifiable {
+    let id: Double
+    var name: String
+    var related: [Closing.ID] = []
+}
+
+struct EarSimulator: Hashable, Identifiable {
+    let id: Double
+    var name: String
+    var related: [EarSimulator.ID] = []
+}
 
 
 

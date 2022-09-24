@@ -516,7 +516,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
             }
             .fullScreenCover(isPresented: $onekHzshowTestCompletionSheet, content: {
                 ZStack{
-                    colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+                    colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all)
                     VStack(alignment: .leading) {
                         
                         Button(action: {

@@ -516,7 +516,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
             }
             .fullScreenCover(isPresented: $showTestCompletionSheet, content: {
                 ZStack{
-                    colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+                    colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all)
                     VStack(alignment: .leading) {
                         Button(action: {
                             if ehaP1fullTestCompleted == true {

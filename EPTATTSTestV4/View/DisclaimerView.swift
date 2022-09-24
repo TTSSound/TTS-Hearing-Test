@@ -341,12 +341,12 @@ class UserAgreementModel: ObservableObject {
 }
 
 
-struct DisclaimerView_Previews: PreviewProvider {
-    static var previews: some View {
-        DisclaimerView(setup: nil, relatedLink: link)
-    }
-    
-    static func link(setup: Setup) -> some View {
-        EmptyView()
-    }
-}
+//struct DisclaimerView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        DisclaimerView(setup: nil, relatedLink: link)
+//    }
+//
+//    static func link(setup: Setup) -> some View {
+//        EmptyView()
+//    }
+//}

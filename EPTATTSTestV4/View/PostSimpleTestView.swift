@@ -88,12 +88,12 @@ extension PostSimpleTestContent {
     }
 }
 
-struct PostSimpleTestView_Previews: PreviewProvider {
-    static var previews: some View {
-        PostSimpleTestView(testing: nil, relatedLinkTesting: linkTesting)
-    }
-    
-    static func linkTesting(testing: Testing) -> some View {
-        EmptyView()
-    }
-}
+//struct PostSimpleTestView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PostSimpleTestView(testing: nil, relatedLinkTesting: linkTesting)
+//    }
+//    
+//    static func linkTesting(testing: Testing) -> some View {
+//        EmptyView()
+//    }
+//}

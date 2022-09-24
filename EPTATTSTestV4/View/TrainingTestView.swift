@@ -207,7 +207,7 @@ struct TrainingTestContent<Link: View>: View {
                         NavigationLink("Training Complete. Continue.", destination: Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting))
                         //                        NavigationLink("Training Complete. Contine.", value: P)
                             .padding()
-                            .frame(width: 200, height: 50, alignment: .center)
+                            .frame(width: 300, height: 100, alignment: .center)
                             .background(.green)
                             .foregroundColor(.white)
                             .cornerRadius(24)
@@ -418,7 +418,7 @@ struct TrainingTestContent<Link: View>: View {
             })
             .fullScreenCover(isPresented: $trainingshowTestCompletionSheet, content: {
                 ZStack{
-                    colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+                    colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all)
                     VStack(alignment: .leading) {
                         
                         Button(action: {
@@ -1125,14 +1125,18 @@ extension TrainingTestContent {
     //    }
     
     func trainingrestartPresentation() async {
-        if trainingendTestSeriesValue == false {
+        if trainingendTestSeriesValue == false {//}&& traininguserPausedTest == false {
             traininglocalPlaying = 1
             trainingendTestSeriesValue = false
-        } else if trainingendTestSeriesValue == true {
+        } else if trainingendTestSeriesValue == true {//} && traininguserPausedTest == true {
             traininglocalPlaying = -1
             trainingendTestSeriesValue = true
             trainingshowTestCompletionSheet = true
             trainingplayingStringColorIndex = 2
+        } else {
+            traininglocalPlaying = 1
+            trainingendTestSeriesValue = false
+            print("!!! Critical Error in trainingRestartPresentation() Logic")
         }
     }
     
