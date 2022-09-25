@@ -29,75 +29,80 @@ struct TestSelectionLandingView: View {
                     .foregroundColor(.blue)
                 HStack {
                     Spacer()
-                    Text("Explore Our Gold Standard True To Source Enhanced Hearing Assessment")
-                        .foregroundColor(colorModel.neonGreen)
-
+                    Text("Explore The Complete Enhanced Hearing Assessment (EHA)")
+                        .foregroundColor(.green)
+                        .frame(width: 340, height: 50, alignment: .leading)
                     Spacer()
                     NavigationLink {
                         EHADescription()
                     } label: {
                         Image(systemName: "arrow.right")
-                            .foregroundColor(colorModel.neonGreen)
+                            .foregroundColor(.blue)
                             .font(.title)
+                            .frame(width: 20, height: 50, alignment: .center)
                     }
                     Spacer()
                 }
-                .padding(.leading)
-                .padding(.top, 10)
-                .padding(.bottom, 10)
+                .padding(.leading, 10)
+                .padding(.trailing, 10)
+                .padding(.top)
                 HStack {
                     Spacer()
-                    Text("Explore The Experience of True To Source Personalized Corrective Audio")
-                        .foregroundColor(colorModel.limeGreen)
+                    Text("Explore Personalized Corrective Audio")
+                        .foregroundColor(.green)
+                        .frame(width: 340, height: 50, alignment: .leading)
 
                     Spacer()
                     NavigationLink {
                         CorrectiveFiltersExplanationView()
                     } label: {
                         Image(systemName: "arrow.right")
-                            .foregroundColor(colorModel.limeGreen)
+                            .foregroundColor(.blue)
                             .font(.title)
+                            .frame(width: 20, height: 50, alignment: .center)
                     }
                     Spacer()
                 }
-                .padding(.leading)
-                .padding(.top, 10)
-                .padding(.bottom, 10)
+                .padding(.leading, 10)
+                .padding(.trailing, 10)
                 HStack {
                     Spacer()
-                    Text("Explore Our FULL SPECTRUM True To Source Extended Pure Tone Audiogram")
-                        .foregroundColor(colorModel.darkNeonGreen)
-
+                    Text("Explore The Entry Extended Pure Tone Audiogram")
+                        .foregroundColor(.green)
+                        .frame(width: 340, height: 50, alignment: .leading)
                     Spacer()
                     NavigationLink {
                         EPTADescription()
                     } label: {
                         Image(systemName: "arrow.right")
-                            .foregroundColor(colorModel.darkNeonGreen)
+                            .foregroundColor(.blue)
                             .font(.title)
+                            .frame(width: 20, height: 50, alignment: .center)
                     }
                     Spacer()
                 }
-                .padding(.leading)
-                .padding(.top, 10)
-                .padding(.bottom, 10)
+                .padding(.leading, 10)
+                .padding(.trailing, 10)
                 HStack {
                     Spacer()
-                    Text("See How To Trial Our Technology With Our Simplest Hearing Test")
-                        .foregroundColor(colorModel.tiffanyBlue)
+                    Text("Explore Our Simplest, Trial Hearing Test")
+                        .foregroundColor(.green)
+                        .frame(width: 340, height: 50, alignment: .leading)
                     Spacer()
                     NavigationLink {
                         SimpleTrialDescriptionView()
                     } label: {
                         Image(systemName: "arrow.right")
-                            .foregroundColor(colorModel.tiffanyBlue)
+                            .foregroundColor(.blue)
                             .font(.title)
+                            .frame(width: 20, height: 50, alignment: .center)
                     }
+                    
                     Spacer()
                 }
-                .padding(.leading)
-                .padding(.top, 10)
-                .padding(.bottom, 10)
+                .padding(.leading, 10)
+                .padding(.trailing, 10)
+                .padding(.bottom)
                 HStack{
                     Spacer()
                     NavigationLink {
