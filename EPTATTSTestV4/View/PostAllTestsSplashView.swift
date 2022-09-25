@@ -21,7 +21,6 @@ struct SaveSystemSettingsInterimEHA: Codable {
     }
 }
 
-
 struct SaveSystemSettingsEndEPTASimple: Codable {
     
     var jsonFinalEndingSystemVolume = [Float]()
@@ -30,7 +29,6 @@ struct SaveSystemSettingsEndEPTASimple: Codable {
         case jsonFinalEndingSystemVolume
     }
 }
-
 
 struct PostAllTestsSplashView<Link: View>: View {
     var testing: Testing?
@@ -51,7 +49,6 @@ struct PostAllTestsSplashContent<Link: View>: View {
     var dataModel = DataModel.shared
     var relatedLinkTesting: (Testing) -> Link
     @EnvironmentObject private var naviationModel: NavigationModel
-    
     
     @StateObject var colorModel: ColorModel = ColorModel()
     var audioSessionModel: AudioSessionModel = AudioSessionModel()
@@ -285,9 +282,7 @@ extension PostAllTestsSplashContent {
         await writeInputSystemInterimResultsToCSV()
         isOkayToUpload = true
     }
-    
-    
-
+        
     func uploadPostAllTestSettings() async {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, qos: .background) {
             uploadFile(fileName: "EndEPTASimpleSystemSettings.json")

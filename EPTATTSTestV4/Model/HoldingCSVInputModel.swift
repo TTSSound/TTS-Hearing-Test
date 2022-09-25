@@ -111,10 +111,6 @@ import FirebaseFirestoreSwift
 //}
 
 
-
-
-
-
 class HoldingCSVInputModel: ObservableObject {
     
     //Setup Model Variables

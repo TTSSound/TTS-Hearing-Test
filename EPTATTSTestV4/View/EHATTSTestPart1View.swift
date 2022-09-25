@@ -4,6 +4,7 @@
 //
 //  Created by Jeffrey Jaskunas on 9/1/22.
 //
+
 import SwiftUI
 import Foundation
 import AVFAudio
@@ -113,7 +114,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
     @State var endTestSeriesValue: Bool = false
     @State var showTestCompletionSheet: Bool = false
     
-//    @State var envDataObjectModel_samples: [String] = ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16", "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
+    //    @State var envDataObjectModel_samples: [String] = ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16", "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
     
     @State var envDataObjectModel_samples: [String] = [String]()
     
@@ -135,7 +136,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
     @State var panArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
     @State var totalCount = 32
     @State var localPan: Float = Float()
-
+    
     
     // Presentation Cycles
     // Cycle 1 Right: ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8"]  // panArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
@@ -143,7 +144,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
     // Cycle 3 Right: ["Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]   // panArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
     // Cycle 4 Left: ["Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]    //panArray: [Float] = [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
     
-//    rightFinalGain"\(activeFrequency)"
+    //    rightFinalGain"\(activeFrequency)"
     @State var rightFinalGainSample1 = Float()
     @State var rightFinalGainSample2 = Float()
     @State var rightFinalGainSample3 = Float()
@@ -200,9 +201,9 @@ struct EHATTSTestPart1Content<Link: View>: View {
     @State var envDataObjectModel_reversalFrequency = [String]()
     @State var envDataObjectModel_reversalDirection = Float()
     @State var envDataObjectModel_reversalDirectionArray = [Float]()
-
+    
     @State var envDataObjectModel_averageGain = Float()
-
+    
     @State var envDataObjectModel_eptaSamplesCount = 8 //17
     @State var envDataObjectModel_eptaSamplesCountArray = [7, 7, 7, 7, 7, 7, 7, 7,
                                                            15, 15, 15, 15, 15, 15, 15, 15,
@@ -271,7 +272,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
     
     @State var ehaP1TestStarted: Bool = false
     
-
+    
     let fileEHAP1Name = "SummaryEHAP1Results.json"
     let summaryEHAP1CSVName = "SummaryEHAP1ResultsCSV.csv"
     let detailedEHAP1CSVName = "DetailedEHAP1ResultsCSV.csv"
@@ -286,7 +287,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
     
     
     @State var saveFinalResults: SaveFinalResults? = nil
-
+    
     let heardThread = DispatchQueue(label: "BackGroundThread", qos: .userInitiated)
     let arrayThread = DispatchQueue(label: "BackGroundPlayBack", qos: .background)
     let audioThread = DispatchQueue(label: "AudioThread", qos: .default)
@@ -312,11 +313,9 @@ struct EHATTSTestPart1Content<Link: View>: View {
     @State private var qosUserInitiated: Bool = false
     
     var body: some View {
-        
         ZStack{
             colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
             VStack {
-//                Spacer()
                 HStack{
                     if ehaP1fullTestCompleted == false {
                         Text("EHA Part 1 / EPTA Test")
@@ -340,10 +339,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
                 .navigationDestination(isPresented: $ehaP1fullTestCompleted) {
                     PostAllTestsSplashView(testing: testing, relatedLinkTesting: linkTesting)
                 }
-            
-               
                 
-//                Spacer()
                 if ehaP1TestStarted == false {
                     Button {
                         Task(priority: .userInitiated) {
@@ -431,7 +427,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
                     .padding(.top, 20)
                     .padding(.bottom, 40)
                 }
-            
+                
                 Button {
                     heardThread.async{ self.localHeard = 1
                     }
@@ -446,8 +442,8 @@ struct EHATTSTestPart1Content<Link: View>: View {
                 }
                 .padding(.top, 20)
                 .padding(.bottom, 80)
-            
-            Spacer()
+                
+                Spacer()
             }
             .onAppear{
                 showTestCompletionSheet = true
@@ -629,7 +625,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
                                 }
                             }
                         }
-                            
+                        
                         Spacer()
                         if ehaP1fullTestCompleted == false {
                             Text("Take a moment for a break before exiting to continue with the next test segment")
@@ -730,13 +726,13 @@ struct EHATTSTestPart1Content<Link: View>: View {
         }
         .onChange(of: testIsPlaying, perform: { testBoolValue in
             if testBoolValue == true && endTestSeriesValue == false {
-            //User is starting test for first time
+                //User is starting test for first time
                 audioSessionModel.setAudioSession()
                 localPlaying = 1
                 playingStringColorIndex = 0
                 userPausedTest = false
             } else if testBoolValue == false && endTestSeriesValue == false {
-            // User is pausing test for firts time
+                // User is pausing test for firts time
                 stop()
                 localPlaying = 0
                 playingStringColorIndex = 1
@@ -873,9 +869,9 @@ struct EHATTSTestPart1Content<Link: View>: View {
                             await nonResponseCounting()
                             await createReversalHeardArray()
                             
-                // !!!!!! New function and removal of function, not in EHAP2
+                            // !!!!!! New function and removal of function, not in EHAP2
                             await createReversalGainArrayNonResponse()
-//                            await createReversalGainArray()
+                            //                            await createReversalGainArray()
                             await checkHeardReversalArrays()
                             await reversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change event
                         }
@@ -884,8 +880,8 @@ struct EHATTSTestPart1Content<Link: View>: View {
                         ehaP1fullTestCompleted = ehaP1fullTestCompletedHoldingArray[envDataObjectModel_index]
                         Task(priority: .background) {
                             await resetPlaying()
-//                            print("Fatal Error: Stopped in Task else")
-//                            print("heardArray: \(envDataObjectModel_heardArray)")
+                            //                            print("Fatal Error: Stopped in Task else")
+                            //                            print("heardArray: \(envDataObjectModel_heardArray)")
                         }
                     }
                 }
@@ -895,24 +891,24 @@ struct EHATTSTestPart1Content<Link: View>: View {
             if reversalValue == 1 {
                 DispatchQueue.global(qos: .background).async {
                     Task(priority: .userInitiated) {
-//                        await createReversalHeardArray()≠
-//                        await createReversalGainArray()
-//                        await checkHeardReversalArrays()
+                        //                        await createReversalHeardArray()≠
+                        //                        await createReversalGainArray()
+                        //                        await checkHeardReversalArrays()
                         await reversalDirection()
                         await reversalComplexAction()
                         await reversalsCompleteLogging()
                         await assignLRAverageSampleGains()
-//                        await printReversalGain()
-//                        await printData()
-//                        await printReversalData()
+                        //                        await printReversalGain()
+                        //                        await printData()
+                        //                        await printReversalData()
                         await concatenateFinalArrays()
-//                        await printConcatenatedArrays()
+                        //                        await printConcatenatedArrays()
                         await saveFinalStoredArrays()
                         await endTestSeriesFunc()
                         await newTestCycle()
                         await restartPresentation()
-//                        print("End of Reversals")
-//                        print("Prepare to Start Next Presentation")
+                        //                        print("End of Reversals")
+                        //                        print("Prepare to Start Next Presentation")
                     }
                 }
             }
@@ -929,8 +925,9 @@ struct EHATTSTestPart1Content<Link: View>: View {
             }
         }
     }
+}
  
-    
+extension EHATTSTestPart1Content {
 //MARK: - AudioPlayer Methods
     
     func pauseRestartTestCycle() {
@@ -1210,9 +1207,8 @@ struct EHATTSTestPart1Content<Link: View>: View {
 //}
 
 
-
-//MARK: - Reversal Extension
 extension EHATTSTestPart1Content {
+//MARK: - Reversal Extension
     enum LastErrors: Error {
         case lastError
         case lastUnexpected(code: Int)
@@ -1227,8 +1223,6 @@ extension EHATTSTestPart1Content {
         envDataObjectModel_reversalHeard.append(envDataObjectModel_heardArray[idxHA-1])
         self.idxReversalHeardCount = envDataObjectModel_reversalHeard.count
     }
-    
-    
     
     func createReversalGainArray() async {
         //        envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
@@ -1463,8 +1457,6 @@ extension EHATTSTestPart1Content {
         secondHeardResponseIndex = Int()
         secondHeardIsTrue = false
     }
-    
-    
     
     func reversalsCompleteLogging() async {
         if secondHeardIsTrue == true {
@@ -2246,7 +2238,7 @@ extension EHATTSTestPart1Content {
 }
 
 extension EHATTSTestPart1Content {
-    //MARK: Extension for Gain Link File Checking
+//MARK: Extension for Gain Link File Checking
     
     func gainCurveAssignment() async {
         if gainEHAP1SettingArrayLink == 2.5 {
@@ -2520,4 +2512,3 @@ extension EHATTSTestPart1Content {
 //        EmptyView()
 //    }
 //}
-

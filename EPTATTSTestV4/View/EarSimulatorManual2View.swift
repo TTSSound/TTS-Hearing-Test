@@ -1172,8 +1172,6 @@ extension EarSimulatorManual2View {
 
 }
 
-
-
 //struct EarSimulatorManual2View_Previews: PreviewProvider {
 //    static var previews: some View {
 //        EarSimulatorManual2View()

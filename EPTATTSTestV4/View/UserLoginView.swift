@@ -571,7 +571,6 @@ extension UserLoginContent {
         print("SetupModel userUUIDString: \(userUUIDString)")
     }
     
-    
     func concatenateDemoFinalArrays2() async {
         finalFirstName.append(contentsOf: userFirstName)
         finalLastName.append(contentsOf: userLastName)
@@ -618,7 +617,7 @@ extension UserLoginContent {
 }
 
 extension UserLoginContent {
-//MARK: -Extension CSV/JSON Methods
+    //MARK: -Extension CSV/JSON Methods
     func getSetupData2() async {
         guard let setupData = await self.getDemoJSONData2() else { return }
         print("Json Setup Data 2:")
@@ -649,11 +648,11 @@ extension UserLoginContent {
         print("saveFinalResults: \(saveFinalSetupResults2)")
         print("Json Encoded \(jsonSetupData!)")
         return jsonSetupData
-
+        
     }
     
     func saveSetupToJSON2() async {
-    // !!!This saves to device directory, whish is likely what is desired
+        // !!!This saves to device directory, whish is likely what is desired
         let setupPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = setupPaths[0]
         print("DocumentsDirectory: \(documentsDirectory)")
@@ -664,13 +663,13 @@ extension UserLoginContent {
         do {
             let jsonSetupData = try encoder.encode(saveFinalSetupResults2)
             print(jsonSetupData)
-          
+            
             try jsonSetupData.write(to: setupFilePaths)
         } catch {
             print("Error writing to JSON Setup file 2: \(error)")
         }
     }
-
+    
     func writeSetupResultsToCSV2() async {
         print("writeSetupResultsToCSV2 Start")
         let stringFinalFirstName = "finalFirstName," + finalFirstName.map { String($0) }.joined(separator: ",")
@@ -737,14 +736,14 @@ extension UserLoginContent {
         }
     }
     
-        
+    
     private func getDirectoryPath2() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0]
         return documentsDirectory
     }
-
-// Only Use Files that have a pure string name assigned, not a name of ["String"]
+    
+    // Only Use Files that have a pure string name assigned, not a name of ["String"]
     private func uploadFile2(fileName: String) {
         DispatchQueue.global(qos: .userInteractive).async {
             let storageRef = Storage.storage().reference()
@@ -755,7 +754,7 @@ extension UserLoginContent {
             if fileManager.fileExists(atPath: filePath[0]) {
                 let filePath = URL(fileURLWithPath: filePath[0])
                 let localFile = filePath
-//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
                 let fileRef = lastNameRef.child("\(fileName)")
                 let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
                     if error == nil && metadata == nil {
@@ -777,7 +776,7 @@ extension UserLoginContent {
     }
     
     private func checkDataLinkJson2() async {
-//        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
+        //        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
         let dataName = "DisclaimerResults.json"
         let fileManager = FileManager.default
         let dataPath = (await self.getDataLinkPath2() as NSString).strings(byAppendingPaths: [dataName])
@@ -795,7 +794,7 @@ extension UserLoginContent {
     }
     
     private func checkDataLinkCSV2() async {
-//        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
+        //        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
         let dataName = "DisclaimerResultsCSV.csv"
         let fileManager = FileManager.default
         let dataPath = (await self.getDataLinkPath2() as NSString).strings(byAppendingPaths: [dataName])
@@ -813,7 +812,7 @@ extension UserLoginContent {
     }
     
     private func checkDataLinkInputCSV2() async {
-//        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
+        //        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
         let dataName = "InputDisclaimerResultsCSV.csv"
         let fileManager = FileManager.default
         let dataPath = (await self.getDataLinkPath2() as NSString).strings(byAppendingPaths: [dataName])
@@ -829,7 +828,9 @@ extension UserLoginContent {
             }
         }
     }
+}
 
+extension UserLoginContent {
 //MARK: -NavigationLink Method
     private func link(setup: Setup) -> some View {
         EmptyView()

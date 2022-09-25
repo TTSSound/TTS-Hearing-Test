@@ -51,9 +51,6 @@ struct DisclaimerContent<Link: View>: View {
     
     @StateObject var colorModel = ColorModel()
     
-    //    @Binding var selectedTab: Int
-    
-    
     
     @ObservedObject var userAgreementModel: UserAgreementModel = UserAgreementModel()
     @State var disclaimerSetting = Bool()
@@ -66,8 +63,6 @@ struct DisclaimerContent<Link: View>: View {
     @State var userAgreementTime = Float()
     @State var userAgreementDate = Date()
     var urlFile: URL = URL(fileURLWithPath: "userAgreementText.txt")
-    
-    
     
     @State var userAgreement = [Bool]()
     @State var finalUserAgreementAgreed: [Int] = [Int]()
@@ -205,7 +200,7 @@ extension DisclaimerContent {
 }
     
 extension DisclaimerContent {
-//MARK: -Extension CSV/JSON Methods
+    //MARK: -Extension CSV/JSON Methods
     
     func getDisclaimerData() async {
         guard let disclaimerData = await self.getDemoJSONData() else { return }
@@ -240,11 +235,11 @@ extension DisclaimerContent {
         print("saveFinalResults: \(saveFinalDisclaimerResults)")
         print("Json Encoded \(jsonDisclaimerData!)")
         return jsonDisclaimerData
-
+        
     }
     
     func saveDisclaimerToJSON() async {
-    // !!!This saves to device directory, whish is likely what is desired
+        // !!!This saves to device directory, whish is likely what is desired
         let disclaimerPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = disclaimerPaths[0]
         print("DocumentsDirectory: \(documentsDirectory)")
@@ -255,13 +250,13 @@ extension DisclaimerContent {
         do {
             let jsonDisclaimerData = try encoder.encode(saveFinalDisclaimerResults)
             print(jsonDisclaimerData)
-          
+            
             try jsonDisclaimerData.write(to: disclaimerFilePaths)
         } catch {
             print("Error writing to JSON Disclaimer file: \(error)")
         }
     }
-            
+    
     func writeDisclaimerResultsToCSV() async {
         print("writeDisclaimerResultsToCSV Start")
         let formatter3 = DateFormatter()
@@ -313,7 +308,9 @@ extension DisclaimerContent {
             print("CVSWriter Input Disclaimer Error or Error Finding File for Input Disclaimer CSV \(error.localizedDescription)")
         }
     }
+}
 
+extension DisclaimerContent {
 //MARK: -NavigationLink Method
     private func link(setup: Setup) -> some View {
         EmptyView()

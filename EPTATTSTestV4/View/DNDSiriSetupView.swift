@@ -11,7 +11,6 @@ struct DNDSiriSetupView: View {
     @StateObject var colorModel: ColorModel = ColorModel()
     @State var doNotDisturbSetting = false
     
-    
     var body: some View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)

@@ -23,8 +23,6 @@ struct SamplesESM1List: Identifiable, Hashable {
     }
 }
 
-
-
 struct EarSimulatorManual1View: View {
     
     @State private var samples = [SamplesESM1List]()
@@ -930,21 +928,16 @@ struct EarSimulatorManual1View: View {
                         ESM1localTestCount += 1
                         Task(priority: .userInitiated) {
                             await ESM1heardArrayNormalize()
-                            
                             await ESM1count()
                             await ESM1logNotPlaying()
                             await ESM1resetPlaying()
-                            
                             await ESM1resetHeard()
 //                            await ESM1nonResponseCounting()
                             await ESM1createReversalHeardArray()
                             await ESM1createReversalSampleArray()
 //                            await createReversalGainArrayNonResponse()
 //                            await ESM1checkHeardReversalArrays()
-                       
-
                             await ESM1reversalStart()
-
                         }
                     }
                 }
@@ -1088,7 +1081,6 @@ extension EarSimulatorManual1View {
                 print("Error in arrayNormalization else if isCountSame && heardAIAFnet1 if segment")
             }
     }
-    
     
     private func ESM1count() async {
         ESM1idxTestCountUpdated = ESM1_testCount.count + 1

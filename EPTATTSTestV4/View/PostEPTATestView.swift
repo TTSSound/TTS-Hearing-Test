@@ -19,9 +19,7 @@ struct PostEPTATestView<Link: View>: View {
                 .navigationTitle("")
         }
     }
-    
 }
-
 
 struct PostEPTATestContent<Link: View>: View {
     var testing: Testing

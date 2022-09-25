@@ -259,7 +259,7 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
 }
  
 extension PostBilateral1kHzTestContent {
-    //MARK: -Extension Methods
+//MARK: -Extension Methods
     func betaReviewWriteGainSetting() async {
         await betaGainCurveGenderAge()
         await betaUserItrnaEarDeltaGain()
@@ -422,8 +422,6 @@ extension PostBilateral1kHzTestContent {
         }
         
     }
-    
-    
     
     func returnBetaTestSelected() async {
         if eptaBetaLinkExists == true && ehaBetaLinkExists == false {

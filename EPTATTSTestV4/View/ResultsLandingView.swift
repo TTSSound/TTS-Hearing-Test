@@ -22,8 +22,6 @@ struct ResultsLandingView<Link: View>: View{
     }
 }
 
-
-
 struct ResultsLandingContent<Link: View>: View {
     var closing: Closing
     var dataModel = DataModel.shared

@@ -11,7 +11,6 @@ struct TestSelectionLandingView: View {
     @StateObject  var colorModel: ColorModel = ColorModel()
     
     var body: some View {
-
 // Marketing and info on EPTA vs EHA Tests
 // Direction that EHA test be taken in two parts at two different times and days
         ZStack{

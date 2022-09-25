@@ -81,5 +81,3 @@ struct ManualSetupView: View {
 //        ManualSetupView()
 //    }
 //}
-
-

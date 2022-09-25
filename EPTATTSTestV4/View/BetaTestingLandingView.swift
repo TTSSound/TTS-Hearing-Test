@@ -738,43 +738,7 @@ extension BetaTestingLandingContent{
         }
     }
 }
-//    private func setupCSVReader() async {
-//        let dataSetupName = "InputSetupResultsCSV.csv"
-//        let fileSetupManager = FileManager.default
-//        let dataSetupPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataSetupName])
-//        if fileSetupManager.fileExists(atPath: dataSetupPath[0]) {
-//            let dataSetupFilePath = URL(fileURLWithPath: dataSetupPath[0])
-//            if dataSetupFilePath.isFileURL  {
-//                dataFileURLLastName = dataSetupFilePath
-//                print("dataSetupFilePath: \(dataSetupFilePath)")
-//                print("dataFileURL1: \(dataFileURLLastName)")
-//                print("Setup Input File Exists")
-//            } else {
-//                print("Setup Data File Path Does Not Exist")
-//            }
-//        }
-//        do {
-//            let results = try CSVReader.decode(input: dataFileURLLastName)
-//            print(results)
-//            print("Setup Results Read")
-//            let rows = results.columns
-//            print("rows: \(rows)")
-//            let fieldLastName: String = results[row: 1, column: 0]
-//            print("fieldLastName: \(fieldLastName)")
-//            inputLastName = fieldLastName
-//            print("inputLastName: \(inputLastName)")
-//        } catch {
-//            print("Error in reading Last Name results")
-//        }
-//    }
-//
-//    private func getDataLinkPath() async -> String {
-//        let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-//        let documentsDirectory = dataLinkPaths[0]
-//        return documentsDirectory
-//    }
-    
-    
+
 extension BetaTestingLandingContent {
 //MARK: -NavigationLink Extension
     private func linkTesting(testing: Testing) -> some View {

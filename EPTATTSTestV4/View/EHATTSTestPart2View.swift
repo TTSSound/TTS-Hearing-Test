@@ -3010,7 +3010,6 @@ extension EHATTSTestPart2Content {
         ehaP2playingStringColorIndex = 2
     }
     
-    
     func ehaP2concatenateFinalArrays() async {
         if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 {
             ehaP2_finalStoredIndex.append(contentsOf: [100000000] + ehaP2_indexForTest)

@@ -615,9 +615,6 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                                 }
                             }
                         }
-                            
-                            
-                        
                         
                         if bilateral1kHzTestCompleted == false {
                             Text("This is first true test phase. So, make sure you are ready and paying attention to what you hear.")
@@ -923,7 +920,7 @@ extension Bilateral1kHzTestContent {
     
     func onekHzstop() {
       do{
-          let onekHzurlSample = Bundle.main.path(forResource: "Sample0", ofType: ".wav")
+          let onekHzurlSample = Bundle.main.path(forResource: onekHzactiveFrequency, ofType: ".wav")
           guard let onekHzurlSample = onekHzurlSample else { return print(onekHzSampleErrors.onekHznotFound) }
           onekHztestPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: onekHzurlSample))
           guard let onekHztestPlayer = onekHztestPlayer else { return }
@@ -933,7 +930,7 @@ extension Bilateral1kHzTestContent {
     
     func playTesting() async {
         do{
-            let onekHzurlSample = Bundle.main.path(forResource: "Sample0", ofType: ".wav")
+            let onekHzurlSample = Bundle.main.path(forResource: onekHzactiveFrequency, ofType: ".wav")
             guard let onekHzurlSample = onekHzurlSample else {
                 return print(onekHzSampleErrors.onekHznotFound) }
             onekHztestPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: onekHzurlSample))
@@ -1036,7 +1033,7 @@ extension Bilateral1kHzTestContent {
 
 
 extension Bilateral1kHzTestContent {
-    //MARK: - 1kHz Reversal Extension
+//MARK: - 1kHz Reversal Extension
     enum onekHzLastErrors: Error {
         case onekHzlastError
         case onekHzlastUnexpected(code: Int)

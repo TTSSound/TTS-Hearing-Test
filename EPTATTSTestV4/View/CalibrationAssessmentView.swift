@@ -459,7 +459,7 @@ extension CalibrationAssessmentView {
 }
  
 extension CalibrationAssessmentView {
-//MARK: -Extension CSV/JSON Methods
+    //MARK: -Extension CSV/JSON Methods
     func getDeviceData() async {
         guard let deviceSelectionData = await getDeviceJSONData() else { return }
         print("Json Device Selection Data:")
@@ -467,7 +467,7 @@ extension CalibrationAssessmentView {
         let jsonDeviceSelectionString = String(data: deviceSelectionData, encoding: .utf8)
         print(jsonDeviceSelectionString!)
         do {
-        self.saveFinalDeviceSelection = try JSONDecoder().decode(SaveFinalDeviceSelection.self, from: deviceSelectionData)
+            self.saveFinalDeviceSelection = try JSONDecoder().decode(SaveFinalDeviceSelection.self, from: deviceSelectionData)
             print("JSON GetDeviceSelectionData Run")
             print("data: \(deviceSelectionData)")
         } catch let error {
@@ -494,9 +494,9 @@ extension CalibrationAssessmentView {
         print("Json Encoded \(jsonDeviceData!)")
         return jsonDeviceData
     }
-
+    
     func saveDeviceToJSON() async {
-    // !!!This saves to device directory, whish is likely what is desired
+        // !!!This saves to device directory, whish is likely what is desired
         let devicePaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = devicePaths[0]
         print("DocumentsDirectory: \(documentsDirectory)")
@@ -507,13 +507,13 @@ extension CalibrationAssessmentView {
         do {
             let jsonDeviceData = try encoder.encode(saveFinalDeviceSelection)
             print(jsonDeviceData)
-          
+            
             try jsonDeviceData.write(to: deviceFilePaths)
         } catch {
             print("Error writing to JSON Device Selection file: \(error)")
         }
     }
-
+    
     func writeDeviceResultsToCSV() async {
         print("writeDeviceSelectionToCSV Start")
         let formatter3 = DateFormatter()
@@ -542,7 +542,7 @@ extension CalibrationAssessmentView {
         } catch {
             print("CVSWriter Device Selection Error or Error Finding File for Device Selection CSV \(error.localizedDescription)")
         }
-    
+        
     }
     
     func writeInputDeviceResultsToCSV() async {
@@ -580,8 +580,8 @@ extension CalibrationAssessmentView {
         let documentsDirectory = paths[0]
         return documentsDirectory
     }
-
-// Only Use Files that have a pure string name assigned, not a name of ["String"]
+    
+    // Only Use Files that have a pure string name assigned, not a name of ["String"]
     private func uploadFile(fileName: String) {
         DispatchQueue.global(qos: .userInteractive).async {
             let storageRef = Storage.storage().reference()
@@ -592,7 +592,7 @@ extension CalibrationAssessmentView {
             if fileManager.fileExists(atPath: filePath[0]) {
                 let filePath = URL(fileURLWithPath: filePath[0])
                 let localFile = filePath
-//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
                 let fileRef = lastNameRef.child("\(fileName)")
                 let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
                     if error == nil && metadata == nil {
@@ -636,8 +636,10 @@ extension CalibrationAssessmentView {
             print("Error in reading Last Name results")
         }
     }
-    
-    
+}
+
+extension CalibrationAssessmentView {
+//MARK: -NavigationLink Method Extension
     private func getDataLinkPath() async -> String {
         let dataLinkPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = dataLinkPaths[0]
@@ -652,5 +654,3 @@ extension CalibrationAssessmentView {
 //            
 //    }
 //}
-
-

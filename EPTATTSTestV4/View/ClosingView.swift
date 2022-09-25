@@ -23,8 +23,6 @@ import CodableCSV
 //    let jsonUserAgreementAgreedDate: Double
 //}
 
-
-
 struct ClosingView: View {
     
     //Setup Model Variables

@@ -87,8 +87,6 @@
 		7C4D018A28C1724100361559 /* EHATTSTestPart1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D018928C1724100361559 /* EHATTSTestPart1View.swift */; };
 		7C4D018C28C1728D00361559 /* SimpleTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D018B28C1728D00361559 /* SimpleTestView.swift */; };
 		7C4D018E28C17FB900361559 /* SetupResults.json in Resources */ = {isa = PBXBuildFile; fileRef = 7C4D018D28C17FB900361559 /* SetupResults.json */; };
-		7C4D019128C262CD00361559 /* EHAP1DataObjectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D019028C262CD00361559 /* EHAP1DataObjectModel.swift */; };
-		7C4D019328C2631000361559 /* SimpleDataObjectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D019228C2631000361559 /* SimpleDataObjectModel.swift */; };
 		7C4D019828C283AE00361559 /* HoldingCSVInputModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D019728C283AE00361559 /* HoldingCSVInputModel.swift */; };
 		7C4EF1BB28B3D7CF008C81D6 /* ConditionalNavigation.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7C4EF1BA28B3D7CF008C81D6 /* ConditionalNavigation.txt */; };
 		7C51F16428C81FAC00FF5F0F /* Sample13.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7C51F15628C81FAB00FF5F0F /* Sample13.wav */; };
@@ -311,6 +309,12 @@
 		7C179FEC28B81B7500964AAC /* InAppPurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseView.swift; sourceTree = "<group>"; };
 		7C179FEE28B852CA00964AAC /* CalibrationIssueSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationIssueSplashView.swift; sourceTree = "<group>"; };
 		7C179FF428B8848900964AAC /* ColorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorModel.swift; sourceTree = "<group>"; };
+		7C18BB2328E0F7B200068DBB /* DONOTChangeReferenceEarSimulatorManual2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DONOTChangeReferenceEarSimulatorManual2.swift; sourceTree = "<group>"; };
+		7C18BB2528E0F84D00068DBB /* DONOTChangeReferenceEarSimulatorManual1_V2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DONOTChangeReferenceEarSimulatorManual1_V2.swift; sourceTree = "<group>"; };
+		7C18BB2728E0F8C000068DBB /* DONOTChangeEHATTSTestPart2View_V2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DONOTChangeEHATTSTestPart2View_V2.swift; sourceTree = "<group>"; };
+		7C18BB2928E0F9CE00068DBB /* DONOTChangeEHATTSTestPart1View_V2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DONOTChangeEHATTSTestPart1View_V2.swift; sourceTree = "<group>"; };
+		7C18BB2B28E0FA1F00068DBB /* DONOTChangeBilateral1kHzTestView_V2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DONOTChangeBilateral1kHzTestView_V2.swift; sourceTree = "<group>"; };
+		7C18BB2D28E0FA8000068DBB /* DONOTChangeTrainingTestView_V2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DONOTChangeTrainingTestView_V2.swift; sourceTree = "<group>"; };
 		7C1F1E3028D8C0CC00B672B1 /* ResultsLandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsLandingView.swift; sourceTree = "<group>"; };
 		7C1F1E3228D8C2AD00B672B1 /* ResultsSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsSplashView.swift; sourceTree = "<group>"; };
 		7C24C1E128BEC419006E77DD /* PostEPTATestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostEPTATestView.swift; sourceTree = "<group>"; };
@@ -653,6 +657,30 @@
 			path = VolumeSliderAttempts;
 			sourceTree = "<group>";
 		};
+		7C18BB2128E0F75400068DBB /* DONOTChangeV1 */ = {
+			isa = PBXGroup;
+			children = (
+				7C99A16B28C95D0800E46C65 /* DONOTChangeReferenceEHATest.swift */,
+				7C0AE96C28CCF55D00A4F652 /* DONOTChangeReferenceEPTATTSTestV4List.swift */,
+				7CCB2B2C28D4C5CD00056C49 /* DONOTChangeReferenceEHAP2TestView.swift */,
+				7C3D20AE289DADCB0039EDA6 /* EPTATTSTestV4List.swift */,
+			);
+			path = DONOTChangeV1;
+			sourceTree = "<group>";
+		};
+		7C18BB2228E0F76C00068DBB /* DONOTChangeV2 */ = {
+			isa = PBXGroup;
+			children = (
+				7C18BB2B28E0FA1F00068DBB /* DONOTChangeBilateral1kHzTestView_V2.swift */,
+				7C18BB2928E0F9CE00068DBB /* DONOTChangeEHATTSTestPart1View_V2.swift */,
+				7C18BB2728E0F8C000068DBB /* DONOTChangeEHATTSTestPart2View_V2.swift */,
+				7C18BB2528E0F84D00068DBB /* DONOTChangeReferenceEarSimulatorManual1_V2.swift */,
+				7C18BB2328E0F7B200068DBB /* DONOTChangeReferenceEarSimulatorManual2.swift */,
+				7C18BB2D28E0FA8000068DBB /* DONOTChangeTrainingTestView_V2.swift */,
+			);
+			path = DONOTChangeV2;
+			sourceTree = "<group>";
+		};
 		7C2E2B7028AC1147005CC490 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -692,6 +720,7 @@
 				7C3D20B0289DADCC0039EDA6 /* Assets.xcassets */,
 				7C3D20B2289DADCC0039EDA6 /* Preview Content */,
 				7CD23A6F28AE053200AEBB02 /* Notes */,
+				7CF0DD9D28DF88FD0002718C /* DONOTChangeReferences */,
 				7CF0DD9C28DEB2E60002718C /* ArchiveAndInactive */,
 			);
 			path = EPTATTSTestV4;
@@ -869,7 +898,6 @@
 				7CB2A01128DD0966008132DE /* EarSimulatorLandingView.swift */,
 				7CB2A01328DD0994008132DE /* EarSimulatorManual1View.swift */,
 				7CB2A01528DD09AF008132DE /* EarSimulatorManual2View.swift */,
-				7CF0DD9D28DF88FD0002718C /* DONOTChangeReferences */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -886,6 +914,11 @@
 		7C99C87028A6FF0600170AD7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				7C179FF428B8848900964AAC /* ColorModel.swift */,
+				7C3D20BC289DB1BA0039EDA6 /* AudioSessionModel.swift */,
+				7C4D019728C283AE00361559 /* HoldingCSVInputModel.swift */,
+				7C95E37028D18B5700163DCC /* GainReferenceModel.swift */,
+				7C3D20C0289DD1A60039EDA6 /* EnvDataObjectModel.swift */,
 				7C125E3228B2236E00109CE5 /* SetupDataModel.swift */,
 				7C4D017728C002F800361559 /* TestSelectionModel.swift */,
 				7C4D018728C1528300361559 /* TestSelectLinkModel.swift */,
@@ -895,17 +928,12 @@
 				7C4D017B28C0182C00361559 /* SystemSettingsModel.swift */,
 				7C4D017D28C01CC400361559 /* SurveyAssessmentModel.swift */,
 				7C24C1EF28BF0886006E77DD /* StorageManager.swift */,
-				7C179FF428B8848900964AAC /* ColorModel.swift */,
 				7C4D019028C262CD00361559 /* EHAP1DataObjectModel.swift */,
-				7C3D20C0289DD1A60039EDA6 /* EnvDataObjectModel.swift */,
 				7C4D019228C2631000361559 /* SimpleDataObjectModel.swift */,
-				7C3D20BC289DB1BA0039EDA6 /* AudioSessionModel.swift */,
 				7C4D019928C285AF00361559 /* SystemSettingsEndEPTASimpleModel.swift */,
 				7C4D019B28C28A4000361559 /* SystemSettingsInterimEHAModel.swift */,
 				7C4D019D28C28E1100361559 /* SystemSettingsEndEHAModel.swift */,
 				7C4D019528C2635900361559 /* InAppPurchaseModel.swift */,
-				7C4D019728C283AE00361559 /* HoldingCSVInputModel.swift */,
-				7C95E37028D18B5700163DCC /* GainReferenceModel.swift */,
 				7C14A7F628ACA77900601602 /* SummaryResults.json */,
 				7C94955E28AD2D0200FDEFAD /* SummaryResultsProject.json */,
 				7C411BD028AD7F40008C47C2 /* SummaryResultsCSV.csv */,
@@ -1134,10 +1162,8 @@
 		7CF0DD9D28DF88FD0002718C /* DONOTChangeReferences */ = {
 			isa = PBXGroup;
 			children = (
-				7C99A16B28C95D0800E46C65 /* DONOTChangeReferenceEHATest.swift */,
-				7C0AE96C28CCF55D00A4F652 /* DONOTChangeReferenceEPTATTSTestV4List.swift */,
-				7CCB2B2C28D4C5CD00056C49 /* DONOTChangeReferenceEHAP2TestView.swift */,
-				7C3D20AE289DADCB0039EDA6 /* EPTATTSTestV4List.swift */,
+				7C18BB2228E0F76C00068DBB /* DONOTChangeV2 */,
+				7C18BB2128E0F75400068DBB /* DONOTChangeV1 */,
 			);
 			path = DONOTChangeReferences;
 			sourceTree = "<group>";
@@ -1433,7 +1459,6 @@
 			files = (
 				7CA0EA3828C3B85A00F465BA /* ManualSetupInstructionView.swift in Sources */,
 				7C666DAA28B69299007707AC /* EPTAResultsDisplayView.swift in Sources */,
-				7C4D019328C2631000361559 /* SimpleDataObjectModel.swift in Sources */,
 				7C76D5F028B18A9B0044958B /* SimpleResultsDisplayView.swift in Sources */,
 				7C24C1E628BEC8F1006E77DD /* PostAllTestsSplashView.swift in Sources */,
 				7C4D019828C283AE00361559 /* HoldingCSVInputModel.swift in Sources */,
@@ -1484,7 +1509,6 @@
 				7C3316EF28D2515100721935 /* BetaTestingLandingView.swift in Sources */,
 				7C99A16E28C95DFA00E46C65 /* Bilateral1kHzTestView.swift in Sources */,
 				7C179FE528B805DB00964AAC /* SimpleTrialDescriptionView.swift in Sources */,
-				7C4D019128C262CD00361559 /* EHAP1DataObjectModel.swift in Sources */,
 				7C666DA028B676B1007707AC /* ExplanationView.swift in Sources */,
 				7C1F1E3328D8C2AD00B672B1 /* ResultsSplashView.swift in Sources */,
 				7C4D018A28C1724100361559 /* EHATTSTestPart1View.swift in Sources */,

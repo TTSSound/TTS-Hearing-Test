@@ -73,7 +73,6 @@ struct TestSelectionView: View {
     @State var saveFinalTestSelection: SaveFinalTestSelection? = nil
     
     var body: some View {
-        
         // Marketing and info on EPTA vs EHA Tests
         // Direction that EHA test be taken in two parts at two different times and days
         ZStack{
@@ -279,7 +278,7 @@ struct TestSelectionView: View {
 }
 
 extension TestSelectionView {
-    //MARK: -Methods Extension
+//MARK: -Methods Extension
     func singleSelection() async {
         if selectedEHA == true {
             singleEHA = 1
@@ -405,7 +404,7 @@ extension TestSelectionView {
 }
     
 extension TestSelectionView {
-    //MARK: -CSV/JSON Methods Extension
+//MARK: -CSV/JSON Methods Extension
     
     func getTestSelectionData() async {
         guard let testSelectionData = await getTestSelectionJSONData() else { return }
@@ -506,7 +505,7 @@ extension TestSelectionView {
     }
     
     
-    //MARK: -TestSelectionLinkModel Funcs
+//MARK: -TestSelectionLinkModel Funcs
     func writeEHATestLinkToCSV() async {
         print("writeEHATestSelectionLinkToCSV Start")
         let selectedEHATest = "EHA," + "EHA"

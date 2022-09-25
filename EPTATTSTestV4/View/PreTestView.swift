@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct PreTestView<Link: View>: View {
     var testing: Testing?
     var relatedLinkTesting: (Testing) -> Link

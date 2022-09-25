@@ -487,8 +487,10 @@ extension UserDataEntryContent {
             print("accountCreatedAndLoggedIn: \(accountCreatedAndLoggedIn)")
         })
     }
-    
-    //MARK: -Extenstion Methods
+}
+ 
+extension UserDataEntryContent {
+//MARK: -Extenstion Methods
     func loadWhyWeAsk() {
         whyWeAskModel.load(file: whyWeAskModel.whyDoWeAskForThisText)
     }
@@ -605,7 +607,7 @@ extension UserDataEntryContent {
 }
 
 extension UserDataEntryContent {
-//MARK: -Extentions CSV/JSON Methods
+    //MARK: -Extentions CSV/JSON Methods
     func getSetupData() async {
         guard let setupData = await self.getDemoJSONData() else { return }
         print("Json Setup Data:")
@@ -636,11 +638,11 @@ extension UserDataEntryContent {
         print("saveFinalResults: \(saveFinalSetupResults)")
         print("Json Encoded \(jsonSetupData!)")
         return jsonSetupData
-
+        
     }
     
     func saveSetupToJSON() async {
-    // !!!This saves to device directory, whish is likely what is desired
+        // !!!This saves to device directory, whish is likely what is desired
         let setupPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = setupPaths[0]
         print("DocumentsDirectory: \(documentsDirectory)")
@@ -651,13 +653,13 @@ extension UserDataEntryContent {
         do {
             let jsonSetupData = try encoder.encode(saveFinalSetupResults)
             print(jsonSetupData)
-          
+            
             try jsonSetupData.write(to: setupFilePaths)
         } catch {
             print("Error writing to JSON Setup file: \(error)")
         }
     }
-
+    
     func writeSetupResultsToCSV() async {
         print("writeSetupResultsToCSV Start")
         let stringFinalFirstName = "finalFirstName," + finalFirstName.map { String($0) }.joined(separator: ",")
@@ -724,19 +726,12 @@ extension UserDataEntryContent {
         }
     }
     
-//        import Firebase
-//        import FirebaseStorage
-//        import FirebaseFirestoreSwift
-//    @State private var inputLastName = String()
-//    let setupCSVName = "SetupResultsCSV.csv"
-//    e.g. fileName variable is setupCSVName with value of "SetupResultsCSV.csv"
     private func getDirectoryPath() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0]
         return documentsDirectory
     }
-
-// Only Use Files that have a pure string name assigned, not a name of ["String"]
+    
     private func uploadFile(fileName: String) {
         DispatchQueue.global(qos: .userInteractive).async {
             let storageRef = Storage.storage().reference()
@@ -747,7 +742,7 @@ extension UserDataEntryContent {
             if fileManager.fileExists(atPath: filePath[0]) {
                 let filePath = URL(fileURLWithPath: filePath[0])
                 let localFile = filePath
-//                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
+                //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
                 let fileRef = lastNameRef.child("\(fileName)")
                 let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
                     if error == nil && metadata == nil {
@@ -768,15 +763,8 @@ extension UserDataEntryContent {
         return documentsDirectory
     }
     
-//    let fileDisclaimerName = ["DisclaimerResults.json"]
-//    let disclaimerCSVName = "DisclaimerResultsCSV.csv"
-//    let inputDisclaimerCSVName = "InputDisclaimerResultsCSV.csv"
-//    dataFileURLDisclaimerJson
-//     dataFileURLDisclaimerCSV
-//     dataFileURLDisclaimerInputCSV
-    
     private func checkDataLinkJson() async {
-//        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
+        //        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
         let dataName = ["DisclaimerResults.json"]
         let fileManager = FileManager.default
         let dataPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: dataName)
@@ -794,7 +782,7 @@ extension UserDataEntryContent {
     }
     
     private func checkDataLinkCSV() async {
-//        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
+        //        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
         let dataName = "DisclaimerResultsCSV.csv"
         let fileManager = FileManager.default
         let dataPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataName])
@@ -812,7 +800,7 @@ extension UserDataEntryContent {
     }
     
     private func checkDataLinkInputCSV() async {
-//        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
+        //        let dataName = ["!!!INSERT FILE NAME VARIABLE!!!"]
         let dataName = "InputDisclaimerResultsCSV.csv"
         let fileManager = FileManager.default
         let dataPath = (await self.getDataLinkPath() as NSString).strings(byAppendingPaths: [dataName])
@@ -828,8 +816,11 @@ extension UserDataEntryContent {
             }
         }
     }
+}
 
+extension UserDataEntryContent {
 //MARK: -NavigationLink Method
+    
     private func link(setup: Setup) -> some View {
         EmptyView()
     }
@@ -866,4 +857,3 @@ class WhyWeAskModel: ObservableObject {
 //        EmptyView()
 //    }
 //}
-

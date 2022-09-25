@@ -77,15 +77,10 @@ class JSONParserCombineViewModel: ObservableObject {
     var parseFilePath: URL = URL(fileURLWithPath: "")
     var readJSONData = Data()
 
-
-
-
     struct JSONData: Codable {
         let title: String
         let data: String
     }
-
-
 
 
     func getLocalDirectoryPath() async -> String {

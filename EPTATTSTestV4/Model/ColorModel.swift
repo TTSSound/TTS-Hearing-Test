@@ -92,6 +92,4 @@ class ColorModel: ObservableObject {
     @Published var colorBackgroundReverseBottomTiffanyBlue = RadialGradient(gradient: Gradient(colors: [Color.black, Color(red: 0.06666666666666667, green: 0.6549019607843137, blue: 0.7333333333333333)]), center: .bottom, startRadius: -10, endRadius: 300)
     @Published var colorBackgroundTopTiffanyBlue = RadialGradient(gradient: Gradient(colors: [Color(red: 0.06666666666666667, green: 0.6549019607843137, blue: 0.7333333333333333), Color.black]), center: .top, startRadius: -10, endRadius: 300)
     @Published var colorBackgroundReverseTopTiffanyBlue = RadialGradient(gradient: Gradient(colors: [Color.black, Color(red: 0.06666666666666667, green: 0.6549019607843137, blue: 0.7333333333333333)]), center: .top, startRadius: -10, endRadius: 300)
-
-
 }

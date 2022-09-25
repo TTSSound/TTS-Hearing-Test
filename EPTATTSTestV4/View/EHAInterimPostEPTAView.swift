@@ -81,7 +81,6 @@ struct EHAInterimPostEPTAContent<Link: View>: View {
     
     @State var saveSystemSettingsInterimStartEHA: SaveSystemSettingsInterimStartEHA? = nil
     
-    
     var body: some View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
@@ -187,18 +186,6 @@ struct EHAInterimPostEPTAContent<Link: View>: View {
                             .padding()
                             .foregroundColor(.red)
                             .font(.title)
-                        
-                        //                            NavigationLink {
-                        ////                                EHATTSTestPart2View()
-                        //                                NavigationView()
-                        //                            } label: {
-                        //                                Text("Return Home To See Results and Continue")
-                        //                                    .padding()
-                        //                                    .frame(width: 300, height: 50, alignment: .center)
-                        //                                    .background(.green)
-                        //                                    .foregroundColor(.white)
-                        //                                    .cornerRadius(300)
-                        //                            }
                         Spacer()
                     }
                     .padding(.top, 80)
@@ -522,7 +509,6 @@ extension EHAInterimPostEPTAContent {
         EmptyView()
     }
 }
-
 
 //struct EHAInterimPostEPTAView_Previews: PreviewProvider {
 //    static var previews: some View {
