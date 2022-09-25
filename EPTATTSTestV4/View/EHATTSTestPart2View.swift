@@ -503,169 +503,8 @@ struct EHATTSTestPart2Content<Link: View>: View {
                 }
                 .padding(.top, 20)
                 .padding(.bottom, 10)
-                HStack {
-                    Spacer()
-                    Toggle("MonoTest", isOn: $ehaP2MonoTest)
-                        .foregroundColor(.white)
-                        .font(.caption2)
-                        .padding(.leading)
-                    Spacer()
-                    if ehaP2MonoTest == true {
-                        Toggle("Right", isOn: $ehaP2MonoRightTest)
-                            .foregroundColor(.white)
-                            .font(.caption2)
-                        Spacer()
-                        Toggle("Left", isOn: $ehaP2MonoLeftTest)
-                            .foregroundColor(.white)
-                            .font(.caption2)
-                        Spacer()
-                        Toggle("Bilat", isOn: $ehaP2MonoBilateralTest)
-                            .foregroundColor(.white)
-                            .font(.caption2)
-                            .padding(.trailing)
-                    }
-                    Spacer()
-                }
-                .padding(.top, 5)
-                .padding(.bottom, 5)
-                .padding(.leading)
+                
 
-                .onChange(of: ehaP2MonoRightTest, perform: { rightValue in
-                    if rightValue == true {
-                        // Set Pan to 1.0
-                        ehaP2localPanHoldingArray = ehaP2panRightArray
-                        ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedMono
-                        ehaP2totalCount = ehaP2MonoTotalCount
-                        ehaP2_samples = ehaP2_monoSamples
-                        ehaP2MonoRightTest = true
-                        ehaP2MonoLeftTest = false
-                        ehaP2MonoBilateralTest = false
-                    } else {
-                        // Do Nothing
-                    }
-                })
-                .onChange(of: ehaP2MonoLeftTest, perform: { leftValue in
-                    if leftValue == true {
-                        //set pan to -1.0
-                        ehaP2localPanHoldingArray = ehaP2panLeftArray
-                        ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedMono
-                        ehaP2totalCount = ehaP2MonoTotalCount
-                        ehaP2_samples = ehaP2_monoSamples
-                        ehaP2MonoRightTest = false
-                        ehaP2MonoLeftTest = true
-                        ehaP2MonoBilateralTest = false
-                    } else {
-                        //do nothing
-                    }
-                })
-                .onChange(of: ehaP2MonoBilateralTest, perform: { bilateralValue in
-                    if bilateralValue == true {
-                        ehaP2localPanHoldingArray = ehaP2panBilateralArray
-                        ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedMono
-                        ehaP2totalCount = ehaP2MonoTotalCount
-                        ehaP2_samples = ehaP2_monoSamples
-                        ehaP2MonoRightTest = false
-                        ehaP2MonoLeftTest = false
-                        ehaP2MonoBilateralTest = true
-                    } else {
-                        //do nothing
-                    }
-                })
-                
-                HStack{
-                    Spacer()
-                    VStack{
-                        Toggle("ChangeSampleType ", isOn: $changeSampleArray)
-                            .foregroundColor(.white)
-                            .font(.caption2)
-                            .padding(.leading)
-                            .padding(.trailing)
-                        Spacer()
-                        if changeSampleArray == true {
-                            HStack{
-                                Toggle("HighResStd", isOn: $highResStandard)
-                                    .foregroundColor(.white)
-                                    .font(.caption2)
-//                                    .padding()
-                                Spacer()
-                                Toggle("HighResFaded", isOn: $highResFaded)
-                                    .foregroundColor(.white)
-                                    .font(.caption2)
-//                                    .padding()
-                                Spacer()
-                                Toggle("CDDitherFaded", isOn: $cdFadedDithered)
-                                    .foregroundColor(.white)
-                                    .font(.caption2)
-//                                    .padding()
-                            }
-                            .padding(.leading)
-                            .padding(.trailing)
-                            Spacer()
-                        }
-//                        Spacer()
-                    }
-                }
-                .padding(.leading)
-                .onChange(of: changeSampleArray) { change in
-                    if change == true {
-                        sampleArraySet = false
-                    } else if change == false {
-                        sampleArraySet = true
-                    }
-                }
-                .onChange(of: highResStandard) { highResValue in
-                    sampleArraySet = false
-                    if highResValue == true && sampleArraySet == false {
-                        //remove array values
-                        ehaP2_dualSamples.removeAll()
-                        ehaP2_monoSamples.removeAll()
-                        //set other toggles to fales
-                        highResFaded = false
-                        cdFadedDithered = false
-                        sampleArraySet = true
-                        //append new highresstd values
-                        ehaP2_dualSamples.append(contentsOf: highResStdSamples)
-                        ehaP2_monoSamples.append(contentsOf: highResStdMonoSamples)
-                        print("ehaP2_samples: \(ehaP2_dualSamples)")
-                        print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
-                    }
-                    
-                }
-                .onChange(of: highResFaded) { highResFadedValue in
-                    sampleArraySet = false
-                    if highResFadedValue == true && sampleArraySet == false {
-                        //remove array values
-                        ehaP2_dualSamples.removeAll()
-                        ehaP2_monoSamples.removeAll()
-                        //set other toggles to fales
-                        highResStandard = false
-                        cdFadedDithered = false
-                        sampleArraySet = true
-                        //append new highresstd values
-                        ehaP2_dualSamples.append(contentsOf: highResFadedSamples)
-                        ehaP2_monoSamples.append(contentsOf: highResFadedMonoSamples)
-                        print("ehaP2_samples: \(ehaP2_dualSamples)")
-                        print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
-                    }
-                }
-                .onChange(of: cdFadedDithered) { cdFadedDitheredValue in
-                    sampleArraySet = false
-                    if cdFadedDitheredValue == true && sampleArraySet == false {
-                        //remove array values
-                        ehaP2_dualSamples.removeAll()
-                        ehaP2_monoSamples.removeAll()
-                        //set other toggles to fales
-                        highResStandard = false
-                        highResFaded = false
-                        sampleArraySet = true
-                        //append new highresstd values
-                        ehaP2_dualSamples.append(contentsOf: cdFadedDitheredSamples)
-                        ehaP2_monoSamples.append(contentsOf: cdFadedDitheredMonoSamples)
-                        print("ehaP2_samples: \(ehaP2_dualSamples)")
-                        print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
-                    }
-                }
-                
                 HStack{
                     Spacer()
                     Toggle("Show Data", isOn: $displayGainData)
@@ -691,7 +530,6 @@ struct EHATTSTestPart2Content<Link: View>: View {
                 .padding(.bottom, 5)
                 .padding(.leading)
                 
-                Spacer()
                 if ehaP2TestStarted == false {
                     Button {
                         Task(priority: .userInitiated) {
@@ -708,13 +546,13 @@ struct EHATTSTestPart2Content<Link: View>: View {
                         Text("Click to Start")
                             .fontWeight(.bold)
                             .padding()
-                            .frame(width: 200, height: 50, alignment: .center)
+                            .frame(width: 300, height: 50, alignment: .center)
                             .background(colorModel.tiffanyBlue)
                             .foregroundColor(.white)
                             .cornerRadius(24)
                     }
-                    .padding(.top, 10)
-                    .padding(.bottom, 10)
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
                     
                     Text("")
                         .fontWeight(.bold)
@@ -759,8 +597,8 @@ struct EHATTSTestPart2Content<Link: View>: View {
                             .cornerRadius(24)
                         
                     }
-                    .padding(.top, 10)
-                    .padding(.bottom, 10)
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
                     Button {
                         ehaP2_heardArray.removeAll()
                         ehaP2pauseRestartTestCycle()
@@ -781,7 +619,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                             .cornerRadius(24)
                     }
                     .padding(.top, 20)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 40)
                 }
                 Button {
                     ehaP2heardThread.async{ self.ehaP2localHeard = 1
@@ -795,7 +633,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                         .foregroundColor(.black)
                         .cornerRadius(24)
                 }
-                .padding(.top, 10)
+                .padding(.top, 20)
                 .padding(.bottom, 80)
             }
             .fullScreenCover(isPresented: $ehaP2showTestCompletionSheet, content: {
@@ -833,32 +671,29 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                 .padding(.bottom, 10)
                                 if showQoSThreads == true {
                                     HStack{
-                                        Spacer()
                                         Toggle("Background", isOn: $qosBackground)
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(.white)
                                             .font(.caption)
                                         Spacer()
                                         Toggle("Default", isOn: $qosDefault)
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(.white)
                                             .font(.caption)
                                         Spacer()
                                     }
-                                    .padding(.leading)
-                                    .padding(.trailing)
+                                    .padding(.leading, 10)
                                     .padding(.bottom, 10)
                                     HStack{
-                                        Spacer()
                                         Toggle("UserInteractive", isOn: $qosUserInteractive)
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(.white)
                                             .font(.caption)
                                         Spacer()
                                         Toggle("UserInitiated", isOn: $qosUserInitiated)
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(.white)
                                             .font(.caption)
                                         Spacer()
                                     }
-                                    .padding(.leading)
-                                    .padding(.trailing)
+                                    .padding(.leading, 10)
+                                    .padding(.bottom, 10)
                                 }
                             }
                             .onChange(of: qosBackground) { backgroundValue in
@@ -898,19 +733,180 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                 }
                             }
                         }
+                        
+                        if ehaP2fullTestCompleted == false {
+                            VStack{
+                                Toggle(isOn: $changeSampleArray) {
+                                    Text("ChangeSampleType")
+                                        .foregroundColor(.blue)
+                                }
+                                .padding(.leading, 10)
+                                .padding(.trailing, 10)
+                                .padding(.bottom, 10)
+                                if changeSampleArray == true {
+                                    HStack{
+                                        Toggle("92/24\nStd", isOn: $highResStandard)
+                                            .foregroundColor(.white)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("92/24\nFaded", isOn: $highResFaded)
+                                            .foregroundColor(.white)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("48/16\nFaded", isOn: $cdFadedDithered)
+                                            .foregroundColor(.white)
+                                            .font(.caption)
+                                        Spacer()
+                                    }
+                                    .padding(.leading, 10)
+                                    .padding(.bottom, 10)
+                                }
+                            }
+                            .onChange(of: changeSampleArray) { change in
+                                if change == true {
+                                    sampleArraySet = false
+                                } else if change == false {
+                                    sampleArraySet = true
+                                }
+                            }
+                            .onChange(of: highResStandard) { highResValue in
+                                sampleArraySet = false
+                                if highResValue == true && sampleArraySet == false {
+                                    //remove array values
+                                    ehaP2_dualSamples.removeAll()
+                                    ehaP2_monoSamples.removeAll()
+                                    //set other toggles to fales
+                                    highResFaded = false
+                                    cdFadedDithered = false
+                                    sampleArraySet = true
+                                    //append new highresstd values
+                                    ehaP2_dualSamples.append(contentsOf: highResStdSamples)
+                                    ehaP2_monoSamples.append(contentsOf: highResStdMonoSamples)
+                                    print("ehaP2_samples: \(ehaP2_dualSamples)")
+                                    print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
+                                }
+                            }
+                            .onChange(of: highResFaded) { highResFadedValue in
+                                sampleArraySet = false
+                                if highResFadedValue == true && sampleArraySet == false {
+                                    //remove array values
+                                    ehaP2_dualSamples.removeAll()
+                                    ehaP2_monoSamples.removeAll()
+                                    //set other toggles to fales
+                                    highResStandard = false
+                                    cdFadedDithered = false
+                                    sampleArraySet = true
+                                    //append new highresstd values
+                                    ehaP2_dualSamples.append(contentsOf: highResFadedSamples)
+                                    ehaP2_monoSamples.append(contentsOf: highResFadedMonoSamples)
+                                    print("ehaP2_samples: \(ehaP2_dualSamples)")
+                                    print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
+                                }
+                            }
+                            .onChange(of: cdFadedDithered) { cdFadedDitheredValue in
+                                sampleArraySet = false
+                                if cdFadedDitheredValue == true && sampleArraySet == false {
+                                    //remove array values
+                                    ehaP2_dualSamples.removeAll()
+                                    ehaP2_monoSamples.removeAll()
+                                    //set other toggles to fales
+                                    highResStandard = false
+                                    highResFaded = false
+                                    sampleArraySet = true
+                                    //append new highresstd values
+                                    ehaP2_dualSamples.append(contentsOf: cdFadedDitheredSamples)
+                                    ehaP2_monoSamples.append(contentsOf: cdFadedDitheredMonoSamples)
+                                    print("ehaP2_samples: \(ehaP2_dualSamples)")
+                                    print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
+                                }
+                            }
+                        }
 
-                        Spacer()
+                        if ehaP2fullTestCompleted == false {
+                            VStack(alignment: .leading, spacing: 10){
+                                Toggle(isOn: $ehaP2MonoTest) {
+                                    Text("SetMonoTest")
+                                        .foregroundColor(.blue)
+                                }
+                                .padding(.leading, 10)
+                                .padding(.trailing, 10)
+                                .padding(.bottom, 10)
+                                if ehaP2MonoTest == true {
+                                    HStack{
+                                        Toggle("Right", isOn: $ehaP2MonoRightTest)
+                                            .foregroundColor(.white)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("Left", isOn: $ehaP2MonoLeftTest)
+                                            .foregroundColor(.white)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("Bilat", isOn: $ehaP2MonoBilateralTest)
+                                            .foregroundColor(.white)
+                                            .font(.caption)
+                                        Spacer()
+                                    }
+                                    .padding(.leading, 10)
+                                    .padding(.bottom, 10)
+                                }
+                            }
+                            .onChange(of: ehaP2MonoRightTest) { rightValue in
+                                if rightValue == true {
+                                    // Set Pan to 1.0
+                                    ehaP2localPanHoldingArray = ehaP2panRightArray
+                                    ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedMono
+                                    ehaP2totalCount = ehaP2MonoTotalCount
+                                    ehaP2_samples = ehaP2_monoSamples
+                                    ehaP2MonoRightTest = true
+                                    ehaP2MonoLeftTest = false
+                                    ehaP2MonoBilateralTest = false
+                                } else {
+                                    // Do Nothing
+                                }
+                            }
+                            .onChange(of: ehaP2MonoLeftTest) { leftValue in
+                                if leftValue == true {
+                                    //set pan to -1.0
+                                    ehaP2localPanHoldingArray = ehaP2panLeftArray
+                                    ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedMono
+                                    ehaP2totalCount = ehaP2MonoTotalCount
+                                    ehaP2_samples = ehaP2_monoSamples
+                                    ehaP2MonoRightTest = false
+                                    ehaP2MonoLeftTest = true
+                                    ehaP2MonoBilateralTest = false
+                                } else {
+                                    //do nothing
+                                }
+                            }
+                            .onChange(of: ehaP2MonoBilateralTest) { bilateralValue in
+                                if bilateralValue == true {
+                                    ehaP2localPanHoldingArray = ehaP2panBilateralArray
+                                    ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedMono
+                                    ehaP2totalCount = ehaP2MonoTotalCount
+                                    ehaP2_samples = ehaP2_monoSamples
+                                    ehaP2MonoRightTest = false
+                                    ehaP2MonoLeftTest = false
+                                    ehaP2MonoBilateralTest = true
+                                } else {
+                                    //do nothing
+                                }
+                            }
+                        }
+
                         if ehaP2fullTestCompleted == false && ehaP2TestingPhases < 1 {
-                            Spacer()
-                            Text("You are now going to take the full extended hearing assessment. The test is completed in TEN(10) phases and will take about 25 minutes to complete.")
-                                .foregroundColor(.white)
-                                .font(.title)
-                                .padding()
-                            Spacer()
-                            Text("Make sure to take a break after each test phase, as you must concentrate deeply while actively testing, which may become tiring without breaks")
-                                .foregroundColor(.white)
-                                .font(.title2)
-                                .padding()
+                            ScrollView {
+                                Text("You are now going to take the full extended hearing assessment. The test is completed in TEN(10) phases and will take about 25 minutes to complete.")
+                                    .foregroundColor(.white)
+                                    .font(.title2)
+                                    .padding(.bottom, 10)
+                                Text("Make sure to take a break after each test phase, as you must concentrate deeply while actively testing, which may become tiring without breaks")
+                                    .foregroundColor(.white)
+                                    .font(.title3)
+                                    .padding(.bottom, 10)
+                            }
+                            .frame(width: nil, height: 220, alignment: .leading)
+                            .padding()
+                            .cornerRadius(24)
                             Spacer()
                             HStack{
                                 Spacer()
@@ -925,7 +921,10 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                     }
                                 Spacer()
                             }
+                            .padding(.top, 20)
+                            .padding(.bottom, 40)
                             Spacer()
+                            
                         } else if ehaP2fullTestCompleted == false && ehaP2TestingPhases >= 1 {
                             Spacer()
                             Text("Take a moment for a break before exiting to continue with the next test segment")
@@ -995,7 +994,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
         }
         .onAppear() {
             Task(priority: .userInitiated) {
-                if gainEHAP2PhonIsSet == false {
+                if gainEHAP2PhonIsSet == false && changeSampleArray == false {
                     await checkGainEHAP2_2_5DataLink()
                     await checkGainEHAP2_4DataLink()
                     await checkGainEHAP2_5DataLink()
@@ -1059,8 +1058,10 @@ struct EHATTSTestPart2Content<Link: View>: View {
             ehaP2localReversal = 0
             ehaP2TestStarted = true
             if ehaP2playingValue == 1{
-                print("ehaP2localTestCount: \(ehaP2localTestCount)")
-                
+                print("LocalTestCount: \(ehaP2localTestCount)")
+                print("ActiveFrequency: \(ehaP2activeFrequency)")
+                print("Gain: \(ehaP2_testGain)")
+                print("Pan: \(ehaP2localPan)")
                 
                 if qualityOfService == 1 {
                     print("QOS Thread Background")
@@ -1301,7 +1302,7 @@ extension EHATTSTestPart2Content {
         ehaP2localReversalEnd = 0
         ehaP2_index = ehaP2_index + 1
 //        print(ehaP2_eptaSamplesCountArray[ehaP2_index]) /// This is causing the issue
-        print("ehaP2_index: \(ehaP2_index)")
+//        print("ehaP2_index: \(ehaP2_index)")
         ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]
         ehaP2userPausedTest = false
         ehaP2testIsPlaying = true
@@ -1340,8 +1341,8 @@ extension EHATTSTestPart2Content {
     func ehaP2setPan() {
         ehaP2localPan = ehaP2localPanHoldingArray[ehaP2_index]
 //        ehaP2localPan = ehaP2panArray[ehaP2_index]
-        print("Pan: \(ehaP2localPan)")
-        print("Pan Index \(ehaP2_index)")
+//        print("Pan: \(ehaP2localPan)")
+//        print("Pan Index \(ehaP2_index)")
     }
      
     func ehaP2loadAndTestPresentation(sample: String, gain: Float, pan: Float) {
@@ -1359,7 +1360,7 @@ extension EHATTSTestPart2Content {
    
    func ehaP2stop() {
      do{
-         let ehaP2urlSample = Bundle.main.path(forResource: "Sample0", ofType: ".wav")
+         let ehaP2urlSample = Bundle.main.path(forResource: ehaP2activeFrequency, ofType: ".wav")
          guard let ehaP2urlSample = ehaP2urlSample else { return print(ehaP2SampleErrors.ehaP2notFound) }
          ehaP2testPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: ehaP2urlSample))
          guard let ehaP2testPlayer = ehaP2testPlayer else { return }
@@ -1369,7 +1370,7 @@ extension EHATTSTestPart2Content {
    
    func playTesting() async {
        do{
-           let ehaP2urlSample = Bundle.main.path(forResource: "Sample0", ofType: ".wav")
+           let ehaP2urlSample = Bundle.main.path(forResource: ehaP2activeFrequency, ofType: ".wav")
            guard let ehaP2urlSample = ehaP2urlSample else {
                return print(ehaP2SampleErrors.ehaP2notFound) }
            ehaP2testPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: ehaP2urlSample))
@@ -1425,8 +1426,7 @@ extension EHATTSTestPart2Content {
         } else if ehaP2firstHeardIsTrue == true {
             ehaP2secondHeardResponseIndex = ehaP2localTestCount
             ehaP2secondHeardIsTrue = true
-            print("Second Heard Is True Logged!")
-
+//            print("Second Heard Is True Logged!")
         } else {
             print("Error in localResponseTrackingLogic")
         }
@@ -1561,9 +1561,9 @@ extension EHATTSTestPart2Content {
         if ehaP2idxHA - ehaP2idxReversalHeardCount == 0 {
             print("Success, Arrays match")
         } else if ehaP2idxHA - ehaP2idxReversalHeardCount < 0 && ehaP2idxHA - ehaP2idxReversalHeardCount > 0{
-            fatalError("Fatal Error in HeardArrayCount - ReversalHeardArrayCount")
+            print("Fatal Error in HeardArrayCount - ReversalHeardArrayCount")
         } else {
-            fatalError("hit else in check reversal arrays")
+            print("hit else in check reversal arrays")
         }
     }
     
@@ -1687,15 +1687,15 @@ extension EHATTSTestPart2Content {
     }
     
     func ehaP2reversalComplexAction() async {
-        print("!! In reversalComplexAction")
-        print("ehaP2localSeriesNoResponses: \(ehaP2localSeriesNoResponses)")
+//        print("!! In reversalComplexAction")
+//        print("ehaP2localSeriesNoResponses: \(ehaP2localSeriesNoResponses)")
         if ehaP2idxReversalHeardCount <= 1 && ehaP2idxHA <= 1 {
-            print("!!!In first if section for reversal Action")
+//            print("!!!In first if section for reversal Action")
             await ehaP2reversalAction()
         }  else if ehaP2idxReversalHeardCount == 2 {
-            print("!!!In first else if section")
+//            print("!!!In first else if section")
             if ehaP2idxReversalHeardCount == 2 && ehaP2secondHeardIsTrue == true {
-                print("!!! In first sub if of else if check too high")
+//                print("!!! In first sub if of else if check too high")
                 await ehaP2startTooHighCheck()
                 //            } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false {
                 //                print("!!! In first sub else if heard count == 2. reversal action")
@@ -1704,10 +1704,10 @@ extension EHATTSTestPart2Content {
                 // Changes HERE From EHAP1
                 // !!!!
             } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false && ehaP2localSeriesNoResponses < 2 {
-                print("!!! In first sub else if heard count == 2. reversal action")
+//                print("!!! In first sub else if heard count == 2. reversal action")
                 await ehaP2reversalAction()
             } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false && ehaP2localSeriesNoResponses == 2 {
-                print("!!!in second sub else if heard count ==2 local series no response == 2 reversal of four")
+//                print("!!!in second sub else if heard count ==2 local series no response == 2 reversal of four")
                 await ehaP2reversalOfFour()
                 // !!! Changes Above from EHAP1
                 
@@ -1718,19 +1718,19 @@ extension EHATTSTestPart2Content {
                 print("!!Fatal Error in reversalHeard and Heard Array Counts")
             }
         } else if ehaP2idxReversalHeardCount >= 3 {
-            print("reversal section >= 3")
+//            print("reversal section >= 3")
             if ehaP2secondHeardResponseIndex - ehaP2firstHeardResponseIndex == 1 {
-                print("reversal section >= 3")
-                print("In first if section sHRI - fHRI == 1")
-                print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
+//                print("reversal section >= 3")
+//                print("In first if section sHRI - fHRI == 1")
+//                print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
             } else if ehaP2localSeriesNoResponses >= 3 {
-                print("!!! In first else if localSeriesNoResponse >= 3")
+//                print("!!! In first else if localSeriesNoResponse >= 3")
                 await ehaP2reversalOfTen()
             } else if ehaP2localSeriesNoResponses == 2 {
-                print("!!! In second else if localSeriesNoResponse == 2")
+//                print("!!! In second else if localSeriesNoResponse == 2")
                 await ehaP2reversalOfFour()
             } else {
-                print("!!!In else section reversal action")
+//                print("!!!In else section reversal action")
                 await ehaP2reversalAction()
             }
         } else {
@@ -1744,8 +1744,8 @@ extension EHATTSTestPart2Content {
     
     func ehaP2check2PositiveSeriesReversals() async {
         if ehaP2_reversalHeard[ehaP2idxHA-2] == 1 && ehaP2_reversalHeard[ehaP2idxHA-1] == 1 {
-            print("reversal - check2PositiveSeriesReversals")
-            print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
+//            print("reversal - check2PositiveSeriesReversals")
+//            print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
         }
     }
     
@@ -1776,9 +1776,9 @@ extension EHATTSTestPart2Content {
     }
     
     func ehaP2reversalsCompleteLogging() async {
-        print("in reversalcompletelogging")
+//        print("in reversalcompletelogging")
         if ehaP2secondHeardIsTrue == true {
-            print("in reversal complete logging first if")
+//            print("in reversal complete logging first if")
             self.ehaP2localReversalEnd = 1
             self.ehaP2localMarkNewTestCycle = 1
             self.ehaP2firstGain = ehaP2_reversalGain[ehaP2firstHeardResponseIndex-1]
@@ -1792,36 +1792,36 @@ extension EHATTSTestPart2Content {
             let ehaP2delta = ehaP2firstGain - ehaP2secondGain
             let ehaP2avg = (ehaP2firstGain + ehaP2secondGain)/2
             if ehaP2delta == 0 {
-                print("in second if")
+//                print("in second if")
                 ehaP2_averageGain = ehaP2secondGain
                 print("average Gain: \(ehaP2_averageGain)")
             } else if ehaP2delta >= 0.04 {
-                print("in first else if")
+//                print("in first else if")
                 ehaP2_averageGain = ehaP2secondGain
-                print("FirstGain: \(ehaP2firstGain)")
-                print("SecondGain: \(ehaP2secondGain)")
-                print("average Gain: \(ehaP2_averageGain)")
+//                print("FirstGain: \(ehaP2firstGain)")
+//                print("SecondGain: \(ehaP2secondGain)")
+//                print("average Gain: \(ehaP2_averageGain)")
             } else if ehaP2delta <= -0.04 {
-                print("in second else if")
+//                print("in second else if")
                 ehaP2_averageGain = ehaP2firstGain
-                print("FirstGain: \(ehaP2firstGain)")
-                print("SecondGain: \(ehaP2secondGain)")
-                print("average Gain: \(ehaP2_averageGain)")
+//                print("FirstGain: \(ehaP2firstGain)")
+//                print("SecondGain: \(ehaP2secondGain)")
+//                print("average Gain: \(ehaP2_averageGain)")
             } else if ehaP2delta < 0.04 && ehaP2delta > -0.04 {
-                print("in third else if")
+//                print("in third else if")
                 ehaP2_averageGain = ehaP2avg
-                print("FirstGain: \(ehaP2firstGain)")
-                print("SecondGain: \(ehaP2secondGain)")
-                print("average Gain: \(ehaP2_averageGain)")
+//                print("FirstGain: \(ehaP2firstGain)")
+//                print("SecondGain: \(ehaP2secondGain)")
+//                print("average Gain: \(ehaP2_averageGain)")
             } else {
-                print("in final else of sub if")
+//                print("in final else of sub if")
                 ehaP2_averageGain = ehaP2avg
-                print("FirstGain: \(ehaP2firstGain)")
-                print("SecondGain: \(ehaP2secondGain)")
-                print("average Gain: \(ehaP2_averageGain)")
+//                print("FirstGain: \(ehaP2firstGain)")
+//                print("SecondGain: \(ehaP2secondGain)")
+//                print("average Gain: \(ehaP2_averageGain)")
             }
         } else if ehaP2secondHeardIsTrue == false {
-            print("Contine, second hear is true = false")
+//            print("Contine, second hear is true = false")
         } else {
             print("Critical error in reversalsCompletLogging Logic")
         }
@@ -2939,7 +2939,7 @@ extension EHATTSTestPart2Content {
         ehaP2userPausedTest = false
         ehaP2playingStringColorIndex = 2
         //        envDataObjectModel_eptaSamplesCount = envDataObjectModel_eptaSamplesCount + 8
-        print(ehaP2_eptaSamplesCountArray[ehaP2_index])
+//        print(ehaP2_eptaSamplesCountArray[ehaP2_index])
         ehaP2localPlaying = 1
     }
     
@@ -3146,7 +3146,7 @@ extension EHATTSTestPart2Content {
         let ehaP2paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let ehaP2DocumentsDirectory = ehaP2paths[0]
         let ehaP2FilePaths = ehaP2DocumentsDirectory.appendingPathComponent(fileehaP2Name)
-        print(ehaP2FilePaths)
+//        print(ehaP2FilePaths)
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         do {
@@ -3392,7 +3392,7 @@ extension EHATTSTestPart2Content {
              let csvEHAP2InputLeftSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP2InputLeftSummaryDocumentsDirectory = csvEHAP2InputLeftSummaryPath
              let csvEHAP2InputLeftSummaryFilePath = csvEHAP2InputLeftSummaryDocumentsDirectory.appendingPathComponent(inputEHAP2LeftSummaryCSVName)
-             print(csvEHAP2InputLeftSummaryFilePath)
+//             print(csvEHAP2InputLeftSummaryFilePath)
              let writer = try CSVWriter(fileURL: csvEHAP2InputLeftSummaryFilePath, append: false)
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])

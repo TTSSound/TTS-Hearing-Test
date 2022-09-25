@@ -316,7 +316,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
         ZStack{
             colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
             VStack {
-                Spacer()
+//                Spacer()
                 HStack{
                     if ehaP1fullTestCompleted == false {
                         Text("EHA Part 1 / EPTA Test")
@@ -340,89 +340,10 @@ struct EHATTSTestPart1Content<Link: View>: View {
                 .navigationDestination(isPresented: $ehaP1fullTestCompleted) {
                     PostAllTestsSplashView(testing: testing, relatedLinkTesting: linkTesting)
                 }
-                HStack{
-                    Spacer()
-                    VStack{
-                        Toggle("ChangeSampleType ", isOn: $changeSampleArray)
-                            .foregroundColor(.white)
-                            .font(.caption)
-                            .padding(.leading)
-                            .padding(.trailing)
-                        Spacer()
-                        if changeSampleArray == true {
-                            HStack{
-                                Toggle("High Res Std", isOn: $highResStandard)
-                                    .foregroundColor(.white)
-                                    .font(.caption)
-                                    .padding()
-                                Spacer()
-                                Toggle("High Res Faded", isOn: $highResFaded)
-                                    .foregroundColor(.white)
-                                    .font(.caption)
-                                    .padding()
-                                Spacer()
-                                Toggle("CD Dither Faded", isOn: $cdFadedDithered)
-                                    .foregroundColor(.white)
-                                    .font(.caption)
-                                    .padding()
-                            }
-                            Spacer()
-                        }
-                        Spacer()
-                    }
-                }
-                .onChange(of: changeSampleArray) { change in
-                    if change == true {
-                        sampleArraySet = false
-                    } else if change == false {
-                        sampleArraySet = true
-                    }
-                }
-                .onChange(of: highResStandard) { highResValue in
-                    sampleArraySet = false
-                    if highResValue == true && sampleArraySet == false {
-                        //remove array values
-                        envDataObjectModel_samples.removeAll()
-                        //set other toggles to fales
-                        highResFaded = false
-                        cdFadedDithered = false
-                        sampleArraySet = true
-                        //append new highresstd values
-                        envDataObjectModel_samples.append(contentsOf: highResStdSamples)
-                        print("training_samples: \(envDataObjectModel_samples)")
-                    }
-
-                }
-                .onChange(of: highResFaded) { highResFadedValue in
-                    sampleArraySet = false
-                    if highResFadedValue == true && sampleArraySet == false {
-                        //remove array values
-                        envDataObjectModel_samples.removeAll()
-                        //set other toggles to fales
-                        highResStandard = false
-                        cdFadedDithered = false
-                        sampleArraySet = true
-                        //append new highresstd values
-                        envDataObjectModel_samples.append(contentsOf: highResFadedSamples)
-                        print("training_samples: \(envDataObjectModel_samples)")
-                    }
-                }
-                .onChange(of: cdFadedDithered) { cdFadedDitheredValue in
-                    sampleArraySet = false
-                    if cdFadedDitheredValue == true && sampleArraySet == false {
-                        //remove array values
-                        envDataObjectModel_samples.removeAll()
-                        //set other toggles to fales
-                        highResStandard = false
-                        highResFaded = false
-                        sampleArraySet = true
-                        //append new highresstd values
-                        envDataObjectModel_samples.append(contentsOf: cdFadedDitheredSamples)
-                        print("training_samples: \(envDataObjectModel_samples)")
-                    }
-                }
+            
+               
                 
-                Spacer()
+//                Spacer()
                 if ehaP1TestStarted == false {
                     Button {
                         Task(priority: .userInitiated) {
@@ -436,7 +357,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
                         Text("Click to Start")
                             .fontWeight(.bold)
                             .padding()
-                            .frame(width: 200, height: 50, alignment: .center)
+                            .frame(width: 300, height: 50, alignment: .center)
                             .background(colorModel.tiffanyBlue)
                             .foregroundColor(.white)
                             .cornerRadius(24)
@@ -566,32 +487,29 @@ struct EHATTSTestPart1Content<Link: View>: View {
                                 .padding(.bottom, 10)
                                 if showQoSThreads == true {
                                     HStack{
-                                        Spacer()
                                         Toggle("Background", isOn: $qosBackground)
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(.white)
                                             .font(.caption)
                                         Spacer()
                                         Toggle("Default", isOn: $qosDefault)
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(.white)
                                             .font(.caption)
                                         Spacer()
                                     }
-                                    .padding(.leading)
-                                    .padding(.trailing)
+                                    .padding(.leading, 10)
                                     .padding(.bottom, 10)
                                     HStack{
-                                        Spacer()
                                         Toggle("UserInteractive", isOn: $qosUserInteractive)
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(.white)
                                             .font(.caption)
                                         Spacer()
                                         Toggle("UserInitiated", isOn: $qosUserInitiated)
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(.white)
                                             .font(.caption)
                                         Spacer()
                                     }
-                                    .padding(.leading)
-                                    .padding(.trailing)
+                                    .padding(.leading, 10)
+                                    .padding(.bottom, 10)
                                 }
                             }
                             .onChange(of: qosBackground) { backgroundValue in
@@ -631,7 +549,86 @@ struct EHATTSTestPart1Content<Link: View>: View {
                                 }
                             }
                         }
-                            
+                        
+                        if ehaP1fullTestCompleted == false {
+                            VStack{
+                                Toggle(isOn: $changeSampleArray) {
+                                    Text("ChangeSampleType")
+                                        .foregroundColor(.blue)
+                                }
+                                .padding(.leading, 10)
+                                .padding(.trailing, 10)
+                                .padding(.bottom, 10)
+                                if changeSampleArray == true {
+                                    HStack{
+                                        Toggle("92/24\nStd", isOn: $highResStandard)
+                                            .foregroundColor(.white)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("92/24\nFaded", isOn: $highResFaded)
+                                            .foregroundColor(.white)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("48/16\nFaded", isOn: $cdFadedDithered)
+                                            .foregroundColor(.white)
+                                            .font(.caption)
+                                        Spacer()
+                                    }
+                                    .padding(.leading, 10)
+                                    .padding(.bottom, 10)
+                                }
+                            }
+                            .onChange(of: changeSampleArray) { change in
+                                if change == true {
+                                    sampleArraySet = false
+                                } else if change == false {
+                                    sampleArraySet = true
+                                }
+                            }
+                            .onChange(of: highResStandard) { highResValue in
+                                sampleArraySet = false
+                                if highResValue == true && sampleArraySet == false {
+                                    //remove array values
+                                    envDataObjectModel_samples.removeAll()
+                                    //set other toggles to fales
+                                    highResFaded = false
+                                    cdFadedDithered = false
+                                    sampleArraySet = true
+                                    //append new highresstd values
+                                    envDataObjectModel_samples.append(contentsOf: highResStdSamples)
+                                    print("EHAP1_samples: \(envDataObjectModel_samples)")
+                                }
+                                
+                            }
+                            .onChange(of: highResFaded) { highResFadedValue in
+                                sampleArraySet = false
+                                if highResFadedValue == true && sampleArraySet == false {
+                                    //remove array values
+                                    envDataObjectModel_samples.removeAll()
+                                    //set other toggles to fales
+                                    highResStandard = false
+                                    cdFadedDithered = false
+                                    sampleArraySet = true
+                                    //append new highresstd values
+                                    envDataObjectModel_samples.append(contentsOf: highResFadedSamples)
+                                    print("EHAP!_samples: \(envDataObjectModel_samples)")
+                                }
+                            }
+                            .onChange(of: cdFadedDithered) { cdFadedDitheredValue in
+                                sampleArraySet = false
+                                if cdFadedDitheredValue == true && sampleArraySet == false {
+                                    //remove array values
+                                    envDataObjectModel_samples.removeAll()
+                                    //set other toggles to fales
+                                    highResStandard = false
+                                    highResFaded = false
+                                    sampleArraySet = true
+                                    //append new highresstd values
+                                    envDataObjectModel_samples.append(contentsOf: cdFadedDitheredSamples)
+                                    print("EHAP1_samples: \(envDataObjectModel_samples)")
+                                }
+                            }
+                        }
                             
                         Spacer()
                         if ehaP1fullTestCompleted == false {

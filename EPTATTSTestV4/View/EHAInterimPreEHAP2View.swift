@@ -173,12 +173,17 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
                                 }
                             }
                         } label: {
-                            Text("Submit Results")
-                                .padding()
-                                .frame(width: 200, height: 50, alignment: .center)
-                                .background(.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(300)
+                            HStack {
+                                Spacer()
+                                Text("Submit Results")
+                                Spacer()
+                                Image(systemName: "arrow.up.doc.fill")
+                                Spacer()
+                            }
+                            .frame(width: 300, height: 50, alignment: .center)
+                            .background(.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(24)
                         }
                         Spacer()
                     }
@@ -190,12 +195,17 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
                         NavigationLink {
                             EHATTSTestPart2View(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
                         } label: {
-                            Text("Continue")
-                                .padding()
-                                .frame(width: 200, height: 50, alignment: .center)
-                                .background(.green)
-                                .foregroundColor(.white)
-                                .cornerRadius(300)
+                            HStack {
+                                Spacer()
+                                Text("Now Let's Continue!")
+                                Spacer()
+                                Image(systemName: "arrowshape.bounce.right")
+                                Spacer()
+                            }
+                            .frame(width: 300, height: 50, alignment: .center)
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(24)
                         }
                         Spacer()
                     }

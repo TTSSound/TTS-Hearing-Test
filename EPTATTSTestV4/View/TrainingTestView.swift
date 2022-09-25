@@ -231,87 +231,8 @@ struct TrainingTestContent<Link: View>: View {
                     }
                     
                 }
-                HStack{
-                    Spacer()
-                    VStack{
-                        Toggle("ChangeSampleType ", isOn: $changeSampleArray)
-                            .foregroundColor(.white)
-                            .font(.caption)
-                            .padding(.leading)
-                            .padding(.trailing)
-                        Spacer()
-                        if changeSampleArray == true {
-                            HStack{
-                                Toggle("High Res Std", isOn: $highResStandard)
-                                    .foregroundColor(.white)
-                                    .font(.caption)
-                                    .padding()
-                                Spacer()
-                                Toggle("High Res Faded", isOn: $highResFaded)
-                                    .foregroundColor(.white)
-                                    .font(.caption)
-                                    .padding()
-                                Spacer()
-                                Toggle("CD Dither Faded", isOn: $cdFadedDithered)
-                                    .foregroundColor(.white)
-                                    .font(.caption)
-                                    .padding()
-                            }
-                            Spacer()
-                        }
-                        Spacer()
-                    }
-                }
-                .onChange(of: changeSampleArray) { change in
-                    if change == true {
-                        sampleArraySet = false
-                    } else if change == false {
-                        sampleArraySet = true
-                    }
-                }
-                .onChange(of: highResStandard) { highResValue in
-                    sampleArraySet = false
-                    if highResValue == true && sampleArraySet == false {
-                        //remove array values
-                        training_samples.removeAll()
-                        //set other toggles to fales
-                        highResFaded = false
-                        cdFadedDithered = false
-                        sampleArraySet = true
-                        //append new highresstd values
-                        training_samples.append(contentsOf: highResStdSamples)
-                        print("training_samples: \(training_samples)")
-                    }
-
-                }
-                .onChange(of: highResFaded) { highResFadedValue in
-                    sampleArraySet = false
-                    if highResFadedValue == true && sampleArraySet == false {
-                        //remove array values
-                        training_samples.removeAll()
-                        //set other toggles to fales
-                        highResStandard = false
-                        cdFadedDithered = false
-                        sampleArraySet = true
-                        //append new highresstd values
-                        training_samples.append(contentsOf: highResFadedSamples)
-                        print("training_samples: \(training_samples)")
-                    }
-                }
-                .onChange(of: cdFadedDithered) { cdFadedDitheredValue in
-                    sampleArraySet = false
-                    if cdFadedDitheredValue == true && sampleArraySet == false {
-                        //remove array values
-                        training_samples.removeAll()
-                        //set other toggles to fales
-                        highResStandard = false
-                        highResFaded = false
-                        sampleArraySet = true
-                        //append new highresstd values
-                        training_samples.append(contentsOf: cdFadedDitheredSamples)
-                        print("training_samples: \(training_samples)")
-                    }
-                }
+        
+                
                 
                 Spacer()
                 if trainingTestStarted == false {
@@ -453,32 +374,29 @@ struct TrainingTestContent<Link: View>: View {
                                 .padding(.bottom, 10)
                                 if showQoSThreads == true {
                                     HStack{
-                                        Spacer()
                                         Toggle("Background", isOn: $qosBackground)
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(.white)
                                             .font(.caption)
                                         Spacer()
                                         Toggle("Default", isOn: $qosDefault)
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(.white)
                                             .font(.caption)
                                         Spacer()
                                     }
-                                    .padding(.leading)
-                                    .padding(.trailing)
+                                    .padding(.leading, 10)
                                     .padding(.bottom, 10)
                                     HStack{
-                                        Spacer()
                                         Toggle("UserInteractive", isOn: $qosUserInteractive)
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(.white)
                                             .font(.caption)
                                         Spacer()
                                         Toggle("UserInitiated", isOn: $qosUserInitiated)
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(.white)
                                             .font(.caption)
                                         Spacer()
                                     }
-                                    .padding(.leading)
-                                    .padding(.trailing)
+                                    .padding(.leading, 10)
+                                    .padding(.bottom, 10)
                                 }
                             }
                             .onChange(of: qosBackground) { backgroundValue in
@@ -515,6 +433,86 @@ struct TrainingTestContent<Link: View>: View {
                                     qosUserInteractive = false
                                     qosUserInitiated = true
                                     qualityOfService = 4
+                                }
+                            }
+                        }
+                        
+                        if trainingfullTestCompleted == false {
+                            VStack{
+                                Toggle(isOn: $changeSampleArray) {
+                                    Text("ChangeSampleType")
+                                        .foregroundColor(.blue)
+                                }
+                                .padding(.leading, 10)
+                                .padding(.trailing, 10)
+                                .padding(.bottom, 10)
+                                if changeSampleArray == true {
+                                    HStack{
+                                        Toggle("92/24\nStd", isOn: $highResStandard)
+                                            .foregroundColor(.white)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("92/24\nFaded", isOn: $highResFaded)
+                                            .foregroundColor(.white)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("48/16\nFaded", isOn: $cdFadedDithered)
+                                            .foregroundColor(.white)
+                                            .font(.caption)
+                                        Spacer()
+                                    }
+                                    .padding(.leading, 10)
+                                    .padding(.bottom, 10)
+                                }
+                            }
+                            .onChange(of: changeSampleArray) { change in
+                                if change == true {
+                                    sampleArraySet = false
+                                } else if change == false {
+                                    sampleArraySet = true
+                                }
+                            }
+                            .onChange(of: highResStandard) { highResValue in
+                                sampleArraySet = false
+                                if highResValue == true && sampleArraySet == false {
+                                    //remove array values
+                                    training_samples.removeAll()
+                                    //set other toggles to fales
+                                    highResFaded = false
+                                    cdFadedDithered = false
+                                    sampleArraySet = true
+                                    //append new highresstd values
+                                    training_samples.append(contentsOf: highResStdSamples)
+                                    print("training_samples: \(training_samples)")
+                                }
+
+                            }
+                            .onChange(of: highResFaded) { highResFadedValue in
+                                sampleArraySet = false
+                                if highResFadedValue == true && sampleArraySet == false {
+                                    //remove array values
+                                    training_samples.removeAll()
+                                    //set other toggles to fales
+                                    highResStandard = false
+                                    cdFadedDithered = false
+                                    sampleArraySet = true
+                                    //append new highresstd values
+                                    training_samples.append(contentsOf: highResFadedSamples)
+                                    print("training_samples: \(training_samples)")
+                                }
+                            }
+                            .onChange(of: cdFadedDithered) { cdFadedDitheredValue in
+                                sampleArraySet = false
+                                if cdFadedDitheredValue == true && sampleArraySet == false {
+                                    //remove array values
+                                    training_samples.removeAll()
+                                    //set other toggles to fales
+                                    highResStandard = false
+                                    highResFaded = false
+                                    sampleArraySet = true
+                                    //append new highresstd values
+                                    training_samples.append(contentsOf: cdFadedDitheredSamples)
+                                    print("training_samples: \(training_samples)")
                                 }
                             }
                         }
