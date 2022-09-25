@@ -13,26 +13,34 @@ struct SiriSetupView: View {
     var body: some View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
-            VStack(spacing: 10) {
+            VStack(alignment: .leading, spacing: 10) {
                 Text("To Ensure Your Device is Setup Properly, Three Steps Need To Be Completed.\n\nAfter completing step 3, access the final 4th setp to test your device and confirm it is setup properly. If there is an issue, we'll notify you.")
                     .font(.title)
                     .fontWeight(.heavy)
                     .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
                     .padding(.horizontal)
+                    .padding(.top, 40)
                 Spacer()
-                NavigationLink {
-                    ManualSetupView()
-                } label: {
-                    VStack{
-                        Text("If you would prefer to complete all steps manually, instructions on how to do this may be accessed here.")
-                            .padding(.bottom, 20)
+                HStack{
+                    Spacer()
+                    Text("If you would prefer to complete all steps manually, press below.")
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+                .padding(.bottom, 20)
+                HStack{
+                    Spacer()
+                    NavigationLink {
+                        ManualSetupView()
+                    } label: {
                         Text("Manual Device Setup Instructions")
                             .frame(width: 300, height: 50, alignment: .center)
                             .foregroundColor(.white)
-                            .backgroundStyle(.blue)
+                            .background(.blue)
+                            .opacity(0.6)
                             .cornerRadius(24)
                     }
+                    Spacer()
                 }
                 Divider()
                 Spacer()

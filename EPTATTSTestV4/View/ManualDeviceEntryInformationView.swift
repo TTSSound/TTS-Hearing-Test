@@ -39,11 +39,11 @@ struct ManualDeviceEntryInformationView: View {
                             }
                             .foregroundColor(.white)
                         }
-                        .frame(width: 300, height: 200, alignment: .center)
+                        .frame(width: 300, height: 180, alignment: .center)
                         .background(Color.green)
                         .cornerRadius(24)
                     }
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 5)
                     NavigationLink {
                         ManualDeviceDisclaimerView()
                     } label: {
@@ -61,11 +61,11 @@ struct ManualDeviceEntryInformationView: View {
                                 Spacer()
                             }
                         }
-                        .frame(width: 300, height: 200, alignment: .center)
+                        .frame(width: 300, height: 180, alignment: .center)
                         .background(Color.gray)
                         .cornerRadius(24)
                     }
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 10)
                 }
                 .padding(.top, 20)
                 .padding(.bottom, 40)

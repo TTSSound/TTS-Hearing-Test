@@ -202,8 +202,10 @@ struct CalibrationAssessmentView: View {
                                         HStack {
                                             Text("\(self.headphones[index].name)")
                                                 .foregroundColor(.white)
+                                                .padding(.leading)
                                             Toggle("", isOn: self.$headphones[index].isToggledH)
                                                 .foregroundColor(.white)
+                                                .padding(.trailing)
                                                 .onChange(of: self.headphones[index].isToggledH) { nameIndex in
                                                     Task(priority: .userInitiated) {
                                                         deviceSelectionIndex.removeAll()
@@ -240,7 +242,7 @@ struct CalibrationAssessmentView: View {
                                         .listRowBackground(Color.clear)
                                     }
                                 }
-                                .background(colorModel.colorBackgroundTiffanyBlue)
+                                .background(colorModel.colorBackgroundBottomTiffanyBlue)
                                 .scrollContentBackground(.hidden)
                                 .listRowInsets(nil)
                                 .listRowBackground(Color.clear)

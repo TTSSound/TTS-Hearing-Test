@@ -29,7 +29,8 @@ struct EPTATTSTestV4App: App {
     
     var body: some Scene {
         WindowGroup {
-            NavigationView()
+            SiriSetupView()
+//            NavigationView()
         }
     }
 }
