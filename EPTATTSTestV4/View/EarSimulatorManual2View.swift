@@ -642,12 +642,10 @@ struct EarSimulatorManual2View: View {
                             ForEach(samples.indices, id: \.self) { index in
                                 HStack {
                                     Text("\(self.samples[index].name)")
-                                        .foregroundColor(.blue)
+                                        .foregroundColor(.white)
                                         .padding(.leading)
                                     Toggle("", isOn: self.$samples[index].isToggledS)
-                                        .foregroundColor(.blue)
-                                        .background(Color.clear)
-                                        .padding(.trailing)
+                                        .foregroundColor(.white)
                                         .onChange(of: self.samples[index].isToggledS) { nameIndex in
                                             sampleSelectionIndex.removeAll()
                                             sampleSelectedName.removeAll()
@@ -662,11 +660,16 @@ struct EarSimulatorManual2View: View {
                                             print("index: \(index)")
                                         }
                                 }
-                                .background(Color.black)
                                 .cornerRadius(12)
-                                
+                                .scrollContentBackground(.hidden)
+                                .listRowInsets(nil)
+                                .listRowBackground(Color.clear)
                             }
                         }
+                        .background(colorModel.colorBackgroundTopDarkNeonGreen)
+                        .scrollContentBackground(.hidden)
+                        .listRowInsets(nil)
+                        .listRowBackground(Color.clear)
                         .onAppear {
                             sampleSelectionIndex.removeAll()
                             sampleSelectedName.removeAll()

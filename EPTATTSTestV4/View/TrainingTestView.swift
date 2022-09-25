@@ -219,7 +219,7 @@ struct TrainingTestContent<Link: View>: View {
                         NavigationLink("Training Complete. Continue.", destination: TrainingTestHoldingPlace(testing: testing, relatedLinkTesting: linkTesting))
                         //                        NavigationLink("Training Complete. Contine.", value: P)
                             .padding()
-                            .frame(width: 300, height: 100, alignment: .center)
+                            .frame(width: 300, height: 50, alignment: .center)
                             .background(.green)
                             .foregroundColor(.white)
                             .cornerRadius(24)
@@ -232,9 +232,6 @@ struct TrainingTestContent<Link: View>: View {
                     
                 }
         
-                
-                
-                Spacer()
                 if trainingTestStarted == false {
                     Button {
                         Task(priority: .userInitiated) {
@@ -247,7 +244,7 @@ struct TrainingTestContent<Link: View>: View {
                         Text("Click to Start")
                             .fontWeight(.bold)
                             .padding()
-                            .frame(width: 200, height: 50, alignment: .center)
+                            .frame(width: 300, height: 50, alignment: .center)
                             .background(colorModel.tiffanyBlue)
                             .foregroundColor(.white)
                             .cornerRadius(24)
@@ -266,7 +263,6 @@ struct TrainingTestContent<Link: View>: View {
                         .padding(.bottom, 40)
                     
                 } else if trainingTestStarted == true {
-                    
                     Button {
                         traininglocalPlaying = 0
                         trainingstop()

@@ -492,7 +492,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                     } else if ehaP2fullTestCompleted == true {
                         NavigationLink("Test Phase Complete, Press To Continue", destination: PostEHATestView(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting))
                             .padding()
-                            .frame(width: 200, height: 50, alignment: .center)
+                            .frame(width: 300, height: 50, alignment: .center)
                             .background(.green)
                             .foregroundColor(.white)
                             .cornerRadius(24)

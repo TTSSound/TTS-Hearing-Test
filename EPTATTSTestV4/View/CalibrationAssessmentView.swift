@@ -200,15 +200,10 @@ struct CalibrationAssessmentView: View {
                                 List {
                                     ForEach(headphones.indices, id: \.self) {index in
                                         HStack {
-                                            
                                             Text("\(self.headphones[index].name)")
-                                                .foregroundColor(.blue)
-                                                .padding(.leading)
-                                            
+                                                .foregroundColor(.white)
                                             Toggle("", isOn: self.$headphones[index].isToggledH)
-                                                .foregroundColor(.blue)
-                                                .background(Color.clear)
-                                                .padding(.trailing)
+                                                .foregroundColor(.white)
                                                 .onChange(of: self.headphones[index].isToggledH) { nameIndex in
                                                     Task(priority: .userInitiated) {
                                                         deviceSelectionIndex.removeAll()
@@ -239,10 +234,16 @@ struct CalibrationAssessmentView: View {
                                                     }
                                                 }
                                         }
-                                        .background(Color.black)
                                         .cornerRadius(12)
+                                        .scrollContentBackground(.hidden)
+                                        .listRowInsets(nil)
+                                        .listRowBackground(Color.clear)
                                     }
                                 }
+                                .background(colorModel.colorBackgroundTiffanyBlue)
+                                .scrollContentBackground(.hidden)
+                                .listRowInsets(nil)
+                                .listRowBackground(Color.clear)
                                 .onAppear {
                                     Task(priority: .userInitiated) {
                                         deviceApprovalFinding = Int()

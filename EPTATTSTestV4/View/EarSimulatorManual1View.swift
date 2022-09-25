@@ -589,32 +589,29 @@ struct EarSimulatorManual1View: View {
                             .padding(.bottom, 10)
                             if showQoSThreads == true {
                                 HStack{
-                                    Spacer()
                                     Toggle("Background", isOn: $qosBackground)
-                                        .foregroundColor(.blue)
+                                        .foregroundColor(.white)
                                         .font(.caption)
                                     Spacer()
                                     Toggle("Default", isOn: $qosDefault)
-                                        .foregroundColor(.blue)
+                                        .foregroundColor(.white)
                                         .font(.caption)
                                     Spacer()
                                 }
-                                .padding(.leading)
-                                .padding(.trailing)
+                                .padding(.leading, 10)
                                 .padding(.bottom, 10)
                                 HStack{
-                                    Spacer()
                                     Toggle("UserInteractive", isOn: $qosUserInteractive)
-                                        .foregroundColor(.blue)
+                                        .foregroundColor(.white)
                                         .font(.caption)
                                     Spacer()
                                     Toggle("UserInitiated", isOn: $qosUserInitiated)
-                                        .foregroundColor(.blue)
+                                        .foregroundColor(.white)
                                         .font(.caption)
                                     Spacer()
                                 }
-                                .padding(.leading)
-                                .padding(.trailing)
+                                .padding(.leading, 10)
+                                .padding(.bottom, 10)
                             }
                         }
                         .onChange(of: qosBackground) { backgroundValue in
@@ -654,34 +651,32 @@ struct EarSimulatorManual1View: View {
                             }
                         }
                         
-                        HStack{
-                            Spacer()
-                            VStack{
-                                Toggle("Select Sample Type ", isOn: $changeSampleArray)
-                                    .foregroundColor(.white)
-                                    .padding(.leading)
-                                    .padding(.trailing)
-                               
-                                if changeSampleArray == true {
-                                    HStack{
-                                        Toggle("High Res Std", isOn: $highResStandard)
-                                            .foregroundColor(.white)
-                                            .font(.caption)
-                                            .padding()
-//                                        Spacer()
-                                        Toggle("High Res Faded", isOn: $highResFaded)
-                                            .foregroundColor(.white)
-                                            .font(.caption)
-                                            .padding()
-//                                        Spacer()
-                                        Toggle("CD Dither Faded", isOn: $cdFadedDithered)
-                                            .foregroundColor(.white)
-                                            .font(.caption)
-                                            .padding()
-                                    }
-                                }
+                        VStack{
+                            Toggle(isOn: $changeSampleArray) {
+                                Text("ChangeSampleType")
+                                    .foregroundColor(.blue)
                             }
-                            Spacer()
+                            .padding(.leading, 10)
+                            .padding(.trailing, 10)
+                            .padding(.bottom, 10)
+                            if changeSampleArray == true {
+                                HStack{
+                                    Toggle("92/24\nStd", isOn: $highResStandard)
+                                        .foregroundColor(.white)
+                                        .font(.caption)
+                                    Spacer()
+                                    Toggle("92/24\nFaded", isOn: $highResFaded)
+                                        .foregroundColor(.white)
+                                        .font(.caption)
+                                    Spacer()
+                                    Toggle("48/16\nFaded", isOn: $cdFadedDithered)
+                                        .foregroundColor(.white)
+                                        .font(.caption)
+                                    Spacer()
+                                }
+                                .padding(.leading, 10)
+                                .padding(.bottom, 10)
+                            }
                         }
                         .onChange(of: changeSampleArray) { change in
                             if change == true {
@@ -738,12 +733,9 @@ struct EarSimulatorManual1View: View {
                             ForEach(samples.indices, id: \.self) { index in
                                 HStack {
                                     Text("\(self.samples[index].name)")
-                                        .foregroundColor(.blue)
-                                        .padding(.leading)
+                                        .foregroundColor(.white)
                                     Toggle("", isOn: self.$samples[index].isToggledS)
-                                        .foregroundColor(.blue)
-                                        .background(Color.clear)
-                                        .padding(.trailing)
+                                        .foregroundColor(.white)
                                         .onChange(of: self.samples[index].isToggledS) { nameIndex in
                                             sampleSelectionIndex.removeAll()
                                             sampleSelectedName.append(self.samples[index].name)
@@ -756,10 +748,16 @@ struct EarSimulatorManual1View: View {
                                             print("index: \(index)")
                                         }
                                 }
-                                .background(Color.black)
                                 .cornerRadius(12)
+                                .scrollContentBackground(.hidden)
+                                .listRowInsets(nil)
+                                .listRowBackground(Color.clear)
                             }
                         }
+                        .background(colorModel.colorBackgroundTopDarkNeonGreen)
+                        .scrollContentBackground(.hidden)
+                        .listRowInsets(nil)
+                        .listRowBackground(Color.clear)
                         .onAppear {
                             sampleSelectionIndex.removeAll()
                             sampleSelectedName.removeAll()

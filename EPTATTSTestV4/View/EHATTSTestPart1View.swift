@@ -328,7 +328,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
                     } else if ehaP1EPTATestCompleted == true {
                         NavigationLink("Test Phase Complete. Continue.", destination: PostAllTestsSplashView(testing: testing, relatedLinkTesting: linkTesting))
                             .padding()
-                            .frame(width: 200, height: 50, alignment: .center)
+                            .frame(width: 300, height: 50, alignment: .center)
                             .background(.green)
                             .foregroundColor(.white)
                             .cornerRadius(24)
