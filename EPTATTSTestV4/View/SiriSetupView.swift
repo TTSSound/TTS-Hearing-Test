@@ -24,7 +24,15 @@ struct SiriSetupView: View {
                 NavigationLink {
                     ManualSetupView()
                 } label: {
-                    Text("If you would prefer to complete all steps manually, instructions on how to do this may be accessed here.")
+                    VStack{
+                        Text("If you would prefer to complete all steps manually, instructions on how to do this may be accessed here.")
+                            .padding(.bottom, 20)
+                        Text("Manual Device Setup Instructions")
+                            .frame(width: 300, height: 50, alignment: .center)
+                            .foregroundColor(.white)
+                            .backgroundStyle(.blue)
+                            .cornerRadius(24)
+                    }
                 }
                 Divider()
                 Spacer()

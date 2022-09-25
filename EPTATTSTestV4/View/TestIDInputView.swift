@@ -66,7 +66,7 @@ struct TestIDInputContent<Link: View>: View {
                 HStack{
                     Text("Test Key")
                         .foregroundColor(.white)
-                    TextField("Enter Key", text: $testIDKey)
+                    TextField("SKIP THIS FILED!!!!", text: $testIDKey)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .autocapitalization(.none)
                         .disableAutocorrection(true)

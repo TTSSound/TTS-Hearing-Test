@@ -291,7 +291,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     
     let onekHzheardThread = DispatchQueue(label: "BackGroundThread", qos: .userInitiated)
     let onekHzarrayThread = DispatchQueue(label: "BackGroundPlayBack", qos: .background)
-    let onekHzaudioThread = DispatchQueue(label: "AudioThread", qos: .background)
+    let onekHzaudioThread = DispatchQueue(label: "AudioThread", qos: .userInteractive)
     let onekHzpreEventThread = DispatchQueue(label: "PreeventThread", qos: .userInitiated)
     
     @State private var changeSampleArray: Bool = false
@@ -299,6 +299,18 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     @State private var highResFaded: Bool = false
     @State private var cdFadedDithered: Bool = false
     @State private var sampleArraySet: Bool = false
+    
+    let onekHzaudioThreadBackground = DispatchQueue(label: "AudioThread", qos: .background)
+    let onekHzaudioThreadDefault = DispatchQueue(label: "AudioThread", qos: .default)
+    let onekHzaudioThreadUserInteractive = DispatchQueue(label: "AudioThread", qos: .userInteractive)
+    let onekHzaudioThreadUserInitiated = DispatchQueue(label: "AudioThread", qos: .userInitiated)
+    
+    @State private var showQoSThreads: Bool = false
+    @State private var qualityOfService = Int()
+    @State private var qosBackground: Bool = false
+    @State private var qosDefault: Bool = false
+    @State private var qosUserInteractive: Bool = false
+    @State private var qosUserInitiated: Bool = false
     
     var body: some View {
         ZStack{
@@ -416,6 +428,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                         Task(priority: .userInitiated) {
                             audioSessionModel.setAudioSession()
                             onekHzlocalPlaying = 1
+                            changeSampleArray = false
                             print("Start Button Clicked. Playing = \(onekHzlocalPlaying)")
                         }
                     } label: {
@@ -514,6 +527,10 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                 .padding(.bottom, 80)
                 Spacer()
             }
+            .onAppear {
+                onekHzshowTestCompletionSheet = true
+                audioSessionModel.cancelAudioSession()
+            }
             .fullScreenCover(isPresented: $onekHzshowTestCompletionSheet, content: {
                 ZStack{
                     colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all)
@@ -527,38 +544,146 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                                 .padding(10)
                                 .foregroundColor(.clear)
                         })
-                        Spacer()
-                        Text("Take a moment for a break before exiting to continue with the next test segment")
-                            .foregroundColor(.white)
-                            .font(.title)
-                            .padding()
-                        Spacer()
-                        Text("Let's proceed with the test.")
-                            .foregroundColor(.green)
-                            .font(.title)
-                            .padding()
-                            .padding(.bottom, 20)
-                        HStack{
-                            Spacer()
-                            Button {
-                                continuePastBilateralTest = true
-                                onekHzshowTestCompletionSheet.toggle()
-                            } label: {
-                                Text("Continue")
-                                    .fontWeight(.semibold)
-                                    .padding()
-                                    .frame(width: 300, height: 50, alignment: .center)
-                                    .background(Color .green)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(24)
+                        if bilateral1kHzTestCompleted == false {
+                            VStack(alignment: .leading, spacing: 10){
+                                Toggle(isOn: $showQoSThreads) {
+                                    Text("Change Qos Threads")
+                                        .foregroundColor(.blue)
+                                }
+                                .padding(.leading, 10)
+                                .padding(.trailing, 10)
+                                .padding(.bottom, 10)
+                                if showQoSThreads == true {
+                                    HStack{
+                                        Spacer()
+                                        Toggle("Background", isOn: $qosBackground)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("Default", isOn: $qosDefault)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                    }
+                                    .padding(.leading)
+                                    .padding(.trailing)
+                                    .padding(.bottom, 10)
+                                    HStack{
+                                        Spacer()
+                                        Toggle("UserInteractive", isOn: $qosUserInteractive)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("UserInitiated", isOn: $qosUserInitiated)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                    }
+                                    .padding(.leading)
+                                    .padding(.trailing)
+                                }
                             }
+                            .onChange(of: qosBackground) { backgroundValue in
+                                if backgroundValue == true {
+                                    qosBackground = true
+                                    qosDefault = false
+                                    qosUserInteractive = false
+                                    qosUserInitiated = false
+                                    qualityOfService = 1
+                                }
+                            }
+                            .onChange(of: qosDefault) { defaultValue in
+                                if defaultValue == true {
+                                    qosBackground = false
+                                    qosDefault = true
+                                    qosUserInteractive = false
+                                    qosUserInitiated = false
+                                    qualityOfService = 2
+                                }
+                            }
+                            .onChange(of: qosUserInteractive) { interactiveValue in
+                                if interactiveValue == true {
+                                    qosBackground = false
+                                    qosDefault = false
+                                    qosUserInteractive = true
+                                    qosUserInitiated = false
+                                    qualityOfService = 3
+                                }
+                            }
+                            .onChange(of: qosUserInitiated) { initiatedValue in
+                                if initiatedValue == true {
+                                    qosBackground = false
+                                    qosDefault = false
+                                    qosUserInteractive = false
+                                    qosUserInitiated = true
+                                    qualityOfService = 4
+                                }
+                            }
+                        }
+                        Spacer()
+                        if bilateral1kHzTestCompleted == false {
+                            Text("This is first true test phase. So, make sure you are ready and paying attention to what you hear.")
+                                .foregroundColor(.white)
+                                .font(.title)
+                                .padding()
+                            Spacer()
+                            Text("Let's proceed with the test.")
+                                .foregroundColor(.green)
+                                .font(.title)
+                                .padding()
+                                .padding(.bottom, 20)
+                            Spacer()
+                            HStack{
+                                Spacer()
+                                Button {
+                                    continuePastBilateralTest = false
+                                    onekHzshowTestCompletionSheet.toggle()
+                                } label: {
+                                    Text("Continue")
+                                        .fontWeight(.semibold)
+                                        .padding()
+                                        .frame(width: 300, height: 50, alignment: .center)
+                                        .background(Color .green)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(24)
+                                }
+                                Spacer()
+                            }
+                        } else if bilateral1kHzTestCompleted == true {
+                            Text("Take a moment for a break before exiting to continue with the next test segment")
+                                .foregroundColor(.white)
+                                .font(.title)
+                                .padding()
+                            Spacer()
+                            Text("Let's proceed with the test.")
+                                .foregroundColor(.green)
+                                .font(.title)
+                                .padding()
+                                .padding(.bottom, 20)
+                            Spacer()
+                            HStack{
+                                Spacer()
+                                Button {
+                                    continuePastBilateralTest = true
+                                    onekHzshowTestCompletionSheet.toggle()
+                                } label: {
+                                    Text("Continue")
+                                        .fontWeight(.semibold)
+                                        .padding()
+                                        .frame(width: 300, height: 50, alignment: .center)
+                                        .background(Color .green)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(24)
+                                }
+                                Spacer()
+                            }
+                            .navigationDestination(isPresented: $bilateral1kHzTestCompleted) {
+                                PostBilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)
+                            }
+                            .padding(.top, 20)
+                            .padding(.bottom, 40)
                             Spacer()
                         }
-                        .navigationDestination(isPresented: $bilateral1kHzTestCompleted) {
-                            PostBilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)
-                        }
-                        .padding(.top, 20)
-                        .padding(.bottom, 40)
                         Spacer()
                     }
                 }
@@ -604,18 +729,79 @@ struct Bilateral1kHzTestContent<Link: View>: View {
             onekHzTestStarted = true
             if onekHzplayingValue == 1{
                 onekHzSetPan()
-                onekHzaudioThread.async {
-                    onekHzloadAndTestPresentation(sample: onekHzactiveFrequency, gain: onekHz_testGain, pan: onekHz_pan)
-                    while onekHztestPlayer!.isPlaying == true && self.onekHzlocalHeard == 0 { }
-                    if onekHzlocalHeard == 1 {
-                        onekHztestPlayer!.stop()
-                        print("Stopped in while if: Returned Array \(onekHzlocalHeard)")
-                    } else {
-                        onekHztestPlayer!.stop()
-                        self.onekHzlocalHeard = -1
-                        print("Stopped naturally: Returned Array \(onekHzlocalHeard)")
+                
+                if qualityOfService == 1 {
+                    print("QOS Thread Background")
+                    onekHzaudioThreadBackground.async {
+                        onekHzloadAndTestPresentation(sample: onekHzactiveFrequency, gain: onekHz_testGain, pan: onekHz_pan)
+                        while onekHztestPlayer!.isPlaying == true && self.onekHzlocalHeard == 0 { }
+                        if onekHzlocalHeard == 1 {
+                            onekHztestPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(onekHzlocalHeard)")
+                        } else {
+                            onekHztestPlayer!.stop()
+                            self.onekHzlocalHeard = -1
+                            print("Stopped naturally: Returned Array \(onekHzlocalHeard)")
+                        }
+                    }
+                } else if qualityOfService == 2 {
+                    print("QOS Thread Default")
+                    onekHzaudioThreadDefault.async {
+                        onekHzloadAndTestPresentation(sample: onekHzactiveFrequency, gain: onekHz_testGain, pan: onekHz_pan)
+                        while onekHztestPlayer!.isPlaying == true && self.onekHzlocalHeard == 0 { }
+                        if onekHzlocalHeard == 1 {
+                            onekHztestPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(onekHzlocalHeard)")
+                        } else {
+                            onekHztestPlayer!.stop()
+                            self.onekHzlocalHeard = -1
+                            print("Stopped naturally: Returned Array \(onekHzlocalHeard)")
+                        }
+                    }
+                } else if qualityOfService == 3 {
+                    print("QOS Thread UserInteractive")
+                    onekHzaudioThreadUserInteractive.async {
+                        onekHzloadAndTestPresentation(sample: onekHzactiveFrequency, gain: onekHz_testGain, pan: onekHz_pan)
+                        while onekHztestPlayer!.isPlaying == true && self.onekHzlocalHeard == 0 { }
+                        if onekHzlocalHeard == 1 {
+                            onekHztestPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(onekHzlocalHeard)")
+                        } else {
+                            onekHztestPlayer!.stop()
+                            self.onekHzlocalHeard = -1
+                            print("Stopped naturally: Returned Array \(onekHzlocalHeard)")
+                        }
+                    }
+                } else if qualityOfService == 4 {
+                    print("QOS Thread UserInitiated")
+                    onekHzaudioThreadUserInitiated.async {
+                        onekHzloadAndTestPresentation(sample: onekHzactiveFrequency, gain: onekHz_testGain, pan: onekHz_pan)
+                        while onekHztestPlayer!.isPlaying == true && self.onekHzlocalHeard == 0 { }
+                        if onekHzlocalHeard == 1 {
+                            onekHztestPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(onekHzlocalHeard)")
+                        } else {
+                            onekHztestPlayer!.stop()
+                            self.onekHzlocalHeard = -1
+                            print("Stopped naturally: Returned Array \(onekHzlocalHeard)")
+                        }
+                    }
+                } else {
+                    print("QOS Thread Not Set, Catch Setting of Default")
+                    onekHzaudioThread.async {
+                        onekHzloadAndTestPresentation(sample: onekHzactiveFrequency, gain: onekHz_testGain, pan: onekHz_pan)
+                        while onekHztestPlayer!.isPlaying == true && self.onekHzlocalHeard == 0 { }
+                        if onekHzlocalHeard == 1 {
+                            onekHztestPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(onekHzlocalHeard)")
+                        } else {
+                            onekHztestPlayer!.stop()
+                            self.onekHzlocalHeard = -1
+                            print("Stopped naturally: Returned Array \(onekHzlocalHeard)")
+                        }
                     }
                 }
+                
                 onekHzpreEventThread.async {
                     onekHzpreEventLogging()
                 }

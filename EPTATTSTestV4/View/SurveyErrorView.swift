@@ -34,8 +34,9 @@ struct SurveyErrorContent<Link: View>: View {
             colorModel.colorBackgroundRed.ignoresSafeArea(.all, edges: .top)
             VStack{
                 Spacer()
-                Text("Please hit BACK and confirm you answered all questions and selected submit survey at the bottom of the survey")
+                Text("Please hit BACK and confirm you answered all questions and selected submit survey at the bottom.")
                     .foregroundColor(.white)
+                    .padding(.all)
                     .font(.title)
                     .hoverEffect(/*@START_MENU_TOKEN@*/.highlight/*@END_MENU_TOKEN@*/)
                     .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)

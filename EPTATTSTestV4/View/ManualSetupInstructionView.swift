@@ -12,7 +12,7 @@ struct ManualSetupInstructionView: View {
     
     var body: some View {
         ZStack{
-            colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea()
+            colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack(alignment: .leading, spacing: 10) {
                 ScrollView{
                     Text("1. Check the left side of your phone for the silence switch and with your finger, flip it to the upper position. If you can see red at the switch, your device is still silenced and you need to flip the switch.")

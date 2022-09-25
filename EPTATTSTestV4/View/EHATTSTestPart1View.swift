@@ -289,7 +289,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
 
     let heardThread = DispatchQueue(label: "BackGroundThread", qos: .userInitiated)
     let arrayThread = DispatchQueue(label: "BackGroundPlayBack", qos: .background)
-    let audioThread = DispatchQueue(label: "AudioThread", qos: .background)
+    let audioThread = DispatchQueue(label: "AudioThread", qos: .default)
     let preEventThread = DispatchQueue(label: "PreeventThread", qos: .userInitiated)
     
     @State private var changeSampleArray: Bool = false
@@ -297,6 +297,19 @@ struct EHATTSTestPart1Content<Link: View>: View {
     @State private var highResFaded: Bool = false
     @State private var cdFadedDithered: Bool = false
     @State private var sampleArraySet: Bool = false
+    
+    
+    let threadBackground = DispatchQueue(label: "AudioThread", qos: .background)
+    let threadDefault = DispatchQueue(label: "AudioThread", qos: .default)
+    let threadUserInteractive = DispatchQueue(label: "AudioThread", qos: .userInteractive)
+    let threadUserInitiated = DispatchQueue(label: "AudioThread", qos: .userInitiated)
+    
+    @State private var showQoSThreads: Bool = false
+    @State private var qualityOfService = Int()
+    @State private var qosBackground: Bool = false
+    @State private var qosDefault: Bool = false
+    @State private var qosUserInteractive: Bool = false
+    @State private var qosUserInitiated: Bool = false
     
     var body: some View {
         
@@ -416,6 +429,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
                             audioSessionModel.setAudioSession()
                             localPlaying = 1
                             endTestSeriesValue = false
+                            changeSampleArray = false
                             print("Start Button Clicked. Playing = \(localPlaying)")
                         }
                     } label: {
@@ -514,6 +528,10 @@ struct EHATTSTestPart1Content<Link: View>: View {
             
             Spacer()
             }
+            .onAppear{
+                showTestCompletionSheet = true
+                audioSessionModel.cancelAudioSession()
+            }
             .fullScreenCover(isPresented: $showTestCompletionSheet, content: {
                 ZStack{
                     colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all)
@@ -537,7 +555,85 @@ struct EHATTSTestPart1Content<Link: View>: View {
                                 .padding(10)
                                 .foregroundColor(.clear)
                         })
-                        
+                        if ehaP1fullTestCompleted == false {
+                            VStack(alignment: .leading, spacing: 10){
+                                Toggle(isOn: $showQoSThreads) {
+                                    Text("Change Qos Threads")
+                                        .foregroundColor(.blue)
+                                }
+                                .padding(.leading, 10)
+                                .padding(.trailing, 10)
+                                .padding(.bottom, 10)
+                                if showQoSThreads == true {
+                                    HStack{
+                                        Spacer()
+                                        Toggle("Background", isOn: $qosBackground)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("Default", isOn: $qosDefault)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                    }
+                                    .padding(.leading)
+                                    .padding(.trailing)
+                                    .padding(.bottom, 10)
+                                    HStack{
+                                        Spacer()
+                                        Toggle("UserInteractive", isOn: $qosUserInteractive)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("UserInitiated", isOn: $qosUserInitiated)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                    }
+                                    .padding(.leading)
+                                    .padding(.trailing)
+                                }
+                            }
+                            .onChange(of: qosBackground) { backgroundValue in
+                                if backgroundValue == true {
+                                    qosBackground = true
+                                    qosDefault = false
+                                    qosUserInteractive = false
+                                    qosUserInitiated = false
+                                    qualityOfService = 1
+                                }
+                            }
+                            .onChange(of: qosDefault) { defaultValue in
+                                if defaultValue == true {
+                                    qosBackground = false
+                                    qosDefault = true
+                                    qosUserInteractive = false
+                                    qosUserInitiated = false
+                                    qualityOfService = 2
+                                }
+                            }
+                            .onChange(of: qosUserInteractive) { interactiveValue in
+                                if interactiveValue == true {
+                                    qosBackground = false
+                                    qosDefault = false
+                                    qosUserInteractive = true
+                                    qosUserInitiated = false
+                                    qualityOfService = 3
+                                }
+                            }
+                            .onChange(of: qosUserInitiated) { initiatedValue in
+                                if initiatedValue == true {
+                                    qosBackground = false
+                                    qosDefault = false
+                                    qosUserInteractive = false
+                                    qosUserInitiated = true
+                                    qualityOfService = 4
+                                }
+                            }
+                        }
+                            
+                            
+                        Spacer()
                         if ehaP1fullTestCompleted == false {
                             Text("Take a moment for a break before exiting to continue with the next test segment")
                                 .foregroundColor(.white)
@@ -549,7 +645,9 @@ struct EHATTSTestPart1Content<Link: View>: View {
                                 Button(action: {
                                     if ehaP1fullTestCompleted == true {
                                         showTestCompletionSheet.toggle()
-                                    } else if ehaP1fullTestCompleted == false {
+                                    } else if ehaP1fullTestCompleted == false && ehaP1TestStarted == false {
+                                        showTestCompletionSheet.toggle()
+                                    } else if ehaP1fullTestCompleted == false && ehaP1TestStarted == true {
                                         DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
                                             Task(priority: .userInitiated) {
                                                 await combinedPauseRestartAndStartNexTestCycle()
@@ -670,17 +768,75 @@ struct EHATTSTestPart1Content<Link: View>: View {
                 print("localPan: \(localPan)")
                 print("envDataObjectModel_index: \(envDataObjectModel_index)")
                 
-         
-                audioThread.async {
-                    loadAndTestPresentation(sample: activeFrequency, gain: envDataObjectModel_testGain, pan: localPan)
-                    while testPlayer!.isPlaying == true && self.localHeard == 0 { }
-                    if localHeard == 1 {
-                        testPlayer!.stop()
-//                        print("Stopped in while if: Returned Array \(localHeard)")
-                    } else {
-                    testPlayer!.stop()
-                    self.localHeard = -1
-//                    print("Stopped naturally: Returned Array \(localHeard)")
+                if qualityOfService == 1 {
+                    print("QOS Thread Background")
+                    threadBackground.async {
+                        loadAndTestPresentation(sample: activeFrequency, gain: envDataObjectModel_testGain, pan: localPan)
+                        while testPlayer!.isPlaying == true && self.localHeard == 0 { }
+                        if localHeard == 1 {
+                            testPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(localHeard)")
+                        } else {
+                            testPlayer!.stop()
+                            self.localHeard = -1
+                            print("Stopped naturally: Returned Array \(localHeard)")
+                        }
+                    }
+                } else if qualityOfService == 2 {
+                    print("QOS Thread Default")
+                    threadDefault.async {
+                        loadAndTestPresentation(sample: activeFrequency, gain: envDataObjectModel_testGain, pan: localPan)
+                        while testPlayer!.isPlaying == true && self.localHeard == 0 { }
+                        if localHeard == 1 {
+                            testPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(localHeard)")
+                        } else {
+                            testPlayer!.stop()
+                            self.localHeard = -1
+                            print("Stopped naturally: Returned Array \(localHeard)")
+                        }
+                    }
+                } else if qualityOfService == 3 {
+                    print("QOS Thread UserInteractive")
+                    threadUserInteractive.async {
+                        loadAndTestPresentation(sample: activeFrequency, gain: envDataObjectModel_testGain, pan: localPan)
+                        while testPlayer!.isPlaying == true && self.localHeard == 0 { }
+                        if localHeard == 1 {
+                            testPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(localHeard)")
+                        } else {
+                            testPlayer!.stop()
+                            self.localHeard = -1
+                            print("Stopped naturally: Returned Array \(localHeard)")
+                        }
+                    }
+                } else if qualityOfService == 4 {
+                    print("QOS Thread UserInitiated")
+                    threadUserInitiated.async {
+                        loadAndTestPresentation(sample: activeFrequency, gain: envDataObjectModel_testGain, pan: localPan)
+                        while testPlayer!.isPlaying == true && self.localHeard == 0 { }
+                        if localHeard == 1 {
+                            testPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(localHeard)")
+                        } else {
+                            testPlayer!.stop()
+                            self.localHeard = -1
+                            print("Stopped naturally: Returned Array \(localHeard)")
+                        }
+                    }
+                } else {
+                    print("QOS Thread Not Set, Catch Setting of Default")
+                    audioThread.async {
+                        loadAndTestPresentation(sample: activeFrequency, gain: envDataObjectModel_testGain, pan: localPan)
+                        while testPlayer!.isPlaying == true && self.localHeard == 0 { }
+                        if localHeard == 1 {
+                            testPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(localHeard)")
+                        } else {
+                            testPlayer!.stop()
+                            self.localHeard = -1
+                            print("Stopped naturally: Returned Array \(localHeard)")
+                        }
                     }
                 }
                 preEventThread.async {

@@ -203,11 +203,12 @@ struct CalibrationAssessmentView: View {
                                             
                                             Text("\(self.headphones[index].name)")
                                                 .foregroundColor(.blue)
-                                            
+                                                .padding(.leading)
                                             
                                             Toggle("", isOn: self.$headphones[index].isToggledH)
                                                 .foregroundColor(.blue)
-                                            
+                                                .background(Color.clear)
+                                                .padding(.trailing)
                                                 .onChange(of: self.headphones[index].isToggledH) { nameIndex in
                                                     Task(priority: .userInitiated) {
                                                         deviceSelectionIndex.removeAll()
@@ -238,6 +239,8 @@ struct CalibrationAssessmentView: View {
                                                     }
                                                 }
                                         }
+                                        .background(Color.black)
+                                        .cornerRadius(12)
                                     }
                                 }
                                 .onAppear {

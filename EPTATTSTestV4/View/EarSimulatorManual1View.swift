@@ -210,6 +210,18 @@ struct EarSimulatorManual1View: View {
     
     @State private var earSimulatorM1showTestCompletionSheet: Bool = false
     
+    let earSimulatorM1ThreadBackground = DispatchQueue(label: "AudioThread", qos: .background)
+    let earSimulatorM1ThreadDefault = DispatchQueue(label: "AudioThread", qos: .default)
+    let earSimulatorM1ThreadUserInteractive = DispatchQueue(label: "AudioThread", qos: .userInteractive)
+    let earSimulatorM1ThreadUserInitiated = DispatchQueue(label: "AudioThread", qos: .userInitiated)
+    
+    @State private var showQoSThreads: Bool = false
+    @State private var qualityOfService = Int()
+    @State private var qosBackground: Bool = false
+    @State private var qosDefault: Bool = false
+    @State private var qosUserInteractive: Bool = false
+    @State private var qosUserInitiated: Bool = false
+    
     var body: some View {
         ZStack {
             colorModel.colorBackgroundTopNeonGreen.ignoresSafeArea(.all)
@@ -569,6 +581,80 @@ struct EarSimulatorManual1View: View {
                                 .padding(10)
                                 .foregroundColor(.red)
                         })
+                        VStack(alignment: .leading, spacing: 10){
+                            Toggle(isOn: $showQoSThreads) {
+                                Text("Change Qos Threads")
+                                    .foregroundColor(.blue)
+                            }
+                            .padding(.leading, 10)
+                            .padding(.trailing, 10)
+                            .padding(.bottom, 10)
+                            if showQoSThreads == true {
+                                HStack{
+                                    Spacer()
+                                    Toggle("Background", isOn: $qosBackground)
+                                        .foregroundColor(.blue)
+                                        .font(.caption)
+                                    Spacer()
+                                    Toggle("Default", isOn: $qosDefault)
+                                        .foregroundColor(.blue)
+                                        .font(.caption)
+                                    Spacer()
+                                }
+                                .padding(.leading)
+                                .padding(.trailing)
+                                .padding(.bottom, 10)
+                                HStack{
+                                    Spacer()
+                                    Toggle("UserInteractive", isOn: $qosUserInteractive)
+                                        .foregroundColor(.blue)
+                                        .font(.caption)
+                                    Spacer()
+                                    Toggle("UserInitiated", isOn: $qosUserInitiated)
+                                        .foregroundColor(.blue)
+                                        .font(.caption)
+                                    Spacer()
+                                }
+                                .padding(.leading)
+                                .padding(.trailing)
+                            }
+                        }
+                        .onChange(of: qosBackground) { backgroundValue in
+                            if backgroundValue == true {
+                                qosBackground = true
+                                qosDefault = false
+                                qosUserInteractive = false
+                                qosUserInitiated = false
+                                qualityOfService = 1
+                            }
+                        }
+                        .onChange(of: qosDefault) { defaultValue in
+                            if defaultValue == true {
+                                qosBackground = false
+                                qosDefault = true
+                                qosUserInteractive = false
+                                qosUserInitiated = false
+                                qualityOfService = 2
+                            }
+                        }
+                        .onChange(of: qosUserInteractive) { interactiveValue in
+                            if interactiveValue == true {
+                                qosBackground = false
+                                qosDefault = false
+                                qosUserInteractive = true
+                                qosUserInitiated = false
+                                qualityOfService = 3
+                            }
+                        }
+                        .onChange(of: qosUserInitiated) { initiatedValue in
+                            if initiatedValue == true {
+                                qosBackground = false
+                                qosDefault = false
+                                qosUserInteractive = false
+                                qosUserInitiated = true
+                                qualityOfService = 4
+                            }
+                        }
                         
                         HStack{
                             Spacer()
@@ -763,16 +849,76 @@ struct EarSimulatorManual1View: View {
                 ESM1TestStarted = true
                 if ESM1playingValue == 1{
                     //Play Sample
-                    earSimulatorM1audioThread.async {
-                        ESM1loadAndTestPresentation(sample: ESM1activeFrequency, gain: ESM1_testGain, pan: ESM1_pan)
-                        while ESM1testPlayer!.isPlaying == true && self.ESM1localHeard == 0 { }
-                        if ESM1localHeard == 1 {
-                            ESM1testPlayer!.stop()
-                            print("Stopped in while if: Returned Array \(ESM1localHeard)")
-                        } else {
-                            ESM1testPlayer!.stop()
-                            self.ESM1localHeard = -1
-                            print("Stopped naturally: Returned Array \(ESM1localHeard)")
+                    
+                    if qualityOfService == 1 {
+                        print("QOS Thread Background")
+                        earSimulatorM1ThreadBackground.async {
+                            ESM1loadAndTestPresentation(sample: ESM1activeFrequency, gain: ESM1_testGain, pan: ESM1_pan)
+                            while ESM1testPlayer!.isPlaying == true && self.ESM1localHeard == 0 { }
+                            if ESM1localHeard == 1 {
+                                ESM1testPlayer!.stop()
+                                print("Stopped in while if: Returned Array \(ESM1localHeard)")
+                            } else {
+                                ESM1testPlayer!.stop()
+                                self.ESM1localHeard = -1
+                                print("Stopped naturally: Returned Array \(ESM1localHeard)")
+                            }
+                        }
+                    } else if qualityOfService == 2 {
+                        print("QOS Thread Default")
+                        earSimulatorM1ThreadDefault.async {
+                            ESM1loadAndTestPresentation(sample: ESM1activeFrequency, gain: ESM1_testGain, pan: ESM1_pan)
+                            while ESM1testPlayer!.isPlaying == true && self.ESM1localHeard == 0 { }
+                            if ESM1localHeard == 1 {
+                                ESM1testPlayer!.stop()
+                                print("Stopped in while if: Returned Array \(ESM1localHeard)")
+                            } else {
+                                ESM1testPlayer!.stop()
+                                self.ESM1localHeard = -1
+                                print("Stopped naturally: Returned Array \(ESM1localHeard)")
+                            }
+                        }
+                    } else if qualityOfService == 3 {
+                        print("QOS Thread UserInteractive")
+                        earSimulatorM1ThreadUserInteractive.async {
+                            ESM1loadAndTestPresentation(sample: ESM1activeFrequency, gain: ESM1_testGain, pan: ESM1_pan)
+                            while ESM1testPlayer!.isPlaying == true && self.ESM1localHeard == 0 { }
+                            if ESM1localHeard == 1 {
+                                ESM1testPlayer!.stop()
+                                print("Stopped in while if: Returned Array \(ESM1localHeard)")
+                            } else {
+                                ESM1testPlayer!.stop()
+                                self.ESM1localHeard = -1
+                                print("Stopped naturally: Returned Array \(ESM1localHeard)")
+                            }
+                        }
+                    } else if qualityOfService == 4 {
+                        print("QOS Thread UserInitiated")
+                        earSimulatorM1ThreadUserInitiated.async {
+                            ESM1loadAndTestPresentation(sample: ESM1activeFrequency, gain: ESM1_testGain, pan: ESM1_pan)
+                            while ESM1testPlayer!.isPlaying == true && self.ESM1localHeard == 0 { }
+                            if ESM1localHeard == 1 {
+                                ESM1testPlayer!.stop()
+                                print("Stopped in while if: Returned Array \(ESM1localHeard)")
+                            } else {
+                                ESM1testPlayer!.stop()
+                                self.ESM1localHeard = -1
+                                print("Stopped naturally: Returned Array \(ESM1localHeard)")
+                            }
+                        }
+                    } else {
+                        print("QOS Thread Not Set, Catch Setting of Default")
+                        earSimulatorM1audioThread.async {
+                            ESM1loadAndTestPresentation(sample: ESM1activeFrequency, gain: ESM1_testGain, pan: ESM1_pan)
+                            while ESM1testPlayer!.isPlaying == true && self.ESM1localHeard == 0 { }
+                            if ESM1localHeard == 1 {
+                                ESM1testPlayer!.stop()
+                                print("Stopped in while if: Returned Array \(ESM1localHeard)")
+                            } else {
+                                ESM1testPlayer!.stop()
+                                self.ESM1localHeard = -1
+                                print("Stopped naturally: Returned Array \(ESM1localHeard)")
+                            }
                         }
                     }
                     //Event Logging

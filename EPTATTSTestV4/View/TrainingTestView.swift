@@ -177,7 +177,8 @@ struct TrainingTestContent<Link: View>: View {
     
     let trainingheardThread = DispatchQueue(label: "BackGroundThread", qos: .userInitiated)
     let trainingarrayThread = DispatchQueue(label: "BackGroundPlayBack", qos: .background)
-    let trainingaudioThread = DispatchQueue(label: "AudioThread", qos: .background)
+    let trainingaudioThread = DispatchQueue(label: "AudioThread", qos: .default)
+        
     let trainingpreEventThread = DispatchQueue(label: "PreeventThread", qos: .userInitiated)
     
     @State var P: Testing?
@@ -188,8 +189,19 @@ struct TrainingTestContent<Link: View>: View {
     @State private var cdFadedDithered: Bool = false
     @State private var sampleArraySet: Bool = false
     
+    let trainingaudioThreadBackground = DispatchQueue(label: "AudioThread", qos: .background)
+    let trainingaudioThreadDefault = DispatchQueue(label: "AudioThread", qos: .default)
+    let trainingaudioThreadUserInteractive = DispatchQueue(label: "AudioThread", qos: .userInteractive)
+    let trainingaudioThreadUserInitiated = DispatchQueue(label: "AudioThread", qos: .userInitiated)
+    
+    @State private var showQoSThreads: Bool = false
+    @State private var qualityOfService = Int()
+    @State private var qosBackground: Bool = false
+    @State private var qosDefault: Bool = false
+    @State private var qosUserInteractive: Bool = false
+    @State private var qosUserInitiated: Bool = false
+    
     var body: some View {
-        
         ZStack{
             colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
             VStack {
@@ -202,9 +214,9 @@ struct TrainingTestContent<Link: View>: View {
                         .foregroundColor(.white)
                         .padding(.top, 40)
                         .padding(.bottom, 20)
-                } else if trainingfullTestCompleted == true {
+                } else if trainingTestCompleted == true { //trainingfullTestCompleted == true {
                     HStack{
-                        NavigationLink("Training Complete. Continue.", destination: Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting))
+                        NavigationLink("Training Complete. Continue.", destination: TrainingTestHoldingPlace(testing: testing, relatedLinkTesting: linkTesting))
                         //                        NavigationLink("Training Complete. Contine.", value: P)
                             .padding()
                             .frame(width: 300, height: 100, alignment: .center)
@@ -215,7 +227,7 @@ struct TrainingTestContent<Link: View>: View {
                             .padding(.bottom, 20)
                     }
                     .navigationDestination(isPresented: $trainingTestCompleted) {
-                        Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)
+                        TrainingTestHoldingPlace(testing: testing, relatedLinkTesting: linkTesting)
                     }
                     
                 }
@@ -410,6 +422,7 @@ struct TrainingTestContent<Link: View>: View {
             }
             .onAppear(perform: {
                 trainingshowTestCompletionSheet = true
+                audioSessionModel.cancelAudioSession()
                 highResStandard = true
                 //append highresstd to array
                 training_samples.append(contentsOf: highResStdSamples)
@@ -429,6 +442,83 @@ struct TrainingTestContent<Link: View>: View {
                                 .padding(10)
                                 .foregroundColor(.clear)
                         })
+                        if trainingfullTestCompleted == false {
+                            VStack(alignment: .leading, spacing: 10){
+                                Toggle(isOn: $showQoSThreads) {
+                                    Text("Change Qos Threads")
+                                        .foregroundColor(.blue)
+                                }
+                                .padding(.leading, 10)
+                                .padding(.trailing, 10)
+                                .padding(.bottom, 10)
+                                if showQoSThreads == true {
+                                    HStack{
+                                        Spacer()
+                                        Toggle("Background", isOn: $qosBackground)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("Default", isOn: $qosDefault)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                    }
+                                    .padding(.leading)
+                                    .padding(.trailing)
+                                    .padding(.bottom, 10)
+                                    HStack{
+                                        Spacer()
+                                        Toggle("UserInteractive", isOn: $qosUserInteractive)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("UserInitiated", isOn: $qosUserInitiated)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                    }
+                                    .padding(.leading)
+                                    .padding(.trailing)
+                                }
+                            }
+                            .onChange(of: qosBackground) { backgroundValue in
+                                if backgroundValue == true {
+                                    qosBackground = true
+                                    qosDefault = false
+                                    qosUserInteractive = false
+                                    qosUserInitiated = false
+                                    qualityOfService = 1
+                                }
+                            }
+                            .onChange(of: qosDefault) { defaultValue in
+                                if defaultValue == true {
+                                    qosBackground = false
+                                    qosDefault = true
+                                    qosUserInteractive = false
+                                    qosUserInitiated = false
+                                    qualityOfService = 2
+                                }
+                            }
+                            .onChange(of: qosUserInteractive) { interactiveValue in
+                                if interactiveValue == true {
+                                    qosBackground = false
+                                    qosDefault = false
+                                    qosUserInteractive = true
+                                    qosUserInitiated = false
+                                    qualityOfService = 3
+                                }
+                            }
+                            .onChange(of: qosUserInitiated) { initiatedValue in
+                                if initiatedValue == true {
+                                    qosBackground = false
+                                    qosDefault = false
+                                    qosUserInteractive = false
+                                    qosUserInitiated = true
+                                    qualityOfService = 4
+                                }
+                            }
+                        }
+                        
                         if trainingfullTestCompleted == false {
                             Spacer()
                             Text("Next you will get a chance to experience what taking the test is like. You will hear a tone playing. Whenever you hear a tone playing, press the green button to indicate you have heard the tone.")
@@ -464,7 +554,7 @@ struct TrainingTestContent<Link: View>: View {
                             HStack{
                                 Spacer()
                                 Button {
-                                    P = EPTATTSTestV4.Testing(id: 11.2, name: "1kHz Test", related: [])
+//                                    P = EPTATTSTestV4.Testing(id: 11.2, name: "1kHz Test", related: [])
                                     trainingTestCompleted = true
                                     trainingshowTestCompletionSheet.toggle()
                                 } label: {
@@ -521,18 +611,79 @@ struct TrainingTestContent<Link: View>: View {
             trainingTestStarted = true
             if trainingplayingValue == 1{
                 
-                trainingaudioThread.async {
-                    trainingloadAndTestPresentation(sample: trainingactiveFrequency, gain: training_testGain)
-                    while trainingtestPlayer!.isPlaying == true && self.traininglocalHeard == 0 { }
-                    if traininglocalHeard == 1 {
-                        trainingtestPlayer!.stop()
-                        print("Stopped in while if: Returned Array \(traininglocalHeard)")
-                    } else {
-                        trainingtestPlayer!.stop()
-                        self.traininglocalHeard = -1
-                        print("Stopped naturally: Returned Array \(traininglocalHeard)")
+                if qualityOfService == 1 {
+                    print("QOS Thread Background")
+                    trainingaudioThreadBackground.async {
+                        trainingloadAndTestPresentation(sample: trainingactiveFrequency, gain: training_testGain)
+                        while trainingtestPlayer!.isPlaying == true && self.traininglocalHeard == 0 { }
+                        if traininglocalHeard == 1 {
+                            trainingtestPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(traininglocalHeard)")
+                        } else {
+                            trainingtestPlayer!.stop()
+                            self.traininglocalHeard = -1
+                            print("Stopped naturally: Returned Array \(traininglocalHeard)")
+                        }
+                    }
+                } else if qualityOfService == 2 {
+                    print("QOS Thread Default")
+                    trainingaudioThreadDefault.async {
+                        trainingloadAndTestPresentation(sample: trainingactiveFrequency, gain: training_testGain)
+                        while trainingtestPlayer!.isPlaying == true && self.traininglocalHeard == 0 { }
+                        if traininglocalHeard == 1 {
+                            trainingtestPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(traininglocalHeard)")
+                        } else {
+                            trainingtestPlayer!.stop()
+                            self.traininglocalHeard = -1
+                            print("Stopped naturally: Returned Array \(traininglocalHeard)")
+                        }
+                    }
+                } else if qualityOfService == 3 {
+                    print("QOS Thread UserInteractive")
+                    trainingaudioThreadUserInteractive.async {
+                        trainingloadAndTestPresentation(sample: trainingactiveFrequency, gain: training_testGain)
+                        while trainingtestPlayer!.isPlaying == true && self.traininglocalHeard == 0 { }
+                        if traininglocalHeard == 1 {
+                            trainingtestPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(traininglocalHeard)")
+                        } else {
+                            trainingtestPlayer!.stop()
+                            self.traininglocalHeard = -1
+                            print("Stopped naturally: Returned Array \(traininglocalHeard)")
+                        }
+                    }
+                } else if qualityOfService == 4 {
+                    print("QOS Thread UserInitiated")
+                    trainingaudioThreadUserInitiated.async {
+                        trainingloadAndTestPresentation(sample: trainingactiveFrequency, gain: training_testGain)
+                        while trainingtestPlayer!.isPlaying == true && self.traininglocalHeard == 0 { }
+                        if traininglocalHeard == 1 {
+                            trainingtestPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(traininglocalHeard)")
+                        } else {
+                            trainingtestPlayer!.stop()
+                            self.traininglocalHeard = -1
+                            print("Stopped naturally: Returned Array \(traininglocalHeard)")
+                        }
+                    }
+                } else {
+                    print("QOS Thread Not Set, Catch Setting of Default")
+                    trainingaudioThread.async {
+                        trainingloadAndTestPresentation(sample: trainingactiveFrequency, gain: training_testGain)
+                        while trainingtestPlayer!.isPlaying == true && self.traininglocalHeard == 0 { }
+                        if traininglocalHeard == 1 {
+                            trainingtestPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(traininglocalHeard)")
+                        } else {
+                            trainingtestPlayer!.stop()
+                            self.traininglocalHeard = -1
+                            print("Stopped naturally: Returned Array \(traininglocalHeard)")
+                        }
                     }
                 }
+                
+                
                 trainingpreEventThread.async {
                     trainingpreEventLogging()
                 }

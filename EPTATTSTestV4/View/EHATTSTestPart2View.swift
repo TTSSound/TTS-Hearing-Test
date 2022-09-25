@@ -88,7 +88,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
     @State private var dataFileURLComparedLastName = URL(fileURLWithPath: "")   // General and Open
     @State private var isOkayToUpload = false
     let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
-
+    
     @State var ehaP2localHeard = 0
     @State var ehaP2localPlaying = Int()    // Playing = 1. Stopped = -1
     @State var ehaP2localReversal = Int()
@@ -151,7 +151,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                                            "FDSample53", "FDSample54", "FDSample55", "FDSample56", "FDSample57", "FDSample58", "FDSample59", "PreSilence"]
     
     
-   
+    
     @State var ehaP2_monoSamples: [String] = [String]()
     
     @State private var highResStdMonoSamples: [String] = ["Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
@@ -174,7 +174,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                                                "FDSample44", "FDSample45", "FDSample46", "FDSample47", "FDSample48", "FDSample49", "FDSample50", "FDSample51", "FDSample52",
                                                                "FDSample53", "FDSample54", "FDSample55", "FDSample56", "FDSample57", "FDSample58", "FDSample59", "PreSilence"]
     
-
+    
     
     @State var ehaP2panArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
                                          -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
@@ -219,16 +219,16 @@ struct EHATTSTestPart2Content<Link: View>: View {
     @State var ehaP2MonoBilateralTest: Bool = false
     
     @State var ehaP2VariableArraysSet: Bool = false
-
+    
     
     // Presentation Cycles
     // Cycle 1 Right:  ["Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25"]
     // Cycle 2 Right:  ["Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34"]
     // Cycle 3 Right:  ["Sample35", "Sample36", "Sample37", "Sample38", "Sample39", "Sample40", "Sample41", "Sample42", "Sample43"]
     // Cycle 4 Right:  ["Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52", "Sample53"]
-
     
-//    rightFinalGain"\(activeFrequency)"
+    
+    //    rightFinalGain"\(activeFrequency)"
     
     //Change Sample Numbers
     @State var ehaP2RightFinalGainSample17 = Float()
@@ -328,7 +328,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
     @State var ehaP2finalStoredRightFinalGainsArray = [Float]()
     @State var ehaP2finalStoredleftFinalGainsArray = [Float]()
     
-
+    
     
     @State var ehaP2_index: Int = 0
     @State var ehaP2_testGain: Float = 0.2
@@ -344,11 +344,11 @@ struct EHATTSTestPart2Content<Link: View>: View {
     @State var ehaP2_reversalFrequency = [String]()
     @State var ehaP2_reversalDirection = Float()
     @State var ehaP2_reversalDirectionArray = [Float]()
-
+    
     @State var ehaP2_averageGain = Float()
-
+    
     @State var ehaP2_eptaSamplesCount = 86 //8 //17
-//    @State var ehaP2_eptaSamplesCountArray = [2, 2, 2]
+    //    @State var ehaP2_eptaSamplesCountArray = [2, 2, 2]
     @State var ehaP2_eptaSamplesCountArray = [8, 8, 8, 8, 8, 8, 8, 8, 8,
                                               17, 17, 17, 17, 17, 17, 17, 17, 17,
                                               26, 26, 26, 26, 26, 26, 26, 26, 26,
@@ -360,7 +360,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                               78, 78, 78, 78, 78, 78, 78,
                                               85, 85, 85, 85, 85, 85, 85]
     @State var ehaP2_eptaSamplesCountArrayIdx = 0  //[0, 1, 2, 3]
-
+    
     @State var ehaP2_finalStoredIndex: [Int] = [Int]()
     @State var ehaP2_finalStoredTestPan: [Float] = [Float]()
     @State var ehaP2_finalStoredTestTestGain: [Float] = [Float]()
@@ -396,15 +396,15 @@ struct EHATTSTestPart2Content<Link: View>: View {
     @State var ehaP2fullTestCompleted: Bool = false
     @State var ehaP2fullTestCompletedHoldingArray: [Bool] = [Bool]()
     @State var ehaP2fullTestCompletedLR: [Bool] = [false, false, false, false, false, false, false, false, false,
-                                                  false, false, false, false, false, false, false, false, false,
-                                                  false, false, false, false, false, false, false, false, false,
-                                                  false, false, false, false, false, false, false, false, false,
-                                                  false, false, false, false, false, false, false, false, false,
-                                                  false, false, false, false, false, false, false, false, false,
-                                                  false, false, false, false, false, false, false, false, false,
-                                                  false, false, false, false, false, false, false, false, false,
-                                                  false, false, false, false, false, false, false,
-                                                  false, false, false, false, false, false, false, true]
+                                                   false, false, false, false, false, false, false, false, false,
+                                                   false, false, false, false, false, false, false, false, false,
+                                                   false, false, false, false, false, false, false, false, false,
+                                                   false, false, false, false, false, false, false, false, false,
+                                                   false, false, false, false, false, false, false, false, false,
+                                                   false, false, false, false, false, false, false, false, false,
+                                                   false, false, false, false, false, false, false, false, false,
+                                                   false, false, false, false, false, false, false,
+                                                   false, false, false, false, false, false, false, true]
     
     @State var ehaP2fullTestCompletedMono: [Bool] = [false, false, false, false, false, false, false, false, false,
                                                      false, false, false, false, false, false, false, false, false,
@@ -413,8 +413,8 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                                      false, false, false, false, false, false, false, true]
     
     
-
-                                                     
+    
+    
     @State var ehaP2TestingPhases = 0
     @State var displayGainData: Bool = false
     
@@ -439,7 +439,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
     
     @State var ehaP2TestStarted: Bool = false
     
-
+    
     let fileehaP2Name = "SummaryehaP2Results.json"
     let summaryehaP2CSVName = "SummaryehaP2ResultsCSV.csv"
     let detailedehaP2CSVName = "DetailedehaP2ResultsCSV.csv"
@@ -453,649 +453,810 @@ struct EHATTSTestPart2Content<Link: View>: View {
     let inputEHAP2LeftSummaryCSVName = "InputSummaryEHAP2LeftResultsCSV.csv"
     
     @State var ehaP2saveFinalResults: ehaP2SaveFinalResults? = nil
-
+    
     let ehaP2heardThread = DispatchQueue(label: "BackGroundThread", qos: .userInitiated)
     let ehaP2arrayThread = DispatchQueue(label: "BackGroundPlayBack", qos: .background)
-    let ehaP2audioThread = DispatchQueue(label: "AudioThread", qos: .background)
+    let ehaP2audioThread = DispatchQueue(label: "AudioThread", qos: .default)
     let ehaP2preEventThread = DispatchQueue(label: "PreeventThread", qos: .userInitiated)
-  
+    
     @State private var changeSampleArray: Bool = false
     @State private var highResStandard: Bool = false
     @State private var highResFaded: Bool = false
     @State private var cdFadedDithered: Bool = false
     @State private var sampleArraySet: Bool = false
     
-    var body: some View {
-       ZStack{
-           colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
-           VStack {
-               HStack{
-                   if ehaP2fullTestCompleted == false {
-                       Text("EHA Part 2 Test Cycle \(ehaP2TestingPhases)")
-                           .font(.title)
-                           .fontWeight(.bold)
-                           .padding()
-                           .foregroundColor(.white)
-                   } else if ehaP2fullTestCompleted == true {
-                       NavigationLink("Test Phase Complete, Press To Continue", destination: PostEHATestView(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting))
-                           .padding()
-                           .frame(width: 200, height: 50, alignment: .center)
-                           .background(.green)
-                           .foregroundColor(.white)
-                           .cornerRadius(24)
-                   }
-               }
-               .navigationDestination(isPresented: $ehaP2fullTestCompleted) {
-                   PostEHATestView(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
-               }
-               .padding(.top, 20)
-               .padding(.bottom, 10)
-               HStack {
-                   Spacer()
-                   Toggle("MonoTest", isOn: $ehaP2MonoTest)
-                       .foregroundColor(.white)
-                       .font(.caption)
-                   Spacer()
-                   if ehaP2MonoTest == true {
-                       Toggle("Right", isOn: $ehaP2MonoRightTest)
-                           .foregroundColor(.white)
-                           .font(.caption)
-                       Spacer()
-                       Toggle("Left", isOn: $ehaP2MonoLeftTest)
-                           .foregroundColor(.white)
-                           .font(.caption)
-                       Spacer()
-                       Toggle("Bilat", isOn: $ehaP2MonoBilateralTest)
-                           .foregroundColor(.white)
-                           .font(.caption)
-                   }
-                   Spacer()
-               }
-//               .frame(width: 380, height: 50, alignment: .center)
-               .padding(.top, 5)
-               .padding(.bottom, 5)
-               .onChange(of: ehaP2MonoRightTest, perform: { rightValue in
-                   if rightValue == true {
-                           // Set Pan to 1.0
-                       ehaP2localPanHoldingArray = ehaP2panRightArray
-                       ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedMono
-                       ehaP2totalCount = ehaP2MonoTotalCount
-                       ehaP2_samples = ehaP2_monoSamples
-                       ehaP2MonoRightTest = true
-                       ehaP2MonoLeftTest = false
-                       ehaP2MonoBilateralTest = false
-                   } else {
-                       // Do Nothing
-                   }
-               })
-               .onChange(of: ehaP2MonoLeftTest, perform: { leftValue in
-                   if leftValue == true {
-                       //set pan to -1.0
-                       ehaP2localPanHoldingArray = ehaP2panLeftArray
-                       ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedMono
-                       ehaP2totalCount = ehaP2MonoTotalCount
-                       ehaP2_samples = ehaP2_monoSamples
-                       ehaP2MonoRightTest = false
-                       ehaP2MonoLeftTest = true
-                       ehaP2MonoBilateralTest = false
-                   } else {
-                       //do nothing
-                   }
-               })
-               .onChange(of: ehaP2MonoBilateralTest, perform: { bilateralValue in
-                   if bilateralValue == true {
-                       ehaP2localPanHoldingArray = ehaP2panBilateralArray
-                       ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedMono
-                       ehaP2totalCount = ehaP2MonoTotalCount
-                       ehaP2_samples = ehaP2_monoSamples
-                       ehaP2MonoRightTest = false
-                       ehaP2MonoLeftTest = false
-                       ehaP2MonoBilateralTest = true
-                   } else {
-                       //do nothing
-                   }
-               })
-               
-               Spacer()
-               HStack{
-                   Spacer()
-                   VStack{
-                       Toggle("ChangeSampleType ", isOn: $changeSampleArray)
-                           .foregroundColor(.white)
-                           .font(.caption)
-                           .padding(.leading)
-                           .padding(.trailing)
-                       Spacer()
-                       if changeSampleArray == true {
-                           HStack{
-                               Toggle("High Res Std", isOn: $highResStandard)
-                                   .foregroundColor(.white)
-                                   .font(.caption)
-                                   .padding()
-                               Spacer()
-                               Toggle("High Res Faded", isOn: $highResFaded)
-                                   .foregroundColor(.white)
-                                   .font(.caption)
-                                   .padding()
-                               Spacer()
-                               Toggle("CD Dither Faded", isOn: $cdFadedDithered)
-                                   .foregroundColor(.white)
-                                   .font(.caption)
-                                   .padding()
-                           }
-                           Spacer()
-                       }
-                       Spacer()
-                   }
-               }
-               .onChange(of: changeSampleArray) { change in
-                   if change == true {
-                       sampleArraySet = false
-                   } else if change == false {
-                       sampleArraySet = true
-                   }
-               }
-               .onChange(of: highResStandard) { highResValue in
-                   sampleArraySet = false
-                   if highResValue == true && sampleArraySet == false {
-                       //remove array values
-                       ehaP2_dualSamples.removeAll()
-                       ehaP2_monoSamples.removeAll()
-                       //set other toggles to fales
-                       highResFaded = false
-                       cdFadedDithered = false
-                       sampleArraySet = true
-                       //append new highresstd values
-                       ehaP2_dualSamples.append(contentsOf: highResStdSamples)
-                       ehaP2_monoSamples.append(contentsOf: highResStdMonoSamples)
-                       print("ehaP2_samples: \(ehaP2_dualSamples)")
-                       print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
-                   }
-
-               }
-               .onChange(of: highResFaded) { highResFadedValue in
-                   sampleArraySet = false
-                   if highResFadedValue == true && sampleArraySet == false {
-                       //remove array values
-                       ehaP2_dualSamples.removeAll()
-                       ehaP2_monoSamples.removeAll()
-                       //set other toggles to fales
-                       highResStandard = false
-                       cdFadedDithered = false
-                       sampleArraySet = true
-                       //append new highresstd values
-                       ehaP2_dualSamples.append(contentsOf: highResFadedSamples)
-                       ehaP2_monoSamples.append(contentsOf: highResFadedMonoSamples)
-                       print("ehaP2_samples: \(ehaP2_dualSamples)")
-                       print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
-                   }
-               }
-               .onChange(of: cdFadedDithered) { cdFadedDitheredValue in
-                   sampleArraySet = false
-                   if cdFadedDitheredValue == true && sampleArraySet == false {
-                       //remove array values
-                       ehaP2_dualSamples.removeAll()
-                       ehaP2_monoSamples.removeAll()
-                       //set other toggles to fales
-                       highResStandard = false
-                       highResFaded = false
-                       sampleArraySet = true
-                       //append new highresstd values
-                       ehaP2_dualSamples.append(contentsOf: cdFadedDitheredSamples)
-                       ehaP2_monoSamples.append(contentsOf: cdFadedDitheredMonoSamples)
-                       print("ehaP2_samples: \(ehaP2_dualSamples)")
-                       print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
-                   }
-               }
-               
-               HStack{
-                   Spacer()
-                   Toggle("Show\nData", isOn: $displayGainData)
-                       .font(.caption)
-                       .foregroundColor(.white)
-//                   Spacer()
-                   if displayGainData == true {
-                       Text("Gain:\n\(ehaP2_testGain)")
-                           .font(.caption)
-                           .foregroundColor(.white)
-                       Spacer()
-                       Text("Pan:\n\(ehaP2_pan)")
-                           .font(.caption)
-                           .foregroundColor(.white)
-                       Spacer()
-                       Text("phon:\n\(gainEHAP2SettingArrayLink)")
-                           .font(.caption)
-                           .foregroundColor(.white)
-//                       Spacer()
-                    }
-                   Spacer()
-               }
-               .frame(width: 380, height: 50, alignment: .center)
-               .padding(.top, 5)
-               .padding(.bottom, 5)
-        
-               Spacer()
-               if ehaP2TestStarted == false {
-                   Button {
-                       Task(priority: .userInitiated) {
-                           audioSessionModel.setAudioSession()
-                           ehaP2setDualMonoVariables()
-                           ehaP2localPlaying = 1
-                           ehaP2endTestSeriesValue = false
-                           changeSampleArray = false
-                           ehaP2MonoTest = false
-                           print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
-                       }
-                   } label: {
-                       Text("Click to Start")
-                           .fontWeight(.bold)
-                           .padding()
-                           .frame(width: 200, height: 50, alignment: .center)
-                           .background(colorModel.tiffanyBlue)
-                           .foregroundColor(.white)
-                           .cornerRadius(24)
-                   }
-                   .padding(.top, 10)
-                   .padding(.bottom, 10)
-                   
-                   Text("")
-                       .fontWeight(.bold)
-                       .padding()
-                       .frame(width: 200, height: 50, alignment: .center)
-                       .background(Color .clear)
-                       .foregroundColor(.clear)
-                       .cornerRadius(24)
-                       .padding(.top, 20)
-                       .padding(.bottom, 40)
-               } else if ehaP2TestStarted == true {
-                   Button {
-                       ehaP2localPlaying = 0
-                       ehaP2stop()
-                       ehaP2userPausedTest = true
-                       ehaP2playingStringColorIndex = 1
-                       DispatchQueue.main.asyncAfter(deadline: .now() + 2.2, qos: .userInitiated) {
-                           ehaP2localPlaying = 0
-                           ehaP2stop()
-                           ehaP2userPausedTest = true
-                           ehaP2playingStringColorIndex = 1
-                       }
-                       DispatchQueue.main.asyncAfter(deadline: .now() + 3.6, qos: .userInitiated) {
-                           ehaP2localPlaying = 0
-                           ehaP2stop()
-                           ehaP2userPausedTest = true
-                           ehaP2playingStringColorIndex = 1
-                       }
-                       DispatchQueue.main.asyncAfter(deadline: .now() + 5.4, qos: .userInitiated) {
-                           ehaP2localPlaying = 0
-                           ehaP2stop()
-                           ehaP2userPausedTest = true
-                           ehaP2playingStringColorIndex = 1
-                       }
-                   } label: {
-                       Text("Pause Test")
-                           .fontWeight(.semibold)
-                           .padding()
-                           .frame(width: 200, height: 50, alignment: .center)
-                           .background(Color .yellow)
-                           .foregroundColor(.black)
-                           .cornerRadius(24)
-                       
-                   }
-                   .padding(.top, 10)
-                   .padding(.bottom, 10)
-                   Button {
-                       ehaP2_heardArray.removeAll()
-                       ehaP2pauseRestartTestCycle()
-                       audioSessionModel.setAudioSession()
-                       ehaP2localPlaying = 1
-                       ehaP2userPausedTest = false
-                       ehaP2playingStringColorIndex = 0
-                       ehaP2endTestSeriesValue = false
-                       ehaP2setDualMonoVariables()
-                       print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
-                   } label: {
-                       Text(ehaP2playingString[ehaP2playingStringColorIndex])
-                           .foregroundColor(ehaP2playingAlternateStringColor[ehaP2playingStringColorIndex+1])
-                           .fontWeight(.semibold)
-                           .padding()
-                           .frame(width: 200, height: 50, alignment: .center)
-                           .background(ehaP2playingAlternateStringColor[ehaP2playingStringColorIndex])
-                           .cornerRadius(24)
-                   }
-                   .padding(.top, 20)
-                   .padding(.bottom, 20)
-               }
-               Button {
-                   ehaP2heardThread.async{ self.ehaP2localHeard = 1
-                   }
-               } label: {
-                   Text("Press if You Hear The Tone")
-                       .fontWeight(.semibold)
-                       .padding()
-                       .frame(width: 300, height: 100, alignment: .center)
-                       .background(Color .green)
-                       .foregroundColor(.black)
-                       .cornerRadius(24)
-               }
-               .padding(.top, 10)
-               .padding(.bottom, 80)
-               }
-               .fullScreenCover(isPresented: $ehaP2showTestCompletionSheet, content: {
-                   ZStack{
-                       colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all)//, edges: .top)
-                       VStack(alignment: .leading) {
-                           Button(action: {
-                               if ehaP2fullTestCompleted == true {
-                                   ehaP2showTestCompletionSheet.toggle()
-                               } else if ehaP2fullTestCompleted == false {
-                                   ehaP2showTestCompletionSheet.toggle()
-                                   ehaP2setDualMonoVariables()
-                                   ehaP2endTestSeriesValue = false
-                                   ehaP2testIsPlaying = true
-                                   ehaP2localPlaying = 1
-                                   ehaP2playingStringColorIndex = 2
-                                   ehaP2userPausedTest = false
-                                   print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
-                               }
-                           }, label: {
-                               Image(systemName: "xmark")
-                                   .font(.headline)
-                                   .padding(10)
-                                   .foregroundColor(.clear)
-                           })
-                           if ehaP2fullTestCompleted == false && ehaP2TestingPhases < 1 {
-                               Spacer()
-                               Text("You are now going to take the full extended hearing assessment. The test is completed in TEN(10) phases and will take about 25 minutes to complete.")
-                                   .foregroundColor(.white)
-                                   .font(.title)
-                                   .padding()
-                               Spacer()
-                               Text("Make sure to take a break after each test phase, as you must concentrate deeply while actively testing, which may become tiring without breaks")
-                                   .foregroundColor(.white)
-                                   .font(.title2)
-                                   .padding()
-                               Spacer()
-                               HStack{
-                                   Spacer()
-                                   Text("Let's Continue To Start The Test!")
-                                       .frame(width: 300, height: 50, alignment: .center)
-                                       .foregroundColor(.white)
-                                       .background(Color.green)
-                                       .cornerRadius(24)
-                                       .onTapGesture {
-                                           ehaP2TestingPhases += 1
-                                           ehaP2showTestCompletionSheet.toggle()
-                                       }
-                               Spacer()
-                               }
-                               Spacer()
-                           } else if ehaP2fullTestCompleted == false && ehaP2TestingPhases >= 1 {
-                               Spacer()
-                               Text("Take a moment for a break before exiting to continue with the next test segment")
-                                   .foregroundColor(.white)
-                                   .font(.title)
-                                   .padding()
-                               Spacer()
-                               Text("You have completed \(ehaP2TestingPhases) of TEN test phases.")
-                                   .foregroundColor(.white)
-                                   .font(.title)
-                                   .padding()
-                               Spacer()
-                               HStack{
-                                   Spacer()
-                                   Button(action: {
-                                       if ehaP2fullTestCompleted == true {
-                                           ehaP2showTestCompletionSheet.toggle()
-                                       } else if ehaP2fullTestCompleted == false {
-                                           DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
-                                               Task(priority: .userInitiated) {
-                                                   await ehaP2combinedPauseRestartAndStartNexTestCycle()
-                                                   ehaP2TestingPhases += 1
-                                               }
-                                           }
-                                       }
-                                   }, label: {
-                                       Text("Start The Next Cycle")
-                                           .fontWeight(.bold)
-                                           .padding()
-                                           .frame(width: 200, height: 50, alignment: .center)
-                                           .background(colorModel.tiffanyBlue)
-                                           .foregroundColor(.white)
-                                           .cornerRadius(300)
-                                   })
-                               Spacer()
-                               }
-                           } else if ehaP2fullTestCompleted == true && ehaP2TestingPhases >= 1 {
-                               Text("Full Test Completed! Let's Proceed.")
-                                   .foregroundColor(.green)
-                                   .font(.title)
-                                   .padding()
-                                   .padding(.bottom, 20)
-                               HStack{
-                                   Spacer()
-                                   
-                                   Button {
-                                       self.ehaP2EPTATestCompleted = true
-                                       ehaP2showTestCompletionSheet.toggle()
-                                   } label: {
-                                       Text("Continue")
-                                           .fontWeight(.semibold)
-                                           .padding()
-                                           .frame(width: 200, height: 50, alignment: .center)
-                                           .background(Color .green)
-                                           .foregroundColor(.white)
-                                           .cornerRadius(300)
-                                   }
-                                   Spacer()
-                               }
-                               .padding(.top, 20)
-                               .padding(.bottom, 40)
-                           }
-                           Spacer()
-                       }
-                   }
-               })
-           }
-           .onAppear() {
-               Task(priority: .userInitiated) {
-                   if gainEHAP2PhonIsSet == false {
-                       await checkGainEHAP2_2_5DataLink()
-                       await checkGainEHAP2_4DataLink()
-                       await checkGainEHAP2_5DataLink()
-                       await checkGainEHAP2_7DataLink()
-                       await checkGainEHAP2_8DataLink()
-                       await checkGainEHAP2_11DataLink()
-                       await checkGainEHAP2_16DataLink()
-                       await checkGainEHAP2_17DataLink()
-                       await checkGainEHAP2_24DataLink()
-                       await checkGainEHAP2_27DataLink()
-                       await gainEHAP2CurveAssignment()
-                       ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]
-                       await comparedLastNameCSVReader()
-                       gainEHAP2PhonIsSet = true
-                       highResStandard = true
-                       //append highresstd to array
-                       ehaP2_dualSamples.append(contentsOf: highResStdSamples)
-                       ehaP2_monoSamples.append(contentsOf: highResStdMonoSamples)
-                       sampleArraySet = true
-                       print("ehaP2_dualSamples: \(ehaP2_dualSamples)")
-                       print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
-                       ehaP2showTestCompletionSheet = true
-                       
-                   } else if gainEHAP2PhonIsSet == true {
-                       print("Gain Already Set")
-                   } else {
-                       print("!!!Fatal Error in gainEHAP1PhonIsSet OnAppear Functions")
-                   }
-               }
-           }
-           .onChange(of: ehaP2testIsPlaying, perform: { ehaP2testBoolValue in
-               if ehaP2testBoolValue == true && ehaP2endTestSeriesValue == false {
-               //User is starting test for first time
-                   audioSessionModel.setAudioSession()
-                   ehaP2localPlaying = 1
-                   ehaP2playingStringColorIndex = 0
-                   ehaP2userPausedTest = false
-               } else if ehaP2testBoolValue == false && ehaP2endTestSeriesValue == false {
-               // User is pausing test for firts time
-                   ehaP2stop()
-                   ehaP2localPlaying = 0
-                   ehaP2playingStringColorIndex = 1
-                   ehaP2userPausedTest = true
-               } else if ehaP2testBoolValue == true && ehaP2endTestSeriesValue == true {
-                   ehaP2stop()
-                   ehaP2localPlaying = -1
-                   ehaP2playingStringColorIndex = 2
-                   ehaP2userPausedTest = true
-               } else {
-                   print("Critical error in pause logic")
-               }
-           })
-           // This is the lowest CPU approach from many, many tries
-           .onChange(of: ehaP2localPlaying, perform: { ehaP2playingValue in
-               ehaP2activeFrequency = ehaP2_samples[ehaP2_index]
-               ehaP2localPan = ehaP2localPanHoldingArray[ehaP2_index]
-               ehaP2_pan = ehaP2localPanHoldingArray[ehaP2_index]
-//               ehaP2localPan = ehaP2panArray[ehaP2_index]
-//               ehaP2_pan = ehaP2panArray[ehaP2_index]
-               ehaP2localHeard = 0
-               ehaP2localReversal = 0
-               ehaP2TestStarted = true
-               if ehaP2playingValue == 1{
-                   print("ehaP2localTestCount: \(ehaP2localTestCount)")
-                   ehaP2audioThread.async {
-                       ehaP2loadAndTestPresentation(sample: ehaP2activeFrequency, gain: ehaP2_testGain, pan: ehaP2localPan)
-                       while ehaP2testPlayer!.isPlaying == true && self.ehaP2localHeard == 0 { }
-                       if ehaP2localHeard == 1 {
-                           ehaP2testPlayer!.stop()
-                           print("Stopped in while if: Returned Array \(ehaP2localHeard)")
-                       } else {
-                           ehaP2testPlayer!.stop()
-                       self.ehaP2localHeard = -1
-                       print("Stopped naturally: Returned Array \(ehaP2localHeard)")
-                       }
-                   }
-                   ehaP2preEventThread.async {
-                       ehaP2preEventLogging()
-                   }
-                   DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3.6) {
-                       if self.ehaP2localHeard == 1 {
-                           ehaP2localTestCount += 1
-                           ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
-                           Task(priority: .userInitiated) {
-                               await ehaP2responseHeardArray()      //ehaP2_heardArray.append(1)
-                               await ehaP2localResponseTracking()
-                               await ehaP2count()
-                               await ehaP2logNotPlaying()           //ehaP2_playing = -1
-                               await ehaP2resetPlaying()
-                               await ehaP2resetHeard()
-                               await ehaP2resetNonResponseCount()
-                               await ehaP2createReversalHeardArray()
-                               await ehaP2createReversalGainArray()
-                               await ehaP2checkHeardReversalArrays()
-                               await ehaP2reversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change event
-                           }
-                       }
-                       else if ehaP2_heardArray.last == nil || self.ehaP2localHeard == -1 {
-                           ehaP2localTestCount += 1
-                           ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
-                           Task(priority: .userInitiated) {
-                               await ehaP2heardArrayNormalize()
-                               
-                               await maxEHAP2GainReachedReversal()
-                               
-                               await ehaP2count()
-                               await ehaP2logNotPlaying()   //self.ehaP2_playing = -1
-                               await ehaP2resetPlaying()
-                               await ehaP2resetHeard()
-                               await ehaP2nonResponseCounting()
-                               await ehaP2createReversalHeardArray()
-                               
-                               await ehaP2createReversalGainArrayNonResponse()
-//                               await ehaP2createReversalGainArray()
-                               
-                               await ehaP2checkHeardReversalArrays()
-                               await ehaP2reversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change    event
-                           }
-                       } else {
-                           ehaP2localTestCount = 1
-                           ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
-                           Task(priority: .background) {
-                               await ehaP2resetPlaying()
-                               print("Fatal Error: Stopped in Task else")
-                               print("heardArray: \(ehaP2_heardArray)")
-                           }
-                       }
-                   }
-               }
-           })
-           .onChange(of: ehaP2localReversal) { ehaP2reversalValue in
-               if ehaP2reversalValue == 1 {
-                   DispatchQueue.global(qos: .background).async {
-                       Task(priority: .userInitiated) {
-                           if ehaP2MonoTest == false {
-                               //                        await ehaP2createReversalHeardArray()
-                               //                        await ehaP2createReversalGainArray()
-                               //                        await ehaP2checkHeardReversalArrays()
-                               await ehaP2reversalDirection()
-                               await ehaP2reversalComplexAction()
-                               await ehaP2reversalsCompleteLogging()
-                               await ehaP2AssignLRAverageSampleGains()
-//                               await ehaP2AssignMonoAverageSampleGains()
-                               //                        await ehaP2printReversalGain()
-                               //                        await ehaP2printData()
-                               //                        await ehaP2printReversalData()
-                               await ehaP2concatenateFinalArrays()
-                               //                        await ehaP2printConcatenatedArrays()
-                               await ehaP2saveFinalStoredArrays()
-                               await ehaP2endTestSeriesFunc()
-                               await ehaP2newTestCycle()
-                               
-                               print("End of Reversals")
-                               print("Prepare to Start Next Presentation")
-                               await ehaP2restartPresentation()
-                           } else if ehaP2MonoTest == true {
-                               //                        await ehaP2createReversalHeardArray()
-                               //                        await ehaP2createReversalGainArray()
-                               //                        await ehaP2checkHeardReversalArrays()
-                               await ehaP2reversalDirection()
-                               await ehaP2reversalComplexAction()
-                               await ehaP2reversalsCompleteLogging()
-//                               await ehaP2AssignLRAverageSampleGains()
-                               await ehaP2AssignMonoAverageSampleGains()
-                               //                        await ehaP2printReversalGain()
-                               //                        await ehaP2printData()
-                               //                        await ehaP2printReversalData()
-                               await ehaP2concatenateFinalArrays()
-                               //                        await ehaP2printConcatenatedArrays()
-                               await ehaP2saveFinalStoredArrays()
-                               await ehaP2endTestSeriesFunc()
-                               await ehaP2newTestCycle()
-                              
-                               print("End of Reversals")
-                               print("Prepare to Start Next Presentation")
-                               await ehaP2restartPresentation()
-                           } else {
-                               print("!!!Fatal error in ehaP2ReversalValue ehaP2MonoTest Logic")
-                           }
-                       }
-                   }
-               }
-           }
-           .onChange(of: isOkayToUpload) { uploadValue in
-               print("!!@@@uploadValue: \(uploadValue)")
-               if uploadValue == true {
-                   Task{
-                       print("!!!@@@@Starting Upload Results")
-                       await uploadEHAP2Results()
-                   }
-               } else {
-                   print("Fatal Error in uploadValue Change of Logic")
-               }
-           }
-       }
     
-       
+    let ehaP2ThreadBackground = DispatchQueue(label: "AudioThread", qos: .background)
+    let ehaP2ThreadDefault = DispatchQueue(label: "AudioThread", qos: .default)
+    let ehaP2ThreadUserInteractive = DispatchQueue(label: "AudioThread", qos: .userInteractive)
+    let ehaP2ThreadUserInitiated = DispatchQueue(label: "AudioThread", qos: .userInitiated)
+    
+    @State private var showQoSThreads: Bool = false
+    @State private var qualityOfService = Int()
+    @State private var qosBackground: Bool = false
+    @State private var qosDefault: Bool = false
+    @State private var qosUserInteractive: Bool = false
+    @State private var qosUserInitiated: Bool = false
+    
+    var body: some View {
+        ZStack{
+            colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+            VStack {
+                HStack{
+                    if ehaP2fullTestCompleted == false {
+                        Text("EHA Part 2 Test Cycle \(ehaP2TestingPhases)")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .padding()
+                            .foregroundColor(.white)
+                    } else if ehaP2fullTestCompleted == true {
+                        NavigationLink("Test Phase Complete, Press To Continue", destination: PostEHATestView(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting))
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(24)
+                    }
+                }
+                .navigationDestination(isPresented: $ehaP2fullTestCompleted) {
+                    PostEHATestView(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
+                }
+                .padding(.top, 20)
+                .padding(.bottom, 10)
+                HStack {
+                    Spacer()
+                    Toggle("MonoTest", isOn: $ehaP2MonoTest)
+                        .foregroundColor(.white)
+                        .font(.caption2)
+                        .padding(.leading)
+                    Spacer()
+                    if ehaP2MonoTest == true {
+                        Toggle("Right", isOn: $ehaP2MonoRightTest)
+                            .foregroundColor(.white)
+                            .font(.caption2)
+                        Spacer()
+                        Toggle("Left", isOn: $ehaP2MonoLeftTest)
+                            .foregroundColor(.white)
+                            .font(.caption2)
+                        Spacer()
+                        Toggle("Bilat", isOn: $ehaP2MonoBilateralTest)
+                            .foregroundColor(.white)
+                            .font(.caption2)
+                            .padding(.trailing)
+                    }
+                    Spacer()
+                }
+                .padding(.top, 5)
+                .padding(.bottom, 5)
+                .padding(.leading)
+
+                .onChange(of: ehaP2MonoRightTest, perform: { rightValue in
+                    if rightValue == true {
+                        // Set Pan to 1.0
+                        ehaP2localPanHoldingArray = ehaP2panRightArray
+                        ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedMono
+                        ehaP2totalCount = ehaP2MonoTotalCount
+                        ehaP2_samples = ehaP2_monoSamples
+                        ehaP2MonoRightTest = true
+                        ehaP2MonoLeftTest = false
+                        ehaP2MonoBilateralTest = false
+                    } else {
+                        // Do Nothing
+                    }
+                })
+                .onChange(of: ehaP2MonoLeftTest, perform: { leftValue in
+                    if leftValue == true {
+                        //set pan to -1.0
+                        ehaP2localPanHoldingArray = ehaP2panLeftArray
+                        ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedMono
+                        ehaP2totalCount = ehaP2MonoTotalCount
+                        ehaP2_samples = ehaP2_monoSamples
+                        ehaP2MonoRightTest = false
+                        ehaP2MonoLeftTest = true
+                        ehaP2MonoBilateralTest = false
+                    } else {
+                        //do nothing
+                    }
+                })
+                .onChange(of: ehaP2MonoBilateralTest, perform: { bilateralValue in
+                    if bilateralValue == true {
+                        ehaP2localPanHoldingArray = ehaP2panBilateralArray
+                        ehaP2fullTestCompletedHoldingArray = ehaP2fullTestCompletedMono
+                        ehaP2totalCount = ehaP2MonoTotalCount
+                        ehaP2_samples = ehaP2_monoSamples
+                        ehaP2MonoRightTest = false
+                        ehaP2MonoLeftTest = false
+                        ehaP2MonoBilateralTest = true
+                    } else {
+                        //do nothing
+                    }
+                })
+                
+                HStack{
+                    Spacer()
+                    VStack{
+                        Toggle("ChangeSampleType ", isOn: $changeSampleArray)
+                            .foregroundColor(.white)
+                            .font(.caption2)
+                            .padding(.leading)
+                            .padding(.trailing)
+                        Spacer()
+                        if changeSampleArray == true {
+                            HStack{
+                                Toggle("HighResStd", isOn: $highResStandard)
+                                    .foregroundColor(.white)
+                                    .font(.caption2)
+//                                    .padding()
+                                Spacer()
+                                Toggle("HighResFaded", isOn: $highResFaded)
+                                    .foregroundColor(.white)
+                                    .font(.caption2)
+//                                    .padding()
+                                Spacer()
+                                Toggle("CDDitherFaded", isOn: $cdFadedDithered)
+                                    .foregroundColor(.white)
+                                    .font(.caption2)
+//                                    .padding()
+                            }
+                            .padding(.leading)
+                            .padding(.trailing)
+                            Spacer()
+                        }
+//                        Spacer()
+                    }
+                }
+                .padding(.leading)
+                .onChange(of: changeSampleArray) { change in
+                    if change == true {
+                        sampleArraySet = false
+                    } else if change == false {
+                        sampleArraySet = true
+                    }
+                }
+                .onChange(of: highResStandard) { highResValue in
+                    sampleArraySet = false
+                    if highResValue == true && sampleArraySet == false {
+                        //remove array values
+                        ehaP2_dualSamples.removeAll()
+                        ehaP2_monoSamples.removeAll()
+                        //set other toggles to fales
+                        highResFaded = false
+                        cdFadedDithered = false
+                        sampleArraySet = true
+                        //append new highresstd values
+                        ehaP2_dualSamples.append(contentsOf: highResStdSamples)
+                        ehaP2_monoSamples.append(contentsOf: highResStdMonoSamples)
+                        print("ehaP2_samples: \(ehaP2_dualSamples)")
+                        print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
+                    }
+                    
+                }
+                .onChange(of: highResFaded) { highResFadedValue in
+                    sampleArraySet = false
+                    if highResFadedValue == true && sampleArraySet == false {
+                        //remove array values
+                        ehaP2_dualSamples.removeAll()
+                        ehaP2_monoSamples.removeAll()
+                        //set other toggles to fales
+                        highResStandard = false
+                        cdFadedDithered = false
+                        sampleArraySet = true
+                        //append new highresstd values
+                        ehaP2_dualSamples.append(contentsOf: highResFadedSamples)
+                        ehaP2_monoSamples.append(contentsOf: highResFadedMonoSamples)
+                        print("ehaP2_samples: \(ehaP2_dualSamples)")
+                        print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
+                    }
+                }
+                .onChange(of: cdFadedDithered) { cdFadedDitheredValue in
+                    sampleArraySet = false
+                    if cdFadedDitheredValue == true && sampleArraySet == false {
+                        //remove array values
+                        ehaP2_dualSamples.removeAll()
+                        ehaP2_monoSamples.removeAll()
+                        //set other toggles to fales
+                        highResStandard = false
+                        highResFaded = false
+                        sampleArraySet = true
+                        //append new highresstd values
+                        ehaP2_dualSamples.append(contentsOf: cdFadedDitheredSamples)
+                        ehaP2_monoSamples.append(contentsOf: cdFadedDitheredMonoSamples)
+                        print("ehaP2_samples: \(ehaP2_dualSamples)")
+                        print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
+                    }
+                }
+                
+                HStack{
+                    Spacer()
+                    Toggle("Show Data", isOn: $displayGainData)
+                        .font(.caption)
+                        .foregroundColor(.white)
+                        .padding(.leading)
+                    if displayGainData == true {
+                        Text("Gain:\n\(ehaP2_testGain)")
+                            .font(.caption)
+                            .foregroundColor(.white)
+                        Spacer()
+                        Text("Pan:\n\(ehaP2_pan)")
+                            .font(.caption)
+                            .foregroundColor(.white)
+                        Spacer()
+                        Text("phon:\n\(gainEHAP2SettingArrayLink)")
+                            .font(.caption)
+                            .foregroundColor(.white)
+                    }
+                    Spacer()
+                }
+                .padding(.top, 5)
+                .padding(.bottom, 5)
+                .padding(.leading)
+                
+                Spacer()
+                if ehaP2TestStarted == false {
+                    Button {
+                        Task(priority: .userInitiated) {
+                            audioSessionModel.setAudioSession()
+                            ehaP2setDualMonoVariables()
+                            ehaP2localPlaying = 1
+                            ehaP2endTestSeriesValue = false
+                            changeSampleArray = false
+                            ehaP2MonoTest = false
+                            changeSampleArray = false
+                            print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
+                        }
+                    } label: {
+                        Text("Click to Start")
+                            .fontWeight(.bold)
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(colorModel.tiffanyBlue)
+                            .foregroundColor(.white)
+                            .cornerRadius(24)
+                    }
+                    .padding(.top, 10)
+                    .padding(.bottom, 10)
+                    
+                    Text("")
+                        .fontWeight(.bold)
+                        .padding()
+                        .frame(width: 200, height: 50, alignment: .center)
+                        .background(Color .clear)
+                        .foregroundColor(.clear)
+                        .cornerRadius(24)
+                        .padding(.top, 20)
+                        .padding(.bottom, 40)
+                } else if ehaP2TestStarted == true {
+                    Button {
+                        ehaP2localPlaying = 0
+                        ehaP2stop()
+                        ehaP2userPausedTest = true
+                        ehaP2playingStringColorIndex = 1
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.2, qos: .userInitiated) {
+                            ehaP2localPlaying = 0
+                            ehaP2stop()
+                            ehaP2userPausedTest = true
+                            ehaP2playingStringColorIndex = 1
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.6, qos: .userInitiated) {
+                            ehaP2localPlaying = 0
+                            ehaP2stop()
+                            ehaP2userPausedTest = true
+                            ehaP2playingStringColorIndex = 1
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.4, qos: .userInitiated) {
+                            ehaP2localPlaying = 0
+                            ehaP2stop()
+                            ehaP2userPausedTest = true
+                            ehaP2playingStringColorIndex = 1
+                        }
+                    } label: {
+                        Text("Pause Test")
+                            .fontWeight(.semibold)
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(Color .yellow)
+                            .foregroundColor(.black)
+                            .cornerRadius(24)
+                        
+                    }
+                    .padding(.top, 10)
+                    .padding(.bottom, 10)
+                    Button {
+                        ehaP2_heardArray.removeAll()
+                        ehaP2pauseRestartTestCycle()
+                        audioSessionModel.setAudioSession()
+                        ehaP2localPlaying = 1
+                        ehaP2userPausedTest = false
+                        ehaP2playingStringColorIndex = 0
+                        ehaP2endTestSeriesValue = false
+                        ehaP2setDualMonoVariables()
+                        print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
+                    } label: {
+                        Text(ehaP2playingString[ehaP2playingStringColorIndex])
+                            .foregroundColor(ehaP2playingAlternateStringColor[ehaP2playingStringColorIndex+1])
+                            .fontWeight(.semibold)
+                            .padding()
+                            .frame(width: 200, height: 50, alignment: .center)
+                            .background(ehaP2playingAlternateStringColor[ehaP2playingStringColorIndex])
+                            .cornerRadius(24)
+                    }
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
+                }
+                Button {
+                    ehaP2heardThread.async{ self.ehaP2localHeard = 1
+                    }
+                } label: {
+                    Text("Press if You Hear The Tone")
+                        .fontWeight(.semibold)
+                        .padding()
+                        .frame(width: 300, height: 100, alignment: .center)
+                        .background(Color .green)
+                        .foregroundColor(.black)
+                        .cornerRadius(24)
+                }
+                .padding(.top, 10)
+                .padding(.bottom, 80)
+            }
+            .fullScreenCover(isPresented: $ehaP2showTestCompletionSheet, content: {
+                ZStack{
+                    colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all)//, edges: .top)
+                    VStack(alignment: .leading) {
+                        Button(action: {
+                            if ehaP2fullTestCompleted == true {
+                                ehaP2showTestCompletionSheet.toggle()
+                            } else if ehaP2fullTestCompleted == false {
+                                ehaP2showTestCompletionSheet.toggle()
+                                ehaP2setDualMonoVariables()
+                                ehaP2endTestSeriesValue = false
+                                ehaP2testIsPlaying = true
+                                ehaP2localPlaying = 1
+                                ehaP2playingStringColorIndex = 2
+                                ehaP2userPausedTest = false
+                                print("Start Button Clicked. Playing = \(ehaP2localPlaying)")
+                            }
+                        }, label: {
+                            Image(systemName: "xmark")
+                                .font(.headline)
+                                .padding(10)
+                                .foregroundColor(.clear)
+                        })
+                        
+                        if ehaP2fullTestCompleted == false {
+                            VStack(alignment: .leading, spacing: 10){
+                                Toggle(isOn: $showQoSThreads) {
+                                    Text("Change Qos Threads")
+                                        .foregroundColor(.blue)
+                                }
+                                .padding(.leading, 10)
+                                .padding(.trailing, 10)
+                                .padding(.bottom, 10)
+                                if showQoSThreads == true {
+                                    HStack{
+                                        Spacer()
+                                        Toggle("Background", isOn: $qosBackground)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("Default", isOn: $qosDefault)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                    }
+                                    .padding(.leading)
+                                    .padding(.trailing)
+                                    .padding(.bottom, 10)
+                                    HStack{
+                                        Spacer()
+                                        Toggle("UserInteractive", isOn: $qosUserInteractive)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                        Toggle("UserInitiated", isOn: $qosUserInitiated)
+                                            .foregroundColor(.blue)
+                                            .font(.caption)
+                                        Spacer()
+                                    }
+                                    .padding(.leading)
+                                    .padding(.trailing)
+                                }
+                            }
+                            .onChange(of: qosBackground) { backgroundValue in
+                                if backgroundValue == true {
+                                    qosBackground = true
+                                    qosDefault = false
+                                    qosUserInteractive = false
+                                    qosUserInitiated = false
+                                    qualityOfService = 1
+                                }
+                            }
+                            .onChange(of: qosDefault) { defaultValue in
+                                if defaultValue == true {
+                                    qosBackground = false
+                                    qosDefault = true
+                                    qosUserInteractive = false
+                                    qosUserInitiated = false
+                                    qualityOfService = 2
+                                }
+                            }
+                            .onChange(of: qosUserInteractive) { interactiveValue in
+                                if interactiveValue == true {
+                                    qosBackground = false
+                                    qosDefault = false
+                                    qosUserInteractive = true
+                                    qosUserInitiated = false
+                                    qualityOfService = 3
+                                }
+                            }
+                            .onChange(of: qosUserInitiated) { initiatedValue in
+                                if initiatedValue == true {
+                                    qosBackground = false
+                                    qosDefault = false
+                                    qosUserInteractive = false
+                                    qosUserInitiated = true
+                                    qualityOfService = 4
+                                }
+                            }
+                        }
+
+                        Spacer()
+                        if ehaP2fullTestCompleted == false && ehaP2TestingPhases < 1 {
+                            Spacer()
+                            Text("You are now going to take the full extended hearing assessment. The test is completed in TEN(10) phases and will take about 25 minutes to complete.")
+                                .foregroundColor(.white)
+                                .font(.title)
+                                .padding()
+                            Spacer()
+                            Text("Make sure to take a break after each test phase, as you must concentrate deeply while actively testing, which may become tiring without breaks")
+                                .foregroundColor(.white)
+                                .font(.title2)
+                                .padding()
+                            Spacer()
+                            HStack{
+                                Spacer()
+                                Text("Let's Continue To Start The Test!")
+                                    .frame(width: 300, height: 50, alignment: .center)
+                                    .foregroundColor(.white)
+                                    .background(Color.green)
+                                    .cornerRadius(24)
+                                    .onTapGesture {
+                                        ehaP2TestingPhases += 1
+                                        ehaP2showTestCompletionSheet.toggle()
+                                    }
+                                Spacer()
+                            }
+                            Spacer()
+                        } else if ehaP2fullTestCompleted == false && ehaP2TestingPhases >= 1 {
+                            Spacer()
+                            Text("Take a moment for a break before exiting to continue with the next test segment")
+                                .foregroundColor(.white)
+                                .font(.title)
+                                .padding()
+                            Spacer()
+                            Text("You have completed \(ehaP2TestingPhases) of TEN test phases.")
+                                .foregroundColor(.white)
+                                .font(.title)
+                                .padding()
+                            Spacer()
+                            HStack{
+                                Spacer()
+                                Button(action: {
+                                    if ehaP2fullTestCompleted == true {
+                                        ehaP2showTestCompletionSheet.toggle()
+                                    } else if ehaP2fullTestCompleted == false {
+                                        DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
+                                            Task(priority: .userInitiated) {
+                                                await ehaP2combinedPauseRestartAndStartNexTestCycle()
+                                                ehaP2TestingPhases += 1
+                                            }
+                                        }
+                                    }
+                                }, label: {
+                                    Text("Start The Next Cycle")
+                                        .fontWeight(.bold)
+                                        .padding()
+                                        .frame(width: 200, height: 50, alignment: .center)
+                                        .background(colorModel.tiffanyBlue)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(300)
+                                })
+                                Spacer()
+                            }
+                        } else if ehaP2fullTestCompleted == true && ehaP2TestingPhases >= 1 {
+                            Text("Full Test Completed! Let's Proceed.")
+                                .foregroundColor(.green)
+                                .font(.title)
+                                .padding()
+                                .padding(.bottom, 20)
+                            HStack{
+                                Spacer()
+                                
+                                Button {
+                                    self.ehaP2EPTATestCompleted = true
+                                    ehaP2showTestCompletionSheet.toggle()
+                                } label: {
+                                    Text("Continue")
+                                        .fontWeight(.semibold)
+                                        .padding()
+                                        .frame(width: 200, height: 50, alignment: .center)
+                                        .background(Color .green)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(300)
+                                }
+                                Spacer()
+                            }
+                            .padding(.top, 20)
+                            .padding(.bottom, 40)
+                        }
+                        Spacer()
+                    }
+                }
+            })
+        }
+        .onAppear() {
+            Task(priority: .userInitiated) {
+                if gainEHAP2PhonIsSet == false {
+                    await checkGainEHAP2_2_5DataLink()
+                    await checkGainEHAP2_4DataLink()
+                    await checkGainEHAP2_5DataLink()
+                    await checkGainEHAP2_7DataLink()
+                    await checkGainEHAP2_8DataLink()
+                    await checkGainEHAP2_11DataLink()
+                    await checkGainEHAP2_16DataLink()
+                    await checkGainEHAP2_17DataLink()
+                    await checkGainEHAP2_24DataLink()
+                    await checkGainEHAP2_27DataLink()
+                    await gainEHAP2CurveAssignment()
+                    ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]
+                    await comparedLastNameCSVReader()
+                    gainEHAP2PhonIsSet = true
+                    highResStandard = true
+                    //append highresstd to array
+                    ehaP2_dualSamples.append(contentsOf: highResStdSamples)
+                    ehaP2_monoSamples.append(contentsOf: highResStdMonoSamples)
+                    sampleArraySet = true
+                    print("ehaP2_dualSamples: \(ehaP2_dualSamples)")
+                    print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
+                    ehaP2showTestCompletionSheet = true
+                    audioSessionModel.cancelAudioSession()
+                } else if gainEHAP2PhonIsSet == true {
+                    print("Gain Already Set")
+                } else {
+                    print("!!!Fatal Error in gainEHAP1PhonIsSet OnAppear Functions")
+                }
+            }
+        }
+        .onChange(of: ehaP2testIsPlaying, perform: { ehaP2testBoolValue in
+            if ehaP2testBoolValue == true && ehaP2endTestSeriesValue == false {
+                //User is starting test for first time
+                audioSessionModel.setAudioSession()
+                ehaP2localPlaying = 1
+                ehaP2playingStringColorIndex = 0
+                ehaP2userPausedTest = false
+            } else if ehaP2testBoolValue == false && ehaP2endTestSeriesValue == false {
+                // User is pausing test for firts time
+                ehaP2stop()
+                ehaP2localPlaying = 0
+                ehaP2playingStringColorIndex = 1
+                ehaP2userPausedTest = true
+            } else if ehaP2testBoolValue == true && ehaP2endTestSeriesValue == true {
+                ehaP2stop()
+                ehaP2localPlaying = -1
+                ehaP2playingStringColorIndex = 2
+                ehaP2userPausedTest = true
+            } else {
+                print("Critical error in pause logic")
+            }
+        })
+        // This is the lowest CPU approach from many, many tries
+        .onChange(of: ehaP2localPlaying, perform: { ehaP2playingValue in
+            ehaP2activeFrequency = ehaP2_samples[ehaP2_index]
+            ehaP2localPan = ehaP2localPanHoldingArray[ehaP2_index]
+            ehaP2_pan = ehaP2localPanHoldingArray[ehaP2_index]
+            //               ehaP2localPan = ehaP2panArray[ehaP2_index]
+            //               ehaP2_pan = ehaP2panArray[ehaP2_index]
+            ehaP2localHeard = 0
+            ehaP2localReversal = 0
+            ehaP2TestStarted = true
+            if ehaP2playingValue == 1{
+                print("ehaP2localTestCount: \(ehaP2localTestCount)")
+                
+                
+                if qualityOfService == 1 {
+                    print("QOS Thread Background")
+                    ehaP2ThreadBackground.async {
+                        ehaP2loadAndTestPresentation(sample: ehaP2activeFrequency, gain: ehaP2_testGain, pan: ehaP2localPan)
+                        while ehaP2testPlayer!.isPlaying == true && self.ehaP2localHeard == 0 { }
+                        if ehaP2localHeard == 1 {
+                            ehaP2testPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(ehaP2localHeard)")
+                        } else {
+                            ehaP2testPlayer!.stop()
+                            self.ehaP2localHeard = -1
+                            print("Stopped naturally: Returned Array \(ehaP2localHeard)")
+                        }
+                    }
+                } else if qualityOfService == 2 {
+                    print("QOS Thread Default")
+                    ehaP2ThreadDefault.async {
+                        ehaP2loadAndTestPresentation(sample: ehaP2activeFrequency, gain: ehaP2_testGain, pan: ehaP2localPan)
+                        while ehaP2testPlayer!.isPlaying == true && self.ehaP2localHeard == 0 { }
+                        if ehaP2localHeard == 1 {
+                            ehaP2testPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(ehaP2localHeard)")
+                        } else {
+                            ehaP2testPlayer!.stop()
+                            self.ehaP2localHeard = -1
+                            print("Stopped naturally: Returned Array \(ehaP2localHeard)")
+                        }
+                    }
+                } else if qualityOfService == 3 {
+                    print("QOS Thread UserInteractive")
+                    ehaP2ThreadUserInteractive.async {
+                        ehaP2loadAndTestPresentation(sample: ehaP2activeFrequency, gain: ehaP2_testGain, pan: ehaP2localPan)
+                        while ehaP2testPlayer!.isPlaying == true && self.ehaP2localHeard == 0 { }
+                        if ehaP2localHeard == 1 {
+                            ehaP2testPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(ehaP2localHeard)")
+                        } else {
+                            ehaP2testPlayer!.stop()
+                            self.ehaP2localHeard = -1
+                            print("Stopped naturally: Returned Array \(ehaP2localHeard)")
+                        }
+                    }
+                } else if qualityOfService == 4 {
+                    print("QOS Thread UserInitiated")
+                    ehaP2ThreadUserInitiated.async {
+                        ehaP2loadAndTestPresentation(sample: ehaP2activeFrequency, gain: ehaP2_testGain, pan: ehaP2localPan)
+                        while ehaP2testPlayer!.isPlaying == true && self.ehaP2localHeard == 0 { }
+                        if ehaP2localHeard == 1 {
+                            ehaP2testPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(ehaP2localHeard)")
+                        } else {
+                            ehaP2testPlayer!.stop()
+                            self.ehaP2localHeard = -1
+                            print("Stopped naturally: Returned Array \(ehaP2localHeard)")
+                        }
+                    }
+                } else {
+                    print("QOS Thread Not Set, Catch Setting of Default")
+                    ehaP2audioThread.async {
+                        ehaP2loadAndTestPresentation(sample: ehaP2activeFrequency, gain: ehaP2_testGain, pan: ehaP2localPan)
+                        while ehaP2testPlayer!.isPlaying == true && self.ehaP2localHeard == 0 { }
+                        if ehaP2localHeard == 1 {
+                            ehaP2testPlayer!.stop()
+                            print("Stopped in while if: Returned Array \(ehaP2localHeard)")
+                        } else {
+                            ehaP2testPlayer!.stop()
+                            self.ehaP2localHeard = -1
+                            print("Stopped naturally: Returned Array \(ehaP2localHeard)")
+                        }
+                    }
+                }
+                
+                
+                ehaP2preEventThread.async {
+                    ehaP2preEventLogging()
+                }
+                DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3.6) {
+                    if self.ehaP2localHeard == 1 {
+                        ehaP2localTestCount += 1
+                        ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
+                        Task(priority: .userInitiated) {
+                            await ehaP2responseHeardArray()      //ehaP2_heardArray.append(1)
+                            await ehaP2localResponseTracking()
+                            await ehaP2count()
+                            await ehaP2logNotPlaying()           //ehaP2_playing = -1
+                            await ehaP2resetPlaying()
+                            await ehaP2resetHeard()
+                            await ehaP2resetNonResponseCount()
+                            await ehaP2createReversalHeardArray()
+                            await ehaP2createReversalGainArray()
+                            await ehaP2checkHeardReversalArrays()
+                            await ehaP2reversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change event
+                        }
+                    }
+                    else if ehaP2_heardArray.last == nil || self.ehaP2localHeard == -1 {
+                        ehaP2localTestCount += 1
+                        ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
+                        Task(priority: .userInitiated) {
+                            await ehaP2heardArrayNormalize()
+                            
+                            await maxEHAP2GainReachedReversal()
+                            
+                            await ehaP2count()
+                            await ehaP2logNotPlaying()   //self.ehaP2_playing = -1
+                            await ehaP2resetPlaying()
+                            await ehaP2resetHeard()
+                            await ehaP2nonResponseCounting()
+                            await ehaP2createReversalHeardArray()
+                            
+                            await ehaP2createReversalGainArrayNonResponse()
+                            //                               await ehaP2createReversalGainArray()
+                            
+                            await ehaP2checkHeardReversalArrays()
+                            await ehaP2reversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change    event
+                        }
+                    } else {
+                        ehaP2localTestCount = 1
+                        ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
+                        Task(priority: .background) {
+                            await ehaP2resetPlaying()
+                            print("Fatal Error: Stopped in Task else")
+                            print("heardArray: \(ehaP2_heardArray)")
+                        }
+                    }
+                }
+            }
+        })
+        .onChange(of: ehaP2localReversal) { ehaP2reversalValue in
+            if ehaP2reversalValue == 1 {
+                DispatchQueue.global(qos: .background).async {
+                    Task(priority: .userInitiated) {
+                        if ehaP2MonoTest == false {
+                            //                        await ehaP2createReversalHeardArray()
+                            //                        await ehaP2createReversalGainArray()
+                            //                        await ehaP2checkHeardReversalArrays()
+                            await ehaP2reversalDirection()
+                            await ehaP2reversalComplexAction()
+                            await ehaP2reversalsCompleteLogging()
+                            await ehaP2AssignLRAverageSampleGains()
+                            //                               await ehaP2AssignMonoAverageSampleGains()
+                            //                        await ehaP2printReversalGain()
+                            //                        await ehaP2printData()
+                            //                        await ehaP2printReversalData()
+                            await ehaP2concatenateFinalArrays()
+                            //                        await ehaP2printConcatenatedArrays()
+                            await ehaP2saveFinalStoredArrays()
+                            await ehaP2endTestSeriesFunc()
+                            await ehaP2newTestCycle()
+                            
+                            print("End of Reversals")
+                            print("Prepare to Start Next Presentation")
+                            await ehaP2restartPresentation()
+                        } else if ehaP2MonoTest == true {
+                            //                        await ehaP2createReversalHeardArray()
+                            //                        await ehaP2createReversalGainArray()
+                            //                        await ehaP2checkHeardReversalArrays()
+                            await ehaP2reversalDirection()
+                            await ehaP2reversalComplexAction()
+                            await ehaP2reversalsCompleteLogging()
+                            //                               await ehaP2AssignLRAverageSampleGains()
+                            await ehaP2AssignMonoAverageSampleGains()
+                            //                        await ehaP2printReversalGain()
+                            //                        await ehaP2printData()
+                            //                        await ehaP2printReversalData()
+                            await ehaP2concatenateFinalArrays()
+                            //                        await ehaP2printConcatenatedArrays()
+                            await ehaP2saveFinalStoredArrays()
+                            await ehaP2endTestSeriesFunc()
+                            await ehaP2newTestCycle()
+                            
+                            print("End of Reversals")
+                            print("Prepare to Start Next Presentation")
+                            await ehaP2restartPresentation()
+                        } else {
+                            print("!!!Fatal error in ehaP2ReversalValue ehaP2MonoTest Logic")
+                        }
+                    }
+                }
+            }
+        }
+        .onChange(of: isOkayToUpload) { uploadValue in
+            print("!!@@@uploadValue: \(uploadValue)")
+            if uploadValue == true {
+                Task{
+                    print("!!!@@@@Starting Upload Results")
+                    await uploadEHAP2Results()
+                }
+            } else {
+                print("Fatal Error in uploadValue Change of Logic")
+            }
+        }
+    }
+}
+ 
+extension EHATTSTestPart2Content {
 //MARK: - AudioPlayer Methods
    
    func ehaP2pauseRestartTestCycle() {

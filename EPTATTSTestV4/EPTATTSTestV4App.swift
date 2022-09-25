@@ -29,32 +29,7 @@ struct EPTATTSTestV4App: App {
     
     var body: some Scene {
         WindowGroup {
-//            DeviceSetupView()
-//            WelcomeSetupView()
-//            SetupListActionView()
-//            TestDeviceSetupView()
-//            SiriSetupView()
-//            CalibrationAssessmentView()
-//            CalibrationSplashView()
-//            LandingView()
-//            UserWrittenHearingAssessmentView()
-//            ManualDeviceEntryInformationView()
-//            ManualDeviceEntryView()
-//            TestDeviceSetupView()
-//            ExplanationView()
-//            InstructionsForTakingTest()
-//            TestIDInputView()
-//            PreTestView()
-//            ClosingView()
-//            TrainingTestView()
-//            Bilateral1kHzTestView()
-//            EHATTSTestPart1View()
-//            SimpleTestView()
-//            EHATTSTestView()
-//            PostBilateral1kHzTestView()
-//            EHATTSTestPart2View()
-//            EarSimulatorManual1View()
-//            EarSimulatorManual2View()
+            
             NavigationView()
 
         }

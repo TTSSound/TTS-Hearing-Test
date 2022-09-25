@@ -66,24 +66,41 @@ struct PreTestContent<Link: View>: View {
                 Text("TestReturned: \(returnedTestSelectedArray[returnedTestSelected])")
                     .foregroundColor(.white)
                 Spacer()
-                NavigationLink {
-                    TrainingTestView(testing: testing, relatedLinkTesting: linkTesting)
-                } label: {
+                if returnedTestSelected < 1 {
                     VStack{
                         Text("We are Now Ready To Take a Practice Test.")
-                            .foregroundColor(.white)
+                            .foregroundColor(.clear)
                             .padding(.bottom, 20)
                         Text("Continue")
                             .padding()
                             .frame(width: 300, height: 50, alignment: .center)
-                            .background(.green)
-                            .foregroundColor(.white)
+                            .background(Color.clear)
+                            .foregroundColor(.clear)
                             .cornerRadius(24)
                         
                     }
                     .padding(.top, 40)
                     .padding(.bottom, 20)
-                    
+                } else if returnedTestSelected >= 1 {
+                    NavigationLink {
+                        TrainingTestView(testing: testing, relatedLinkTesting: linkTesting)
+                    } label: {
+                        VStack{
+                            Text("We are Now Ready To Take a Practice Test.")
+                                .foregroundColor(.white)
+                                .padding(.bottom, 20)
+                            Text("Continue")
+                                .padding()
+                                .frame(width: 300, height: 50, alignment: .center)
+                                .background(.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
+                            
+                        }
+                        .padding(.top, 40)
+                        .padding(.bottom, 20)
+                        
+                    }
                 }
                 Spacer()
             }

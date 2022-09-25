@@ -595,6 +595,7 @@ struct UserWrittenHearingAssessmentContent<Link: View>: View {
                         .background(.black)
                         .onAppear {
                             incompleteQuestion = false
+                            submitSurvey = false
                         }
                         .onChange(of: submitSurvey) { _ in
                             Task(priority: .userInitiated, operation: {

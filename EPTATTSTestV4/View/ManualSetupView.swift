@@ -13,7 +13,7 @@ struct ManualSetupView: View {
     
     var body: some View {
         ZStack{
-            colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea()
+            colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack(){
                 Text("If The Prior System Setup Using Siri Did Not Work, Here is a Manual Setup Process")
                     .font(.title)
