@@ -13,18 +13,16 @@ struct EHADescription: View {
   
     var body: some View {
         ZStack{
-            colorModel.colorBackgroundTopLimeGreen.ignoresSafeArea(.all, edges: .top)
+            colorModel.colorBackgroundTopTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack{
                 Spacer()
                 GroupBox(label:
-                            Label("Extended Hearing Evaluation", systemImage:  "ear.and.waveform").foregroundColor(colorModel.tiffanyBlue) //"hearingdevice.ear")
-                    .foregroundColor(.black)
+                            Label("Extended Hearing Evaluation", systemImage:  "ear.and.waveform")
+                                .foregroundColor(colorModel.tiffanyBlue) //"hearingdevice.ear")
                     ){
                         ScrollView(.vertical, showsIndicators: true) {
                             Text(ehaDescriptionModel.eHADescriptionText)
-                                .foregroundColor(.black)
                                 .font(.footnote)
-                                .foregroundColor(.black)
                         }
                         .frame(height: 425)
                     }

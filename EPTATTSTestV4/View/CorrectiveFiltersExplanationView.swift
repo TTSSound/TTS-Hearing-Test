@@ -13,16 +13,16 @@ struct CorrectiveFiltersExplanationView: View {
   
     var body: some View {
         ZStack{
-            colorModel.colorBackgroundTopTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+            colorModel.colorBackgroundBottomTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack{
                 Spacer()
                 GroupBox(label:
-                            Label("Personalized Corrective Audio Filters", systemImage:  "headphones.circle").foregroundColor(colorModel.darkNeonGreen)
+                            Label("Personalized Corrective Audio Filters", systemImage:  "headphones.circle")
+                                .foregroundColor(colorModel.darkNeonGreen)
                     ){
                         ScrollView(.vertical, showsIndicators: true) {
                             Text(correctiveFiltersExplanationModel.correctiveFiltersExplanationText)
                                 .font(.footnote)
-                                .foregroundColor(.black)
                         }
                         .frame(height: 425)
                     }

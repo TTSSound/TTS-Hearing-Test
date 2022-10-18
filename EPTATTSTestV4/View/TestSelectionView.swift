@@ -115,7 +115,7 @@ struct TestSelectionView: View {
                     .background(.gray)
                     .foregroundColor(.gray)
                 Toggle(isOn: $selectedEPTA) {
-                    Text("I Want The Shorter, Extended Audiogram Test")
+                    Text("I Want The Shorter, Extended Audiogram.")
                         .frame(width: 200, height: 50, alignment: .center)
                 }
                 .padding(.leading)
@@ -141,7 +141,7 @@ struct TestSelectionView: View {
                     .background(.gray)
                     .foregroundColor(.gray)
                 Toggle(isOn: $selectedSimple) {
-                    Text("I Only Want A Trial. Give me the Simple Augiogram.")
+                    Text("I Only Want To Trial the Simple Augiogram.")
                         .frame(width: 200, height: 50, alignment: .center)
                 }
                 .padding(.leading)

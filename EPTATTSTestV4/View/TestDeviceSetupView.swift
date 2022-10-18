@@ -32,7 +32,7 @@ struct SaveSystemSettings: Codable {  // This is a model
 
 struct TestDeviceSetupView: View {
     @StateObject var colorModel: ColorModel = ColorModel()
-    var audioSessionModel = AudioSessionModel()
+    @State var audioSessionModel = AudioSessionModel()
     
     
     let setupCSVName = "SetupResultsCSV.csv"
@@ -119,7 +119,9 @@ struct TestDeviceSetupView: View {
                 /// THIS    IS THE KEY TO GETTING IT TO REFRESH VALUE !!!!!!!!!!
                 Button {
                     Task{
-                        audioSessionModel.setAudioSession()
+                        audioSessionModel.cancelAudioSession()
+//                        audioSessionModel.setAudioSession()
+                        audioSessionModel.setAudioSessionPlayback()
                         checkVolue()
                         checkSilentMode()
                         await concantenateFinalSystemVolumeArray()
@@ -158,14 +160,22 @@ struct TestDeviceSetupView: View {
                 }
                 Spacer()
             }
-            .onAppear {
-                Task{
-                    audioSessionModel.setAudioSession()
-                    checkVolue()
-                    checkSilentMode()
-                    await concantenateFinalSystemVolumeArray()
-                    await saveTestSystemSettings()
-                    await setupCSVReader()
+            .onAppear(perform: {
+                print("Check Try Audio Session Start")
+//                audioSessionModel.setAudioSession()
+                audioSessionModel.setAudioSessionPlayback()
+            })
+            .onAppear(perform: {
+                checkVolue()
+                checkSilentMode()
+            })
+            .onChange(of: volumeCorrect) { volumeValue in
+                if volumeValue >= 0 {
+                    Task {
+                        await concantenateFinalSystemVolumeArray()
+                        await saveTestSystemSettings()
+                        await setupCSVReader()
+                    }
                 }
             }
             .onChange(of: isOkayToUpload) { uploadValue in
@@ -187,7 +197,7 @@ extension TestDeviceSetupView {
             tdLinkColorIndex = 1
             volumeSettingIndex = 1
         }
-        if audioSessionModel.audioSession.outputVolume >= 0.60 && audioSessionModel.audioSession.outputVolume <= 0.626 {
+        if audioSessionModel.audioSession.outputVolume >= 0.60 && audioSessionModel.audioSession.outputVolume <= 0.655 {
             volumeCorrect = 2
             tdLinkColorIndex = 2
             volumeSettingIndex = 2

@@ -13,16 +13,16 @@ struct SimpleTrialDescriptionView: View {
   
     var body: some View {
         ZStack{
-            colorModel.colorBackgroundTopNeonGreen.ignoresSafeArea(.all, edges: .top)
+            colorModel.colorBackgroundNeonGreen.ignoresSafeArea(.all, edges: .top)
             VStack{
                Spacer()
                 GroupBox(label:
-                            Label("Simple Trial Relative Hearing Test", systemImage: "ear").foregroundColor(.black)
+                            Label("Simple Trial Relative Hearing Test", systemImage: "ear")
+                                .foregroundColor(.white)
                     ) {
                         ScrollView(.vertical, showsIndicators: true) {
                             Text(simpleTrialDescriptionModel.simpleTrialDescriptionText)
                                 .font(.footnote)
-                                .foregroundColor(.black)
                         }
                         .frame(height: 425)
                     }

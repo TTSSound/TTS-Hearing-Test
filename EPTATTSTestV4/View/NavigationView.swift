@@ -229,17 +229,29 @@ struct NavigationView: View {
             NavigationStack(path: $navigationModel.setupPath) {
                 ZStack{
                     colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
-                    NavigationLink("Let's Begin The Setup Process", value: EPTATTSTestV4.Setup(id: 1.0, name: "Disclaimer", related: []))
-                        .font(.title)
-                        .padding()
-                        .frame(width: 300, height: 100, alignment: .center)
-                        .background(colorModel.tiffanyBlue)
-                        .foregroundColor(.white)
-                        .cornerRadius(24)
-                        .hoverEffect()
-                        .navigationDestination(for: Setup.self) { setup in
-                            DisclaimerView(setup: setup, relatedLink: link)
+                    VStack{
+                        Spacer()
+                        HStack{
+                            Text("Before Proceeding, Ensure All Other Applications Are Closed.\n\nFailure To Do This May Cause Less Than Optimal Test Performance.")
+                                .foregroundColor(.red)
+                                .font(.title)
                         }
+                        .padding(.leading, 10)
+                        .padding(.trailing, 10)
+                        Spacer()
+                        NavigationLink("Let's Begin The Setup Process", value: EPTATTSTestV4.Setup(id: 1.0, name: "Disclaimer", related: []))
+                            .font(.title)
+                            .padding()
+                            .frame(width: 300, height: 100, alignment: .center)
+                            .background(colorModel.tiffanyBlue)
+                            .foregroundColor(.white)
+                            .cornerRadius(24)
+                            .hoverEffect()
+                            .navigationDestination(for: Setup.self) { setup in
+                                DisclaimerView(setup: setup, relatedLink: link)
+                            }
+                        Spacer()
+                    }
                 }
             }
             .tabItem {

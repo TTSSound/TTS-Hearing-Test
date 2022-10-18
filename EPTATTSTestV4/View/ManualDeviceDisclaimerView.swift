@@ -60,15 +60,15 @@ struct ManualDeviceDisclaimerView: View {
     
     var body: some View {
         ZStack{
-            colorModel.colorBackgroundBottomRed .ignoresSafeArea(.all, edges: .top)
+            colorModel.colorBackgroundTopRed.ignoresSafeArea(.all, edges: .top)
             VStack {
                 Spacer()
                 GroupBox(label:
-                            Label("Uncalibrated Device Agreement", systemImage: "building.columns").foregroundColor(.black)
+                            Label("Uncalibrated Device Agreement", systemImage: "building.columns")
+                                .foregroundColor(.white)
                 ) {
                     ScrollView(.vertical, showsIndicators: true) {
                         Text(uncalibratedAgreementModel.uncalibratedAgreementText)
-                            .foregroundColor(.black)
                             .font(.footnote)
                     }
                     .frame(height: 375)

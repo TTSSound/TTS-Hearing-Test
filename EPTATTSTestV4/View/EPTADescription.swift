@@ -17,11 +17,11 @@ struct EPTADescription: View {
             VStack{
                 Spacer()
                 GroupBox(label:
-                        Label("Extended Hearing Evaluation", systemImage: "ear.trianglebadge.exclamationmark").foregroundColor(colorModel.limeGreen)
+                        Label("Extended Hearing Evaluation", systemImage: "ear.trianglebadge.exclamationmark")
+                            .foregroundColor(colorModel.limeGreen)
                     ) {
                         ScrollView(.vertical, showsIndicators: true) {
                             Text(ePTADescriptionModel.ePTADescriptionText)
-                                .foregroundColor(.black)
                                 .font(.footnote)
                         }
                         .frame(height: 425)
