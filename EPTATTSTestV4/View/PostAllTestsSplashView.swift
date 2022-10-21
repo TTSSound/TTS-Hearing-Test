@@ -181,18 +181,6 @@ extension PostAllTestsSplashContent {
         }
     }
     
-//    func whatTest() async {
-//        if testSelectionModel.finalSelectedEHATest == [1] {
-//            testTakenDirector = 1
-//        } else if testSelectionModel.finalSelectedEPTATest == [1] {
-//            testTakenDirector = 2
-//        } else if testSelectionModel.finalSelectedSimpleTest == [1] {
-//            testTakenDirector = 3
-//        } else {
-//            print("!!!Error in whatTest Logic")
-//        }
-//    }
-    
     func returnPostTestSelected() async {
         if ehaPostLinkExists == true {
             testTakenDirector = 1
@@ -503,9 +491,7 @@ extension PostAllTestsSplashContent {
             if fileManager.fileExists(atPath: filePath[0]) {
                 let filePath = URL(fileURLWithPath: filePath[0])
                 let localFile = filePath
-                //                let fileRef = storageRef.child("CSV/SetupResultsCSV.csv")    //("CSV/\(UUID().uuidString).csv") // Add UUID as name
                 let fileRef = lastNameRef.child("\(fileName)")
-                
                 let uploadTask = fileRef.putFile(from: localFile, metadata: nil) { metadata, error in
                     if error == nil && metadata == nil {
                         //TSave a reference to firestore database
