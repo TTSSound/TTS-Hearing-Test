@@ -252,7 +252,7 @@ extension EHAInterimPreEHAP2Content {
             preEHAP2LinkColorIndex = 1
             preEHAP2VolumeSettingIndex = 1
         }
-        if audioSessionModel.audioSession.outputVolume >= 0.60 && audioSessionModel.audioSession.outputVolume <= 0.626 {
+        if audioSessionModel.audioSession.outputVolume >= 0.60 && audioSessionModel.audioSession.outputVolume <= 0.655 {
             volumePreEHAP2Correct = 2
             preEHAP2LinkColorIndex = 2
             preEHAP2VolumeSettingIndex = 2

@@ -231,7 +231,7 @@ extension EHAInterimPostEPTAContent {
             ehaLinkColorIndex = 1
             ehaVolumeSettingIndex = 1
         }
-        if audioSessionModel.audioSession.outputVolume >= 0.60 && audioSessionModel.audioSession.outputVolume <= 0.626 {
+        if audioSessionModel.audioSession.outputVolume >= 0.60 && audioSessionModel.audioSession.outputVolume <= 0.655 {
             volumeEHACorrect = 2
             ehaLinkColorIndex = 2
             ehaVolumeSettingIndex = 2

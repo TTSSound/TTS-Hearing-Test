@@ -167,7 +167,7 @@ extension PostAllTestsSplashContent {
             paLinkColorIndex = 1
             pavolumeSettingIndex = 1
         }
-        if audioSessionModel.audioSession.outputVolume >= 0.60 && audioSessionModel.audioSession.outputVolume <= 0.626 {
+        if audioSessionModel.audioSession.outputVolume >= 0.60 && audioSessionModel.audioSession.outputVolume <= 0.655 {
             pavolumeCorrect = 2
             paLinkColorIndex = 2
             pavolumeSettingIndex = 2
