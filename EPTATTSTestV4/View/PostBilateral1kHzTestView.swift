@@ -223,19 +223,6 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
                         })
                         .padding(.top, 10)
                         .padding(.bottom, 10)
-                        //
-                        //                        NavigationLink(destination: {
-                        //                            EHATTSTestPart2View(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
-                        //                        }, label: {
-                        //                            Text("3. EHA Part 2")
-                        //                                .padding()
-                        //                                .frame(width: 300, height: 50, alignment: .center)
-                        //                                .background(.gray)
-                        //                                .foregroundColor(.white)
-                        //                                .cornerRadius(24)
-                        //                        })
-                        //                        .padding(.top, 10)
-                        //                        .padding(.bottom, 60)
                     }
                 }
                 Spacer()

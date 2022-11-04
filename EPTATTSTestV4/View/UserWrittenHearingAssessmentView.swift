@@ -6,6 +6,7 @@
 //
 
 
+
 //1. Does a hearing problem cause you to feel embarrassed when you meet new people?
 //2. Does a hearing probelm cause you to feel frustrated when talking to members of your family?
 //3. Do you have difficulty hearing / understanding co-workers, clients, or customers?

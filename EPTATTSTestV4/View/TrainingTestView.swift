@@ -959,29 +959,6 @@ extension TrainingTestContent {
         EmptyView()
     }
 
-    
-//    func arrayTesting() async {
-//        let arraySet1 = Int(training_testPan.count)
-//        let arraySet2 = Int(training_testTestGain.count) - Int(training_frequency.count) + Int(training_testCount.count) - Int(training_heardArray.count)
-//        if arraySet1 + arraySet2 == 0 {
-//            print("All Event Logs Match")
-//        } else {
-//            print("Error Event Logs Length Error")
-//        }
-//    }
-    
-//    func trainingprintData () async {
-//        DispatchQueue.global(qos: .background).async {
-//            print("Start printData)(")
-//            print("--------Array Values Logged-------------")
-//            print("testPan: \(training_testPan)")
-//            print("testTestGain: \(training_testTestGain)")
-//            print("frequency: \(training_frequency)")
-//            print("testCount: \(training_testCount)")
-//            print("heardArray: \(training_heardArray)")
-//            print("---------------------------------------")
-//        }
-//    }
 }
 
 
@@ -1170,12 +1147,6 @@ extension TrainingTestContent {
         }
     }
     
-    //    func trainingprintReversalGain() async {
-    //        DispatchQueue.global(qos: .background).async {
-    //            print("New Gain: \(training_testGain)")
-    //            print("Reversal Direcction: \(training_reversalDirection)")
-    //        }
-    //    }
     
     func trainingreversalHeardCount1() async {
         await trainingreversalAction()
@@ -1254,20 +1225,6 @@ extension TrainingTestContent {
         }
     }
     
-    //    func trainingprintReversalData() async {
-    //        print("--------Reversal Values Logged-------------")
-    //        print("indexForTest: \(training_indexForTest)")
-    //        print("Test Pan: \(training_testPan)")
-    //        print("New TestGain: \(training_testTestGain)")
-    //        print("reversalFrequency: \(trainingactiveFrequency)")
-    //        print("testCount: \(training_testCount)")
-    //        print("heardArray: \(training_heardArray)")
-    //        print("reversalHeard: \(training_reversalHeard)")
-    //        print("FirstGain: \(trainingfirstGain)")
-    //        print("SecondGain: \(trainingsecondGain)")
-    //        print("AverageGain: \(training_averageGain)")
-    //        print("------------------------------------------")
-    //    }
     
     func trainingrestartPresentation() async {
         if trainingendTestSeriesValue == false {//}&& traininguserPausedTest == false {

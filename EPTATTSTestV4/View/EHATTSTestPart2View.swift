@@ -1162,19 +1162,14 @@ struct EHATTSTestPart2Content<Link: View>: View {
                         ehaP2fullTestCompleted = ehaP2fullTestCompletedHoldingArray[ehaP2_index]
                         Task(priority: .userInitiated) {
                             await ehaP2heardArrayNormalize()
-                            
                             await maxEHAP2GainReachedReversal()
-                            
                             await ehaP2count()
                             await ehaP2logNotPlaying()   //self.ehaP2_playing = -1
                             await ehaP2resetPlaying()
                             await ehaP2resetHeard()
                             await ehaP2nonResponseCounting()
                             await ehaP2createReversalHeardArray()
-                            
                             await ehaP2createReversalGainArrayNonResponse()
-                            //                               await ehaP2createReversalGainArray()
-                            
                             await ehaP2checkHeardReversalArrays()
                             await ehaP2reversalStart()  // Send Signal for Reversals here....then at end of reversals, send playing value = 1 to retrigger change    event
                         }
@@ -1195,44 +1190,26 @@ struct EHATTSTestPart2Content<Link: View>: View {
                 DispatchQueue.global(qos: .background).async {
                     Task(priority: .userInitiated) {
                         if ehaP2MonoTest == false {
-                            //                        await ehaP2createReversalHeardArray()
-                            //                        await ehaP2createReversalGainArray()
-                            //                        await ehaP2checkHeardReversalArrays()
                             await ehaP2reversalDirection()
                             await ehaP2reversalComplexAction()
                             await ehaP2reversalsCompleteLogging()
                             await ehaP2AssignLRAverageSampleGains()
-                            //                               await ehaP2AssignMonoAverageSampleGains()
-                            //                        await ehaP2printReversalGain()
-                            //                        await ehaP2printData()
-                            //                        await ehaP2printReversalData()
                             await ehaP2concatenateFinalArrays()
-                            //                        await ehaP2printConcatenatedArrays()
                             await ehaP2saveFinalStoredArrays()
                             await ehaP2endTestSeriesFunc()
                             await ehaP2newTestCycle()
-                            
                             print("End of Reversals")
                             print("Prepare to Start Next Presentation")
                             await ehaP2restartPresentation()
                         } else if ehaP2MonoTest == true {
-                            //                        await ehaP2createReversalHeardArray()
-                            //                        await ehaP2createReversalGainArray()
-                            //                        await ehaP2checkHeardReversalArrays()
                             await ehaP2reversalDirection()
                             await ehaP2reversalComplexAction()
                             await ehaP2reversalsCompleteLogging()
-                            //                               await ehaP2AssignLRAverageSampleGains()
                             await ehaP2AssignMonoAverageSampleGains()
-                            //                        await ehaP2printReversalGain()
-                            //                        await ehaP2printData()
-                            //                        await ehaP2printReversalData()
                             await ehaP2concatenateFinalArrays()
-                            //                        await ehaP2printConcatenatedArrays()
                             await ehaP2saveFinalStoredArrays()
                             await ehaP2endTestSeriesFunc()
                             await ehaP2newTestCycle()
-                            
                             print("End of Reversals")
                             print("Prepare to Start Next Presentation")
                             await ehaP2restartPresentation()

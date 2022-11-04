@@ -51,7 +51,6 @@ struct PostEHATestContent<Link: View>: View {
     @State private var isOkayToUpload = false
     let inputFinalComparedLastNameCSV = "LastNameCSV.csv"
     
-    //    @StateObject var systemSettingsEndEHAModel: SystemSettingsEndEHAModel = SystemSettingsEndEHAModel()
     @State var volumeEHAPostTest = Float()
     
     

@@ -204,25 +204,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     @State var onekHz_finalStoredReversalHeard: [Int] = [Int]()
     @State var onekHz_finalStoredFirstGain: [Float] = [Float]()
     @State var onekHz_finalStoredSecondGain: [Float] = [Float]()
-    
-    //    @State var final_Name = [String]()
-    //    @State var final_Age = [Int]()
-    //    @State var final_Sex = [Int]()
-    //    @State var final_onekHzactiveFrequency = [String]()
-    //    @State var final_RightEar1kHzdBFinal = [Float]()
-    //    @State var final_LeftEar1kHzdBFinal = [Float]()
-    //    @State var final_onekHzIntraEarDeltaHLFinal = [Float]()
-    //    @State var final_onekHzFinalComboLRGains = [Float]()
-    //    @State var final_RightEar1kHzdB1 = [Float]()
-    //    @State var final_LeftEar1kHzdB1 = [Float]()
-    //    @State var final_onekHzFinalLRGains1 = [Float]()
-    //    @State var final_RightEar1kHzdB2 = [Float]()
-    //    @State var final_LeftEar1kHzdB2 = [Float]()
-    //    @State var final_onekHzFinalLRGains2 = [Float]()
-    //    @State var final_onekHz_testPan = [Float]()
-    //    @State var final_onekHz_indexForTest = [Int]()
-    //    @State var final_onekHz_reversalGain = [Float]()
-    //    @State var final_onekHz_testTestGain = [Float]()
+
     
     @State var final_onekHz_Name = [String]()
     @State var final_onekHz_Age = [Int]()
@@ -1216,13 +1198,6 @@ extension Bilateral1kHzTestContent {
         }
     }
     
-    //    func onekHzprintReversalGain() async {
-    //        print("Start onekHzprintReversalGain()")
-    //        DispatchQueue.global(qos: .background).async {
-    //            print("New Gain: \(onekHz_testGain)")
-    //            print("Reversal Direcction: \(onekHz_reversalDirection)")
-    //        }
-    //    }
     
     func onekHzreversalHeardCount1() async {
         //        print("Start onekHzreversalHeardCount1()")
@@ -1484,18 +1459,6 @@ extension Bilateral1kHzTestContent {
         }
     }
     
-    //    func onekHzprintConcatenatedArrays() async {
-    //        print("finalStoredIndex: \(onekHz_finalStoredIndex)")
-    //        print("finalStoredTestPan: \(onekHz_finalStoredTestPan)")
-    //        print("finalStoredTestTestGain: \(onekHz_finalStoredTestTestGain)")
-    //        print("finalStoredFrequency: \(onekHz_finalStoredFrequency)")
-    //        print("finalStoredTestCount: \(onekHz_finalStoredTestCount)")
-    //        print("finalStoredHeardArray: \(onekHz_finalStoredHeardArray)")
-    //        print("finalStoredReversalHeard: \(onekHz_finalStoredReversalHeard)")
-    //        print("finalStoredFirstGain: \(onekHz_finalStoredFirstGain)")
-    //        print("finalStoredSecondGain: \(onekHz_finalStoredSecondGain)")
-    //        print("finalStoredAverageGain: \(onekHz_finalStoredAverageGain)")
-    //    }
     
     func onekHzsaveFinalStoredArrays() async {
         if onekHzlocalMarkNewTestCycle == 1 && onekHzlocalReversalEnd == 1 {
@@ -1517,11 +1480,6 @@ extension Bilateral1kHzTestContent {
         }
     }
     
-    //    let fileOnekHzName = "SummaryOnekHzResults.json"
-    //    let summaryOnekHzCSVName = "SummaryOnekHzResultsCSV.csv"
-    //    let detailedOnekHzCSVName = "DetailedOnekHzResultsCSV.csv"
-    //    let inputOnekHzSummaryCSVName = "InputSummaryOnekHzResultsCSV.csv"
-    //    let inputOnekHzDetailedCSVName = "InputDetailedOnekHzResultsCSV.csv"
     
     func uploadBilateralTestResults() async {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, qos: .background) {

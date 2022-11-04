@@ -123,42 +123,6 @@ struct TrainingTestHoldingPlaceContent<Link: View>: View {
         
     }
     
-    //                    NavigationLink(destination:
-    //                        returnedTrainTestSelected == 1 ? AnyView(EHATTSTestPart1View())
-    //                        : returnedTrainTestSelected == 2 ? AnyView(EPTATTSTestV4List())
-    //                        : returnedTrainTestSelected == 3 ? AnyView(SimpleTestView())
-    //                        : AnyView(TrainingTestHoldingPlace(testing: testing, relatedLinkTesting: linkTesting))
-    //                    ){
-    //                        HStack{
-    //                           Image(systemName: "arrowshape.bounce.right")
-    //                                .foregroundColor(.green)
-    //                           Text("We are Now Ready To Start The Test.\nClick Continue to Get Started!")
-    //                                .foregroundColor(.green)
-    //                       }
-    //                    }
-    //                    .foregroundColor(.green)
-    //                    .foregroundColor(ttLinkColors[ttLinkColorIndex])
-    //                    .padding(.top, 20)
-    //                    .padding(.bottom, 20)
-    
-    //                    Spacer()
-    //                    HStack{
-    //                        Spacer()
-    //                        NavigationLink("Bilateral1kHzTestView", destination: Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)).foregroundColor(.blue)
-    //                        Spacer()
-    //                        NavigationLink("EHATTSTestPart1", destination: EHATTSTestPart1View()).foregroundColor(.green)
-    //                        Spacer()
-    //                    }
-    //                    Spacer()
-    //                    HStack{
-    //                        Spacer()
-    //                        NavigationLink("EHATTSTestPart2View", destination: EHATTSTestPart2View()).foregroundColor(.orange)
-    //                        Spacer()
-    //                        NavigationLink("SimpleTest", destination: SimpleTestView()).foregroundColor(.red)
-    //                        Spacer()
-    //                    }
-    //                    Spacer()
-    
 }
 
 extension TrainingTestHoldingPlaceContent {

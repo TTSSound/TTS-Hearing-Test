@@ -8,20 +8,7 @@
 import SwiftUI
 import CodableCSV
 
-//struct SetupResults: Codable, Identifiable {
-//    let id: Int
-//    let jsonFinalFirstName: String
-//    let jsonFinalLastName: String
-//    let jsonFinalEmail: String
-//    let jsonFinalPassword: String
-//    let jsonFinalAge: Int
-//    let jsonFinalGender: String
-//    let jsonFinalSex: Int
-//    let jsonFinalGenderIndex: Int
-//    let jsonUserAgreementAgreed: Int
-//    let jsonStringUserAgreementAgreedDate: String
-//    let jsonUserAgreementAgreedDate: Double
-//}
+
 
 struct ClosingView: View {
     
@@ -126,16 +113,6 @@ struct ClosingView: View {
                     .font(.title)
                     .foregroundColor(.red)
                 Spacer()
-//                Button {
-//                    Task {
-////                        await checkSetupDataLink()
-//                        await inAppPurchaseCSVReader()
-//                    }
-//                } label: {
-//                    Text("Try CSV Reader")
-//                        .foregroundColor(.green)
-//                }
-//                Spacer()
                 
                 // We are done with testing (for now if EHA)
                 

@@ -1182,29 +1182,6 @@ extension EHATTSTestPart1Content {
         envDataObjectModel_testCount.append(idxTestCountUpdated)
     }
 }
-//    func arrayTesting() async {
-//        let arraySet1 = Int(envDataObjectModel_testPan.count)
-//        let arraySet2 = Int(envDataObjectModel_testTestGain.count) - Int(envDataObjectModel_frequency.count) + Int(envDataObjectModel_testCount.count) - Int(envDataObjectModel_heardArray.count)
-//        if arraySet1 + arraySet2 == 0 {
-//            print("All Event Logs Match")
-//        } else {
-//            print("Error Event Logs Length Error")
-//        }
-//    }
-    
-//    func printData () async {
-//        DispatchQueue.global(qos: .background).async {
-//            print("Start printData)(")
-//            print("--------Array Values Logged-------------")
-//            print("testPan: \(envDataObjectModel_testPan)")
-//            print("testTestGain: \(envDataObjectModel_testTestGain)")
-//            print("frequency: \(envDataObjectModel_frequency)")
-//            print("testCount: \(envDataObjectModel_testCount)")
-//            print("heardArray: \(envDataObjectModel_heardArray)")
-//            print("---------------------------------------")
-//        }
-//    }
-//}
 
 
 extension EHATTSTestPart1Content {
@@ -1414,12 +1391,7 @@ extension EHATTSTestPart1Content {
         }
     }
     
-    //    func printReversalGain() async {
-    //        DispatchQueue.global(qos: .background).async {
-    //            print("New Gain: \(envDataObjectModel_testGain)")
-    //            print("Reversal Direcction: \(envDataObjectModel_reversalDirection)")
-    //        }
-    //    }
+
     
     func reversalHeardCount1() async {
         await reversalAction()
@@ -1647,20 +1619,6 @@ extension EHATTSTestPart1Content {
         }
     }
     
-    //    func printReversalData() async {
-    //        print("--------Reversal Values Logged-------------")
-    //        print("indexForTest: \(envDataObjectModel_indexForTest)")
-    //        print("Test Pan: \(envDataObjectModel_testPan)")
-    //        print("New TestGain: \(envDataObjectModel_testTestGain)")
-    //        print("reversalFrequency: \(activeFrequency)")
-    //        print("testCount: \(envDataObjectModel_testCount)")
-    //        print("heardArray: \(envDataObjectModel_heardArray)")
-    //        print("reversalHeard: \(envDataObjectModel_reversalHeard)")
-    //        print("FirstGain: \(firstGain)")
-    //        print("SecondGain: \(secondGain)")
-    //        print("AverageGain: \(envDataObjectModel_averageGain)")
-    //        print("------------------------------------------")
-    //    }
     
     func restartPresentation() async {
         if endTestSeriesValue == false {
@@ -1797,22 +1755,6 @@ extension EHATTSTestPart1Content {
         }
     }
     
-    //    func printConcatenatedArrays() async {
-    //        print("finalStoredIndex: \(envDataObjectModel_finalStoredIndex)")
-    //        print("finalStoredTestPan: \(envDataObjectModel_finalStoredTestPan)")
-    //        print("finalStoredTestTestGain: \(envDataObjectModel_finalStoredTestTestGain)")
-    //        print("finalStoredFrequency: \(envDataObjectModel_finalStoredFrequency)")
-    //        print("finalStoredTestCount: \(envDataObjectModel_finalStoredTestCount)")
-    //        print("finalStoredHeardArray: \(envDataObjectModel_finalStoredHeardArray)")
-    //        print("finalStoredReversalHeard: \(envDataObjectModel_finalStoredReversalHeard)")
-    //        print("finalStoredFirstGain: \(envDataObjectModel_finalStoredFirstGain)")
-    //        print("finalStoredSecondGain: \(envDataObjectModel_finalStoredSecondGain)")
-    //        print("finalStoredAverageGain: \(envDataObjectModel_finalStoredAverageGain)")
-    //        print("rightFinalGainsArray: \(rightFinalGainsArray)")
-    //        print("finalStoredRightFinalGainsArray: \(finalStoredRightFinalGainsArray)")
-    //        print("leftFinalGainsArray: \(leftFinalGainsArray)")
-    //        print("finalStoredleftFinalGainsArray: \(finalStoredleftFinalGainsArray)")
-    //    }
     
     func saveFinalStoredArrays() async {
         if localMarkNewTestCycle == 1 && localReversalEnd == 1 {
