@@ -38,7 +38,7 @@ struct Bilateral1kHzTestView<Link: View>: View {
 }
 
 
-struct onekHzSaveFinalResults: Codable {  // This is a model
+struct onekHzSaveFinalResults: Codable {  // This is a model 
     var json_onekHz_Name = String()
     var json_onekHz_Age = Int()
     var json_onekHz_Sex = Int()
@@ -864,7 +864,7 @@ extension Bilateral1kHzTestContent {
         onekHzlocalMarkNewTestCycle = 0
         onekHzlocalReversalEnd = 0
         onekHz_index = onekHz_index
-        onekHz_testGain = 0.025       // Add code to reset starting test gain by linking to table of expected HL
+        onekHz_testGain = 0.025       // Add code to reset starting test gain by linking to table o expected HL
         onekHztestIsPlaying = false
         onekHzlocalPlaying = 0
         onekHz_testCount.removeAll()
@@ -934,7 +934,7 @@ extension Bilateral1kHzTestContent {
     func onekHzresetPlaying() async { self.onekHzlocalPlaying = 0 }
     
     func onekHzlogNotPlaying() async { self.onekHzlocalPlaying = -1 }
-    
+
     func onekHzresetHeard() async { self.onekHzlocalHeard = 0 }
     
     func onekHzreversalStart() async { self.onekHzlocalReversal = 1}

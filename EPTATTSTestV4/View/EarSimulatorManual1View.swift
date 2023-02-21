@@ -243,20 +243,34 @@ struct EarSimulatorManual1View: View {
                     .background(Color.blue)
                     .cornerRadius(24)
                     Spacer()
-                    Toggle(isOn: $earSimulatorM1Cycle) {
-                        HStack{
-                            Spacer()
-                            Text("Cycle")
-                            Spacer()
-                        }
+//                    Toggle(isOn: $earSimulatorM1Cycle) {
+//                        HStack{
+//                            Spacer()
+//                            Text("Cycle")
+//                            Spacer()
+//                        }
+//                    }
+//                    .frame(width: 180, height: 30, alignment: .center)
+//                    .foregroundColor(.white)
+//                    .background(Color.gray)
+//                    .cornerRadius(24)
+//                    Spacer()
+                    
+                    Button {
+                        audioSessionModel.setAudioSession()
+                        earSimulatorM1_volume = audioSessionModel.audioSession.outputVolume
+                        //                    audioSessionModel.cancelAudioSession()
+                    } label: {
+                        Text("Vol: \(earSimulatorM1_volume)")
                     }
                     .frame(width: 180, height: 30, alignment: .center)
                     .foregroundColor(.white)
-                    .background(Color.gray)
+                    .background(Color.black)
                     .cornerRadius(24)
+                    
                     Spacer()
                 }
-                .padding(.top, 40)
+                .padding(.top, 30)
                 .padding(.bottom, 20)
                 if ESM1TestStarted == false {
                     Button {    // Start Button
@@ -276,7 +290,7 @@ struct EarSimulatorManual1View: View {
                             .cornerRadius(24)
                     }
                     .padding(.top, 20)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 10)
                 } else if ESM1TestStarted == true {
                     HStack{
                         Spacer()
@@ -323,245 +337,995 @@ struct EarSimulatorManual1View: View {
                             Text("Restart")
                                 .frame(width: 100, height: 40, alignment: .center)
                                 .foregroundColor(.white)
-                                .background(.blue)
+                                .background(colorModel.tiffanyBlue)
                                 .cornerRadius(12)
                         }
                         Spacer()
                     }
+                    .padding(.top, 20)
+                    .padding(.bottom, 10)
                 }
+                
+                
                 //View System Volume and Reset Audio Session to View Updated System Volume (2 wide Hstack)
-                HStack{
-                    Spacer()
-                    Button {
-                        audioSessionModel.setAudioSession()
-                        earSimulatorM1_volume = audioSessionModel.audioSession.outputVolume
-                        //                    audioSessionModel.cancelAudioSession()
-                    } label: {
-                        Text("Check Volume: \(earSimulatorM1_volume)")
-                    }
-                    Spacer()
-                }
-                .frame(width: 300, height: 40, alignment: .center)
-                .foregroundColor(.white)
-                .background(Color.blue)
-                .cornerRadius(24)
-                .padding(.top, 20)
-                .padding(.bottom, 20)
+//                HStack{
+//                    Spacer()
+//                    Button {
+//                        audioSessionModel.setAudioSession()
+//                        earSimulatorM1_volume = audioSessionModel.audioSession.outputVolume
+//                        //                    audioSessionModel.cancelAudioSession()
+//                    } label: {
+//                        Text("Check Volume: \(earSimulatorM1_volume)")
+//                    }
+//                    Spacer()
+//                }
+//                .frame(width: 300, height: 20, alignment: .center)
+//                .foregroundColor(.white)
+//                .background(Color.blue)
+//                .cornerRadius(24)
+//                .padding(.top, 5)
+//                .padding(.bottom, 10)
+                
+                
                 //View Current Gain
-                HStack{
-                    Spacer()
-                    Text("Gain: \(ESM1_testGain)")
-                    Spacer()
-                    Text("Pan: \(ESM1_pan)")
-                    Spacer()
-                }
-                .frame(width: 300, height: 30, alignment: .center)
-                .foregroundColor(.white)
-                .background(Color.clear)
-                .cornerRadius(24)
-                .padding(.bottom, 10)
+//                HStack{
+//                    //Spacer()
+//                    Text("Gain: \(ESM1_testGain) %.16f")
+//                    Text(String(format: "Gain: %.f \(ESM1_testGain)"))
+//                    //Spacer()
+//                    //Text("Pan: \(ESM1_pan)")
+//                    //Spacer()
+//                }
+//                .frame(width: 400, height: 50, alignment: .center)
+//                .foregroundColor(.white)
+//                //.background(Color.clear)
+//                //.cornerRadius(24)
+//                .padding(.bottom, 20)
                 
                 HStack{
-                    //Button For Gain Change of 0.1 (10% / 10 db?)
-                    Spacer()
-                    Button {
-                        Task{
-                            let newGain: Float = ESM1_testGain - 0.1
-                            if newGain > 0.0 {
-                                ESM1_testGain -= 0.1
-                            } else if newGain == 0.0 {
-                                ESM1_testGain -= 0.1
-                            } else {
-                                ESM1_testGain = 0.0
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "minus.circle.fill")
-                            .foregroundColor(.red)
-                    }
-                    Spacer()
-                    Text("Gain: 0.1")
-                        .foregroundColor(.white)
-                    Spacer()
-                    Button {
-                        Task {
-                            let newGain: Float = ESM1_testGain + 0.1
-                            if newGain < 1.0 {
-                                ESM1_testGain += 0.1
-                            } else if newGain == 1.0 {
-                                ESM1_testGain += 0.1
-                            } else {
-                                ESM1_testGain = 1.0
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .foregroundColor(.green)
-                    }
-                    Spacer()
+                    //Spacer()
+                    //Text(String(format: "Gain: %.16f \(ESM1_testGain)"))
+                    Text(String(format: "%.16f", ESM1_testGain))
+                    //Spacer()
+                    //Text("Pan: \(ESM1_pan)")
+                    //Spacer()
                 }
-                .frame(width: 300, height: 50, alignment: .center)
-                .background(Color.clear)
-                .cornerRadius(12)
-                .padding(.bottom, 20)
-                HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
-                    Spacer()
-                    Button {
-                        Task {
-                            let newGain: Float = ESM1_testGain - 0.05
-                            if newGain > 0.0 {
-                                ESM1_testGain -= 0.05
-                            } else if newGain == 0.0 {
-                                ESM1_testGain -= 0.05
-                            } else {
-                                ESM1_testGain = 0.0
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "minus.circle.fill")
-                            .foregroundColor(.red)
-                    }
-                    Spacer()
-                    Text("Gain: 0.05")
-                        .foregroundColor(.white)
-                    Spacer()
-                    Button {
-                        Task {
-                            let newGain: Float = ESM1_testGain + 0.05
-                            if newGain < 1.0 {
-                                ESM1_testGain += 0.05
-                            } else if newGain == 1.0 {
-                                ESM1_testGain += 0.05
-                            } else {
-                                ESM1_testGain = 1.0
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .foregroundColor(.green)
-                    }
-                    Spacer()
+                .frame(width: 400, height: 30, alignment: .center)
+                .foregroundColor(.white)
+                .font(.title)
+                //.background(Color.clear)
+                //.cornerRadius(24)
+                .padding(.bottom, 10)
+               
+                
+                Button("GainReset=0") {
+                    ESM1_testGain = Float()
                 }
-                .frame(width: 300, height: 50, alignment: .center)
-                .background(Color.clear)
-                .cornerRadius(12)
+                .fontWeight(.bold)
+                .frame(width: 200, height: 30, alignment: .center)
+                .background(.red)
+                .foregroundColor(.white)
+                .cornerRadius(24)
+                .padding(.trailing, 160)
+                .padding(.leading, 10)
+                .padding(.top, 10)
                 .padding(.bottom, 20)
-                HStack{ // Button for gain change of 0.01 (1% / 1db)
-                    Spacer()
-                    Button {
-                        Task {
-                            let newGain: Float = ESM1_testGain - 0.01
-                            if newGain > 0.0 {
-                                ESM1_testGain -= 0.01
-                            } else if newGain == 0.0 {
-                                ESM1_testGain -= 0.01
-                            } else {
-                                ESM1_testGain = 0.0
+//
+                ScrollView{
+                    
+                    HStack{
+                        //Button For Gain Change of 0.1 (10% / 10 db?)
+                        Spacer()
+                        Button {
+                            Task{
+                                let newGain: Float = ESM1_testGain - 10E-17 //0.0000000000000001
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-17 //0.0000000000000001
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-17 //0.0000000000000001
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
                             }
-                        }
-                    } label: {
-                        Image(systemName: "minus.circle.fill")
-                            .foregroundColor(.red)
-                    }
-                    Spacer()
-                    Text("Gain: 0.01")
-                        .foregroundColor(.white)
-                    Spacer()
-                    Button {
-                        Task {
-                            let newGain: Float = ESM1_testGain + 0.01
-                            if newGain < 1.0 {
-                                ESM1_testGain += 0.01
-                            } else if newGain == 1.0 {
-                                ESM1_testGain += 0.01
-                            } else {
-                                ESM1_testGain = 1.0
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .foregroundColor(.green)
-                    }
-                    Spacer()
-                }
-                .frame(width: 300, height: 50, alignment: .center)
-                .background(Color.clear)
-                .cornerRadius(12)
-                .padding(.bottom, 20)
-                HStack{     // Button for gain change of 0.001 (0.1% 0.1dB?)
-                    Spacer()
-                    Button {
-                        Task {
-                            let newGain: Float = ESM1_testGain - 0.001
-                            if newGain > 0.0 {
-                                ESM1_testGain -= 0.001
-                            } else if newGain == 0.0 {
-                                ESM1_testGain -= 0.001
-                            } else {
-                                ESM1_testGain = 0.0
-                            }
-                        }
-                    } label: {
-                        VStack{
+                        } label: {
                             Image(systemName: "minus.circle.fill")
                                 .foregroundColor(.red)
                         }
+                        Spacer()
+                        Text("Gain: 10E-17")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-17
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-17
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-17
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
                     }
-                    Spacer()
-                    Text("Gain: 0.001")
-                        .foregroundColor(.white)
-                    Spacer()
-                    Button {
-                        Task {
-                            let newGain: Float = ESM1_testGain + 0.001
-                            if newGain < 1.0 {
-                                ESM1_testGain += 0.001
-                            } else if newGain == 1.0 {
-                                ESM1_testGain += 0.001
-                            } else {
-                                ESM1_testGain = 1.0
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    HStack{
+                        //Button For Gain Change of 0.1 (10% / 10 db?)
+                        Spacer()
+                        Button {
+                            Task{
+                                let newGain: Float = ESM1_testGain - 10E-16 //0.0000000000000001
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-16 //0.0000000000000001
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-16 //0.0000000000000001
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 10E-16")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-16
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-16
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-16
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    
+                    HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 10E-15
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-15
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-15
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 10E-15")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-15
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-15
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-15
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    
+                    HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 10E-14
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-14
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-14
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 10E-14")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-14
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-14
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-14
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    
+                    HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 10E-13
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-13
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-13
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 10E-13")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-13
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-13
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-13
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    
+                    HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 10E-12
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-12
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-12
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 10E-12")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-12
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-12
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-12
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    
+                    HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 10E-11
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-11
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-11
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 10E-11")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-11
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-11
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-11
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    
+                    HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 10E-10
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-10
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-10
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 10E-10")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-10
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-10
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-10
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                }
+                .frame(width: 400, height: 190, alignment: .center)
+                .background(Color.clear)
+                .padding(.top, 10)
+                .padding(.bottom, 30)
+                
+                
+                ScrollView{
+                    HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 10E-9
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-9
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-9
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 10E-9")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-9
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-9
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-9
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    
+                    HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 10E-8
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-8
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-8
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 10E-8")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-8
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-8
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-8
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    
+                    HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 10E-7
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-7
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-7
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 10E-7")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-7
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-7
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-7
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    
+                    HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 10E-6
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-6
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-6
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 10E-6")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-6
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-6
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-6
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    
+                    HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 10E-5
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-5
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-5
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 10E-5")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-5
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-5
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-5
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    
+                    HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 10E-4
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-4
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-4
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 10E-4")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-4
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-4
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-4
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    
+                    HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 10E-3
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-3
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-3
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 10E-3")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-3
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-3
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-3
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    
+                    HStack{     // Button for gain Change of 0.05 (5% / 5 db?)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 10E-2
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 10E-2
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 10E-2
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 10E-2")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 10E-2
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 10E-2
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 10E-2
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 400, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    
+                    
+/*
+                    HStack{     // Button for gain change of 0.001 (0.1% 0.1dB?)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 0.001
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 0.001
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 0.001
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            VStack{
+                                Image(systemName: "minus.circle.fill")
+                                    .foregroundColor(.red)
                             }
                         }
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .foregroundColor(.green)
+                        Spacer()
+                        Text("Gain: 0.001")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 0.001
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 0.001
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 0.001
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
                     }
-                    Spacer()
+                    .frame(width: 300, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    
+                    HStack{ // Button for gain change of 0.01 (1% / 1db)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain - 0.01
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 0.01
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 0.01
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 0.01")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 0.01
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 0.01
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 0.01
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 300, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+                   
+                    
+                    HStack{
+                        //Button For Gain Change of 0.1 (10% / 10 db?)
+                        Spacer()
+                        Button {
+                            Task{
+                                let newGain: Float = ESM1_testGain - 0.1
+                                if newGain > 0.0 {
+                                    ESM1_testGain -= 0.1
+                                } else if newGain == 0.0 {
+                                    ESM1_testGain -= 0.1
+                                } else {
+                                    ESM1_testGain = 0.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("Gain: 0.1")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            Task {
+                                let newGain: Float = ESM1_testGain + 0.1
+                                if newGain < 1.0 {
+                                    ESM1_testGain += 0.1
+                                } else if newGain == 1.0 {
+                                    ESM1_testGain += 0.1
+                                } else {
+                                    ESM1_testGain = 1.0
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 300, height: 50, alignment: .center)
+                    .background(Color.clear)
+                    .cornerRadius(12)
+                    .padding(.bottom, 20)
+ */
+ 
+ 
+ 
+                    HStack{
+                        Spacer()
+                        Button {    // Left Pan
+                            ESM1_pan = -1.0
+                        } label: {
+                            Text("Left Pan")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Button {    // Middle Pan
+                            ESM1_pan = 0.0
+                        } label: {
+                            Text("Middle Pan")
+                                .foregroundColor(.yellow)
+                        }
+                        Spacer()
+                        Button {    // Right Pan
+                            ESM1_pan = 1.0
+                        } label: {
+                            Text("Right Pan")
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                    }
+                    .frame(width: 480, height: 50, alignment: .center)
+                    .font(.caption)
+                    .background(Color.clear)
+                    .cornerRadius(24)
+                    .padding(.bottom, 10)
+                    
                 }
-                .frame(width: 300, height: 50, alignment: .center)
+                .frame(width: 400, height: 190, alignment: .center)
                 .background(Color.clear)
-                .cornerRadius(12)
-                .padding(.bottom, 20)
-            
-                HStack{
-                    Spacer()
-                    Button {    // Left Pan
-                        ESM1_pan = -1.0
-                    } label: {
-                        Text("Left Pan")
-                            .foregroundColor(.red)
-                    }
-                    Spacer()
-                    Button {    // Middle Pan
-                        ESM1_pan = 0.0
-                    } label: {
-                        Text("Middle Pan")
-                            .foregroundColor(.yellow)
-                    }
-                    Spacer()
-                    Button {    // Right Pan
-                        ESM1_pan = 1.0
-                    } label: {
-                        Text("Right Pan")
-                            .foregroundColor(.green)
-                    }
-                    Spacer()
-                }
-                .frame(width: 380, height: 50, alignment: .center)
-                .font(.caption)
-                .background(Color.clear)
-                .cornerRadius(24)
                 .padding(.bottom, 40)
+            
+//                HStack{
+//                    Spacer()
+//                    Button {    // Left Pan
+//                        ESM1_pan = -1.0
+//                    } label: {
+//                        Text("Left Pan")
+//                            .foregroundColor(.red)
+//                    }
+//                    Spacer()
+//                    Button {    // Middle Pan
+//                        ESM1_pan = 0.0
+//                    } label: {
+//                        Text("Middle Pan")
+//                            .foregroundColor(.yellow)
+//                    }
+//                    Spacer()
+//                    Button {    // Right Pan
+//                        ESM1_pan = 1.0
+//                    } label: {
+//                        Text("Right Pan")
+//                            .foregroundColor(.green)
+//                    }
+//                    Spacer()
+//                }
+//                .frame(width: 380, height: 50, alignment: .center)
+//                .font(.caption)
+//                .background(Color.clear)
+//                .cornerRadius(24)
+//                .padding(.bottom, 10)
             }
             .onAppear(perform: {
                 earSimulatorM1showTestCompletionSheet = true
