@@ -64,7 +64,10 @@ struct EarSimulatorManual0View: View {
         SamplesESM0List(name: "FSample15"),
         SamplesESM0List(name: "FSample16")
     ]
-    
+
+//
+//
+// Only These Below are needed for the samples. I had tested multiple versions of the samples, but am now only using this version--faded in/out and dithered to 44.1kHz at 16bit
     @State private var samplesCDDitheredFaded = [
         SamplesESM0List(name: "FDSample1"),
         SamplesESM0List(name: "FDSample2"),
@@ -83,7 +86,9 @@ struct EarSimulatorManual0View: View {
         SamplesESM0List(name: "FDSample15"),
         SamplesESM0List(name: "FDSample16")
     ]
-    
+// Only Need samples above, not all three versions
+//
+//
     
     @State private var sampleSelected = [Int]()
     @State private var sampleSelectionIndex = [Int]()
@@ -97,105 +102,48 @@ struct EarSimulatorManual0View: View {
     @State private var ESM0localHeard = 0
     @State private var ESM0localPlaying = Int()    // Playing = 1. Stopped = -1
     @State private var ESM0localReversal = Int()
-//    @State private var ESM0localReversalEnd = Int()
-//    @State private var ESM0localMarkNewTestCycle = Int()
     @State private var ESM0testPlayer: AVAudioPlayer?
-    
-//    @State private var ESM0localTestCount = 0
-//    @State private var ESM0localStartingNonHeardArraySet: Bool = false
-//    @State private var ESM0localReversalHeardLast = Int()
-//    @State private var ESM0localSeriesNoResponses = Int()
-//    @State private var ESM0firstHeardResponseIndex = Int()
-//    @State private var ESM0firstHeardIsTrue: Bool = false
-//    @State private var ESM0secondHeardResponseIndex = Int()
-//    @State private var ESM0secondHeardIsTrue: Bool = false
-//    @State private var ESM0startTooHigh = 0
-//    @State private var ESM0firstGain = Float()
-//    @State private var ESM0secondGain = Float()
     @State private var ESM0endTestSeriesValue: Bool = false
     @State private var ESM0showTestCompletionSheet: Bool = false
     
     @State private var ESM0_samples: [String] = [String]()
     
+    @State private var cdFadedDitheredSamples: [String] =  ["FDSample1", "FDSample2", "FDSample3", "FDSample4", "FDSample5", "FDSample6", "FDSample7", "FDSample8",
+                                                            "FDSample9", "FDSample10", "FDSample11", "FDSample12", "FDSample13", "FDSample14", "FDSample15", "FDSample16"]
+//
+//
+//Will not need sample versions below
     @State private var highResStdSamples: [String] =  ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8",
                                                        "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
     
     @State private var highResFadedSamples: [String] =  ["FSample1", "FSample2", "FSample3", "FSample4", "FSample5", "FSample6", "FSample7", "FSample8",
                                                          "FSample9", "FSample10", "FSample11", "FSample12", "FSample13", "FSample14", "FSample15", "FSample16"]
-    
-    @State private var cdFadedDitheredSamples: [String] =  ["FDSample1", "FDSample2", "FDSample3", "FDSample4", "FDSample5", "FDSample6", "FDSample7", "FDSample8",
-                                                            "FDSample9", "FDSample10", "FDSample11", "FDSample12", "FDSample13", "FDSample14", "FDSample15", "FDSample16"]
-    
+//Will not need sample versions above
+//
+//
+
+
+//
+//
+// Many of these variables are carried over from how I coded the testing, and would not be needed if just coding a simple audio player from scratch, which is all this really is.
     @State private var ESM0_index: Int = 0
     @State private var ESM0_testGain: Float = 0
     @State private var ESM0_heardArray: [Int] = [Int]()
     @State private var ESM0_indexForTest = [Int]()
-//    @State private var ESM0_testCount: [Int] = [Int]()
     @State private var ESM0_pan: Float = Float()
-//    @State private var ESM0_testPan = [Float]()
-//    @State private var ESM0_testTestGain = [Float]()
-//    @State private var ESM0_frequency = [String]()
-//    @State private var ESM0_reversalHeard = [Int]()
-//    @State private var ESM0_reversalGain = [Float]()
-//    @State private var ESM0_reversalFrequency = [String]()
-//    @State private var ESM0_reversalDirection = Float()
-//    @State private var ESM0_reversalDirectionArray = [Float]()
-    
-//    @State private var ESM0_averageGain = Float()
-    
-//    @State private var ESM0_eptaSamplesCount = 1 //17
-//    @State private var ESM0_SamplesCountArray = [1, 1]
-//    @State private var ESM0_SamplesCountArrayIdx = 0
-    
-//    @State private var ESM0_finalStoredIndex: [Int] = [Int]()
-//    @State private var ESM0_finalStoredTestPan: [Float] = [Float]()
-//    @State private var ESM0_finalStoredTestTestGain: [Float] = [Float]()
-//    @State private var ESM0_finalStoredFrequency: [String] = [String]()
-//    @State private var ESM0_finalStoredTestCount: [Int] = [Int]()
-//    @State private var ESM0_finalStoredHeardArray: [Int] = [Int]()
-//    @State private var ESM0_finalStoredReversalHeard: [Int] = [Int]()
-//    @State private var ESM0_finalStoredFirstGain: [Float] = [Float]()
-//    @State private var ESM0_finalStoredSecondGain: [Float] = [Float]()
-//    @State private var ESM0_finalStoredAverageGain: [Float] = [Float]()
-//
-//    @State private var ESM0idxForTest = Int() // = ESM0_indexForTest.count
-//    @State private var ESM0idxForTestNet1 = Int() // = ESM0_indexForTest.count - 1
-//    @State private var ESM0idxTestCount = Int() // = ESM0_TestCount.count
-//    @State private var ESM0idxTestCountUpdated = Int() // = ESM0_TestCount.count + 1
     @State private var ESM0activeFrequency = String()
-//    @State private var ESM0idxHA = Int()    // idx = ESM0_heardArray.count
-//    @State private var ESM0idxReversalHeardCount = Int()
-//    @State private var ESM0idxHAZero = Int()    //  idxZero = idx - idx
-//    @State private var ESM0idxHAFirst = Int()   // idxFirst = idx - idx + 1
-//    @State private var ESM0isCountSame = Int()
-//    @State private var ESM0heardArrayIdxAfnet1 = Int()
     @State private var ESM0testIsPlaying: Bool = false
     @State private var ESM0playingString: [String] = ["", "Restart Test", "Great Job, You've Completed This Test Segment"]
     @State private var ESM0playingStringColor: [Color] = [Color.clear, Color.yellow, Color.green]
-//
-//    @State private var ESM0playingAlternateStringColor: [Color] = [Color.clear, Color(red: 0.06666666666666667, green: 0.6549019607843137, blue: 0.7333333333333333), Color.white, Color.green]
-//    @State private var ESM0TappingColorIndex = 0
-//    @State private var ESM0TappingGesture: Bool = false
-    
     @State private var ESM0playingStringColorIndex = 0
     @State private var ESM0userPausedTest: Bool = false
-    
-//    @State private var ESM0TestCompleted: Bool = false
-    
-//    @State private var ESM0fullTestCompleted: Bool = false
-//    @State private var ESM0fullTestCompletedHoldingArray: [Bool] = [false, false, true]
     @State private var ESM0TestStarted: Bool = false
-    
-    
-//    let inputESM0CSVName = "InputDetailedEarSimulatorM1ResultsCSV.csv"
-    
     
     let earSimulatorM1heardThread = DispatchQueue(label: "BackGroundThread", qos: .userInitiated)
     let earSimulatorM1arrayThread = DispatchQueue(label: "BackGroundPlayBack", qos: .background)
     let earSimulatorM1audioThread = DispatchQueue(label: "AudioThread", qos: .background)
     let earSimulatorM1preEventThread = DispatchQueue(label: "PreeventThread", qos: .userInitiated)
     
-//    @State private var earSimulatorM1testPlayerlocalHeard = Int()
     @State private var earSimulatorM1_volume = Float()
     @State private var newactiveFrequency = String()
     @State private var earSimulatorM1Cycle: Bool = false
@@ -220,6 +168,10 @@ struct EarSimulatorManual0View: View {
     @State private var qosUserInteractive: Bool = false
     @State private var qosUserInitiated: Bool = false
     
+    
+//
+//
+//Long View Section
     var body: some View {
         ZStack {
             colorModel.colorBackgroundTopNeonGreen.ignoresSafeArea(.all)
@@ -379,8 +331,6 @@ struct EarSimulatorManual0View: View {
 //
 //Scroll View #1 of Gain Change Buttons
                 ScrollView{
-        
-                    
                     HStack{
                         Spacer()
                         Button {
@@ -1507,24 +1457,13 @@ struct EarSimulatorManual0View: View {
 // End of Not Needed Items from Above
 //
 //
-           
-                    
-                    
-                    
-//                    earSimulatorM1preEventThread.async {
-//                        ESM0preEventLogging()
-//                    }
+
+// Restart Button functions, likely not needed if play button is set to just retrigger audio playback
                     DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3.6) {
-//                        ESM0localTestCount += 1
                         Task(priority: .userInitiated) {
-//                            await ESM0heardArrayNormalize()
-//                            await ESM0count()
                             await ESM0logNotPlaying()
                             await ESM0resetPlaying()
                             await ESM0resetHeard()
-//                            await ESM0createReversalHeardArray()
-//                            await ESM0createReversalSampleArray()
-//                            await ESM0reversalStart()
                         }
                     }
                 }
@@ -1533,7 +1472,6 @@ struct EarSimulatorManual0View: View {
                 if ESM0reversalValue == 1 {
                     DispatchQueue.global(qos: .background).async {
                         Task(priority: .userInitiated) {
-//                            await writeESM0ResultsToCSV()
                             await ESM0restartPresentation()
                             print("Prepare to Start Next Presentation")
                         }
@@ -1551,30 +1489,6 @@ extension EarSimulatorManual0View {
         case earSimulatorM1lastUnexpected(code: Int)
     }
 
-    private func ESM0pauseRestartTestCycle() {
-//        ESM0localMarkNewTestCycle = 0
-//        ESM0localReversalEnd = 0
-        ESM0_index = 0
-        ESM0_samples.removeAll()
-        ESM0_samples.append(ESM0activeFrequency)
-        newactiveFrequency = ESM0_samples[ESM0_index]
-        ESM0_testGain = ESM0_testGain
-        ESM0testIsPlaying = false
-        ESM0localPlaying = 0
-//        ESM0_testCount.removeAll()
-//        ESM0_reversalHeard.removeAll()
-//        ESM0_averageGain = Float()
-//        ESM0_reversalDirection = Float()
-//        ESM0localStartingNonHeardArraySet = false
-//        ESM0firstHeardResponseIndex = Int()
-//        ESM0firstHeardIsTrue = false
-//        ESM0secondHeardResponseIndex = Int()
-//        ESM0secondHeardIsTrue = false
-//        ESM0localTestCount = 0
-//        ESM0localReversalHeardLast = Int()
-//        ESM0startTooHigh = 0
-    }
-    
     private func ESM0loadAndTestPresentation(sample: String, gain: Float, pan: Float) {
             do{
                 let ESM0urlSample = Bundle.main.path(forResource: newactiveFrequency, ofType: ".wav")
@@ -1597,11 +1511,7 @@ extension EarSimulatorManual0View {
           ESM0testPlayer.stop()
       } catch { print("Error in Player Stop Function") }
   }
-    
-//    private func ESM0resetNonResponseCount() async {ESM0localSeriesNoResponses = 0 }
-//
-//    private func ESM0nonResponseCounting() async {ESM0localSeriesNoResponses += 1 }
-//
+
     private func ESM0resetPlaying() async { self.ESM0localPlaying = 0 }
 
     private func ESM0logNotPlaying() async { self.ESM0localPlaying = -1 }
@@ -1609,327 +1519,7 @@ extension EarSimulatorManual0View {
     private func ESM0resetHeard() async { self.ESM0localHeard = 0 }
 
     private func ESM0reversalStart() async { self.ESM0localReversal = 1}
-//
-//    private func ESM0preEventLogging() {
-//        DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
-//            ESM0_indexForTest.append(ESM0_index)
-//        }
-//        DispatchQueue.global(qos: .default).async {
-//            ESM0_testTestGain.append(ESM0_testGain)
-//        }
-//        DispatchQueue.global(qos: .background).async {
-//            ESM0_frequency.append(ESM0activeFrequency)
-//            ESM0_testPan.append(ESM0_pan)
-//        }
-//    }
-//
-//    private func ESM0responseHeardArray() async {
-//        ESM0_heardArray.append(1)
-//        self.ESM0idxHA = ESM0_heardArray.count
-//        self.ESM0localStartingNonHeardArraySet = true
-//    }
-//
-//    private func ESM0localResponseTracking() async {
-//        if ESM0firstHeardIsTrue == false {
-//            ESM0firstHeardResponseIndex = ESM0localTestCount
-//            ESM0firstHeardIsTrue = true
-//        } else if ESM0firstHeardIsTrue == true {
-//            ESM0secondHeardResponseIndex = ESM0localTestCount
-//            ESM0secondHeardIsTrue = true
-//            print("Second Heard Is True Logged!")
-//
-//        } else {
-//            print("Error in localResponseTrackingLogic")
-//        }
-//    }
-//
-//    private func ESM0heardArrayNormalize() async {
-//        ESM0idxHA = ESM0_heardArray.count
-//        ESM0idxForTest = ESM0_indexForTest.count
-//        ESM0idxForTestNet1 = ESM0idxForTest - 1
-//        ESM0isCountSame = ESM0idxHA - ESM0idxForTest
-//        ESM0heardArrayIdxAfnet1 = ESM0_heardArray.index(after: ESM0idxForTestNet1)
-//
-//        if ESM0localStartingNonHeardArraySet == false {
-//            ESM0_heardArray.append(0)
-//            self.ESM0localStartingNonHeardArraySet = true
-//            ESM0idxHA = ESM0_heardArray.count
-//            ESM0idxHAZero = ESM0idxHA - ESM0idxHA
-//            ESM0idxHAFirst = ESM0idxHAZero + 1
-//            ESM0isCountSame = ESM0idxHA - ESM0idxForTest
-//            ESM0heardArrayIdxAfnet1 = ESM0_heardArray.index(after: ESM0idxForTestNet1)
-//            } else {
-//                print("Error in arrayNormalization else if isCountSame && heardAIAFnet1 if segment")
-//            }
-//    }
-//
-//    private func ESM0count() async {
-//        ESM0idxTestCountUpdated = ESM0_testCount.count + 1
-//        ESM0_testCount.append(ESM0idxTestCountUpdated)
-//    }
-}
-
-extension EarSimulatorManual0View {
-//MARK: -Extension Methods Reversals
     
-//    private func ESM0createReversalHeardArray() async {
-//        ESM0_reversalHeard.append(ESM0_heardArray[ESM0idxHA-1])
-//        self.ESM0idxReversalHeardCount = ESM0_reversalHeard.count
-//    }
-//
-//    private func ESM0createReversalGainArray() async {
-//        ESM0_reversalGain.append(ESM0_testGain)
-//    }
-//
-//    private func ESM0createReversalSampleArray() async {
-//        ESM0_frequency.append(newactiveFrequency)
-//    }
-//
-//    private func createReversalGainArrayNonResponse() async {
-//        if ESM0_testGain < 0.995 {
-//            ESM0_reversalGain.append(ESM0_testGain)
-//        } else if ESM0_testGain >= 0.995 {
-//            ESM0_reversalGain.append(1.0)
-//        }
-//    }
-//
-//    private func ESM0checkHeardReversalArrays() async {
-//        if ESM0idxHA - ESM0idxReversalHeardCount == 0 {
-//            print("Success, Arrays match")
-//        } else if ESM0idxHA - ESM0idxReversalHeardCount < 0 && ESM0idxHA - ESM0idxReversalHeardCount > 0{
-//            fatalError("Fatal Error in HeardArrayCount - ReversalHeardArrayCount")
-//        } else {
-//            fatalError("hit else in check reversal arrays")
-//        }
-//    }
-//
-//    private func ESM0reversalDirection() async {
-//        ESM0localReversalHeardLast = ESM0_reversalHeard.last ?? -999
-//        if ESM0localReversalHeardLast == 1 {
-//            ESM0_reversalDirection = -1.0
-//            ESM0_reversalDirectionArray.append(-1.0)
-//        } else if ESM0localReversalHeardLast == 0 {
-//            ESM0_reversalDirection = 1.0
-//            ESM0_reversalDirectionArray.append(1.0)
-//        } else {
-//            print("Error in Reversal Direction reversalHeardArray Count")
-//        }
-//    }
-//
-//    private func ESM0reversalOfOne() async {
-//        let ESM0rO1Direction = 0.01 * ESM0_reversalDirection
-//        let ESM0r01NewGain = ESM0_testGain + ESM0rO1Direction
-//        if ESM0r01NewGain > 0.00001 && ESM0r01NewGain < 1.0 {
-//            ESM0_testGain = roundf(ESM0r01NewGain * 100000) / 100000
-//        } else if ESM0r01NewGain <= 0.0 {
-//            ESM0_testGain = 0.00001
-//            print("!!!Fatal Zero Gain Catch")
-//        } else if ESM0r01NewGain >= 0.995 {
-//            ESM0_testGain = 0.995
-//            print("!!!Fatal 1.0 Gain Catch")
-//        } else {
-//            print("!!!Fatal Error in reversalOfOne Logic")
-//        }
-//    }
-//
-//    private func ESM0reversalOfTwo() async {
-//        let ESM0rO2Direction = 0.02 * ESM0_reversalDirection
-//        let ESM0r02NewGain = ESM0_testGain + ESM0rO2Direction
-//        if ESM0r02NewGain > 0.00001 && ESM0r02NewGain < 1.0 {
-//            ESM0_testGain = roundf(ESM0r02NewGain * 100000) / 100000
-//        } else if ESM0r02NewGain <= 0.0 {
-//            ESM0_testGain = 0.00001
-//            print("!!!Fatal Zero Gain Catch")
-//        } else if ESM0r02NewGain >= 0.995 {
-//            ESM0_testGain = 0.995
-//            print("!!!Fatal 1.0 Gain Catch")
-//        } else {
-//            print("!!!Fatal Error in reversalOfTwo Logic")
-//        }
-//    }
-//
-//    private func ESM0reversalOfThree() async {
-//        let ESM0rO3Direction = 0.03 * ESM0_reversalDirection
-//        let ESM0r03NewGain = ESM0_testGain + ESM0rO3Direction
-//        if ESM0r03NewGain > 0.00001 && ESM0r03NewGain < 1.0 {
-//            ESM0_testGain = roundf(ESM0r03NewGain * 100000) / 100000
-//        } else if ESM0r03NewGain <= 0.0 {
-//            ESM0_testGain = 0.00001
-//            print("!!!Fatal Zero Gain Catch")
-//        } else if ESM0r03NewGain >= 0.995 {
-//            ESM0_testGain = 0.995
-//            print("!!!Fatal 1.0 Gain Catch")
-//        } else {
-//            print("!!!Fatal Error in reversalOfThree Logic")
-//        }
-//    }
-//
-//    private func ESM0reversalOfFour() async {
-//        let ESM0rO4Direction = 0.04 * ESM0_reversalDirection
-//        let ESM0r04NewGain = ESM0_testGain + ESM0rO4Direction
-//        if ESM0r04NewGain > 0.00001 && ESM0r04NewGain < 1.0 {
-//            ESM0_testGain = roundf(ESM0r04NewGain * 100000) / 100000
-//        } else if ESM0r04NewGain <= 0.0 {
-//            ESM0_testGain = 0.00001
-//            print("!!!Fatal Zero Gain Catch")
-//        } else if ESM0r04NewGain >= 0.995 {
-//            ESM0_testGain = 0.995
-//            print("!!!Fatal 1.0 Gain Catch")
-//        } else {
-//            print("!!!Fatal Error in reversalOfFour Logic")
-//        }
-//    }
-//
-//    private func ESM0reversalOfFive() async {
-//        let ESM0rO5Direction = 0.05 * ESM0_reversalDirection
-//        let ESM0r05NewGain = ESM0_testGain + ESM0rO5Direction
-//        if ESM0r05NewGain > 0.00001 && ESM0r05NewGain < 1.0 {
-//            ESM0_testGain = roundf(ESM0r05NewGain * 100000) / 100000
-//        } else if ESM0r05NewGain <= 0.0 {
-//            ESM0_testGain = 0.00001
-//            print("!!!Fatal Zero Gain Catch")
-//        } else if ESM0r05NewGain >= 0.995 {
-//            ESM0_testGain = 0.995
-//            print("!!!Fatal 1.0 Gain Catch")
-//        } else {
-//            print("!!!Fatal Error in reversalOfFive Logic")
-//        }
-//    }
-//
-//    private func ESM0reversalOfTen() async {
-//        let ESM0r10Direction = 0.10 * ESM0_reversalDirection
-//        let ESM0r10NewGain = ESM0_testGain + ESM0r10Direction
-//        if ESM0r10NewGain > 0.00001 && ESM0r10NewGain < 1.0 {
-//            ESM0_testGain = roundf(ESM0r10NewGain * 100000) / 100000
-//        } else if ESM0r10NewGain <= 0.0 {
-//            ESM0_testGain = 0.00001
-//            print("!!!Fatal Zero Gain Catch")
-//        } else if ESM0r10NewGain >= 0.995 {
-//            ESM0_testGain = 0.995
-//            print("!!!Fatal 1.0 Gain Catch")
-//        } else {
-//            print("!!!Fatal Error in reversalOfTen Logic")
-//        }
-//    }
-//
-//    private func ESM0reversalAction() async {
-//        if ESM0localReversalHeardLast == 1 {
-//            await ESM0reversalOfFive()
-//        } else if ESM0localReversalHeardLast == 0 {
-//            await ESM0reversalOfTwo()
-//        } else {
-//            print("!!!Critical error in Reversal Action")
-//        }
-//    }
-//
-//    private func ESM0reversalComplexAction() async {
-//        if ESM0idxReversalHeardCount <= 1 && ESM0idxHA <= 1 {
-//            await ESM0reversalAction()
-//        }  else if ESM0idxReversalHeardCount == 2 {
-//            if ESM0idxReversalHeardCount == 2 && ESM0secondHeardIsTrue == true {
-//                await ESM0startTooHighCheck()
-//            } else if ESM0idxReversalHeardCount == 2  && ESM0secondHeardIsTrue == false {
-//                await ESM0reversalAction()
-//            } else {
-//                print("In reversal section == 2")
-//                print("Failed reversal section startTooHigh")
-//                print("!!Fatal Error in reversalHeard and Heard Array Counts")
-//            }
-//        } else if ESM0idxReversalHeardCount >= 3 {
-//            print("reversal section >= 3")
-//            if ESM0secondHeardResponseIndex - ESM0firstHeardResponseIndex == 1 {
-//                print("reversal section >= 3")
-//                print("In first if section sHRI - fHRI == 1")
-//                print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
-//            } else if ESM0localSeriesNoResponses == 3 {
-//                await ESM0reversalOfTen()
-//            } else if ESM0localSeriesNoResponses == 2 {
-//                await ESM0reversalOfFour()
-//            } else {
-//                await ESM0reversalAction()
-//            }
-//        } else {
-//            print("Fatal Error in complex reversal logic for if idxRHC >=3, hit else segment")
-//        }
-//    }
-//
-//    private func ESM0reversalHeardCount1() async {
-//        await ESM0reversalAction()
-//    }
-//
-//    private func ESM0check2PositiveSeriesReversals() async {
-//        if ESM0_reversalHeard[ESM0idxHA-2] == 1 && ESM0_reversalHeard[ESM0idxHA-1] == 1 {
-//            print("reversal - check2PositiveSeriesReversals")
-//            print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
-//        }
-//    }
-//
-//    private func ESM0checkTwoNegativeSeriesReversals() async {
-//        if ESM0_reversalHeard.count >= 3 && ESM0_reversalHeard[ESM0idxHA-2] == 0 && ESM0_reversalHeard[ESM0idxHA-1] == 0 {
-//            await ESM0reversalOfFour()
-//        } else {
-//            await ESM0reversalAction()
-//        }
-//    }
-//
-//    private func ESM0startTooHighCheck() async {
-//        if ESM0startTooHigh == 0 && ESM0firstHeardIsTrue == true && ESM0secondHeardIsTrue == true {
-//            ESM0startTooHigh = 1
-//            await ESM0reversalOfTen()
-//            await ESM0resetAfterTooHigh()
-//            print("Too High Found")
-//        } else {
-//            await ESM0reversalAction()
-//        }
-//    }
-//
-//    private func ESM0resetAfterTooHigh() async {
-//        ESM0firstHeardResponseIndex = Int()
-//        ESM0firstHeardIsTrue = false
-//        ESM0secondHeardResponseIndex = Int()
-//        ESM0secondHeardIsTrue = false
-//    }
-//
-//    private func ESM0reversalsCompleteLogging() async {
-//        if ESM0secondHeardIsTrue == true {
-//            self.ESM0localReversalEnd = 1
-//            self.ESM0localMarkNewTestCycle = 1
-//            self.ESM0firstGain = ESM0_reversalGain[ESM0firstHeardResponseIndex-1]
-//            self.ESM0secondGain = ESM0_reversalGain[ESM0secondHeardResponseIndex-1]
-//            print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
-//            let ESM0delta = ESM0firstGain - ESM0secondGain
-//            let ESM0avg = (ESM0firstGain + ESM0secondGain)/2
-//            if ESM0delta == 0 {
-//                ESM0_averageGain = ESM0secondGain
-//                print("average Gain: \(ESM0_averageGain)")
-//            } else if ESM0delta >= 0.05 {
-//                ESM0_averageGain = ESM0secondGain
-//                print("SecondGain: \(ESM0firstGain)")
-//                print("SecondGain: \(ESM0secondGain)")
-//                print("average Gain: \(ESM0_averageGain)")
-//            } else if ESM0delta <= -0.05 {
-//                ESM0_averageGain = ESM0firstGain
-//                print("SecondGain: \(ESM0firstGain)")
-//                print("SecondGain: \(ESM0secondGain)")
-//                print("average Gain: \(ESM0_averageGain)")
-//            } else if ESM0delta < 0.05 && ESM0delta > -0.05 {
-//                ESM0_averageGain = ESM0avg
-//                print("SecondGain: \(ESM0firstGain)")
-//                print("SecondGain: \(ESM0secondGain)")
-//                print("average Gain: \(ESM0_averageGain)")
-//            } else {
-//                ESM0_averageGain = ESM0avg
-//                print("SecondGain: \(ESM0firstGain)")
-//                print("SecondGain: \(ESM0secondGain)")
-//                print("average Gain: \(ESM0_averageGain)")
-//            }
-//        } else if ESM0secondHeardIsTrue == false {
-//            print("Contine, second hear is true = false")
-//        } else {
-//            print("Critical error in reversalsCompletLogging Logic")
-//        }
-//    }
-//
     private func ESM0restartPresentation() async {
         if ESM0endTestSeriesValue == false && ESM0userPausedTest == false && earSimulatorM1Cycle == true {
             ESM0localPlaying = 1
@@ -1939,124 +1529,24 @@ extension EarSimulatorManual0View {
             ESM0endTestSeriesValue = true
             ESM0showTestCompletionSheet = true
             ESM0playingStringColorIndex = 2
-        }  else if earSimulatorM1Cycle == false { //ESM0endTestSeriesValue == true || ESM0userPausedTest == true || earSimulatorM1Cycle == false {
+        }  else if earSimulatorM1Cycle == false {
             ESM0localPlaying = -1
             ESM0endTestSeriesValue = true
             ESM0showTestCompletionSheet = true
             ESM0playingStringColorIndex = 2
         }
     }
-//
-//    private func ESM0wipeArrays() async {
-//        DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier, execute: {
-//            ESM0_heardArray.removeAll()
-//            ESM0_testCount.removeAll()
-//            ESM0_reversalHeard.removeAll()
-//            ESM0_reversalGain.removeAll()
-//            ESM0_averageGain = Float()
-//            ESM0_reversalDirection = Float()
-//            ESM0localStartingNonHeardArraySet = false
-//            ESM0firstHeardResponseIndex = Int()
-//            ESM0firstHeardIsTrue = false
-//            ESM0secondHeardResponseIndex = Int()
-//            ESM0secondHeardIsTrue = false
-//            ESM0localTestCount = 0
-//            ESM0localReversalHeardLast = Int()
-//            ESM0startTooHigh = 0
-//            ESM0localSeriesNoResponses = Int()
-//        })
-//    }
-//
-//    private func startNextTestCycle() async {
-//        await ESM0wipeArrays()
-//        ESM0showTestCompletionSheet.toggle()
-//        ESM0startTooHigh = 0
-//        ESM0localMarkNewTestCycle = 0
-//        ESM0localReversalEnd = 0
-//        ESM0_index = ESM0_index + 1
-//        ESM0_testGain = ESM0_testGain
-//        ESM0endTestSeriesValue = false
-//        ESM0showTestCompletionSheet = false
-//        ESM0testIsPlaying = true
-//        ESM0userPausedTest = false
-//        ESM0playingStringColorIndex = 2
-//        print(ESM0_SamplesCountArray[ESM0_index])
-//        ESM0localPlaying = 1
-//    }
-//
-//    private func ESM0newTestCycle() async {
-//        if ESM0localMarkNewTestCycle == 1 && ESM0localReversalEnd == 1 && ESM0_index < ESM0_SamplesCountArray[ESM0_index] && ESM0endTestSeriesValue == false {
-//            ESM0startTooHigh = 0
-//            ESM0localMarkNewTestCycle = 0
-//            ESM0localReversalEnd = 0
-//            ESM0_index = ESM0_index + 1
-//            ESM0_testGain = ESM0_testGain
-//            ESM0endTestSeriesValue = false
-//            await ESM0wipeArrays()
-//        } else if ESM0localMarkNewTestCycle == 1 && ESM0localReversalEnd == 1 && ESM0_index == ESM0_SamplesCountArray[ESM0_index] && ESM0endTestSeriesValue == false {
-//            ESM0endTestSeriesValue = true
-//            ESM0fullTestCompleted = true
-//            ESM0localPlaying = -1
-//            ESM0_SamplesCountArrayIdx += 1
-//            print("=============================")
-//            print("!!!!! End of Test Series!!!!!!")
-//            print("=============================")
-//            if ESM0fullTestCompleted == true {
-//                ESM0fullTestCompleted = true
-//                ESM0endTestSeriesValue = true
-//                ESM0localPlaying = -1
-//                print("*****************************")
-//                print("=============================")
-//                print("^^^^^^End of Full Test Series^^^^^^")
-//                print("=============================")
-//                print("*****************************")
-//            } else if ESM0fullTestCompleted == false {
-//                ESM0fullTestCompleted = false
-//                ESM0endTestSeriesValue = true
-//                ESM0localPlaying = -1
-//                ESM0_SamplesCountArrayIdx += 1
-//            }
-//        } else {
-//            //                print("Reversal Limit Not Hit")
-//        }
-//    }
-//
-//    private func ESM0endTestSeries() async {
-//        if ESM0endTestSeriesValue == false {
-//            //Do Nothing and continue
-//            print("end Test Series = \(ESM0endTestSeriesValue)")
-//        } else if ESM0endTestSeriesValue == true {
-//            ESM0showTestCompletionSheet = true
-//            ESM0_eptaSamplesCount = ESM0_eptaSamplesCount + 1
-//            await ESM0endTestSeriesStop()
-//        }
-//    }
-//
-//    private func ESM0endTestSeriesStop() async {
-//        ESM0localPlaying = -1
-//        ESM0stop()
-//        ESM0userPausedTest = true
-//        ESM0playingStringColorIndex = 2
-//    }
-//
-//    func writeESM0ResultsToCSV() async {
-//        let stringFinalESM0GainsArray = ESM0_reversalGain.map { String($0) }.joined(separator: ",")
-//        let stringFinalESM0SamplesArray = ESM0_frequency.map { String($0) }.joined(separator: ",")
-//         do {
-//             let csvESM0Path = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
-//             let csvESM0DocumentsDirectory = csvESM0Path
-//             let csvESM0FilePath = csvESM0DocumentsDirectory.appendingPathComponent(inputESM0CSVName)
-//             let writer = try CSVWriter(fileURL: csvESM0FilePath, append: false)
-//             try writer.write(row: [stringFinalESM0GainsArray])
-//             try writer.write(row: [stringFinalESM0SamplesArray])
-//         } catch {
-//             print("CVSWriter ESM0 Data Error or Error Finding File for ESM0 CSV \(error)")
-//         }
-//    }
+    
+    private func ESM0pauseRestartTestCycle() {
+        ESM0_index = 0
+        ESM0_samples.removeAll()
+        ESM0_samples.append(ESM0activeFrequency)
+        newactiveFrequency = ESM0_samples[ESM0_index]
+        ESM0_testGain = ESM0_testGain
+        ESM0testIsPlaying = false
+        ESM0localPlaying = 0
+    }
 }
-
-
-
 
 extension EarSimulatorManual0View {
     private func linkTesting(testing: Testing) -> some View {
@@ -2065,8 +1555,8 @@ extension EarSimulatorManual0View {
 
 }
 
-struct EarSimulatorManual0View_Previews: PreviewProvider {
-    static var previews: some View {
-        EarSimulatorManual0View()
-    }
-}
+//struct EarSimulatorManual0View_Previews: PreviewProvider {
+//    static var previews: some View {
+//        EarSimulatorManual0View()
+//    }
+//}
