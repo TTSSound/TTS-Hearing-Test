@@ -2,7 +2,7 @@
 //  EarSimulatorManual0View.swift
 //  EPTATTSTestV4
 //
-//  Created by Jeffrey Jaskunas on 2/23/23.
+//  Created by Jeffrey Jaskunas on 2/20/23.
 //
 
 import SwiftUI
@@ -11,7 +11,6 @@ import AVFoundation
 import AVKit
 import CoreMedia
 import Combine
-import CodableCSV
 
 
 struct SamplesESM0List: Identifiable, Hashable {
