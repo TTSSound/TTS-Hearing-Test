@@ -791,7 +791,7 @@ struct EarSimulatorManual1View: View {
                         }
                         Spacer()
                         Text("Gain: 10E-9")
-                            .foregroundColor(.white)
+                            .foregroundColor(.blue)
                         Spacer()
                         Button {
                             Task {
@@ -835,7 +835,7 @@ struct EarSimulatorManual1View: View {
                         }
                         Spacer()
                         Text("Gain: 10E-8")
-                            .foregroundColor(.white)
+                            .foregroundColor(.blue)
                         Spacer()
                         Button {
                             Task {
@@ -879,7 +879,7 @@ struct EarSimulatorManual1View: View {
                         }
                         Spacer()
                         Text("Gain: 10E-7")
-                            .foregroundColor(.white)
+                            .foregroundColor(.blue)
                         Spacer()
                         Button {
                             Task {
@@ -923,7 +923,7 @@ struct EarSimulatorManual1View: View {
                         }
                         Spacer()
                         Text("Gain: 10E-6")
-                            .foregroundColor(.white)
+                            .foregroundColor(.blue)
                         Spacer()
                         Button {
                             Task {
@@ -967,7 +967,7 @@ struct EarSimulatorManual1View: View {
                         }
                         Spacer()
                         Text("Gain: 10E-5")
-                            .foregroundColor(.white)
+                            .foregroundColor(.blue)
                         Spacer()
                         Button {
                             Task {
@@ -1011,7 +1011,7 @@ struct EarSimulatorManual1View: View {
                         }
                         Spacer()
                         Text("Gain: 10E-4")
-                            .foregroundColor(.white)
+                            .foregroundColor(.blue)
                         Spacer()
                         Button {
                             Task {
@@ -1055,7 +1055,7 @@ struct EarSimulatorManual1View: View {
                         }
                         Spacer()
                         Text("Gain: 10E-3")
-                            .foregroundColor(.white)
+                            .foregroundColor(.blue)
                         Spacer()
                         Button {
                             Task {
@@ -1099,7 +1099,7 @@ struct EarSimulatorManual1View: View {
                         }
                         Spacer()
                         Text("Gain: 10E-2")
-                            .foregroundColor(.white)
+                            .foregroundColor(.blue)
                         Spacer()
                         Button {
                             Task {

@@ -127,6 +127,7 @@
 		7C666DA428B67841007707AC /* CalibrationSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5F728B18F2D0044958B /* CalibrationSplashView.swift */; };
 		7C666DAA28B69299007707AC /* EPTAResultsDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C666DA928B69299007707AC /* EPTAResultsDisplayView.swift */; };
 		7C666DAC28B6930E007707AC /* EHATTSTestPart2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C666DAB28B6930E007707AC /* EHATTSTestPart2View.swift */; };
+		7C73405A29A802CA00BE0C90 /* EarSimulatorManual0View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73405729A8016B00BE0C90 /* EarSimulatorManual0View.swift */; };
 		7C76D5DF28B1328D0044958B /* SiriSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5DE28B1328D0044958B /* SiriSetupView.swift */; };
 		7C76D5E128B183420044958B /* UserWrittenHearingAssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5E028B183420044958B /* UserWrittenHearingAssessmentView.swift */; };
 		7C76D5E428B184ED0044958B /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76D5E328B184ED0044958B /* LandingView.swift */; };
@@ -442,6 +443,7 @@
 		7C666DA928B69299007707AC /* EPTAResultsDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPTAResultsDisplayView.swift; sourceTree = "<group>"; };
 		7C666DAB28B6930E007707AC /* EHATTSTestPart2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EHATTSTestPart2View.swift; sourceTree = "<group>"; };
 		7C666DAD28B6A16C007707AC /* EHAPurchaseSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EHAPurchaseSheetView.swift; sourceTree = "<group>"; };
+		7C73405729A8016B00BE0C90 /* EarSimulatorManual0View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarSimulatorManual0View.swift; sourceTree = "<group>"; };
 		7C74CD2228AE9640003D184F /* ResultsContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ResultsContainer.xcdatamodel; sourceTree = "<group>"; };
 		7C76D5DE28B1328D0044958B /* SiriSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriSetupView.swift; sourceTree = "<group>"; };
 		7C76D5E028B183420044958B /* UserWrittenHearingAssessmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWrittenHearingAssessmentView.swift; sourceTree = "<group>"; };
@@ -894,6 +896,7 @@
 				7C76D5F128B18AE50044958B /* ClosingView.swift */,
 				7C179FEC28B81B7500964AAC /* InAppPurchaseView.swift */,
 				7CB2A01128DD0966008132DE /* EarSimulatorLandingView.swift */,
+				7C73405729A8016B00BE0C90 /* EarSimulatorManual0View.swift */,
 				7CB2A01328DD0994008132DE /* EarSimulatorManual1View.swift */,
 				7CB2A01528DD09AF008132DE /* EarSimulatorManual2View.swift */,
 			);
@@ -1489,6 +1492,7 @@
 				7C76D5E128B183420044958B /* UserWrittenHearingAssessmentView.swift in Sources */,
 				7C179FF528B8848900964AAC /* ColorModel.swift in Sources */,
 				7CC4CCF128D6387F00E6203B /* ButtonViewTemplates.swift in Sources */,
+				7C73405A29A802CA00BE0C90 /* EarSimulatorManual0View.swift in Sources */,
 				7C666D9E28B67584007707AC /* DisclaimerView.swift in Sources */,
 				7C901FC628B9B980007E1336 /* SystemVolumeView.swift in Sources */,
 				7C7986E528AF038200888A74 /* TestDeviceSetupView.swift in Sources */,

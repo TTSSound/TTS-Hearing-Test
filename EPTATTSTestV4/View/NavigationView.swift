@@ -819,7 +819,8 @@ private let builtInEarSimulators: [EarSimulator] = {
     var earSimulators = [
         "Ear Simulator Landing": EarSimulator(id: 20.0, name: "Ear Simulator Landing", related: []),
         "Ear Simulator Manual 1": EarSimulator(id: 20.1, name: "Ear Simulator Manual 1", related: []),
-        "Ear Simulator Manual 2": EarSimulator(id: 20.2, name: "Ear Simulator Manual 2", related: [])
+        "Ear Simulator Manual 2": EarSimulator(id: 20.2, name: "Ear Simulator Manual 2", related: []),
+        "Ear Simulator Manual 0": EarSimulator(id: 20.3, name: "Ear Simulator Manual 2", related: [])
     ]
     
     return Array(earSimulators.values)

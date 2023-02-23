@@ -41,7 +41,17 @@ struct EarSimulatorLandingContent<Link: View>: View {
                 Spacer()
                 HStack{
                     Spacer()
-                    NavigationLink("Manual Ear Simulator", destination: EarSimulatorManual1View())
+                    NavigationLink("Manual Ear Simulator 0", destination: EarSimulatorManual0View())
+                        .frame(width: 300, height: 100, alignment: .center)
+                        .foregroundColor(.white)
+                        .background(colorModel.tiffanyBlue)
+                        .cornerRadius(24)
+                    Spacer()
+                }
+                Spacer()
+                HStack{
+                    Spacer()
+                    NavigationLink("Manual Ear Simulator 1", destination: EarSimulatorManual1View())
                         .frame(width: 300, height: 100, alignment: .center)
                         .foregroundColor(.white)
                         .background(colorModel.tiffanyBlue)
