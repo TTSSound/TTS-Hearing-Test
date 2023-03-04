@@ -142,16 +142,16 @@ struct BetaTestingLandingContent<Link: View>: View {
                     Spacer()
                 }
                 .padding(.top, 20)
-                Toggle("Full EHA Selected", isOn: $betaEHA)
+                Toggle("SELECT ME: Full EHA Selected", isOn: $betaEHA)
                     .foregroundColor(.green)
                     .padding(.top, 10)
                     .padding(.leading)
                     .padding(.trailing)
-                Toggle("Shorter EPTA Selected", isOn: $betaEPTA)
-                    .foregroundColor(.blue)
-                    .padding(.top, 10)
-                    .padding(.leading)
-                    .padding(.trailing)
+//                Toggle("Shorter EPTA Selected", isOn: $betaEPTA)
+//                    .foregroundColor(.blue)
+//                    .padding(.top, 10)
+//                    .padding(.leading)
+//                    .padding(.trailing)
                 if betaSelectionsSubmitted == false && userLoggedInSuccessful == true || userLoggedInSuccessful == false {
                     Button {
                         Task(priority: .userInitiated) {

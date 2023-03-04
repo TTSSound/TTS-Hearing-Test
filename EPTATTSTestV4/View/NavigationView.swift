@@ -268,17 +268,33 @@ struct NavigationView: View {
                     colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
 //                    NavigationLink("Let's Begin Testing!", value: EPTATTSTestV4.Testing(id: 8.0, name: "Beta Testing Home", related: []))
                     if firstTestingTabEnabled == true {
-                        NavigationLink("Let's Begin Testing!", value: EPTATTSTestV4.Testing(id: 8.0, name: "Beta Testing Home", related: []))
-                            .font(.title)
-                            .padding()
-                            .frame(width: 300, height: 100, alignment: .center)
-                            .background(colorModel.tiffanyBlue)
-                            .foregroundColor(.white)
-                            .cornerRadius(24)
-                            .hoverEffect()
-                            .navigationDestination(for: Testing.self) { testing in
-                                BetaTestingLandingView(testing: testing, relatedLinkTesting: linkTesting)
-                            }
+                        VStack{
+                            Spacer()
+                            NavigationLink("Let's Begin Testing!", value: EPTATTSTestV4.Testing(id: 8.0, name: "Beta Testing Home", related: []))
+                                .font(.title)
+                                .padding()
+                                .frame(width: 300, height: 100, alignment: .center)
+                                .background(colorModel.tiffanyBlue)
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
+                                .hoverEffect()
+//                                .navigationDestination(for: Testing.self) { testing in
+//                                    BetaTestingLandingView(testing: testing, relatedLinkTesting: linkTesting)
+//                                }
+                            Spacer()
+                            NavigationLink("BilateralTEst", value: EPTATTSTestV4.Testing(id: 11.2, name: "1kHz Test", related: []))
+                                .font(.title)
+                                .padding()
+                                .frame(width: 300, height: 100, alignment: .center)
+                                .background(colorModel.tiffanyBlue)
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
+                                .hoverEffect()
+                                .navigationDestination(for: Testing.self) { testing in
+                                    Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)
+                                }
+                            Spacer()
+                        }
                     } else {
                         Text("Please complete the setup tab first")
                             .foregroundColor(.red)
