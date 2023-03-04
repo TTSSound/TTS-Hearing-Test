@@ -147,8 +147,18 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     @State var pan: Float = 1.0
     //!!!!! Changes Above
     
+// Added Manual AirPods Pro Gen 2 Values for Calibration
+    @State var onekHz_StartingDB: Float = 6.0
+    @State var onekHz_AirPodsProGen2MaxDB: Float = 111.74468
+    @State var onekHz_priorDB: Float = Float()
+    @State var onekHz_currentDB: Float = Float()
+    @State var onekHz_incrementDBChange: Float = 0.0
+    @State var onekHz_newTargetDB: Float = Float()
+    @State
+//
+    
     @State var onekHz_index: Int = 0
-    @State var onekHz_testGain: Float = 0.025
+    @State var onekHz_testGain: Float = Float() //0.025
     @State var onekHz_heardArray: [Int] = [Int]()
     @State var onekHz_indexForTest = [Int]()
     @State var onekHz_testCount: [Int] = [Int]()
@@ -327,6 +337,9 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                     Button {
                         Task(priority: .userInitiated) {
                             audioSessionModel.setAudioSession()
+                            onekHz_currentDB = onekHz_StartingDB
+                            onekHz_newTargetDB = onekHz_currentDB
+                            await dBToGain()
                             onekHzlocalPlaying = 1
                             changeSampleArray = false
                             print("Start Button Clicked. Playing = \(onekHzlocalPlaying)")
@@ -430,6 +443,8 @@ struct Bilateral1kHzTestContent<Link: View>: View {
             .onAppear {
                 onekHzshowTestCompletionSheet = true
                 audioSessionModel.cancelAudioSession()
+                onekHz_currentDB = onekHz_StartingDB
+                
             }
             .fullScreenCover(isPresented: $onekHzshowTestCompletionSheet, content: {
                 ZStack{
@@ -864,7 +879,7 @@ extension Bilateral1kHzTestContent {
         onekHzlocalMarkNewTestCycle = 0
         onekHzlocalReversalEnd = 0
         onekHz_index = onekHz_index
-        onekHz_testGain = 0.025       // Add code to reset starting test gain by linking to table o expected HL
+        onekHz_testGain = onekHz_StartingDB       // Add code to reset starting test gain by linking to table o expected HL
         onekHztestIsPlaying = false
         onekHzlocalPlaying = 0
         onekHz_testCount.removeAll()
@@ -1021,6 +1036,26 @@ extension Bilateral1kHzTestContent {
         case onekHzlastUnexpected(code: Int)
     }
     
+    
+    
+    
+
+    
+    
+    func dBNewTargetdB() async {
+        onekHz_newTargetDB = onekHz_currentDB + onekHz_incrementDBChange
+    }
+    
+    func dBToGain() async {
+        onekHz_testGain = Float(10^(Int((onekHz_newTargetDB-onekHz_AirPodsProGen2MaxDB))/20))
+    }
+    
+    
+    
+    
+    
+
+    
     func onekHzcreateReversalHeardArray() async {
         onekHz_reversalHeard.append(onekHz_heardArray[onekHzidxHA-1])
         self.onekHzidxReversalHeardCount = onekHz_reversalHeard.count
@@ -1053,10 +1088,117 @@ extension Bilateral1kHzTestContent {
         }
     }
     
+    
+    
+//    func onekHzreversalOfOne() async {
+//        let onekHzrO1Direction = 0.01 * onekHz_reversalDirection
+//        let onekHzr01NewGain = onekHz_testGain + onekHzrO1Direction
+//        if onekHzr01NewGain > 0.00001 && onekHzr01NewGain < 1.0 {
+//            onekHz_testGain = roundf(onekHzr01NewGain * 100000) / 100000
+//        } else if onekHzr01NewGain <= 0.0 {
+//            onekHz_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if onekHzr01NewGain >= 1.0 {
+//            onekHz_testGain = 1.0
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfOne Logic")
+//        }
+//    }
+//
+//    func onekHzreversalOfTwo() async {
+//        let onekHzrO2Direction = 0.02 * onekHz_reversalDirection
+//        let onekHzr02NewGain = onekHz_testGain + onekHzrO2Direction
+//        if onekHzr02NewGain > 0.00001 && onekHzr02NewGain < 1.0 {
+//            onekHz_testGain = roundf(onekHzr02NewGain * 100000) / 100000
+//        } else if onekHzr02NewGain <= 0.0 {
+//            onekHz_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if onekHzr02NewGain >= 1.0 {
+//            onekHz_testGain = 1.0
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfTwo Logic")
+//        }
+//    }
+//
+//    func onekHzreversalOfThree() async {
+//        let onekHzrO3Direction = 0.03 * onekHz_reversalDirection
+//        let onekHzr03NewGain = onekHz_testGain + onekHzrO3Direction
+//        if onekHzr03NewGain > 0.00001 && onekHzr03NewGain < 1.0 {
+//            onekHz_testGain = roundf(onekHzr03NewGain * 100000) / 100000
+//        } else if onekHzr03NewGain <= 0.0 {
+//            onekHz_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if onekHzr03NewGain >= 1.0 {
+//            onekHz_testGain = 1.0
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfThree Logic")
+//        }
+//    }
+//
+//    func onekHzreversalOfFour() async {
+//        let onekHzrO4Direction = 0.04 * onekHz_reversalDirection
+//        let onekHzr04NewGain = onekHz_testGain + onekHzrO4Direction
+//        if onekHzr04NewGain > 0.00001 && onekHzr04NewGain < 1.0 {
+//            onekHz_testGain = roundf(onekHzr04NewGain * 100000) / 100000
+//        } else if onekHzr04NewGain <= 0.0 {
+//            onekHz_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if onekHzr04NewGain >= 1.0 {
+//            onekHz_testGain = 1.0
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfFour Logic")
+//        }
+//    }
+//
+//    func onekHzreversalOfFive() async {
+//        let onekHzrO5Direction = 0.05 * onekHz_reversalDirection
+//        let onekHzr05NewGain = onekHz_testGain + onekHzrO5Direction
+//        if onekHzr05NewGain > 0.00001 && onekHzr05NewGain < 1.0 {
+//            onekHz_testGain = roundf(onekHzr05NewGain * 100000) / 100000
+//        } else if onekHzr05NewGain <= 0.0 {
+//            onekHz_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if onekHzr05NewGain >= 1.0 {
+//            onekHz_testGain = 1.0
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfFive Logic")
+//        }
+//    }
+//
+//    func onekHzreversalOfTen() async {
+//        let onekHzr10Direction = 0.10 * onekHz_reversalDirection
+//        let onekHzr10NewGain = onekHz_testGain + onekHzr10Direction
+//        if onekHzr10NewGain > 0.00001 && onekHzr10NewGain < 1.0 {
+//            onekHz_testGain = roundf(onekHzr10NewGain * 100000) / 100000
+//        } else if onekHzr10NewGain <= 0.0 {
+//            onekHz_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if onekHzr10NewGain >= 1.0 {
+//            onekHz_testGain = 1.0
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfTen Logic")
+//        }
+//    }
+    
+    
+    // func dBNewTargetdB() async {
+      //   onekHz_newTargetDB = onekHz_currentDB + onekHz_incrementDBChange
+    // }
+     
+     //func dBToGain() async {
+       //  onekHz_testGain = Float(10^(Int((onekHz_newTargetDB-onekHz_AirPodsProGen2MaxDB))/20))
+     //}
+    
     func onekHzreversalOfOne() async {
-        let onekHzrO1Direction = 0.01 * onekHz_reversalDirection
+        let onekHzrO1Direction = 1.0 * onekHz_reversalDirection
         let onekHzr01NewGain = onekHz_testGain + onekHzrO1Direction
-        if onekHzr01NewGain > 0.00001 && onekHzr01NewGain < 1.0 {
+        if onekHzr01NewGain > 0.00001 && onekHzr01NewGain < onekHz_AirPodsProGen2MaxDB-0.1 {
             onekHz_testGain = roundf(onekHzr01NewGain * 100000) / 100000
         } else if onekHzr01NewGain <= 0.0 {
             onekHz_testGain = 0.00001
@@ -1148,6 +1290,10 @@ extension Bilateral1kHzTestContent {
             print("!!!Fatal Error in reversalOfTen Logic")
         }
     }
+    
+    
+
+    
     
     func onekHzreversalAction() async {
         if onekHzlocalReversalHeardLast == 1 {
@@ -1383,6 +1529,7 @@ extension Bilateral1kHzTestContent {
             onekHz_index = onekHz_index + 1
             onekHz_testGain = 0.025
             onekHzendTestSeries = false
+
             
         } else if onekHzlocalMarkNewTestCycle == 1 && onekHzlocalReversalEnd == 1 && onekHz_index == onekHz_eptaSamplesCount && onekHzendTestSeries == false {
             onekHzendTestSeries = true

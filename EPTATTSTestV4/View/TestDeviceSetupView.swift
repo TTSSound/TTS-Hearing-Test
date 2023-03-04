@@ -192,12 +192,12 @@ struct TestDeviceSetupView: View {
 extension TestDeviceSetupView {
     //MARK: -Extension Methods
     func checkVolue() {
-        if audioSessionModel.audioSession.outputVolume == 0.63 {
+        if audioSessionModel.audioSession.outputVolume == 1.0 {
             volumeCorrect = 1
             tdLinkColorIndex = 1
             volumeSettingIndex = 1
         }
-        if audioSessionModel.audioSession.outputVolume >= 0.60 && audioSessionModel.audioSession.outputVolume <= 0.655 {
+        if audioSessionModel.audioSession.outputVolume >= 0.98 && audioSessionModel.audioSession.outputVolume <= 1.0 {
             volumeCorrect = 2
             tdLinkColorIndex = 2
             volumeSettingIndex = 2
