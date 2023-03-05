@@ -909,7 +909,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
                     gainEHAP1PhonIsSet = true
                     highResStandard = true
                     //append highresstd to array
-                    envDataObjectModel_samples.append(contentsOf: highResStdSamples)
+                    envDataObjectModel_samples.append(contentsOf: cdFadedDitheredSamples)
                     sampleArraySet = true
                     print("training_samples: \(envDataObjectModel_samples)")
                 } else if gainEHAP1PhonIsSet == true {

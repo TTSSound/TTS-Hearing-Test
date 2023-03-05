@@ -418,6 +418,207 @@ struct EHATTSTestPart2Content<Link: View>: View {
     @State var ehaP2TestingPhases = 0
     @State var displayGainData: Bool = false
     
+    
+    //
+    //
+    //
+    // Added Manual AirPods Pro Gen 2 Values for Calibration
+        @State var eHAP1_StartingDB = Float()                    //Make this a freq dependent array in other views linked to index
+        @State var eHAP1_AirPodsProGen2MaxDB = Float()    //Make this a freq dependent array in other views linked to index
+        
+        
+        @State var eHAP1_AirPodsProGen2MaxDBArray = [Float]()
+        @State var gainDBEHAP1SettingArray = [Float]()  // Make this target starting dB levels by frequency
+        
+    //        gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS2_5_EHAP1
+        
+        
+        @State var eHAP1_PriorDB: Float = Float()
+        @State var eHAP1_CurrentDB: Float = Float()
+        @State var eHAP1_StepSizeDB: Float = 0.0
+        @State var eHAP1_NewTargetDB: Float = Float()
+      
+        @State var eHAP1_testGainDB: Float = Float() //0.025
+        @State var eHAP1_reversalGainDB = [Float]()
+        @State var eHAP1_testTestGainDB = [Float]()
+       
+        
+        @State var eHAP1firstGainDB = Float()
+        @State var eHAP1secondGainDB = Float()
+        
+        @State var eHAP1firstGainDBRight1 = Float()
+        @State var eHAP1secondGainDBRight1 = Float()
+        @State var eHAP1firstGainDBRight2 = Float()
+        @State var eHAP1secondGainDBRight2 = Float()
+        @State var eHAP1firstGainDBLeft1 = Float()
+        @State var eHAP1secondGainDBLeft1 = Float()
+        @State var eHAP1firstGainDBLeft2 = Float()
+        @State var eHAP1secondGainDBLeft2 = Float()
+        
+        @State var eHAP1_rightFirstSecondGainDBArray: [Float] = [Float]()
+        @State var eHAP1_leftFirstSecondGainDBArray: [Float] = [Float]()
+        
+       
+        @State var eHAP1RightDBSorted: [Float] = [Float]()
+        @State var eHAP1LeftDBSorted: [Float] = [Float]()
+        @State var eHAP1IntraEarDeltaHL1DB = Float()
+        @State var eHAP1IntraEarDeltaHL2DB = Float()
+        @State var eHAP1IntraEarDeltaHLFinalDB = Float()
+        
+        @State var eHAP1FinalLRGainsDB1: [Float] = [Float]()
+        @State var eHAP1FinalLRGainsDB2: [Float] = [Float]()
+        @State var eHAP1InterimLRGainsDBFinal: [Float] = [Float]()
+        @State var eHAP1FinalComboLRGainsDB: [Float] = [Float]()
+        
+        
+        @State var eHAP1_averageGainDB = Float()
+        @State var eHAP1_averageGainDBRight = Float()
+        @State var eHAP1_averageGainDBLeft = Float()
+        
+        @State var eHAP1_averageGainDBRight1 = Float()
+        @State var eHAP1_averageGainDBRight2 = Float()
+        @State var eHAP1_averageGainDBRightArray: [Float] = [Float]()
+        @State var eHAP1_averageLowestGainDBRightArray: [Float] = [Float]()
+        @State var eHAP1_idxFirstAverageGainDBRightArray = Float()
+        @State var eHAP1_idxlastAverageGainDBRightArray = Float()
+        
+        @State var eHAP1_averageGainDBLeft1 = Float()
+        @State var eHAP1_averageGainDBLeft2 = Float()
+        @State var eHAP1_averageGainDBLeftArray: [Float] = [Float]()
+        @State var eHAP1_averageLowestGainDBLeftArray: [Float] = [Float]()
+        @State var eHAP1_idxFirstAverageGainDBLeftArray = Float()
+        @State var eHAP1_idxlastAverageGainDBLeftArray = Float()
+        
+        @State var eHAP1_HoldingLowestRightGainDBArray: [Float] = [Float]()
+        @State var eHAP1_HoldingLowestLeftGainDBArray: [Float] = [Float]()
+      
+        
+        @State var eHAP1_finalStoredFirstGainDB: [Float] = [Float]()
+        @State var eHAP1_finalStoredSecondGainDB: [Float] = [Float]()
+        @State var eHAP1_finalStoredAverageGainDB: [Float] = [Float]()
+        
+        
+        @State var final_eHAP1_eHAP1firstGainDB = [Float]()
+        @State var final_eHAP1_eHAP1secondGainDB = [Float]()
+        @State var final_eHAP1_reversalGainDB = [Float]()
+        @State var final_eHAP1_testTestGainDB = [Float]()
+        @State var final_eHAP1_averageGainDB = [Float]()
+        @State var final_eHAP1_averageGainDBRightArray = [Float]()
+        @State var final_eHAP1_averageGainDBLeftArray = [Float]()
+        @State var final_eHAP1_averageLowestGainDBRightArray = [Float]()
+        @State var final_eHAP1_HoldingLowestRightGainDBArray = [Float]()
+        @State var final_eHAP1_averageLowestGainDBLeftArray = [Float]()
+        @State var final_eHAP1_HoldingLowestLeftGainDBArray = [Float]()
+        
+        
+           
+        @State var ehaP2RightFinalGainDBSample17 = Float()
+        @State var ehaP2RightFinalGainDBSample18 = Float()
+        @State var ehaP2RightFinalGainDBSample19 = Float()
+        @State var ehaP2RightFinalGainDBSample20 = Float()
+        @State var ehaP2RightFinalGainDBSample21 = Float()
+        @State var ehaP2RightFinalGainDBSample22 = Float()
+        @State var ehaP2RightFinalGainDBSample23 = Float()
+        @State var ehaP2RightFinalGainDBSample24 = Float()
+        @State var ehaP2RightFinalGainDBSample25 = Float()
+        @State var ehaP2RightFinalGainDBSample26 = Float()
+        @State var ehaP2RightFinalGainDBSample27 = Float()
+        @State var ehaP2RightFinalGainDBSample28 = Float()
+        @State var ehaP2RightFinalGainDBSample29 = Float()
+        @State var ehaP2RightFinalGainDBSample30 = Float()
+        @State var ehaP2RightFinalGainDBSample31 = Float()
+        @State var ehaP2RightFinalGainDBSample32 = Float()
+        @State var ehaP2RightFinalGainDBSample33 = Float()
+        @State var ehaP2RightFinalGainDBSample34 = Float()
+        @State var ehaP2RightFinalGainDBSample35 = Float()
+        @State var ehaP2RightFinalGainDBSample36 = Float()
+        @State var ehaP2RightFinalGainDBSample37 = Float()
+        @State var ehaP2RightFinalGainDBSample38 = Float()
+        @State var ehaP2RightFinalGainDBSample39 = Float()
+        @State var ehaP2RightFinalGainDBSample40 = Float()
+        @State var ehaP2RightFinalGainDBSample41 = Float()
+        @State var ehaP2RightFinalGainDBSample42 = Float()
+        @State var ehaP2RightFinalGainDBSample43 = Float()
+        @State var ehaP2RightFinalGainDBSample44 = Float()
+        @State var ehaP2RightFinalGainDBSample45 = Float()
+        @State var ehaP2RightFinalGainDBSample46 = Float()
+        @State var ehaP2RightFinalGainDBSample47 = Float()
+        @State var ehaP2RightFinalGainDBSample48 = Float()
+        @State var ehaP2RightFinalGainDBSample49 = Float()
+        @State var ehaP2RightFinalGainDBSample50 = Float()
+        @State var ehaP2RightFinalGainDBSample51 = Float()
+        @State var ehaP2RightFinalGainDBSample52 = Float()
+        @State var ehaP2RightFinalGainDBSample53 = Float()
+        @State var ehaP2RightFinalGainDBSample54 = Float()
+        @State var ehaP2RightFinalGainDBSample55 = Float()
+        @State var ehaP2RightFinalGainDBSample56 = Float()
+        @State var ehaP2RightFinalGainDBSample57 = Float()
+        @State var ehaP2RightFinalGainDBSample58 = Float()
+        @State var ehaP2RightFinalGainDBSample59 = Float()
+        
+        
+        
+        @State var ehaP2LeftFinalGainDBSample17 = Float()
+        @State var ehaP2LeftFinalGainDBSample18 = Float()
+        @State var ehaP2LeftFinalGainDBSample19 = Float()
+        @State var ehaP2LeftFinalGainDBSample20 = Float()
+        @State var ehaP2LeftFinalGainDBSample21 = Float()
+        @State var ehaP2LeftFinalGainDBSample22 = Float()
+        @State var ehaP2LeftFinalGainDBSample23 = Float()
+        @State var ehaP2LeftFinalGainDBSample24 = Float()
+        @State var ehaP2LeftFinalGainDBSample25 = Float()
+        @State var ehaP2LeftFinalGainDBSample26 = Float()
+        @State var ehaP2LeftFinalGainDBSample27 = Float()
+        @State var ehaP2LeftFinalGainDBSample28 = Float()
+        @State var ehaP2LeftFinalGainDBSample29 = Float()
+        @State var ehaP2LeftFinalGainDBSample30 = Float()
+        @State var ehaP2LeftFinalGainDBSample31 = Float()
+        @State var ehaP2LeftFinalGainDBSample32 = Float()
+        @State var ehaP2LeftFinalGainDBSample33 = Float()
+        @State var ehaP2LeftFinalGainDBSample34 = Float()
+        @State var ehaP2LeftFinalGainDBSample35 = Float()
+        @State var ehaP2LeftFinalGainDBSample36 = Float()
+        @State var ehaP2LeftFinalGainDBSample37 = Float()
+        @State var ehaP2LeftFinalGainDBSample38 = Float()
+        @State var ehaP2LeftFinalGainDBSample39 = Float()
+        @State var ehaP2LeftFinalGainDBSample40 = Float()
+        @State var ehaP2LeftFinalGainDBSample41 = Float()
+        @State var ehaP2LeftFinalGainDBSample42 = Float()
+        @State var ehaP2LeftFinalGainDBSample43 = Float()
+        @State var ehaP2LeftFinalGainDBSample44 = Float()
+        @State var ehaP2LeftFinalGainDBSample45 = Float()
+        @State var ehaP2LeftFinalGainDBSample46 = Float()
+        @State var ehaP2LeftFinalGainDBSample47 = Float()
+        @State var ehaP2LeftFinalGainDBSample48 = Float()
+        @State var ehaP2LeftFinalGainDBSample49 = Float()
+        @State var ehaP2LeftFinalGainDBSample50 = Float()
+        @State var ehaP2LeftFinalGainDBSample51 = Float()
+        @State var ehaP2LeftFinalGainDBSample52 = Float()
+        @State var ehaP2LeftFinalGainDBSample53 = Float()
+        @State var ehaP2LeftFinalGainDBSample54 = Float()
+        @State var ehaP2LeftFinalGainDBSample55 = Float()
+        @State var ehaP2LeftFinalGainDBSample56 = Float()
+        @State var ehaP2LeftFinalGainDBSample57 = Float()
+        @State var ehaP2LeftFinalGainDBSample58 = Float()
+        @State var ehaP2LeftFinalGainDBSample59 = Float()
+        
+        
+        
+        @State var ehaP2rightFinalGainsDBArray = [Float]()
+        @State var ehaP2leftFinalGainsDBArray = [Float]()
+        @State var ehaP2finalStoredRightFinalGainsDBArray = [Float]()
+        @State var ehaP2finalStoredleftFinalGainsDBArray = [Float]()
+        
+        
+        @State var eHAP1_finalStoredTestTestGainDB: [Float] = [Float]()
+        
+    // End of Added DB Variables
+    //
+    //
+    //
+    
+    
+    
     @State var dataFileURLEHAP2Gain1 = URL(fileURLWithPath: "")
     @State var dataFileURLEHAP2Gain2 = URL(fileURLWithPath: "")
     @State var dataFileURLEHAP2Gain3 = URL(fileURLWithPath: "")
@@ -483,19 +684,58 @@ struct EHATTSTestPart2Content<Link: View>: View {
             colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
             VStack {
                 HStack{
-                    if ehaP2fullTestCompleted == false {
-                        Text("EHA Part 2 Test Cycle \(ehaP2TestingPhases)")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .padding()
+                    VStack{
+                        if ehaP2fullTestCompleted == false {
+                            HStack{
+                                Text("EHA Part 2 Test Cycle \(ehaP2TestingPhases)")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .padding()
+                                    .foregroundColor(.white)
+                            }
+                            
+                            HStack{
+                                Spacer()
+                                Text("CurrentDB: \(eHAP1_CurrentDB)")
+                                Spacer()
+                                Text("NewTargetDB: \(eHAP1_NewTargetDB)")
+                                Spacer()
+                            }
+                            .font(.caption)
                             .foregroundColor(.white)
-                    } else if ehaP2fullTestCompleted == true {
-                        NavigationLink("Test Phase Complete, Press To Continue", destination: PostEHATestView(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting))
-                            .padding()
-                            .frame(width: 300, height: 50, alignment: .center)
-                            .background(.green)
+                            .padding(.top, 5)
+                            .padding(.bottom, 5)
+                            
+                            HStack{
+                                Spacer()
+                                Text("testGainDB: \(eHAP1_testGainDB)")
+                                Spacer()
+                                Text("StepSizeDB: \(eHAP1_StepSizeDB)")
+                                Spacer()
+                            }
+                            .font(.caption)
                             .foregroundColor(.white)
-                            .cornerRadius(24)
+                            .padding(.top, 5)
+                            .padding(.bottom, 5)
+                            
+                            HStack{
+                                Spacer()
+                                Text("testGain: \(ehaP2_testGain)")
+                                Spacer()
+                            }
+                            .font(.caption)
+                            .foregroundColor(.white)
+                            .padding(.top, 5)
+                            .padding(.bottom, 20)
+                            
+                        } else if ehaP2fullTestCompleted == true {
+                            NavigationLink("Test Phase Complete, Press To Continue", destination: PostEHATestView(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting))
+                                .padding()
+                                .frame(width: 300, height: 50, alignment: .center)
+                                .background(.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
+                        }
                     }
                 }
                 .navigationDestination(isPresented: $ehaP2fullTestCompleted) {
@@ -505,30 +745,30 @@ struct EHATTSTestPart2Content<Link: View>: View {
                 .padding(.bottom, 10)
                 
 
-                HStack{
-                    Spacer()
-                    Toggle("Show Data", isOn: $displayGainData)
-                        .font(.caption)
-                        .foregroundColor(.white)
-                        .padding(.leading)
-                    if displayGainData == true {
-                        Text("Gain:\n\(ehaP2_testGain)")
-                            .font(.caption)
-                            .foregroundColor(.white)
-                        Spacer()
-                        Text("Pan:\n\(ehaP2_pan)")
-                            .font(.caption)
-                            .foregroundColor(.white)
-                        Spacer()
-                        Text("phon:\n\(gainEHAP2SettingArrayLink)")
-                            .font(.caption)
-                            .foregroundColor(.white)
-                    }
-                    Spacer()
-                }
-                .padding(.top, 5)
-                .padding(.bottom, 5)
-                .padding(.leading)
+//                HStack{
+//                    Spacer()
+//                    Toggle("Show Data", isOn: $displayGainData)
+//                        .font(.caption)
+//                        .foregroundColor(.white)
+//                        .padding(.leading)
+//                    if displayGainData == true {
+//                        Text("Gain:\n\(ehaP2_testGain)")
+//                            .font(.caption)
+//                            .foregroundColor(.white)
+//                        Spacer()
+//                        Text("Pan:\n\(ehaP2_pan)")
+//                            .font(.caption)
+//                            .foregroundColor(.white)
+//                        Spacer()
+//                        Text("phon:\n\(gainEHAP2SettingArrayLink)")
+//                            .font(.caption)
+//                            .foregroundColor(.white)
+//                    }
+//                    Spacer()
+//                }
+//                .padding(.top, 5)
+//                .padding(.bottom, 5)
+//                .padding(.leading)
                 
                 if ehaP2TestStarted == false {
                     Button {
@@ -918,6 +1158,9 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                     .onTapGesture {
                                         ehaP2TestingPhases += 1
                                         ehaP2showTestCompletionSheet.toggle()
+                                        eHAP1_CurrentDB = eHAP1_StartingDB
+                                        eHAP1_NewTargetDB = eHAP1_CurrentDB
+                                        ehaP2_testGain = powf(10.0, ((eHAP1_StartingDB - eHAP1_AirPodsProGen2MaxDB)/20))
                                     }
                                 Spacer()
                             }
@@ -947,6 +1190,10 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                             Task(priority: .userInitiated) {
                                                 await ehaP2combinedPauseRestartAndStartNexTestCycle()
                                                 ehaP2TestingPhases += 1
+//
+//                                                eHAP1_CurrentDB = eHAP1_StartingDB
+//                                                eHAP1_NewTargetDB = eHAP1_CurrentDB
+//                                                ehaP2_testGain = powf(10.0, ((eHAP1_StartingDB - eHAP1_AirPodsProGen2MaxDB)/20))
                                             }
                                         }
                                     }
@@ -1008,11 +1255,18 @@ struct EHATTSTestPart2Content<Link: View>: View {
                     await gainEHAP2CurveAssignment()
                     ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]
                     await comparedLastNameCSVReader()
+                    
+                    eHAP1_StartingDB = gainEHAP2SettingArray[ehaP2_index]
+                    eHAP1_CurrentDB = eHAP1_StartingDB
+                    eHAP1_NewTargetDB = eHAP1_StartingDB
+                    eHAP1_AirPodsProGen2MaxDB = eHAP1_AirPodsProGen2MaxDBArray[ehaP2_index]
+                    await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)    // This will set _testGain
+                    
                     gainEHAP2PhonIsSet = true
                     highResStandard = true
                     //append highresstd to array
-                    ehaP2_dualSamples.append(contentsOf: highResStdSamples)
-                    ehaP2_monoSamples.append(contentsOf: highResStdMonoSamples)
+                    ehaP2_dualSamples.append(contentsOf: cdFadedDitheredSamples)
+                    ehaP2_monoSamples.append(contentsOf: cdFadedDitheredMonoSamples)
                     sampleArraySet = true
                     print("ehaP2_dualSamples: \(ehaP2_dualSamples)")
                     print("ehaP2_monoSamples: \(ehaP2_monoSamples)")
@@ -1256,6 +1510,19 @@ extension EHATTSTestPart2Content {
        ehaP2localTestCount = 0
        ehaP2localReversalHeardLast = Int()
        ehaP2startTooHigh = 0
+       
+//Added
+       eHAP1_averageGainDB = Float()
+       Task(priority: .userInitiated) {
+           eHAP1_StartingDB = gainEHAP2SettingArray[ehaP2_index]
+           eHAP1_CurrentDB = eHAP1_StartingDB
+           eHAP1_NewTargetDB = eHAP1_StartingDB
+           eHAP1_AirPodsProGen2MaxDB = eHAP1_AirPodsProGen2MaxDBArray[ehaP2_index]
+           await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)
+       }
+
+               
+//Added Above
    }
     
     func ehaP2combinedPauseRestartAndStartNexTestCycle() async {
@@ -1280,12 +1547,21 @@ extension EHATTSTestPart2Content {
         ehaP2_index = ehaP2_index + 1
 //        print(ehaP2_eptaSamplesCountArray[ehaP2_index]) /// This is causing the issue
 //        print("ehaP2_index: \(ehaP2_index)")
-        ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]
+//        ehaP2_testGain = gainEHAP2SettingArray[ehaP2_index]
         ehaP2userPausedTest = false
         ehaP2testIsPlaying = true
         ehaP2localPlaying = 1
 //        ehaP2showTestCompletionSheet = false
         ehaP2showTestCompletionSheet.toggle()
+        //
+        //
+        eHAP1_StartingDB = gainEHAP2SettingArray[ehaP2_index]
+        eHAP1_CurrentDB = eHAP1_StartingDB
+        eHAP1_NewTargetDB = eHAP1_StartingDB
+        eHAP1_AirPodsProGen2MaxDB = eHAP1_AirPodsProGen2MaxDBArray[ehaP2_index]
+        await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)
+        //
+        //
     }
     
     func ehaP2setDualMonoVariables() {
@@ -1380,6 +1656,7 @@ extension EHATTSTestPart2Content {
        }
        DispatchQueue.global(qos: .default).async {
            ehaP2_testTestGain.append(ehaP2_testGain)
+           eHAP1_testTestGainDB.append(eHAP1_testGainDB)
        }
        DispatchQueue.global(qos: .background).async {
            ehaP2_frequency.append(ehaP2activeFrequency)
@@ -1510,6 +1787,32 @@ extension EHATTSTestPart2Content {
         case ehaP2lastUnexpected(code: Int)
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    func dBNewTargetDB() async {
+        eHAP1_NewTargetDB = eHAP1_CurrentDB + eHAP1_StepSizeDB
+    }
+    
+    func dBToGain(eHAP1_NewTargetDB: Float) async {
+        ehaP2_testGain = powf(10.0, ((eHAP1_NewTargetDB - eHAP1_AirPodsProGen2MaxDB)/20))
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     func ehaP2createReversalHeardArray() async {
         ehaP2_reversalHeard.append(ehaP2_heardArray[ehaP2idxHA-1])
         self.ehaP2idxReversalHeardCount = ehaP2_reversalHeard.count
@@ -1523,14 +1826,17 @@ extension EHATTSTestPart2Content {
     func ehaP2createReversalGainArray() async {
         ehaP2_reversalGain.append(ehaP2_testGain)
         //        ehaP2_reversalGain.append(ehaP2_testTestGain[ehaP2idxHA-1])
+        eHAP1_reversalGainDB.append(eHAP1_testGainDB)
     }
     
     func ehaP2createReversalGainArrayNonResponse() async {
         if ehaP2_testGain < 0.995 {
             ehaP2_reversalGain.append(ehaP2_testGain)
             //        ehaP2_reversalGain.append(ehaP2_testTestGain[ehaP2idxHA-1])
+            eHAP1_reversalGainDB.append(eHAP1_testGainDB)
         } else if ehaP2_testGain >= 0.995 {
             ehaP2_reversalGain.append(1.0)
+            eHAP1_reversalGainDB.append(200.0)
         }
     }
     
@@ -1557,16 +1863,131 @@ extension EHATTSTestPart2Content {
         }
     }
     
+//    func ehaP2reversalOfOne() async {
+//        let ehaP2rO1Direction = 0.01 * ehaP2_reversalDirection
+//        let ehaP2r01NewGain = ehaP2_testGain + ehaP2rO1Direction
+//        if ehaP2r01NewGain > 0.00001 && ehaP2r01NewGain < 1.0 {
+//            ehaP2_testGain = roundf(ehaP2r01NewGain * 100000) / 100000
+//        } else if ehaP2r01NewGain <= 0.0 {
+//            ehaP2_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if ehaP2r01NewGain >= 0.995 {
+//            ehaP2_testGain = 0.995
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfOne Logic")
+//        }
+//    }
+//
+//    func ehaP2reversalOfTwo() async {
+//        let ehaP2rO2Direction = 0.02 * ehaP2_reversalDirection
+//        let ehaP2r02NewGain = ehaP2_testGain + ehaP2rO2Direction
+//        if ehaP2r02NewGain > 0.00001 && ehaP2r02NewGain < 1.0 {
+//            ehaP2_testGain = roundf(ehaP2r02NewGain * 100000) / 100000
+//        } else if ehaP2r02NewGain <= 0.0 {
+//            ehaP2_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if ehaP2r02NewGain >= 0.995 {
+//            ehaP2_testGain = 0.995
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfTwo Logic")
+//        }
+//    }
+//
+//    func ehaP2reversalOfThree() async {
+//        let ehaP2rO3Direction = 0.03 * ehaP2_reversalDirection
+//        let ehaP2r03NewGain = ehaP2_testGain + ehaP2rO3Direction
+//        if ehaP2r03NewGain > 0.00001 && ehaP2r03NewGain < 1.0 {
+//            ehaP2_testGain = roundf(ehaP2r03NewGain * 100000) / 100000
+//        } else if ehaP2r03NewGain <= 0.0 {
+//            ehaP2_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if ehaP2r03NewGain >= 0.995 {
+//            ehaP2_testGain = 0.995
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfThree Logic")
+//        }
+//    }
+//
+//    func ehaP2reversalOfFour() async {
+//        let ehaP2rO4Direction = 0.04 * ehaP2_reversalDirection
+//        let ehaP2r04NewGain = ehaP2_testGain + ehaP2rO4Direction
+//        if ehaP2r04NewGain > 0.00001 && ehaP2r04NewGain < 1.0 {
+//            ehaP2_testGain = roundf(ehaP2r04NewGain * 100000) / 100000
+//        } else if ehaP2r04NewGain <= 0.0 {
+//            ehaP2_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if ehaP2r04NewGain >= 0.995 {
+//            ehaP2_testGain = 0.995
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfFour Logic")
+//        }
+//    }
+//
+//    func ehaP2reversalOfFive() async {
+//        let ehaP2rO5Direction = 0.05 * ehaP2_reversalDirection
+//        let ehaP2r05NewGain = ehaP2_testGain + ehaP2rO5Direction
+//        if ehaP2r05NewGain > 0.00001 && ehaP2r05NewGain < 1.0 {
+//            ehaP2_testGain = roundf(ehaP2r05NewGain * 100000) / 100000
+//        } else if ehaP2r05NewGain <= 0.0 {
+//            ehaP2_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if ehaP2r05NewGain >= 0.995 {
+//            ehaP2_testGain = 0.995
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfFive Logic")
+//        }
+//    }
+//
+//    func ehaP2reversalOfTen() async {
+//        let ehaP2r10Direction = 0.10 * ehaP2_reversalDirection
+//        let ehaP2r10NewGain = ehaP2_testGain + ehaP2r10Direction
+//        if ehaP2r10NewGain > 0.00001 && ehaP2r10NewGain < 1.0 {
+//            ehaP2_testGain = roundf(ehaP2r10NewGain * 100000) / 100000
+//        } else if ehaP2r10NewGain <= 0.0 {
+//            ehaP2_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if ehaP2r10NewGain >= 0.995 {
+//            ehaP2_testGain = 0.995
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfTen Logic")
+//        }
+//    }
+    
+    
     func ehaP2reversalOfOne() async {
-        let ehaP2rO1Direction = 0.01 * ehaP2_reversalDirection
-        let ehaP2r01NewGain = ehaP2_testGain + ehaP2rO1Direction
-        if ehaP2r01NewGain > 0.00001 && ehaP2r01NewGain < 1.0 {
-            ehaP2_testGain = roundf(ehaP2r01NewGain * 100000) / 100000
-        } else if ehaP2r01NewGain <= 0.0 {
-            ehaP2_testGain = 0.00001
+        eHAP1_StepSizeDB = 1.0
+        let rO1Direction = eHAP1_StepSizeDB * ehaP2_reversalDirection
+        eHAP1_NewTargetDB = eHAP1_CurrentDB + rO1Direction
+        if eHAP1_NewTargetDB > 0.00001 && eHAP1_NewTargetDB < eHAP1_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = eHAP1_NewTargetDB
+            eHAP1_CurrentDB = eHAP1_NewTargetDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
+        } else if eHAP1_NewTargetDB <= 0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 1.0
+            eHAP1_CurrentDB = 1.0
+            eHAP1_NewTargetDB = 1.0
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if ehaP2r01NewGain >= 0.995 {
-            ehaP2_testGain = 0.995
+        } else if eHAP1_NewTargetDB >= eHAP1_AirPodsProGen2MaxDB {
+            ehaP2_testGain = 1.0
+            eHAP1_testGainDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_CurrentDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_NewTargetDB = eHAP1_AirPodsProGen2MaxDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfOne Logic")
@@ -1574,84 +1995,177 @@ extension EHATTSTestPart2Content {
     }
     
     func ehaP2reversalOfTwo() async {
-        let ehaP2rO2Direction = 0.02 * ehaP2_reversalDirection
-        let ehaP2r02NewGain = ehaP2_testGain + ehaP2rO2Direction
-        if ehaP2r02NewGain > 0.00001 && ehaP2r02NewGain < 1.0 {
-            ehaP2_testGain = roundf(ehaP2r02NewGain * 100000) / 100000
-        } else if ehaP2r02NewGain <= 0.0 {
-            ehaP2_testGain = 0.00001
+        eHAP1_StepSizeDB = 2.0
+        let rO2Direction = eHAP1_StepSizeDB * ehaP2_reversalDirection
+        eHAP1_NewTargetDB = eHAP1_CurrentDB + rO2Direction
+        if eHAP1_NewTargetDB > 0.00001 && eHAP1_NewTargetDB < eHAP1_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = eHAP1_NewTargetDB
+            eHAP1_CurrentDB = eHAP1_NewTargetDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
+        } else if eHAP1_NewTargetDB <= 0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 1.0
+            eHAP1_CurrentDB = 1.0
+            eHAP1_NewTargetDB = 1.0
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if ehaP2r02NewGain >= 0.995 {
-            ehaP2_testGain = 0.995
+        } else if eHAP1_NewTargetDB >= eHAP1_AirPodsProGen2MaxDB {
+            ehaP2_testGain = 1.0
+            eHAP1_testGainDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_CurrentDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_NewTargetDB = eHAP1_AirPodsProGen2MaxDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
-            print("!!!Fatal Error in reversalOfTwo Logic")
+            print("!!!Fatal Error in reversalOfOne Logic")
         }
     }
     
     func ehaP2reversalOfThree() async {
-        let ehaP2rO3Direction = 0.03 * ehaP2_reversalDirection
-        let ehaP2r03NewGain = ehaP2_testGain + ehaP2rO3Direction
-        if ehaP2r03NewGain > 0.00001 && ehaP2r03NewGain < 1.0 {
-            ehaP2_testGain = roundf(ehaP2r03NewGain * 100000) / 100000
-        } else if ehaP2r03NewGain <= 0.0 {
-            ehaP2_testGain = 0.00001
+        eHAP1_StepSizeDB = 3.0
+        let rO3Direction = eHAP1_StepSizeDB * ehaP2_reversalDirection
+        eHAP1_NewTargetDB = eHAP1_CurrentDB + rO3Direction
+        if eHAP1_NewTargetDB > 0.00001 && eHAP1_NewTargetDB < eHAP1_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = eHAP1_NewTargetDB
+            eHAP1_CurrentDB = eHAP1_NewTargetDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
+        } else if eHAP1_NewTargetDB <= 0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 1.0
+            eHAP1_CurrentDB = 1.0
+            eHAP1_NewTargetDB = 1.0
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if ehaP2r03NewGain >= 0.995 {
-            ehaP2_testGain = 0.995
+        } else if eHAP1_NewTargetDB >= eHAP1_AirPodsProGen2MaxDB {
+            ehaP2_testGain = 1.0
+            eHAP1_testGainDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_CurrentDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_NewTargetDB = eHAP1_AirPodsProGen2MaxDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
-            print("!!!Fatal Error in reversalOfThree Logic")
+            print("!!!Fatal Error in reversalOfOne Logic")
         }
     }
     
     func ehaP2reversalOfFour() async {
-        let ehaP2rO4Direction = 0.04 * ehaP2_reversalDirection
-        let ehaP2r04NewGain = ehaP2_testGain + ehaP2rO4Direction
-        if ehaP2r04NewGain > 0.00001 && ehaP2r04NewGain < 1.0 {
-            ehaP2_testGain = roundf(ehaP2r04NewGain * 100000) / 100000
-        } else if ehaP2r04NewGain <= 0.0 {
-            ehaP2_testGain = 0.00001
+        eHAP1_StepSizeDB = 4.0
+        let rO4Direction = eHAP1_StepSizeDB * ehaP2_reversalDirection
+        eHAP1_NewTargetDB = eHAP1_CurrentDB + rO4Direction
+        if eHAP1_NewTargetDB > 0.00001 && eHAP1_NewTargetDB < eHAP1_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = eHAP1_NewTargetDB
+            eHAP1_CurrentDB = eHAP1_NewTargetDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
+        } else if eHAP1_NewTargetDB <= 0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 1.0
+            eHAP1_CurrentDB = 1.0
+            eHAP1_NewTargetDB = 1.0
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if ehaP2r04NewGain >= 0.995 {
-            ehaP2_testGain = 0.995
+        } else if eHAP1_NewTargetDB >= eHAP1_AirPodsProGen2MaxDB {
+            ehaP2_testGain = 1.0
+            eHAP1_testGainDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_CurrentDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_NewTargetDB = eHAP1_AirPodsProGen2MaxDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
-            print("!!!Fatal Error in reversalOfFour Logic")
+            print("!!!Fatal Error in reversalOfOne Logic")
         }
     }
     
     func ehaP2reversalOfFive() async {
-        let ehaP2rO5Direction = 0.05 * ehaP2_reversalDirection
-        let ehaP2r05NewGain = ehaP2_testGain + ehaP2rO5Direction
-        if ehaP2r05NewGain > 0.00001 && ehaP2r05NewGain < 1.0 {
-            ehaP2_testGain = roundf(ehaP2r05NewGain * 100000) / 100000
-        } else if ehaP2r05NewGain <= 0.0 {
-            ehaP2_testGain = 0.00001
+        eHAP1_StepSizeDB = 5.0
+        let rO5Direction = eHAP1_StepSizeDB * ehaP2_reversalDirection
+        eHAP1_NewTargetDB = eHAP1_CurrentDB + rO5Direction
+        if eHAP1_NewTargetDB > 0.00001 && eHAP1_NewTargetDB < eHAP1_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = eHAP1_NewTargetDB
+            eHAP1_CurrentDB = eHAP1_NewTargetDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
+        } else if eHAP1_NewTargetDB <= 0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 1.0
+            eHAP1_CurrentDB = 1.0
+            eHAP1_NewTargetDB = 1.0
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if ehaP2r05NewGain >= 0.995 {
-            ehaP2_testGain = 0.995
+        } else if eHAP1_NewTargetDB >= eHAP1_AirPodsProGen2MaxDB {
+            ehaP2_testGain = 1.0
+            eHAP1_testGainDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_CurrentDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_NewTargetDB = eHAP1_AirPodsProGen2MaxDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
-            print("!!!Fatal Error in reversalOfFive Logic")
+            print("!!!Fatal Error in reversalOfOne Logic")
         }
     }
     
     func ehaP2reversalOfTen() async {
-        let ehaP2r10Direction = 0.10 * ehaP2_reversalDirection
-        let ehaP2r10NewGain = ehaP2_testGain + ehaP2r10Direction
-        if ehaP2r10NewGain > 0.00001 && ehaP2r10NewGain < 1.0 {
-            ehaP2_testGain = roundf(ehaP2r10NewGain * 100000) / 100000
-        } else if ehaP2r10NewGain <= 0.0 {
-            ehaP2_testGain = 0.00001
+        eHAP1_StepSizeDB = 10.0
+        let r10Direction = eHAP1_StepSizeDB * ehaP2_reversalDirection
+        eHAP1_NewTargetDB = eHAP1_CurrentDB + r10Direction
+        if eHAP1_NewTargetDB > 0.00001 && eHAP1_NewTargetDB < eHAP1_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = eHAP1_NewTargetDB
+            eHAP1_CurrentDB = eHAP1_NewTargetDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
+        } else if eHAP1_NewTargetDB <= 0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 1.0
+            eHAP1_CurrentDB = 1.0
+            eHAP1_NewTargetDB = 1.0
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if ehaP2r10NewGain >= 0.995 {
-            ehaP2_testGain = 0.995
+        } else if eHAP1_NewTargetDB >= eHAP1_AirPodsProGen2MaxDB {
+            ehaP2_testGain = 1.0
+            eHAP1_testGainDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_CurrentDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_NewTargetDB = eHAP1_AirPodsProGen2MaxDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
-            print("!!!Fatal Error in reversalOfTen Logic")
+            print("!!!Fatal Error in reversalOfOne Logic")
         }
     }
+    
+    
+    
     
     func ehaP2reversalAction() async {
         if ehaP2localReversalHeardLast == 1 {
@@ -1752,57 +2266,135 @@ extension EHATTSTestPart2Content {
         ehaP2secondHeardIsTrue = false
     }
     
+//    func ehaP2reversalsCompleteLogging() async {
+////        print("in reversalcompletelogging")
+//        if ehaP2secondHeardIsTrue == true {
+////            print("in reversal complete logging first if")
+//            self.ehaP2localReversalEnd = 1
+//            self.ehaP2localMarkNewTestCycle = 1
+//            self.ehaP2firstGain = ehaP2_reversalGain[ehaP2firstHeardResponseIndex-1]
+//            self.ehaP2secondGain = ehaP2_reversalGain[ehaP2secondHeardResponseIndex-1]
+//            print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
+//            print("ehaP2_reversalGain: \(ehaP2_reversalGain)")
+//            print("ehaP2firstHeardResponseIndex: \(ehaP2firstHeardResponseIndex)")
+//            print("ehaP2secondHeardResponseIndex: \(ehaP2secondHeardResponseIndex)")
+//            print("ehaP2firstGain: \(ehaP2firstGain)")
+//            print("ehaP2secondGain: \(ehaP2secondGain)")
+//            let ehaP2delta = ehaP2firstGain - ehaP2secondGain
+//            let ehaP2avg = (ehaP2firstGain + ehaP2secondGain)/2
+//            if ehaP2delta == 0 {
+////                print("in second if")
+//                ehaP2_averageGain = ehaP2secondGain
+//                print("average Gain: \(ehaP2_averageGain)")
+//            } else if ehaP2delta >= 0.04 {
+////                print("in first else if")
+//                ehaP2_averageGain = ehaP2secondGain
+////                print("FirstGain: \(ehaP2firstGain)")
+////                print("SecondGain: \(ehaP2secondGain)")
+////                print("average Gain: \(ehaP2_averageGain)")
+//            } else if ehaP2delta <= -0.04 {
+////                print("in second else if")
+//                ehaP2_averageGain = ehaP2firstGain
+////                print("FirstGain: \(ehaP2firstGain)")
+////                print("SecondGain: \(ehaP2secondGain)")
+////                print("average Gain: \(ehaP2_averageGain)")
+//            } else if ehaP2delta < 0.04 && ehaP2delta > -0.04 {
+////                print("in third else if")
+//                ehaP2_averageGain = ehaP2avg
+////                print("FirstGain: \(ehaP2firstGain)")
+////                print("SecondGain: \(ehaP2secondGain)")
+////                print("average Gain: \(ehaP2_averageGain)")
+//            } else {
+////                print("in final else of sub if")
+//                ehaP2_averageGain = ehaP2avg
+////                print("FirstGain: \(ehaP2firstGain)")
+////                print("SecondGain: \(ehaP2secondGain)")
+////                print("average Gain: \(ehaP2_averageGain)")
+//            }
+//        } else if ehaP2secondHeardIsTrue == false {
+////            print("Contine, second hear is true = false")
+//        } else {
+//            print("Critical error in reversalsCompletLogging Logic")
+//        }
+//    }
+    
+    
     func ehaP2reversalsCompleteLogging() async {
-//        print("in reversalcompletelogging")
         if ehaP2secondHeardIsTrue == true {
-//            print("in reversal complete logging first if")
             self.ehaP2localReversalEnd = 1
             self.ehaP2localMarkNewTestCycle = 1
             self.ehaP2firstGain = ehaP2_reversalGain[ehaP2firstHeardResponseIndex-1]
             self.ehaP2secondGain = ehaP2_reversalGain[ehaP2secondHeardResponseIndex-1]
+            
+            eHAP1firstGainDB = eHAP1_reversalGainDB[ehaP2firstHeardResponseIndex-1]
+            eHAP1secondGainDB = eHAP1_reversalGainDB[ehaP2secondHeardResponseIndex-1]
+            
+
+//            let ehaP2delta = ehaP2firstGain - ehaP2secondGain
+            let ehaP2avg = (ehaP2firstGain + ehaP2secondGain)/2
+            
+            let eHAP2DeltatDB = eHAP1firstGainDB - eHAP1secondGainDB
+            let eHAP2MagFirst20 = eHAP1firstGainDB/20.0
+            let eHAP2MagFirst = powf(10.0, eHAP2MagFirst20)
+            let eHAP2MagSecond20 = eHAP1secondGainDB/20.0
+            let eHAP2MagSecond = powf(10.0,eHAP2MagSecond20)
+            let eHAP2MagAvg = (eHAP2MagFirst + eHAP2MagSecond)/2.0
+            let eHAP2AvgDB = 20.0 * log10f(eHAP2MagAvg)
+
             print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
             print("ehaP2_reversalGain: \(ehaP2_reversalGain)")
             print("ehaP2firstHeardResponseIndex: \(ehaP2firstHeardResponseIndex)")
             print("ehaP2secondHeardResponseIndex: \(ehaP2secondHeardResponseIndex)")
             print("ehaP2firstGain: \(ehaP2firstGain)")
             print("ehaP2secondGain: \(ehaP2secondGain)")
-            let ehaP2delta = ehaP2firstGain - ehaP2secondGain
-            let ehaP2avg = (ehaP2firstGain + ehaP2secondGain)/2
-            if ehaP2delta == 0 {
-//                print("in second if")
+            print("eHAP2firstGainDB: \(eHAP1firstGainDB)")
+            print("eHAP2secondGainDB: \(eHAP1secondGainDB)")
+            print("eHAP2MagAvg: \(eHAP2MagAvg)")
+            print("eHAP2AvgDB: \(eHAP2AvgDB)")
+            
+            if eHAP2DeltatDB == 0 {
                 ehaP2_averageGain = ehaP2secondGain
-                print("average Gain: \(ehaP2_averageGain)")
-            } else if ehaP2delta >= 0.04 {
-//                print("in first else if")
-                ehaP2_averageGain = ehaP2secondGain
-//                print("FirstGain: \(ehaP2firstGain)")
-//                print("SecondGain: \(ehaP2secondGain)")
+                eHAP1_averageGainDB = eHAP1secondGainDB
 //                print("average Gain: \(ehaP2_averageGain)")
-            } else if ehaP2delta <= -0.04 {
-//                print("in second else if")
+            } else if eHAP2DeltatDB >= 4.0 {
+                ehaP2_averageGain = ehaP2secondGain
+                eHAP1_averageGainDB = eHAP1secondGainDB
+                
+            } else if eHAP2DeltatDB <= -4.0 {
                 ehaP2_averageGain = ehaP2firstGain
-//                print("FirstGain: \(ehaP2firstGain)")
-//                print("SecondGain: \(ehaP2secondGain)")
-//                print("average Gain: \(ehaP2_averageGain)")
-            } else if ehaP2delta < 0.04 && ehaP2delta > -0.04 {
-//                print("in third else if")
+                eHAP1_averageGainDB = eHAP1firstGainDB
+                
+            } else if eHAP2DeltatDB < 4.0 && eHAP2DeltatDB > -4.0 {
                 ehaP2_averageGain = ehaP2avg
-//                print("FirstGain: \(ehaP2firstGain)")
-//                print("SecondGain: \(ehaP2secondGain)")
-//                print("average Gain: \(ehaP2_averageGain)")
+                eHAP1_averageGainDB = eHAP2AvgDB
+                
             } else {
-//                print("in final else of sub if")
                 ehaP2_averageGain = ehaP2avg
-//                print("FirstGain: \(ehaP2firstGain)")
-//                print("SecondGain: \(ehaP2secondGain)")
-//                print("average Gain: \(ehaP2_averageGain)")
+                eHAP1_averageGainDB = eHAP2AvgDB
+                
             }
         } else if ehaP2secondHeardIsTrue == false {
-//            print("Contine, second hear is true = false")
         } else {
             print("Critical error in reversalsCompletLogging Logic")
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     func ehaP2AssignLRAverageSampleGains() async {
         if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2localPan == 1.0 && ehaP2MonoTest == false {
