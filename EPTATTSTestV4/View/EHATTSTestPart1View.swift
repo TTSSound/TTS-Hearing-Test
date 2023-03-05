@@ -899,7 +899,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
                     await checkGainEHAP1_27DataLink()
                     await gainCurveAssignment()
                     await comparedLastNameCSVReader()
-                    await gainHeadphoneAssigment()
+                    await gainHeadphoneAssignment()
                     eHAP1_StartingDB = gainEHAP1SettingArray[envDataObjectModel_index]
                     eHAP1_CurrentDB = eHAP1_StartingDB
                     eHAP1_NewTargetDB = eHAP1_StartingDB
@@ -3016,7 +3016,7 @@ extension EHATTSTestPart1Content {
 extension EHATTSTestPart1Content {
 //MARK: Extension for Gain Link File Checking
     
-    func gainHeadphoneAssigment() async {
+    func gainHeadphoneAssignment() async {
         eHAP1_AirPodsProGen2MaxDBArray.append(contentsOf: gainReferenceModel.maxDBEHAP1ReferenceAirPodsProGen2LR)
             
     }
