@@ -185,6 +185,110 @@ struct EHATTSTestPart1Content<Link: View>: View {
     @State var finalStoredleftFinalGainsArray = [Float]()
     
     
+//
+//
+//
+// Added Manual AirPods Pro Gen 2 Values for Calibration
+    @State var onekHz_StartingDB: Float = 6.0                   //Make this a freq dependent array in other views linked to index
+    @State var onekHz_AirPodsProGen2MaxDB: Float = 111.74468    //Make this a freq dependent array in other views linked to index
+    
+    
+    @State var eHAP1_AirPodsProGen2MaxDBArray = [Float]()
+    @State var gainDBEHAP1SettingArray = [Float]()  // Make this target starting dB levels by frequency
+    
+//        gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS2_5_EHAP1
+    
+    
+    @State var onekHz_PriorDB: Float = Float()
+    @State var onekHz_CurrentDB: Float = Float()
+    @State var onekHz_StepSizeDB: Float = 0.0
+    @State var onekHz_NewTargetDB: Float = Float()
+  
+    @State var onekHz_testGainDB: Float = Float() //0.025
+    @State var onekHz_reversalGainDB = [Float]()
+    @State var onekHz_testTestGainDB = [Float]()
+   
+    
+    @State var onekHzfirstGainDB = Float()
+    @State var onekHzsecondGainDB = Float()
+    
+    @State var onekHzfirstGainDBRight1 = Float()
+    @State var onekHzsecondGainDBRight1 = Float()
+    @State var onekHzfirstGainDBRight2 = Float()
+    @State var onekHzsecondGainDBRight2 = Float()
+    @State var onekHzfirstGainDBLeft1 = Float()
+    @State var onekHzsecondGainDBLeft1 = Float()
+    @State var onekHzfirstGainDBLeft2 = Float()
+    @State var onekHzsecondGainDBLeft2 = Float()
+    
+    @State var onekHz_rightFirstSecondGainDBArray: [Float] = [Float]()
+    @State var onekHz_leftFirstSecondGainDBArray: [Float] = [Float]()
+    
+   
+    @State var onekHzRightDBSorted: [Float] = [Float]()
+    @State var onekHzLeftDBSorted: [Float] = [Float]()
+    @State var onekHzIntraEarDeltaHL1DB = Float()
+    @State var onekHzIntraEarDeltaHL2DB = Float()
+    @State var onekHzIntraEarDeltaHLFinalDB = Float()
+    
+    @State var onekHzFinalLRGainsDB1: [Float] = [Float]()
+    @State var onekHzFinalLRGainsDB2: [Float] = [Float]()
+    @State var onekHzInterimLRGainsDBFinal: [Float] = [Float]()
+    @State var onekHzFinalComboLRGainsDB: [Float] = [Float]()
+    
+    
+    @State var onekHz_averageGainDB = Float()
+    @State var onekHz_averageGainDBRight = Float()
+    @State var onekHz_averageGainDBLeft = Float()
+    
+    @State var onekHz_averageGainDBRight1 = Float()
+    @State var onekHz_averageGainDBRight2 = Float()
+    @State var onekHz_averageGainDBRightArray: [Float] = [Float]()
+    @State var onekHz_averageLowestGainDBRightArray: [Float] = [Float]()
+    @State var onekHz_idxFirstAverageGainDBRightArray = Float()
+    @State var onekHz_idxlastAverageGainDBRightArray = Float()
+    
+    @State var onekHz_averageGainDBLeft1 = Float()
+    @State var onekHz_averageGainDBLeft2 = Float()
+    @State var onekHz_averageGainDBLeftArray: [Float] = [Float]()
+    @State var onekHz_averageLowestGainDBLeftArray: [Float] = [Float]()
+    @State var onekHz_idxFirstAverageGainDBLeftArray = Float()
+    @State var onekHz_idxlastAverageGainDBLeftArray = Float()
+    
+    @State var onekHz_HoldingLowestRightGainDBArray: [Float] = [Float]()
+    @State var onekHz_HoldingLowestLeftGainDBArray: [Float] = [Float]()
+  
+    
+    @State var onekHz_finalStoredFirstGainDB: [Float] = [Float]()
+    @State var onekHz_finalStoredSecondGainDB: [Float] = [Float]()
+    @State var onekHz_finalStoredAverageGainDB: [Float] = [Float]()
+    
+    
+    @State var final_onekHz_onekHzfirstGainDB = [Float]()
+    @State var final_onekHz_onekHzsecondGainDB = [Float]()
+    @State var final_onekHz_reversalGainDB = [Float]()
+    @State var final_onekHz_testTestGainDB = [Float]()
+    @State var final_onekHz_averageGainDB = [Float]()
+    @State var final_onekHz_averageGainDBRightArray = [Float]()
+    @State var final_onekHz_averageGainDBLeftArray = [Float]()
+    @State var final_onekHz_averageLowestGainDBRightArray = [Float]()
+    @State var final_onekHz_HoldingLowestRightGainDBArray = [Float]()
+    @State var final_onekHz_averageLowestGainDBLeftArray = [Float]()
+    @State var final_onekHz_HoldingLowestLeftGainDBArray = [Float]()
+    
+    @State var onekHz_rightFinalGainsDBArray = [Float]()
+    @State var onekHz_leftFinalGainsDBArray = [Float]()
+    @State var onekHz_finalStoredRightFinalGainsDBArray = [Float]()
+    @State var onekHz_finalStoredleftFinalGainsDBArray = [Float]()
+    
+    @State var onekHz_finalStoredTestTestGainDB: [Float] = [Float]()
+    
+// End of Added DB Variables
+//
+//
+//
+    
+    
     
     
     @State var envDataObjectModel_index: Int = 0
@@ -640,6 +744,16 @@ struct EHATTSTestPart1Content<Link: View>: View {
                                         showTestCompletionSheet.toggle()
                                     } else if ehaP1fullTestCompleted == false && ehaP1TestStarted == false {
                                         showTestCompletionSheet.toggle()
+                                        
+                                        //
+                                        //
+                                        onekHz_CurrentDB = onekHz_StartingDB
+                                        onekHz_NewTargetDB = onekHz_CurrentDB
+                                        envDataObjectModel_testGain = powf(10.0, ((onekHz_StartingDB - onekHz_AirPodsProGen2MaxDB)/20))
+                                        //
+                                        //
+                                        
+                                        
                                     } else if ehaP1fullTestCompleted == false && ehaP1TestStarted == true {
                                         DispatchQueue.main.async(group: .none, qos: .userInitiated, flags: .barrier) {
                                             Task(priority: .userInitiated) {
@@ -949,6 +1063,17 @@ extension EHATTSTestPart1Content {
         localTestCount = 0
         localReversalHeardLast = Int()
         startTooHigh = 0
+        
+//Added
+        onekHz_averageGainDB = Float()
+//        Task(priority: .userInitiated) {
+//            onekHz_CurrentDB = onekHz_StartingDB
+//            onekHz_NewTargetDB = onekHz_StartingDB
+//            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)
+//        }
+
+        
+//Added Above
     }
     
     func combinedPauseRestartAndStartNexTestCycle() async {
@@ -974,12 +1099,27 @@ extension EHATTSTestPart1Content {
         envDataObjectModel_index = envDataObjectModel_index + 1
 //        print(envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index])
         print("envDataObjectModel_index: \(envDataObjectModel_index)")
+        
+        //
+        //
         envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]
+        //
+        //
+        
         userPausedTest = false
         testIsPlaying = true
         localPlaying = 1
 //        showTestCompletionSheet = false
         showTestCompletionSheet.toggle()
+        
+        //
+        //
+        onekHz_CurrentDB = onekHz_StartingDB
+        onekHz_NewTargetDB = onekHz_CurrentDB
+        envDataObjectModel_testGain = powf(10.0, ((onekHz_StartingDB - onekHz_AirPodsProGen2MaxDB)/20))
+        //
+        //
+        
     }
     
     func setPan() {
@@ -1052,6 +1192,7 @@ extension EHATTSTestPart1Content {
         }
         DispatchQueue.global(qos: .default).async {
             envDataObjectModel_testTestGain.append(envDataObjectModel_testGain)
+            onekHz_testTestGainDB.append(onekHz_testGainDB)
         }
         DispatchQueue.global(qos: .background).async {
             envDataObjectModel_frequency.append(activeFrequency)
@@ -1191,6 +1332,26 @@ extension EHATTSTestPart1Content {
         case lastUnexpected(code: Int)
     }
     
+    
+    
+    
+    
+    
+    
+    func dBNewTargetDB() async {
+        onekHz_NewTargetDB = onekHz_CurrentDB + onekHz_StepSizeDB
+    }
+    
+    func dBToGain(onekHz_NewTargetDB: Float) async {
+        envDataObjectModel_testGain = powf(10.0, ((onekHz_NewTargetDB - onekHz_AirPodsProGen2MaxDB)/20))
+    }
+    
+    
+    
+    
+    
+    
+    
     func createReversalHeardArray() async {
         envDataObjectModel_reversalHeard.append(envDataObjectModel_heardArray[idxHA-1])
         self.idxReversalHeardCount = envDataObjectModel_reversalHeard.count
@@ -1204,6 +1365,7 @@ extension EHATTSTestPart1Content {
     func createReversalGainArray() async {
         //        envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
         envDataObjectModel_reversalGain.append(envDataObjectModel_testGain)
+        onekHz_reversalGainDB.append(onekHz_testGainDB)
     }
     
     
@@ -1213,8 +1375,10 @@ extension EHATTSTestPart1Content {
         if envDataObjectModel_testGain < 0.995 {
             //        envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
             envDataObjectModel_reversalGain.append(envDataObjectModel_testGain)
+            onekHz_reversalGainDB.append(onekHz_testGainDB)
         } else if envDataObjectModel_testGain >= 0.995 {
             envDataObjectModel_reversalGain.append(1.0)
+            onekHz_reversalGainDB.append(200.0)
         }
     }
     
@@ -1241,16 +1405,130 @@ extension EHATTSTestPart1Content {
         }
     }
     
+//    func reversalOfOne() async {
+//        let rO1Direction = 0.01 * envDataObjectModel_reversalDirection
+//        let r01NewGain = envDataObjectModel_testGain + rO1Direction
+//        if r01NewGain > 0.00001 && r01NewGain < 1.0 {
+//            envDataObjectModel_testGain = roundf(r01NewGain * 100000) / 100000
+//        } else if r01NewGain <= 0.0 {
+//            envDataObjectModel_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if r01NewGain >= 0.995 {
+//            envDataObjectModel_testGain = 0.995
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfOne Logic")
+//        }
+//    }
+//
+//    func reversalOfTwo() async {
+//        let rO2Direction = 0.02 * envDataObjectModel_reversalDirection
+//        let r02NewGain = envDataObjectModel_testGain + rO2Direction
+//        if r02NewGain > 0.00001 && r02NewGain < 1.0 {
+//            envDataObjectModel_testGain = roundf(r02NewGain * 100000) / 100000
+//        } else if r02NewGain <= 0.0 {
+//            envDataObjectModel_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if r02NewGain >= 0.995 {
+//            envDataObjectModel_testGain = 0.995
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfTwo Logic")
+//        }
+//    }
+//
+//    func reversalOfThree() async {
+//        let rO3Direction = 0.03 * envDataObjectModel_reversalDirection
+//        let r03NewGain = envDataObjectModel_testGain + rO3Direction
+//        if r03NewGain > 0.00001 && r03NewGain < 1.0 {
+//            envDataObjectModel_testGain = roundf(r03NewGain * 100000) / 100000
+//        } else if r03NewGain <= 0.0 {
+//            envDataObjectModel_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if r03NewGain >= 0.995 {
+//            envDataObjectModel_testGain = 0.995
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfThree Logic")
+//        }
+//    }
+//
+//    func reversalOfFour() async {
+//        let rO4Direction = 0.04 * envDataObjectModel_reversalDirection
+//        let r04NewGain = envDataObjectModel_testGain + rO4Direction
+//        if r04NewGain > 0.00001 && r04NewGain < 1.0 {
+//            envDataObjectModel_testGain = roundf(r04NewGain * 100000) / 100000
+//        } else if r04NewGain <= 0.0 {
+//            envDataObjectModel_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if r04NewGain >= 0.995 {
+//            envDataObjectModel_testGain = 0.995
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfFour Logic")
+//        }
+//    }
+//
+//    func reversalOfFive() async {
+//        let rO5Direction = 0.05 * envDataObjectModel_reversalDirection
+//        let r05NewGain = envDataObjectModel_testGain + rO5Direction
+//        if r05NewGain > 0.00001 && r05NewGain < 1.0 {
+//            envDataObjectModel_testGain = roundf(r05NewGain * 100000) / 100000
+//        } else if r05NewGain <= 0.0 {
+//            envDataObjectModel_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if r05NewGain >= 0.995 {
+//            envDataObjectModel_testGain = 0.995
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfFive Logic")
+//        }
+//    }
+//
+//    func reversalOfTen() async {
+//        let r10Direction = 0.10 * envDataObjectModel_reversalDirection
+//        let r10NewGain = envDataObjectModel_testGain + r10Direction
+//        if r10NewGain > 0.00001 && r10NewGain < 1.0 {
+//            envDataObjectModel_testGain = roundf(r10NewGain * 100000) / 100000
+//        } else if r10NewGain <= 0.0 {
+//            envDataObjectModel_testGain = 0.00001
+//            print("!!!Fatal Zero Gain Catch")
+//        } else if r10NewGain >= 0.995 {
+//            envDataObjectModel_testGain = 0.995
+//            print("!!!Fatal 1.0 Gain Catch")
+//        } else {
+//            print("!!!Fatal Error in reversalOfTen Logic")
+//        }
+//    }
+    
     func reversalOfOne() async {
-        let rO1Direction = 0.01 * envDataObjectModel_reversalDirection
-        let r01NewGain = envDataObjectModel_testGain + rO1Direction
-        if r01NewGain > 0.00001 && r01NewGain < 1.0 {
-            envDataObjectModel_testGain = roundf(r01NewGain * 100000) / 100000
-        } else if r01NewGain <= 0.0 {
-            envDataObjectModel_testGain = 0.00001
+        onekHz_StepSizeDB = 1.0
+        let rO1Direction = onekHz_StepSizeDB * envDataObjectModel_reversalDirection
+        onekHz_NewTargetDB = onekHz_CurrentDB + rO1Direction
+        if onekHz_NewTargetDB > 0.00001 && onekHz_NewTargetDB < onekHz_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)  //This sets onekHz_testGain
+            onekHz_testGainDB = onekHz_NewTargetDB
+            onekHz_CurrentDB = onekHz_NewTargetDB
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+        } else if onekHz_NewTargetDB <= 0.0 {
+            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 1.0
+            onekHz_CurrentDB = 1.0
+            onekHz_NewTargetDB = 1.0
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if r01NewGain >= 0.995 {
-            envDataObjectModel_testGain = 0.995
+        } else if onekHz_NewTargetDB >= onekHz_AirPodsProGen2MaxDB {
+            envDataObjectModel_testGain = 1.0
+            onekHz_testGainDB = onekHz_AirPodsProGen2MaxDB
+            onekHz_CurrentDB = onekHz_AirPodsProGen2MaxDB
+            onekHz_NewTargetDB = onekHz_AirPodsProGen2MaxDB
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfOne Logic")
@@ -1258,82 +1536,172 @@ extension EHATTSTestPart1Content {
     }
     
     func reversalOfTwo() async {
-        let rO2Direction = 0.02 * envDataObjectModel_reversalDirection
-        let r02NewGain = envDataObjectModel_testGain + rO2Direction
-        if r02NewGain > 0.00001 && r02NewGain < 1.0 {
-            envDataObjectModel_testGain = roundf(r02NewGain * 100000) / 100000
-        } else if r02NewGain <= 0.0 {
-            envDataObjectModel_testGain = 0.00001
+        onekHz_StepSizeDB = 2.0
+        let rO2Direction = onekHz_StepSizeDB * envDataObjectModel_reversalDirection
+        onekHz_NewTargetDB = onekHz_CurrentDB + rO2Direction
+        if onekHz_NewTargetDB > 0.00001 && onekHz_NewTargetDB < onekHz_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)  //This sets onekHz_testGain
+            onekHz_testGainDB = onekHz_NewTargetDB
+            onekHz_CurrentDB = onekHz_NewTargetDB
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+        } else if onekHz_NewTargetDB <= 0.0 {
+            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 1.0
+            onekHz_CurrentDB = 1.0
+            onekHz_NewTargetDB = 1.0
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if r02NewGain >= 0.995 {
-            envDataObjectModel_testGain = 0.995
+        } else if onekHz_NewTargetDB >= onekHz_AirPodsProGen2MaxDB {
+            envDataObjectModel_testGain = 1.0
+            onekHz_testGainDB = onekHz_AirPodsProGen2MaxDB
+            onekHz_CurrentDB = onekHz_AirPodsProGen2MaxDB
+            onekHz_NewTargetDB = onekHz_AirPodsProGen2MaxDB
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
-            print("!!!Fatal Error in reversalOfTwo Logic")
+            print("!!!Fatal Error in reversalOfOne Logic")
         }
     }
     
     func reversalOfThree() async {
-        let rO3Direction = 0.03 * envDataObjectModel_reversalDirection
-        let r03NewGain = envDataObjectModel_testGain + rO3Direction
-        if r03NewGain > 0.00001 && r03NewGain < 1.0 {
-            envDataObjectModel_testGain = roundf(r03NewGain * 100000) / 100000
-        } else if r03NewGain <= 0.0 {
-            envDataObjectModel_testGain = 0.00001
+        onekHz_StepSizeDB = 3.0
+        let rO3Direction = onekHz_StepSizeDB * envDataObjectModel_reversalDirection
+        onekHz_NewTargetDB = onekHz_CurrentDB + rO3Direction
+        if onekHz_NewTargetDB > 0.00001 && onekHz_NewTargetDB < onekHz_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)  //This sets onekHz_testGain
+            onekHz_testGainDB = onekHz_NewTargetDB
+            onekHz_CurrentDB = onekHz_NewTargetDB
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+        } else if onekHz_NewTargetDB <= 0.0 {
+            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 1.0
+            onekHz_CurrentDB = 1.0
+            onekHz_NewTargetDB = 1.0
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if r03NewGain >= 0.995 {
-            envDataObjectModel_testGain = 0.995
+        } else if onekHz_NewTargetDB >= onekHz_AirPodsProGen2MaxDB {
+            envDataObjectModel_testGain = 1.0
+            onekHz_testGainDB = onekHz_AirPodsProGen2MaxDB
+            onekHz_CurrentDB = onekHz_AirPodsProGen2MaxDB
+            onekHz_NewTargetDB = onekHz_AirPodsProGen2MaxDB
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
-            print("!!!Fatal Error in reversalOfThree Logic")
+            print("!!!Fatal Error in reversalOfOne Logic")
         }
     }
     
     func reversalOfFour() async {
-        let rO4Direction = 0.04 * envDataObjectModel_reversalDirection
-        let r04NewGain = envDataObjectModel_testGain + rO4Direction
-        if r04NewGain > 0.00001 && r04NewGain < 1.0 {
-            envDataObjectModel_testGain = roundf(r04NewGain * 100000) / 100000
-        } else if r04NewGain <= 0.0 {
-            envDataObjectModel_testGain = 0.00001
+        onekHz_StepSizeDB = 4.0
+        let rO4Direction = onekHz_StepSizeDB * envDataObjectModel_reversalDirection
+        onekHz_NewTargetDB = onekHz_CurrentDB + rO4Direction
+        if onekHz_NewTargetDB > 0.00001 && onekHz_NewTargetDB < onekHz_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)  //This sets onekHz_testGain
+            onekHz_testGainDB = onekHz_NewTargetDB
+            onekHz_CurrentDB = onekHz_NewTargetDB
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+        } else if onekHz_NewTargetDB <= 0.0 {
+            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 1.0
+            onekHz_CurrentDB = 1.0
+            onekHz_NewTargetDB = 1.0
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if r04NewGain >= 0.995 {
-            envDataObjectModel_testGain = 0.995
+        } else if onekHz_NewTargetDB >= onekHz_AirPodsProGen2MaxDB {
+            envDataObjectModel_testGain = 1.0
+            onekHz_testGainDB = onekHz_AirPodsProGen2MaxDB
+            onekHz_CurrentDB = onekHz_AirPodsProGen2MaxDB
+            onekHz_NewTargetDB = onekHz_AirPodsProGen2MaxDB
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
-            print("!!!Fatal Error in reversalOfFour Logic")
+            print("!!!Fatal Error in reversalOfOne Logic")
         }
     }
     
     func reversalOfFive() async {
-        let rO5Direction = 0.05 * envDataObjectModel_reversalDirection
-        let r05NewGain = envDataObjectModel_testGain + rO5Direction
-        if r05NewGain > 0.00001 && r05NewGain < 1.0 {
-            envDataObjectModel_testGain = roundf(r05NewGain * 100000) / 100000
-        } else if r05NewGain <= 0.0 {
-            envDataObjectModel_testGain = 0.00001
+        onekHz_StepSizeDB = 5.0
+        let rO5Direction = onekHz_StepSizeDB * envDataObjectModel_reversalDirection
+        onekHz_NewTargetDB = onekHz_CurrentDB + rO5Direction
+        if onekHz_NewTargetDB > 0.00001 && onekHz_NewTargetDB < onekHz_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)  //This sets onekHz_testGain
+            onekHz_testGainDB = onekHz_NewTargetDB
+            onekHz_CurrentDB = onekHz_NewTargetDB
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+        } else if onekHz_NewTargetDB <= 0.0 {
+            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 1.0
+            onekHz_CurrentDB = 1.0
+            onekHz_NewTargetDB = 1.0
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if r05NewGain >= 0.995 {
-            envDataObjectModel_testGain = 0.995
+        } else if onekHz_NewTargetDB >= onekHz_AirPodsProGen2MaxDB {
+            envDataObjectModel_testGain = 1.0
+            onekHz_testGainDB = onekHz_AirPodsProGen2MaxDB
+            onekHz_CurrentDB = onekHz_AirPodsProGen2MaxDB
+            onekHz_NewTargetDB = onekHz_AirPodsProGen2MaxDB
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
-            print("!!!Fatal Error in reversalOfFive Logic")
+            print("!!!Fatal Error in reversalOfOne Logic")
         }
     }
     
     func reversalOfTen() async {
-        let r10Direction = 0.10 * envDataObjectModel_reversalDirection
-        let r10NewGain = envDataObjectModel_testGain + r10Direction
-        if r10NewGain > 0.00001 && r10NewGain < 1.0 {
-            envDataObjectModel_testGain = roundf(r10NewGain * 100000) / 100000
-        } else if r10NewGain <= 0.0 {
-            envDataObjectModel_testGain = 0.00001
+        onekHz_StepSizeDB = 10.0
+        let r10Direction = onekHz_StepSizeDB * envDataObjectModel_reversalDirection
+        onekHz_NewTargetDB = onekHz_CurrentDB + r10Direction
+        if onekHz_NewTargetDB > 0.00001 && onekHz_NewTargetDB < onekHz_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)  //This sets onekHz_testGain
+            onekHz_testGainDB = onekHz_NewTargetDB
+            onekHz_CurrentDB = onekHz_NewTargetDB
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+        } else if onekHz_NewTargetDB <= 0.0 {
+            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 1.0
+            onekHz_CurrentDB = 1.0
+            onekHz_NewTargetDB = 1.0
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if r10NewGain >= 0.995 {
-            envDataObjectModel_testGain = 0.995
+        } else if onekHz_NewTargetDB >= onekHz_AirPodsProGen2MaxDB {
+            envDataObjectModel_testGain = 1.0
+            onekHz_testGainDB = onekHz_AirPodsProGen2MaxDB
+            onekHz_CurrentDB = onekHz_AirPodsProGen2MaxDB
+            onekHz_NewTargetDB = onekHz_AirPodsProGen2MaxDB
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
-            print("!!!Fatal Error in reversalOfTen Logic")
+            print("!!!Fatal Error in reversalOfOne Logic")
         }
     }
     
@@ -1430,37 +1798,86 @@ extension EHATTSTestPart1Content {
         secondHeardIsTrue = false
     }
     
+//    func reversalsCompleteLogging() async {
+//        if secondHeardIsTrue == true {
+//            self.localReversalEnd = 1
+//            self.localMarkNewTestCycle = 1
+//            self.firstGain = envDataObjectModel_reversalGain[firstHeardResponseIndex-1]
+//            self.secondGain = envDataObjectModel_reversalGain[secondHeardResponseIndex-1]
+//            print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
+//
+//            let delta = firstGain - secondGain
+//            let avg = (firstGain + secondGain)/2
+//
+//            if delta == 0 {
+//                envDataObjectModel_averageGain = secondGain
+//                //                print("average Gain: \(envDataObjectModel_averageGain)")
+//            } else if delta >= 0.04 {
+//                envDataObjectModel_averageGain = secondGain
+//                //                print("SecondGain: \(firstGain)")
+//                //                print("SecondGain: \(secondGain)")
+//                //                print("average Gain: \(envDataObjectModel_averageGain)")
+//            } else if delta <= -0.04 {
+//                envDataObjectModel_averageGain = firstGain
+//                //                print("SecondGain: \(firstGain)")
+//                //                print("SecondGain: \(secondGain)")
+//                //                print("average Gain: \(envDataObjectModel_averageGain)")
+//            } else if delta < 0.04 && delta > -0.04 {
+//                envDataObjectModel_averageGain = avg
+//                //                print("SecondGain: \(firstGain)")
+//                //                print("SecondGain: \(secondGain)")
+//                //                print("average Gain: \(envDataObjectModel_averageGain)")
+//            } else {
+//                envDataObjectModel_averageGain = avg
+//                //                print("SecondGain: \(firstGain)")
+//                //                print("SecondGain: \(secondGain)")
+//                //                print("average Gain: \(envDataObjectModel_averageGain)")
+//            }
+//        } else if secondHeardIsTrue == false {
+//            //                print("Contine, second hear is true = false")
+//        } else {
+//            print("Critical error in reversalsCompletLogging Logic")
+//        }
+//    }
+    
     func reversalsCompleteLogging() async {
         if secondHeardIsTrue == true {
             self.localReversalEnd = 1
             self.localMarkNewTestCycle = 1
             self.firstGain = envDataObjectModel_reversalGain[firstHeardResponseIndex-1]
             self.secondGain = envDataObjectModel_reversalGain[secondHeardResponseIndex-1]
+            
+            onekHzfirstGainDB = onekHz_reversalGainDB[firstHeardResponseIndex-1]
+            onekHzsecondGainDB = onekHz_reversalGainDB[secondHeardResponseIndex-1]
+            
             print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
             
-            let delta = firstGain - secondGain
+//            let delta = firstGain - secondGain
             let avg = (firstGain + secondGain)/2
+            let eHAP1DeltatDB = onekHzfirstGainDB - onekHzsecondGainDB
+            let eHAP1AvgDB = (onekHzfirstGainDB + onekHzsecondGainDB)/2
             
-            if delta == 0 {
+            if eHAP1DeltatDB == 0.0 {
                 envDataObjectModel_averageGain = secondGain
                 //                print("average Gain: \(envDataObjectModel_averageGain)")
-            } else if delta >= 0.04 {
+            } else if eHAP1DeltatDB >= 4.0 {
                 envDataObjectModel_averageGain = secondGain
                 //                print("SecondGain: \(firstGain)")
                 //                print("SecondGain: \(secondGain)")
                 //                print("average Gain: \(envDataObjectModel_averageGain)")
-            } else if delta <= -0.04 {
+            } else if eHAP1DeltatDB <= -4.0 {
                 envDataObjectModel_averageGain = firstGain
                 //                print("SecondGain: \(firstGain)")
                 //                print("SecondGain: \(secondGain)")
                 //                print("average Gain: \(envDataObjectModel_averageGain)")
-            } else if delta < 0.04 && delta > -0.04 {
+            } else if eHAP1DeltatDB < 4.0 && eHAP1DeltatDB > -4.0 {
                 envDataObjectModel_averageGain = avg
                 //                print("SecondGain: \(firstGain)")
                 //                print("SecondGain: \(secondGain)")
                 //                print("average Gain: \(envDataObjectModel_averageGain)")
             } else {
                 envDataObjectModel_averageGain = avg
+                onekHz_averageGainDB = eHAP1AvgDB
                 //                print("SecondGain: \(firstGain)")
                 //                print("SecondGain: \(secondGain)")
                 //                print("average Gain: \(envDataObjectModel_averageGain)")
@@ -1649,6 +2066,17 @@ extension EHATTSTestPart1Content {
             localReversalHeardLast = Int()
             startTooHigh = 0
             localSeriesNoResponses = Int()
+
+// Added Below
+            onekHz_reversalGainDB.removeAll()
+            onekHz_averageGainDB = Float()
+            
+//            onekHzfirstGainDB = Float()    //Added these in, difference from EHAP1
+//            onekHzsecondGainDB = Float()   //Added these in, difference from EHAP1
+            
+            print("onekHz_reversalGainDB: \(onekHz_reversalGainDB)")
+// Added Above
+            
         })
     }
     
@@ -1681,6 +2109,16 @@ extension EHATTSTestPart1Content {
             envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]       // Add code to reset starting test gain by linking to table of expected HL
             endTestSeriesValue = false
             await wipeArrays()
+
+// Changed Below
+            onekHz_StepSizeDB = 0.0
+            onekHz_CurrentDB = onekHz_StartingDB
+            onekHz_NewTargetDB = onekHz_StartingDB
+//            onekHz_testGain = 0.025
+            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)
+// Changed Above
+
+            
             //        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCount && endTestSeriesValue == false {
         } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCountArray[envDataObjectModel_index] && endTestSeriesValue == false {
             endTestSeriesValue = true
@@ -1752,6 +2190,18 @@ extension EHATTSTestPart1Content {
             finalStoredleftFinalGainsArray.removeAll()
             finalStoredRightFinalGainsArray.append(contentsOf: rightFinalGainsArray)
             finalStoredleftFinalGainsArray.append(contentsOf: leftFinalGainsArray)
+
+// Added Below
+            onekHz_finalStoredTestTestGainDB.append(contentsOf: [1000000.0] + onekHz_testTestGainDB)
+            onekHz_finalStoredFirstGainDB.append(contentsOf: [1000000.0] + [onekHzfirstGainDB])
+            onekHz_finalStoredSecondGainDB.append(contentsOf: [1000000.0] + [onekHzsecondGainDB])
+            onekHz_finalStoredAverageGainDB.append(contentsOf: [1000000.0] + [onekHz_averageGainDB])
+            onekHz_finalStoredRightFinalGainsDBArray.removeAll()
+            onekHz_finalStoredleftFinalGainsDBArray.removeAll()
+            onekHz_finalStoredRightFinalGainsDBArray.append(contentsOf: onekHz_rightFinalGainsDBArray)
+            onekHz_finalStoredleftFinalGainsDBArray.append(contentsOf: onekHz_leftFinalGainsDBArray)
+//Added Above
+            
         }
     }
     
@@ -1885,6 +2335,19 @@ extension EHATTSTestPart1Content {
         let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        
+        
+//Added Below
+        let stringFinalStoredTestTestGainDB = "finalStoredTestTestGainDB," + final_onekHz_testTestGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredFirstGainDB = "finalStoredFirstGainDB," + onekHz_finalStoredFirstGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredSecondGainDB = "finalStoredSecondGainDB," + onekHz_finalStoredSecondGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredAverageGainDB = "finalStoredAverageGainDB," + onekHz_finalStoredAverageGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalrightFinalGainsDBArray = "rightFinalGainsDBArray," + onekHz_rightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsDBArray = "leftFinalGainsDBArray," + onekHz_leftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsDBArray = "finalStoredRightFinalGainsDBArray," + onekHz_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsDBArray = "finalStoredleftFinalGainsDBArray," + onekHz_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        
+//Added Above
         do {
             let csvEHAP1DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvEHAP1DetailDocumentsDirectory = csvEHAP1DetailPath
@@ -1905,6 +2368,18 @@ extension EHATTSTestPart1Content {
             try writer.write(row: [stringFinalleftFinalGainsArray])
             try writer.write(row: [stringFinalStoredRightFinalGainsArray])
             try writer.write(row: [stringFinalStoredleftFinalGainsArray])
+            
+//Added Below
+            try writer.write(row: [stringFinalStoredTestTestGainDB])
+            try writer.write(row: [stringFinalStoredFirstGainDB])
+            try writer.write(row: [stringFinalStoredSecondGainDB])
+            try writer.write(row: [stringFinalStoredAverageGainDB])
+            try writer.write(row: [stringFinalrightFinalGainsDBArray])
+            try writer.write(row: [stringFinalleftFinalGainsDBArray])
+            try writer.write(row: [stringFinalStoredRightFinalGainsDBArray])
+            try writer.write(row: [stringFinalStoredleftFinalGainsDBArray])
+//Added Above
+            
         } catch {
             print("CVSWriter EHAP1 Detailed Error or Error Finding File for Detailed CSV \(error)")
         }
@@ -1920,6 +2395,18 @@ extension EHATTSTestPart1Content {
         let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        
+//Added Below
+        let stringFinalStoredFirstGainDB = "finalStoredFirstGainDB," + onekHz_finalStoredFirstGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredSecondGainDB = "finalStoredSecondGainDB," + onekHz_finalStoredSecondGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredAverageGainDB = "finalStoredAverageGainDB," + onekHz_finalStoredAverageGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalrightFinalGainsDBArray = "rightFinalGainsDBArray," + onekHz_rightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsDBArray = "leftFinalGainsDBArray," + onekHz_leftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsDBArray = "finalStoredRightFinalGainsDBArray," + onekHz_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsDBArray = "finalStoredleftFinalGainsDBArray," + onekHz_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        
+//Added Above
+        
          do {
              let csvEHAP1SummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1SummaryDocumentsDirectory = csvEHAP1SummaryPath
@@ -1934,11 +2421,43 @@ extension EHATTSTestPart1Content {
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
+             
+//Added Below
+             try writer.write(row: [stringFinalStoredFirstGainDB])
+             try writer.write(row: [stringFinalStoredSecondGainDB])
+             try writer.write(row: [stringFinalStoredAverageGainDB])
+             try writer.write(row: [stringFinalrightFinalGainsDBArray])
+             try writer.write(row: [stringFinalleftFinalGainsDBArray])
+             try writer.write(row: [stringFinalStoredRightFinalGainsDBArray])
+             try writer.write(row: [stringFinalStoredleftFinalGainsDBArray])
+//Added Above
+     
          } catch {
              print("CVSWriter Summary EHA Part 1 Data Error or Error Finding File for Detailed CSV \(error)")
          }
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     func writeEHA1InputDetailedResultsToCSV() async {
         let stringFinalStoredIndex = envDataObjectModel_finalStoredIndex.map { String($0) }.joined(separator: ",")
         let stringFinalStoredTestPan = envDataObjectModel_finalStoredTestPan.map { String($0) }.joined(separator: ",")

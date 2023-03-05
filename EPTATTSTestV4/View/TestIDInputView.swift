@@ -206,7 +206,7 @@ extension TestIDInputContent {
             let writerSetup = try CSVWriter(fileURL: csvBetaEHAInputSummaryFilePath, append: false)
             try writerSetup.write(row: [stringFinalInputLastName])
             
-            print("CVS Last Na,e Writer Success")
+            print("CVS Last Name Writer Success")
         } catch {
             print("CVSWriter Last Name Error or Error Finding File for Last Name CSV \(error.localizedDescription)")
         }

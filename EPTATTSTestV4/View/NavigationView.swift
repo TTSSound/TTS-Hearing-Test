@@ -282,7 +282,7 @@ struct NavigationView: View {
 //                                    BetaTestingLandingView(testing: testing, relatedLinkTesting: linkTesting)
 //                                }
                             Spacer()
-                            NavigationLink("BilateralTEst", value: EPTATTSTestV4.Testing(id: 11.2, name: "1kHz Test", related: []))
+                            NavigationLink("Test Phase 1", value: EPTATTSTestV4.Testing(id: 12.0, name: "EPTA EHAP1 Test", related: []))
                                 .font(.title)
                                 .padding()
                                 .frame(width: 300, height: 100, alignment: .center)
@@ -291,7 +291,7 @@ struct NavigationView: View {
                                 .cornerRadius(24)
                                 .hoverEffect()
                                 .navigationDestination(for: Testing.self) { testing in
-                                    Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)
+                                    EHATTSTestPart1View(testing: testing, relatedLinkTesting: linkTesting)
                                 }
                             Spacer()
                         }
