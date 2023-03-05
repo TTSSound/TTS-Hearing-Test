@@ -1744,7 +1744,18 @@ extension Bilateral1kHzTestContent {
             
 // Added Below
             let onekHzdeltaRightDB = onekHzfirstGainDB - onekHzsecondGainDB
-            let onekHzavgRightDB = (onekHzfirstGainDB + onekHzsecondGainDB)/2
+            let onekHzMagFirst20Right = onekHzfirstGainDB/20.0
+            let onekHzMagFirstRight = powf(10.0, onekHzMagFirst20Right)
+            let onekHzMagSecond20Right = onekHzsecondGainDB/20.0
+            let onekHzMagSecondRight = powf(10.0,onekHzMagSecond20Right)
+            let onekHzMagAvgRight = (onekHzMagFirstRight + onekHzMagSecondRight)/2.0
+            let onekHzavgRightDB = 20.0 * log10f(onekHzMagAvgRight)
+            print("eHAP1firstGainDB: \(onekHzfirstGainDB)")
+            print("eHAP1secondGainDB: \(onekHzsecondGainDB)")
+            print("eHAP1MagAvg: \(onekHzMagAvgRight)")
+            print("eHAP1AvgDB: \(onekHzavgRightDB)")
+            
+//            let onekHzavgRightDB = (onekHzfirstGainDB + onekHzsecondGainDB)/2
 // Added Above
             
 //            if onekHzdeltaRight == 0 {
@@ -1815,7 +1826,18 @@ extension Bilateral1kHzTestContent {
             
 // Added Below
             let onekHzdeltaLeftDB = onekHzfirstGainDB - onekHzsecondGainDB
-            let onekHzavgLeftDB = (onekHzfirstGainDB + onekHzsecondGainDB)/2
+            let onekHzMagFirst20Left = onekHzfirstGainDB/20.0
+            let onekHzMagFirstLeft = powf(10.0, onekHzMagFirst20Left)
+            let onekHzMagSecond20Left = onekHzsecondGainDB/20.0
+            let onekHzMagSecondLeft = powf(10.0,onekHzMagSecond20Left)
+            let onekHzMagAvgLeft = (onekHzMagFirstLeft + onekHzMagSecondLeft)/2.0
+            let onekHzavgLeftDB = 20.0 * log10f(onekHzMagAvgLeft)
+            print("eHAP1firstGainDB: \(onekHzfirstGainDB)")
+            print("eHAP1secondGainDB: \(onekHzsecondGainDB)")
+            print("eHAP1MagAvg: \(onekHzMagAvgLeft)")
+            print("eHAP1AvgDB: \(onekHzavgLeftDB)")
+            
+//            let onekHzavgLeftDB = (onekHzfirstGainDB + onekHzsecondGainDB)/2
 // Added Above
             
 //            if onekHzdeltaLeft == 0 {

@@ -1940,7 +1940,17 @@ extension EHATTSTestPart1Content {
 //            let delta = firstGain - secondGain
             let avg = (firstGain + secondGain)/2
             let eHAP1DeltatDB = eHAP1firstGainDB - eHAP1secondGainDB
-            let eHAP1AvgDB = (eHAP1firstGainDB + eHAP1secondGainDB)/2
+            let eHAP1MagFirst20 = eHAP1firstGainDB/20.0
+            let eHAP1MagFirst = powf(10.0, eHAP1MagFirst20)
+            let eHAP1MagSecond20 = eHAP1secondGainDB/20.0
+            let eHAP1MagSecond = powf(10.0,eHAP1MagSecond20)
+            let eHAP1MagAvg = (eHAP1MagFirst + eHAP1MagSecond)/2.0
+            let eHAP1AvgDB = 20.0 * log10f(eHAP1MagAvg)
+            print("eHAP1firstGainDB: \(eHAP1firstGainDB)")
+            print("eHAP1secondGainDB: \(eHAP1secondGainDB)")
+            print("eHAP1MagAvg: \(eHAP1MagAvg)")
+            print("eHAP1AvgDB: \(eHAP1AvgDB)")
+//            let eHAP1AvgDB = (eHAP1firstGainDB + eHAP1secondGainDB)/2
             
             if eHAP1DeltatDB == 0.0 {
                 envDataObjectModel_averageGain = secondGain

@@ -162,12 +162,12 @@ extension PostAllTestsSplashContent {
 //MARK: -Methods Extension
     
     func recheckVolue() {
-        if audioSessionModel.audioSession.outputVolume == 0.63 {
+        if audioSessionModel.audioSession.outputVolume == 1.0 {
             pavolumeCorrect = 1
             paLinkColorIndex = 1
             pavolumeSettingIndex = 1
         }
-        if audioSessionModel.audioSession.outputVolume >= 0.60 && audioSessionModel.audioSession.outputVolume <= 0.655 {
+        if audioSessionModel.audioSession.outputVolume >= 0.98 && audioSessionModel.audioSession.outputVolume <= 1.0 {
             pavolumeCorrect = 2
             paLinkColorIndex = 2
             pavolumeSettingIndex = 2
