@@ -189,8 +189,8 @@ struct EHATTSTestPart1Content<Link: View>: View {
 //
 //
 // Added Manual AirPods Pro Gen 2 Values for Calibration
-    @State var onekHz_StartingDB: Float = 6.0                   //Make this a freq dependent array in other views linked to index
-    @State var onekHz_AirPodsProGen2MaxDB: Float = 111.74468    //Make this a freq dependent array in other views linked to index
+    @State var eHAP1_StartingDB = Float()                    //Make this a freq dependent array in other views linked to index
+    @State var eHAP1_AirPodsProGen2MaxDB = Float()    //Make this a freq dependent array in other views linked to index
     
     
     @State var eHAP1_AirPodsProGen2MaxDBArray = [Float]()
@@ -199,89 +199,124 @@ struct EHATTSTestPart1Content<Link: View>: View {
 //        gainEHAP1SettingArray.append(contentsOf: gainReferenceModel.ABS2_5_EHAP1
     
     
-    @State var onekHz_PriorDB: Float = Float()
-    @State var onekHz_CurrentDB: Float = Float()
-    @State var onekHz_StepSizeDB: Float = 0.0
-    @State var onekHz_NewTargetDB: Float = Float()
+    @State var eHAP1_PriorDB: Float = Float()
+    @State var eHAP1_CurrentDB: Float = Float()
+    @State var eHAP1_StepSizeDB: Float = 0.0
+    @State var eHAP1_NewTargetDB: Float = Float()
   
-    @State var onekHz_testGainDB: Float = Float() //0.025
-    @State var onekHz_reversalGainDB = [Float]()
-    @State var onekHz_testTestGainDB = [Float]()
+    @State var eHAP1_testGainDB: Float = Float() //0.025
+    @State var eHAP1_reversalGainDB = [Float]()
+    @State var eHAP1_testTestGainDB = [Float]()
    
     
-    @State var onekHzfirstGainDB = Float()
-    @State var onekHzsecondGainDB = Float()
+    @State var eHAP1firstGainDB = Float()
+    @State var eHAP1secondGainDB = Float()
     
-    @State var onekHzfirstGainDBRight1 = Float()
-    @State var onekHzsecondGainDBRight1 = Float()
-    @State var onekHzfirstGainDBRight2 = Float()
-    @State var onekHzsecondGainDBRight2 = Float()
-    @State var onekHzfirstGainDBLeft1 = Float()
-    @State var onekHzsecondGainDBLeft1 = Float()
-    @State var onekHzfirstGainDBLeft2 = Float()
-    @State var onekHzsecondGainDBLeft2 = Float()
+    @State var eHAP1firstGainDBRight1 = Float()
+    @State var eHAP1secondGainDBRight1 = Float()
+    @State var eHAP1firstGainDBRight2 = Float()
+    @State var eHAP1secondGainDBRight2 = Float()
+    @State var eHAP1firstGainDBLeft1 = Float()
+    @State var eHAP1secondGainDBLeft1 = Float()
+    @State var eHAP1firstGainDBLeft2 = Float()
+    @State var eHAP1secondGainDBLeft2 = Float()
     
-    @State var onekHz_rightFirstSecondGainDBArray: [Float] = [Float]()
-    @State var onekHz_leftFirstSecondGainDBArray: [Float] = [Float]()
+    @State var eHAP1_rightFirstSecondGainDBArray: [Float] = [Float]()
+    @State var eHAP1_leftFirstSecondGainDBArray: [Float] = [Float]()
     
    
-    @State var onekHzRightDBSorted: [Float] = [Float]()
-    @State var onekHzLeftDBSorted: [Float] = [Float]()
-    @State var onekHzIntraEarDeltaHL1DB = Float()
-    @State var onekHzIntraEarDeltaHL2DB = Float()
-    @State var onekHzIntraEarDeltaHLFinalDB = Float()
+    @State var eHAP1RightDBSorted: [Float] = [Float]()
+    @State var eHAP1LeftDBSorted: [Float] = [Float]()
+    @State var eHAP1IntraEarDeltaHL1DB = Float()
+    @State var eHAP1IntraEarDeltaHL2DB = Float()
+    @State var eHAP1IntraEarDeltaHLFinalDB = Float()
     
-    @State var onekHzFinalLRGainsDB1: [Float] = [Float]()
-    @State var onekHzFinalLRGainsDB2: [Float] = [Float]()
-    @State var onekHzInterimLRGainsDBFinal: [Float] = [Float]()
-    @State var onekHzFinalComboLRGainsDB: [Float] = [Float]()
+    @State var eHAP1FinalLRGainsDB1: [Float] = [Float]()
+    @State var eHAP1FinalLRGainsDB2: [Float] = [Float]()
+    @State var eHAP1InterimLRGainsDBFinal: [Float] = [Float]()
+    @State var eHAP1FinalComboLRGainsDB: [Float] = [Float]()
     
     
-    @State var onekHz_averageGainDB = Float()
-    @State var onekHz_averageGainDBRight = Float()
-    @State var onekHz_averageGainDBLeft = Float()
+    @State var eHAP1_averageGainDB = Float()
+    @State var eHAP1_averageGainDBRight = Float()
+    @State var eHAP1_averageGainDBLeft = Float()
     
-    @State var onekHz_averageGainDBRight1 = Float()
-    @State var onekHz_averageGainDBRight2 = Float()
-    @State var onekHz_averageGainDBRightArray: [Float] = [Float]()
-    @State var onekHz_averageLowestGainDBRightArray: [Float] = [Float]()
-    @State var onekHz_idxFirstAverageGainDBRightArray = Float()
-    @State var onekHz_idxlastAverageGainDBRightArray = Float()
+    @State var eHAP1_averageGainDBRight1 = Float()
+    @State var eHAP1_averageGainDBRight2 = Float()
+    @State var eHAP1_averageGainDBRightArray: [Float] = [Float]()
+    @State var eHAP1_averageLowestGainDBRightArray: [Float] = [Float]()
+    @State var eHAP1_idxFirstAverageGainDBRightArray = Float()
+    @State var eHAP1_idxlastAverageGainDBRightArray = Float()
     
-    @State var onekHz_averageGainDBLeft1 = Float()
-    @State var onekHz_averageGainDBLeft2 = Float()
-    @State var onekHz_averageGainDBLeftArray: [Float] = [Float]()
-    @State var onekHz_averageLowestGainDBLeftArray: [Float] = [Float]()
-    @State var onekHz_idxFirstAverageGainDBLeftArray = Float()
-    @State var onekHz_idxlastAverageGainDBLeftArray = Float()
+    @State var eHAP1_averageGainDBLeft1 = Float()
+    @State var eHAP1_averageGainDBLeft2 = Float()
+    @State var eHAP1_averageGainDBLeftArray: [Float] = [Float]()
+    @State var eHAP1_averageLowestGainDBLeftArray: [Float] = [Float]()
+    @State var eHAP1_idxFirstAverageGainDBLeftArray = Float()
+    @State var eHAP1_idxlastAverageGainDBLeftArray = Float()
     
-    @State var onekHz_HoldingLowestRightGainDBArray: [Float] = [Float]()
-    @State var onekHz_HoldingLowestLeftGainDBArray: [Float] = [Float]()
+    @State var eHAP1_HoldingLowestRightGainDBArray: [Float] = [Float]()
+    @State var eHAP1_HoldingLowestLeftGainDBArray: [Float] = [Float]()
   
     
-    @State var onekHz_finalStoredFirstGainDB: [Float] = [Float]()
-    @State var onekHz_finalStoredSecondGainDB: [Float] = [Float]()
-    @State var onekHz_finalStoredAverageGainDB: [Float] = [Float]()
+    @State var eHAP1_finalStoredFirstGainDB: [Float] = [Float]()
+    @State var eHAP1_finalStoredSecondGainDB: [Float] = [Float]()
+    @State var eHAP1_finalStoredAverageGainDB: [Float] = [Float]()
     
     
-    @State var final_onekHz_onekHzfirstGainDB = [Float]()
-    @State var final_onekHz_onekHzsecondGainDB = [Float]()
-    @State var final_onekHz_reversalGainDB = [Float]()
-    @State var final_onekHz_testTestGainDB = [Float]()
-    @State var final_onekHz_averageGainDB = [Float]()
-    @State var final_onekHz_averageGainDBRightArray = [Float]()
-    @State var final_onekHz_averageGainDBLeftArray = [Float]()
-    @State var final_onekHz_averageLowestGainDBRightArray = [Float]()
-    @State var final_onekHz_HoldingLowestRightGainDBArray = [Float]()
-    @State var final_onekHz_averageLowestGainDBLeftArray = [Float]()
-    @State var final_onekHz_HoldingLowestLeftGainDBArray = [Float]()
+    @State var final_eHAP1_eHAP1firstGainDB = [Float]()
+    @State var final_eHAP1_eHAP1secondGainDB = [Float]()
+    @State var final_eHAP1_reversalGainDB = [Float]()
+    @State var final_eHAP1_testTestGainDB = [Float]()
+    @State var final_eHAP1_averageGainDB = [Float]()
+    @State var final_eHAP1_averageGainDBRightArray = [Float]()
+    @State var final_eHAP1_averageGainDBLeftArray = [Float]()
+    @State var final_eHAP1_averageLowestGainDBRightArray = [Float]()
+    @State var final_eHAP1_HoldingLowestRightGainDBArray = [Float]()
+    @State var final_eHAP1_averageLowestGainDBLeftArray = [Float]()
+    @State var final_eHAP1_HoldingLowestLeftGainDBArray = [Float]()
     
-    @State var onekHz_rightFinalGainsDBArray = [Float]()
-    @State var onekHz_leftFinalGainsDBArray = [Float]()
-    @State var onekHz_finalStoredRightFinalGainsDBArray = [Float]()
-    @State var onekHz_finalStoredleftFinalGainsDBArray = [Float]()
     
-    @State var onekHz_finalStoredTestTestGainDB: [Float] = [Float]()
+    @State var rightFinalGainDBSample1 = Float()
+    @State var rightFinalGainDBSample2 = Float()
+    @State var rightFinalGainDBSample3 = Float()
+    @State var rightFinalGainDBSample4 = Float()
+    @State var rightFinalGainDBSample5 = Float()
+    @State var rightFinalGainDBSample6 = Float()
+    @State var rightFinalGainDBSample7 = Float()
+    @State var rightFinalGainDBSample8 = Float()
+    @State var rightFinalGainDBSample9 = Float()
+    @State var rightFinalGainDBSample10 = Float()
+    @State var rightFinalGainDBSample11 = Float()
+    @State var rightFinalGainDBSample12 = Float()
+    @State var rightFinalGainDBSample13 = Float()
+    @State var rightFinalGainDBSample14 = Float()
+    @State var rightFinalGainDBSample15 = Float()
+    @State var rightFinalGainDBSample16 = Float()
+    
+    @State var leftFinalGainDBSample1 = Float()
+    @State var leftFinalGainDBSample2 = Float()
+    @State var leftFinalGainDBSample3 = Float()
+    @State var leftFinalGainDBSample4 = Float()
+    @State var leftFinalGainDBSample5 = Float()
+    @State var leftFinalGainDBSample6 = Float()
+    @State var leftFinalGainDBSample7 = Float()
+    @State var leftFinalGainDBSample8 = Float()
+    @State var leftFinalGainDBSample9 = Float()
+    @State var leftFinalGainDBSample10 = Float()
+    @State var leftFinalGainDBSample11 = Float()
+    @State var leftFinalGainDBSample12 = Float()
+    @State var leftFinalGainDBSample13 = Float()
+    @State var leftFinalGainDBSample14 = Float()
+    @State var leftFinalGainDBSample15 = Float()
+    @State var leftFinalGainDBSample16 = Float()
+
+    @State var eHAP1_rightFinalGainsDBArray = [Float]()
+    @State var eHAP1_leftFinalGainsDBArray = [Float]()
+    @State var eHAP1_finalStoredRightFinalGainsDBArray = [Float]()
+    @State var eHAP1_finalStoredleftFinalGainsDBArray = [Float]()
+    
+    @State var eHAP1_finalStoredTestTestGainDB: [Float] = [Float]()
     
 // End of Added DB Variables
 //
@@ -421,24 +456,64 @@ struct EHATTSTestPart1Content<Link: View>: View {
             colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
             VStack {
                 HStack{
-                    if ehaP1fullTestCompleted == false {
-                        Text("EHA Part 1 / EPTA Test")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .padding()
+                    VStack{
+                        if ehaP1fullTestCompleted == false {
+                            HStack{
+                                Text("EHA Part 1 / EPTA Test")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .padding()
+                                    .foregroundColor(.white)
+                                    .padding(.top, 20)
+                                    .padding(.bottom, 10)
+                            }
+                            
+                            HStack{
+                                Spacer()
+                                Text("CurrentDB: \(eHAP1_CurrentDB)")
+                                Spacer()
+                                Text("NewTargetDB: \(eHAP1_NewTargetDB)")
+                                Spacer()
+                            }
+                            .font(.caption)
                             .foregroundColor(.white)
-                            .padding(.top, 40)
-                            .padding(.bottom, 20)
-                    } else if ehaP1EPTATestCompleted == true {
-                        NavigationLink("Test Phase Complete. Continue.", destination: PostAllTestsSplashView(testing: testing, relatedLinkTesting: linkTesting))
-                            .padding()
-                            .frame(width: 300, height: 50, alignment: .center)
-                            .background(.green)
+                            .padding(.top, 5)
+                            .padding(.bottom, 5)
+                            
+                            HStack{
+                                Spacer()
+                                Text("testGainDB: \(eHAP1_testGainDB)")
+                                Spacer()
+                                Text("StepSizeDB: \(eHAP1_StepSizeDB)")
+                                Spacer()
+                            }
+                            .font(.caption)
                             .foregroundColor(.white)
-                            .cornerRadius(24)
-                            .padding(.top, 40)
+                            .padding(.top, 5)
+                            .padding(.bottom, 5)
+                            
+                            HStack{
+                                Spacer()
+                                Text("testGain: \(envDataObjectModel_testGain)")
+                                Spacer()
+                            }
+                            .font(.caption)
+                            .foregroundColor(.white)
+                            .padding(.top, 5)
                             .padding(.bottom, 20)
+                            
+                        } else if ehaP1EPTATestCompleted == true {
+                            NavigationLink("Test Phase Complete. Continue.", destination: PostAllTestsSplashView(testing: testing, relatedLinkTesting: linkTesting))
+                                .padding()
+                                .frame(width: 300, height: 50, alignment: .center)
+                                .background(.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
+                                .padding(.top, 40)
+                                .padding(.bottom, 20)
+                        }
                     }
+                
                 }
                 .navigationDestination(isPresented: $ehaP1fullTestCompleted) {
                     PostAllTestsSplashView(testing: testing, relatedLinkTesting: linkTesting)
@@ -747,9 +822,9 @@ struct EHATTSTestPart1Content<Link: View>: View {
                                         
                                         //
                                         //
-                                        onekHz_CurrentDB = onekHz_StartingDB
-                                        onekHz_NewTargetDB = onekHz_CurrentDB
-                                        envDataObjectModel_testGain = powf(10.0, ((onekHz_StartingDB - onekHz_AirPodsProGen2MaxDB)/20))
+                                        eHAP1_CurrentDB = eHAP1_StartingDB
+                                        eHAP1_NewTargetDB = eHAP1_CurrentDB
+                                        envDataObjectModel_testGain = powf(10.0, ((eHAP1_StartingDB - eHAP1_AirPodsProGen2MaxDB)/20))
                                         //
                                         //
                                         
@@ -824,7 +899,13 @@ struct EHATTSTestPart1Content<Link: View>: View {
                     await checkGainEHAP1_27DataLink()
                     await gainCurveAssignment()
                     await comparedLastNameCSVReader()
-                    envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]
+                    await gainHeadphoneAssigment()
+                    eHAP1_StartingDB = gainEHAP1SettingArray[envDataObjectModel_index]
+                    eHAP1_CurrentDB = eHAP1_StartingDB
+                    eHAP1_NewTargetDB = eHAP1_StartingDB
+                    eHAP1_AirPodsProGen2MaxDB = eHAP1_AirPodsProGen2MaxDBArray[envDataObjectModel_index]
+                    await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)    // This will set _testGain
+//                    envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]
                     gainEHAP1PhonIsSet = true
                     highResStandard = true
                     //append highresstd to array
@@ -1048,7 +1129,7 @@ extension EHATTSTestPart1Content {
         localMarkNewTestCycle = 0
         localReversalEnd = 0
         envDataObjectModel_index = envDataObjectModel_index
-        envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]       // Add code to reset starting test gain by linking to table of expected HL
+//        envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]       // Add code to reset starting test gain by linking to table of expected HL
         testIsPlaying = false
         localPlaying = 0
         envDataObjectModel_testCount.removeAll()
@@ -1065,12 +1146,14 @@ extension EHATTSTestPart1Content {
         startTooHigh = 0
         
 //Added
-        onekHz_averageGainDB = Float()
-//        Task(priority: .userInitiated) {
-//            onekHz_CurrentDB = onekHz_StartingDB
-//            onekHz_NewTargetDB = onekHz_StartingDB
-//            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)
-//        }
+        eHAP1_averageGainDB = Float()
+        Task(priority: .userInitiated) {
+            eHAP1_StartingDB = gainEHAP1SettingArray[envDataObjectModel_index]
+            eHAP1_CurrentDB = eHAP1_StartingDB
+            eHAP1_NewTargetDB = eHAP1_StartingDB
+            eHAP1_AirPodsProGen2MaxDB = eHAP1_AirPodsProGen2MaxDBArray[envDataObjectModel_index]
+            await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)
+        }
 
         
 //Added Above
@@ -1102,7 +1185,7 @@ extension EHATTSTestPart1Content {
         
         //
         //
-        envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]
+//        envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]
         //
         //
         
@@ -1114,9 +1197,11 @@ extension EHATTSTestPart1Content {
         
         //
         //
-        onekHz_CurrentDB = onekHz_StartingDB
-        onekHz_NewTargetDB = onekHz_CurrentDB
-        envDataObjectModel_testGain = powf(10.0, ((onekHz_StartingDB - onekHz_AirPodsProGen2MaxDB)/20))
+        eHAP1_StartingDB = gainEHAP1SettingArray[envDataObjectModel_index]
+        eHAP1_CurrentDB = eHAP1_StartingDB
+        eHAP1_NewTargetDB = eHAP1_StartingDB
+        eHAP1_AirPodsProGen2MaxDB = eHAP1_AirPodsProGen2MaxDBArray[envDataObjectModel_index]
+        await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)
         //
         //
         
@@ -1192,7 +1277,7 @@ extension EHATTSTestPart1Content {
         }
         DispatchQueue.global(qos: .default).async {
             envDataObjectModel_testTestGain.append(envDataObjectModel_testGain)
-            onekHz_testTestGainDB.append(onekHz_testGainDB)
+            eHAP1_testTestGainDB.append(eHAP1_testGainDB)
         }
         DispatchQueue.global(qos: .background).async {
             envDataObjectModel_frequency.append(activeFrequency)
@@ -1339,11 +1424,11 @@ extension EHATTSTestPart1Content {
     
     
     func dBNewTargetDB() async {
-        onekHz_NewTargetDB = onekHz_CurrentDB + onekHz_StepSizeDB
+        eHAP1_NewTargetDB = eHAP1_CurrentDB + eHAP1_StepSizeDB
     }
     
-    func dBToGain(onekHz_NewTargetDB: Float) async {
-        envDataObjectModel_testGain = powf(10.0, ((onekHz_NewTargetDB - onekHz_AirPodsProGen2MaxDB)/20))
+    func dBToGain(eHAP1_NewTargetDB: Float) async {
+        envDataObjectModel_testGain = powf(10.0, ((eHAP1_NewTargetDB - eHAP1_AirPodsProGen2MaxDB)/20))
     }
     
     
@@ -1365,7 +1450,7 @@ extension EHATTSTestPart1Content {
     func createReversalGainArray() async {
         //        envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
         envDataObjectModel_reversalGain.append(envDataObjectModel_testGain)
-        onekHz_reversalGainDB.append(onekHz_testGainDB)
+        eHAP1_reversalGainDB.append(eHAP1_testGainDB)
     }
     
     
@@ -1375,10 +1460,10 @@ extension EHATTSTestPart1Content {
         if envDataObjectModel_testGain < 0.995 {
             //        envDataObjectModel_reversalGain.append(envDataObjectModel_testTestGain[idxHA-1])
             envDataObjectModel_reversalGain.append(envDataObjectModel_testGain)
-            onekHz_reversalGainDB.append(onekHz_testGainDB)
+            eHAP1_reversalGainDB.append(eHAP1_testGainDB)
         } else if envDataObjectModel_testGain >= 0.995 {
             envDataObjectModel_reversalGain.append(1.0)
-            onekHz_reversalGainDB.append(200.0)
+            eHAP1_reversalGainDB.append(200.0)
         }
     }
     
@@ -1502,33 +1587,33 @@ extension EHATTSTestPart1Content {
 //    }
     
     func reversalOfOne() async {
-        onekHz_StepSizeDB = 1.0
-        let rO1Direction = onekHz_StepSizeDB * envDataObjectModel_reversalDirection
-        onekHz_NewTargetDB = onekHz_CurrentDB + rO1Direction
-        if onekHz_NewTargetDB > 0.00001 && onekHz_NewTargetDB < onekHz_AirPodsProGen2MaxDB-0.1 {
-            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)  //This sets onekHz_testGain
-            onekHz_testGainDB = onekHz_NewTargetDB
-            onekHz_CurrentDB = onekHz_NewTargetDB
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+        eHAP1_StepSizeDB = 1.0
+        let rO1Direction = eHAP1_StepSizeDB * envDataObjectModel_reversalDirection
+        eHAP1_NewTargetDB = eHAP1_CurrentDB + rO1Direction
+        if eHAP1_NewTargetDB > 0.00001 && eHAP1_NewTargetDB < eHAP1_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = eHAP1_NewTargetDB
+            eHAP1_CurrentDB = eHAP1_NewTargetDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
-        } else if onekHz_NewTargetDB <= 0.0 {
-            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
-            onekHz_testGainDB = 1.0
-            onekHz_CurrentDB = 1.0
-            onekHz_NewTargetDB = 1.0
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
+        } else if eHAP1_NewTargetDB <= 0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 1.0
+            eHAP1_CurrentDB = 1.0
+            eHAP1_NewTargetDB = 1.0
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if onekHz_NewTargetDB >= onekHz_AirPodsProGen2MaxDB {
+        } else if eHAP1_NewTargetDB >= eHAP1_AirPodsProGen2MaxDB {
             envDataObjectModel_testGain = 1.0
-            onekHz_testGainDB = onekHz_AirPodsProGen2MaxDB
-            onekHz_CurrentDB = onekHz_AirPodsProGen2MaxDB
-            onekHz_NewTargetDB = onekHz_AirPodsProGen2MaxDB
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            eHAP1_testGainDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_CurrentDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_NewTargetDB = eHAP1_AirPodsProGen2MaxDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfOne Logic")
@@ -1536,33 +1621,33 @@ extension EHATTSTestPart1Content {
     }
     
     func reversalOfTwo() async {
-        onekHz_StepSizeDB = 2.0
-        let rO2Direction = onekHz_StepSizeDB * envDataObjectModel_reversalDirection
-        onekHz_NewTargetDB = onekHz_CurrentDB + rO2Direction
-        if onekHz_NewTargetDB > 0.00001 && onekHz_NewTargetDB < onekHz_AirPodsProGen2MaxDB-0.1 {
-            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)  //This sets onekHz_testGain
-            onekHz_testGainDB = onekHz_NewTargetDB
-            onekHz_CurrentDB = onekHz_NewTargetDB
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+        eHAP1_StepSizeDB = 2.0
+        let rO2Direction = eHAP1_StepSizeDB * envDataObjectModel_reversalDirection
+        eHAP1_NewTargetDB = eHAP1_CurrentDB + rO2Direction
+        if eHAP1_NewTargetDB > 0.00001 && eHAP1_NewTargetDB < eHAP1_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = eHAP1_NewTargetDB
+            eHAP1_CurrentDB = eHAP1_NewTargetDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
-        } else if onekHz_NewTargetDB <= 0.0 {
-            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
-            onekHz_testGainDB = 1.0
-            onekHz_CurrentDB = 1.0
-            onekHz_NewTargetDB = 1.0
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
+        } else if eHAP1_NewTargetDB <= 0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 1.0
+            eHAP1_CurrentDB = 1.0
+            eHAP1_NewTargetDB = 1.0
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if onekHz_NewTargetDB >= onekHz_AirPodsProGen2MaxDB {
+        } else if eHAP1_NewTargetDB >= eHAP1_AirPodsProGen2MaxDB {
             envDataObjectModel_testGain = 1.0
-            onekHz_testGainDB = onekHz_AirPodsProGen2MaxDB
-            onekHz_CurrentDB = onekHz_AirPodsProGen2MaxDB
-            onekHz_NewTargetDB = onekHz_AirPodsProGen2MaxDB
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            eHAP1_testGainDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_CurrentDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_NewTargetDB = eHAP1_AirPodsProGen2MaxDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfOne Logic")
@@ -1570,33 +1655,33 @@ extension EHATTSTestPart1Content {
     }
     
     func reversalOfThree() async {
-        onekHz_StepSizeDB = 3.0
-        let rO3Direction = onekHz_StepSizeDB * envDataObjectModel_reversalDirection
-        onekHz_NewTargetDB = onekHz_CurrentDB + rO3Direction
-        if onekHz_NewTargetDB > 0.00001 && onekHz_NewTargetDB < onekHz_AirPodsProGen2MaxDB-0.1 {
-            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)  //This sets onekHz_testGain
-            onekHz_testGainDB = onekHz_NewTargetDB
-            onekHz_CurrentDB = onekHz_NewTargetDB
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+        eHAP1_StepSizeDB = 3.0
+        let rO3Direction = eHAP1_StepSizeDB * envDataObjectModel_reversalDirection
+        eHAP1_NewTargetDB = eHAP1_CurrentDB + rO3Direction
+        if eHAP1_NewTargetDB > 0.00001 && eHAP1_NewTargetDB < eHAP1_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = eHAP1_NewTargetDB
+            eHAP1_CurrentDB = eHAP1_NewTargetDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
-        } else if onekHz_NewTargetDB <= 0.0 {
-            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
-            onekHz_testGainDB = 1.0
-            onekHz_CurrentDB = 1.0
-            onekHz_NewTargetDB = 1.0
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
+        } else if eHAP1_NewTargetDB <= 0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 1.0
+            eHAP1_CurrentDB = 1.0
+            eHAP1_NewTargetDB = 1.0
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if onekHz_NewTargetDB >= onekHz_AirPodsProGen2MaxDB {
+        } else if eHAP1_NewTargetDB >= eHAP1_AirPodsProGen2MaxDB {
             envDataObjectModel_testGain = 1.0
-            onekHz_testGainDB = onekHz_AirPodsProGen2MaxDB
-            onekHz_CurrentDB = onekHz_AirPodsProGen2MaxDB
-            onekHz_NewTargetDB = onekHz_AirPodsProGen2MaxDB
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            eHAP1_testGainDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_CurrentDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_NewTargetDB = eHAP1_AirPodsProGen2MaxDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfOne Logic")
@@ -1604,33 +1689,33 @@ extension EHATTSTestPart1Content {
     }
     
     func reversalOfFour() async {
-        onekHz_StepSizeDB = 4.0
-        let rO4Direction = onekHz_StepSizeDB * envDataObjectModel_reversalDirection
-        onekHz_NewTargetDB = onekHz_CurrentDB + rO4Direction
-        if onekHz_NewTargetDB > 0.00001 && onekHz_NewTargetDB < onekHz_AirPodsProGen2MaxDB-0.1 {
-            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)  //This sets onekHz_testGain
-            onekHz_testGainDB = onekHz_NewTargetDB
-            onekHz_CurrentDB = onekHz_NewTargetDB
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+        eHAP1_StepSizeDB = 4.0
+        let rO4Direction = eHAP1_StepSizeDB * envDataObjectModel_reversalDirection
+        eHAP1_NewTargetDB = eHAP1_CurrentDB + rO4Direction
+        if eHAP1_NewTargetDB > 0.00001 && eHAP1_NewTargetDB < eHAP1_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = eHAP1_NewTargetDB
+            eHAP1_CurrentDB = eHAP1_NewTargetDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
-        } else if onekHz_NewTargetDB <= 0.0 {
-            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
-            onekHz_testGainDB = 1.0
-            onekHz_CurrentDB = 1.0
-            onekHz_NewTargetDB = 1.0
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
+        } else if eHAP1_NewTargetDB <= 0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 1.0
+            eHAP1_CurrentDB = 1.0
+            eHAP1_NewTargetDB = 1.0
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if onekHz_NewTargetDB >= onekHz_AirPodsProGen2MaxDB {
+        } else if eHAP1_NewTargetDB >= eHAP1_AirPodsProGen2MaxDB {
             envDataObjectModel_testGain = 1.0
-            onekHz_testGainDB = onekHz_AirPodsProGen2MaxDB
-            onekHz_CurrentDB = onekHz_AirPodsProGen2MaxDB
-            onekHz_NewTargetDB = onekHz_AirPodsProGen2MaxDB
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            eHAP1_testGainDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_CurrentDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_NewTargetDB = eHAP1_AirPodsProGen2MaxDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfOne Logic")
@@ -1638,33 +1723,33 @@ extension EHATTSTestPart1Content {
     }
     
     func reversalOfFive() async {
-        onekHz_StepSizeDB = 5.0
-        let rO5Direction = onekHz_StepSizeDB * envDataObjectModel_reversalDirection
-        onekHz_NewTargetDB = onekHz_CurrentDB + rO5Direction
-        if onekHz_NewTargetDB > 0.00001 && onekHz_NewTargetDB < onekHz_AirPodsProGen2MaxDB-0.1 {
-            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)  //This sets onekHz_testGain
-            onekHz_testGainDB = onekHz_NewTargetDB
-            onekHz_CurrentDB = onekHz_NewTargetDB
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+        eHAP1_StepSizeDB = 5.0
+        let rO5Direction = eHAP1_StepSizeDB * envDataObjectModel_reversalDirection
+        eHAP1_NewTargetDB = eHAP1_CurrentDB + rO5Direction
+        if eHAP1_NewTargetDB > 0.00001 && eHAP1_NewTargetDB < eHAP1_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = eHAP1_NewTargetDB
+            eHAP1_CurrentDB = eHAP1_NewTargetDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
-        } else if onekHz_NewTargetDB <= 0.0 {
-            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
-            onekHz_testGainDB = 1.0
-            onekHz_CurrentDB = 1.0
-            onekHz_NewTargetDB = 1.0
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
+        } else if eHAP1_NewTargetDB <= 0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 1.0
+            eHAP1_CurrentDB = 1.0
+            eHAP1_NewTargetDB = 1.0
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if onekHz_NewTargetDB >= onekHz_AirPodsProGen2MaxDB {
+        } else if eHAP1_NewTargetDB >= eHAP1_AirPodsProGen2MaxDB {
             envDataObjectModel_testGain = 1.0
-            onekHz_testGainDB = onekHz_AirPodsProGen2MaxDB
-            onekHz_CurrentDB = onekHz_AirPodsProGen2MaxDB
-            onekHz_NewTargetDB = onekHz_AirPodsProGen2MaxDB
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            eHAP1_testGainDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_CurrentDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_NewTargetDB = eHAP1_AirPodsProGen2MaxDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfOne Logic")
@@ -1672,33 +1757,33 @@ extension EHATTSTestPart1Content {
     }
     
     func reversalOfTen() async {
-        onekHz_StepSizeDB = 10.0
-        let r10Direction = onekHz_StepSizeDB * envDataObjectModel_reversalDirection
-        onekHz_NewTargetDB = onekHz_CurrentDB + r10Direction
-        if onekHz_NewTargetDB > 0.00001 && onekHz_NewTargetDB < onekHz_AirPodsProGen2MaxDB-0.1 {
-            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)  //This sets onekHz_testGain
-            onekHz_testGainDB = onekHz_NewTargetDB
-            onekHz_CurrentDB = onekHz_NewTargetDB
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+        eHAP1_StepSizeDB = 10.0
+        let r10Direction = eHAP1_StepSizeDB * envDataObjectModel_reversalDirection
+        eHAP1_NewTargetDB = eHAP1_CurrentDB + r10Direction
+        if eHAP1_NewTargetDB > 0.00001 && eHAP1_NewTargetDB < eHAP1_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = eHAP1_NewTargetDB
+            eHAP1_CurrentDB = eHAP1_NewTargetDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
-        } else if onekHz_NewTargetDB <= 0.0 {
-            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
-            onekHz_testGainDB = 1.0
-            onekHz_CurrentDB = 1.0
-            onekHz_NewTargetDB = 1.0
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
+        } else if eHAP1_NewTargetDB <= 0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 1.0
+            eHAP1_CurrentDB = 1.0
+            eHAP1_NewTargetDB = 1.0
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal Zero Gain Catch")
-        } else if onekHz_NewTargetDB >= onekHz_AirPodsProGen2MaxDB {
+        } else if eHAP1_NewTargetDB >= eHAP1_AirPodsProGen2MaxDB {
             envDataObjectModel_testGain = 1.0
-            onekHz_testGainDB = onekHz_AirPodsProGen2MaxDB
-            onekHz_CurrentDB = onekHz_AirPodsProGen2MaxDB
-            onekHz_NewTargetDB = onekHz_AirPodsProGen2MaxDB
-            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            eHAP1_testGainDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_CurrentDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_NewTargetDB = eHAP1_AirPodsProGen2MaxDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
-            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
             print("!!!Fatal 1.0 Gain Catch")
         } else {
             print("!!!Fatal Error in reversalOfOne Logic")
@@ -1847,37 +1932,41 @@ extension EHATTSTestPart1Content {
             self.firstGain = envDataObjectModel_reversalGain[firstHeardResponseIndex-1]
             self.secondGain = envDataObjectModel_reversalGain[secondHeardResponseIndex-1]
             
-            onekHzfirstGainDB = onekHz_reversalGainDB[firstHeardResponseIndex-1]
-            onekHzsecondGainDB = onekHz_reversalGainDB[secondHeardResponseIndex-1]
+            eHAP1firstGainDB = eHAP1_reversalGainDB[firstHeardResponseIndex-1]
+            eHAP1secondGainDB = eHAP1_reversalGainDB[secondHeardResponseIndex-1]
             
             print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
             
 //            let delta = firstGain - secondGain
             let avg = (firstGain + secondGain)/2
-            let eHAP1DeltatDB = onekHzfirstGainDB - onekHzsecondGainDB
-            let eHAP1AvgDB = (onekHzfirstGainDB + onekHzsecondGainDB)/2
+            let eHAP1DeltatDB = eHAP1firstGainDB - eHAP1secondGainDB
+            let eHAP1AvgDB = (eHAP1firstGainDB + eHAP1secondGainDB)/2
             
             if eHAP1DeltatDB == 0.0 {
                 envDataObjectModel_averageGain = secondGain
+                eHAP1_averageGainDB = eHAP1secondGainDB
                 //                print("average Gain: \(envDataObjectModel_averageGain)")
             } else if eHAP1DeltatDB >= 4.0 {
                 envDataObjectModel_averageGain = secondGain
+                eHAP1_averageGainDB = eHAP1secondGainDB
                 //                print("SecondGain: \(firstGain)")
                 //                print("SecondGain: \(secondGain)")
                 //                print("average Gain: \(envDataObjectModel_averageGain)")
             } else if eHAP1DeltatDB <= -4.0 {
                 envDataObjectModel_averageGain = firstGain
+                eHAP1_averageGainDB = eHAP1firstGainDB
                 //                print("SecondGain: \(firstGain)")
                 //                print("SecondGain: \(secondGain)")
                 //                print("average Gain: \(envDataObjectModel_averageGain)")
             } else if eHAP1DeltatDB < 4.0 && eHAP1DeltatDB > -4.0 {
                 envDataObjectModel_averageGain = avg
+                eHAP1_averageGainDB = eHAP1AvgDB
                 //                print("SecondGain: \(firstGain)")
                 //                print("SecondGain: \(secondGain)")
                 //                print("average Gain: \(envDataObjectModel_averageGain)")
             } else {
                 envDataObjectModel_averageGain = avg
-                onekHz_averageGainDB = eHAP1AvgDB
+                eHAP1_averageGainDB = eHAP1AvgDB
                 //                print("SecondGain: \(firstGain)")
                 //                print("SecondGain: \(secondGain)")
                 //                print("average Gain: \(envDataObjectModel_averageGain)")
@@ -1894,140 +1983,238 @@ extension EHATTSTestPart1Content {
             //go through each assignment based on index
             if envDataObjectModel_index == 0 {
                 rightFinalGainSample1 = envDataObjectModel_averageGain
+                rightFinalGainDBSample1 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample1)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample1)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else if envDataObjectModel_index == 1 {
                 rightFinalGainSample2 = envDataObjectModel_averageGain
+                rightFinalGainDBSample2 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample2)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample2)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else if envDataObjectModel_index == 2 {
                 rightFinalGainSample3 = envDataObjectModel_averageGain
+                rightFinalGainDBSample3 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample3)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample3)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else if envDataObjectModel_index == 3 {
                 rightFinalGainSample4 = envDataObjectModel_averageGain
+                rightFinalGainDBSample4 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample4)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample4)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else if envDataObjectModel_index == 4 {
                 rightFinalGainSample5 = envDataObjectModel_averageGain
+                rightFinalGainDBSample5 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample5)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample5)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else if envDataObjectModel_index == 5 {
                 rightFinalGainSample6 = envDataObjectModel_averageGain
+                rightFinalGainDBSample6 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample6)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample6)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else if envDataObjectModel_index == 6 {
                 rightFinalGainSample7 = envDataObjectModel_averageGain
+                rightFinalGainDBSample7 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample7)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample7)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else if envDataObjectModel_index == 7 {
                 rightFinalGainSample8 = envDataObjectModel_averageGain
+                rightFinalGainDBSample8 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample8)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample8)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else if envDataObjectModel_index == 16 {
                 rightFinalGainSample9 = envDataObjectModel_averageGain
+                rightFinalGainDBSample9 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample9)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample9)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else if envDataObjectModel_index == 17 {
                 rightFinalGainSample10 = envDataObjectModel_averageGain
+                rightFinalGainDBSample10 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample10)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample10)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else if envDataObjectModel_index == 18 {
                 rightFinalGainSample11 = envDataObjectModel_averageGain
+                rightFinalGainDBSample11 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample11)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample11)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else if envDataObjectModel_index == 19 {
                 rightFinalGainSample12 = envDataObjectModel_averageGain
+                rightFinalGainDBSample12 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample12)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample12)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else if envDataObjectModel_index == 20 {
                 rightFinalGainSample13 = envDataObjectModel_averageGain
+                rightFinalGainDBSample13 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample13)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample13)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else if envDataObjectModel_index == 21 {
                 rightFinalGainSample14 = envDataObjectModel_averageGain
+                rightFinalGainDBSample14 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample14)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample14)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else if envDataObjectModel_index == 22 {
                 rightFinalGainSample15 = envDataObjectModel_averageGain
+                rightFinalGainDBSample15 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample15)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample15)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else if envDataObjectModel_index == 23 {
                 rightFinalGainSample16 = envDataObjectModel_averageGain
+                rightFinalGainDBSample16 = eHAP1_averageGainDB
                 rightFinalGainsArray.append(rightFinalGainSample16)
+                eHAP1_rightFinalGainsDBArray.append(rightFinalGainDBSample16)
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
             } else {
                 print("*** rightFinalGainsArray: \(rightFinalGainsArray)")
+                print("### eHAP1_rightFinalGainsDBArray: \(eHAP1_rightFinalGainsDBArray)")
                 fatalError("In right side assignLRAverageSampleGains")
             }
         } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && localPan == -1.0 {
             //Left Side. Go Through Each Assignment based on index for sample
             if envDataObjectModel_index == 8 {
                 leftFinalGainSample1 = envDataObjectModel_averageGain
+                leftFinalGainDBSample1 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample1)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample1)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else if envDataObjectModel_index == 9 {
                 leftFinalGainSample2 = envDataObjectModel_averageGain
+                leftFinalGainDBSample2 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample2)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample2)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else if envDataObjectModel_index == 10 {
                 leftFinalGainSample3 = envDataObjectModel_averageGain
+                leftFinalGainDBSample3 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample3)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample3)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else if envDataObjectModel_index == 11 {
                 leftFinalGainSample4 = envDataObjectModel_averageGain
+                leftFinalGainDBSample4 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample4)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample4)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else if envDataObjectModel_index == 12 {
                 leftFinalGainSample5 = envDataObjectModel_averageGain
+                leftFinalGainDBSample5 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample5)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample5)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else if envDataObjectModel_index == 13 {
                 leftFinalGainSample6 = envDataObjectModel_averageGain
+                leftFinalGainDBSample6 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample6)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample6)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else if envDataObjectModel_index == 14 {
                 leftFinalGainSample7 = envDataObjectModel_averageGain
+                leftFinalGainDBSample7 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample7)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample7)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else if envDataObjectModel_index == 15 {
                 leftFinalGainSample8 = envDataObjectModel_averageGain
+                leftFinalGainDBSample8 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample8)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample8)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else if envDataObjectModel_index == 24 {
                 leftFinalGainSample9 = envDataObjectModel_averageGain
+                leftFinalGainDBSample9 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample9)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample9)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else if envDataObjectModel_index == 25 {
                 leftFinalGainSample10 = envDataObjectModel_averageGain
+                leftFinalGainDBSample10 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample10)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample10)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else if envDataObjectModel_index == 26 {
                 leftFinalGainSample11 = envDataObjectModel_averageGain
+                leftFinalGainDBSample11 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample11)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample11)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else if envDataObjectModel_index == 27 {
                 leftFinalGainSample12 = envDataObjectModel_averageGain
+                leftFinalGainDBSample12 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample12)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample12)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else if envDataObjectModel_index == 28 {
                 leftFinalGainSample13 = envDataObjectModel_averageGain
+                leftFinalGainDBSample13 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample13)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample13)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else if envDataObjectModel_index == 29 {
                 leftFinalGainSample14 = envDataObjectModel_averageGain
+                leftFinalGainDBSample14 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample14)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample14)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else if envDataObjectModel_index == 30 {
                 leftFinalGainSample15 = envDataObjectModel_averageGain
+                leftFinalGainDBSample15 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample15)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample15)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else if envDataObjectModel_index == 31 {
                 leftFinalGainSample16 = envDataObjectModel_averageGain
+                leftFinalGainDBSample16 = eHAP1_averageGainDB
                 leftFinalGainsArray.append(leftFinalGainSample16)
+                eHAP1_leftFinalGainsDBArray.append(leftFinalGainDBSample16)
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
             } else {
                 print("*** leftFinalGainsArray: \(leftFinalGainsArray)")
+                print("### eHAP1_leftFinalGainsDBArray: \(eHAP1_leftFinalGainsDBArray)")
                 fatalError("In left side assignLRAverageSampleGains")
             }
         } else {
@@ -2068,13 +2255,13 @@ extension EHATTSTestPart1Content {
             localSeriesNoResponses = Int()
 
 // Added Below
-            onekHz_reversalGainDB.removeAll()
-            onekHz_averageGainDB = Float()
+            eHAP1_reversalGainDB.removeAll()
+            eHAP1_averageGainDB = Float()
             
-//            onekHzfirstGainDB = Float()    //Added these in, difference from EHAP1
-//            onekHzsecondGainDB = Float()   //Added these in, difference from EHAP1
+//            eHAP1firstGainDB = Float()    //Added these in, difference from EHAP1
+//            eHAP1secondGainDB = Float()   //Added these in, difference from EHAP1
             
-            print("onekHz_reversalGainDB: \(onekHz_reversalGainDB)")
+            print("eHAP1_reversalGainDB: \(eHAP1_reversalGainDB)")
 // Added Above
             
         })
@@ -2088,7 +2275,16 @@ extension EHATTSTestPart1Content {
         localReversalEnd = 0
         envDataObjectModel_index = envDataObjectModel_index + 1
         //        envDataObjectModel_eptaSamplesCountArrayIdx += 1
-        envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]       // Add code to reset starting test gain by linking to table of expected HL
+//        envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]       // Add code to reset starting test gain by linking to table of expected HL
+        //
+        //
+        eHAP1_StartingDB = gainEHAP1SettingArray[envDataObjectModel_index]
+        eHAP1_CurrentDB = eHAP1_StartingDB
+        eHAP1_NewTargetDB = eHAP1_StartingDB
+        eHAP1_AirPodsProGen2MaxDB = eHAP1_AirPodsProGen2MaxDBArray[envDataObjectModel_index]
+        await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)    // This will set _testGain
+        //
+        //
         endTestSeriesValue = false
         showTestCompletionSheet = false
         testIsPlaying = true
@@ -2106,17 +2302,19 @@ extension EHATTSTestPart1Content {
             localMarkNewTestCycle = 0
             localReversalEnd = 0
             envDataObjectModel_index = envDataObjectModel_index + 1
-            envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]       // Add code to reset starting test gain by linking to table of expected HL
+//            envDataObjectModel_testGain = gainEHAP1SettingArray[envDataObjectModel_index]       // Add code to reset starting test gain by linking to table of expected HL
+            //
+            //
+            eHAP1_StepSizeDB = 0.0
+            eHAP1_StartingDB = gainEHAP1SettingArray[envDataObjectModel_index]
+            eHAP1_CurrentDB = eHAP1_StartingDB
+            eHAP1_NewTargetDB = eHAP1_StartingDB
+            eHAP1_AirPodsProGen2MaxDB = eHAP1_AirPodsProGen2MaxDBArray[envDataObjectModel_index]
+            await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)    // This will set _testGain
+            //
+            //
             endTestSeriesValue = false
             await wipeArrays()
-
-// Changed Below
-            onekHz_StepSizeDB = 0.0
-            onekHz_CurrentDB = onekHz_StartingDB
-            onekHz_NewTargetDB = onekHz_StartingDB
-//            onekHz_testGain = 0.025
-            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)
-// Changed Above
 
             
             //        } else if localMarkNewTestCycle == 1 && localReversalEnd == 1 && envDataObjectModel_index == envDataObjectModel_eptaSamplesCount && endTestSeriesValue == false {
@@ -2192,14 +2390,14 @@ extension EHATTSTestPart1Content {
             finalStoredleftFinalGainsArray.append(contentsOf: leftFinalGainsArray)
 
 // Added Below
-            onekHz_finalStoredTestTestGainDB.append(contentsOf: [1000000.0] + onekHz_testTestGainDB)
-            onekHz_finalStoredFirstGainDB.append(contentsOf: [1000000.0] + [onekHzfirstGainDB])
-            onekHz_finalStoredSecondGainDB.append(contentsOf: [1000000.0] + [onekHzsecondGainDB])
-            onekHz_finalStoredAverageGainDB.append(contentsOf: [1000000.0] + [onekHz_averageGainDB])
-            onekHz_finalStoredRightFinalGainsDBArray.removeAll()
-            onekHz_finalStoredleftFinalGainsDBArray.removeAll()
-            onekHz_finalStoredRightFinalGainsDBArray.append(contentsOf: onekHz_rightFinalGainsDBArray)
-            onekHz_finalStoredleftFinalGainsDBArray.append(contentsOf: onekHz_leftFinalGainsDBArray)
+            eHAP1_finalStoredTestTestGainDB.append(contentsOf: [1000000.0] + eHAP1_testTestGainDB)
+            eHAP1_finalStoredFirstGainDB.append(contentsOf: [1000000.0] + [eHAP1firstGainDB])
+            eHAP1_finalStoredSecondGainDB.append(contentsOf: [1000000.0] + [eHAP1secondGainDB])
+            eHAP1_finalStoredAverageGainDB.append(contentsOf: [1000000.0] + [eHAP1_averageGainDB])
+            eHAP1_finalStoredRightFinalGainsDBArray.removeAll()
+            eHAP1_finalStoredleftFinalGainsDBArray.removeAll()
+            eHAP1_finalStoredRightFinalGainsDBArray.append(contentsOf: eHAP1_rightFinalGainsDBArray)
+            eHAP1_finalStoredleftFinalGainsDBArray.append(contentsOf: eHAP1_leftFinalGainsDBArray)
 //Added Above
             
         }
@@ -2338,14 +2536,14 @@ extension EHATTSTestPart1Content {
         
         
 //Added Below
-        let stringFinalStoredTestTestGainDB = "finalStoredTestTestGainDB," + final_onekHz_testTestGainDB.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredFirstGainDB = "finalStoredFirstGainDB," + onekHz_finalStoredFirstGainDB.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredSecondGainDB = "finalStoredSecondGainDB," + onekHz_finalStoredSecondGainDB.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredAverageGainDB = "finalStoredAverageGainDB," + onekHz_finalStoredAverageGainDB.map { String($0) }.joined(separator: ",")
-        let stringFinalrightFinalGainsDBArray = "rightFinalGainsDBArray," + onekHz_rightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
-        let stringFinalleftFinalGainsDBArray = "leftFinalGainsDBArray," + onekHz_leftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredRightFinalGainsDBArray = "finalStoredRightFinalGainsDBArray," + onekHz_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredleftFinalGainsDBArray = "finalStoredleftFinalGainsDBArray," + onekHz_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredTestTestGainDB = "finalStoredTestTestGainDB," + final_eHAP1_testTestGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredFirstGainDB = "finalStoredFirstGainDB," + eHAP1_finalStoredFirstGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredSecondGainDB = "finalStoredSecondGainDB," + eHAP1_finalStoredSecondGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredAverageGainDB = "finalStoredAverageGainDB," + eHAP1_finalStoredAverageGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalrightFinalGainsDBArray = "rightFinalGainsDBArray," + eHAP1_rightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsDBArray = "leftFinalGainsDBArray," + eHAP1_leftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsDBArray = "finalStoredRightFinalGainsDBArray," + eHAP1_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsDBArray = "finalStoredleftFinalGainsDBArray," + eHAP1_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
         
 //Added Above
         do {
@@ -2397,13 +2595,13 @@ extension EHATTSTestPart1Content {
         let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
         
 //Added Below
-        let stringFinalStoredFirstGainDB = "finalStoredFirstGainDB," + onekHz_finalStoredFirstGainDB.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredSecondGainDB = "finalStoredSecondGainDB," + onekHz_finalStoredSecondGainDB.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredAverageGainDB = "finalStoredAverageGainDB," + onekHz_finalStoredAverageGainDB.map { String($0) }.joined(separator: ",")
-        let stringFinalrightFinalGainsDBArray = "rightFinalGainsDBArray," + onekHz_rightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
-        let stringFinalleftFinalGainsDBArray = "leftFinalGainsDBArray," + onekHz_leftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredRightFinalGainsDBArray = "finalStoredRightFinalGainsDBArray," + onekHz_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredleftFinalGainsDBArray = "finalStoredleftFinalGainsDBArray," + onekHz_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredFirstGainDB = "finalStoredFirstGainDB," + eHAP1_finalStoredFirstGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredSecondGainDB = "finalStoredSecondGainDB," + eHAP1_finalStoredSecondGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredAverageGainDB = "finalStoredAverageGainDB," + eHAP1_finalStoredAverageGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalrightFinalGainsDBArray = "rightFinalGainsDBArray," + eHAP1_rightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsDBArray = "leftFinalGainsDBArray," + eHAP1_leftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsDBArray = "finalStoredRightFinalGainsDBArray," + eHAP1_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsDBArray = "finalStoredleftFinalGainsDBArray," + eHAP1_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
         
 //Added Above
         
@@ -2436,26 +2634,6 @@ extension EHATTSTestPart1Content {
              print("CVSWriter Summary EHA Part 1 Data Error or Error Finding File for Detailed CSV \(error)")
          }
     }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     func writeEHA1InputDetailedResultsToCSV() async {
@@ -2474,6 +2652,19 @@ extension EHATTSTestPart1Content {
         let stringFinalleftFinalGainsArray = leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        
+        
+//Added Below
+        let stringFinalStoredTestTestGainDB = eHAP1_finalStoredTestTestGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredFirstGainDB = eHAP1_finalStoredFirstGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredSecondGainDB = eHAP1_finalStoredSecondGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredAverageGainDB = eHAP1_finalStoredAverageGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalrightFinalGainsDBArray = eHAP1_rightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsDBArray = eHAP1_leftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsDBArray = eHAP1_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsDBArray = eHAP1_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+//Added Above
+        
         do {
             let csvInputEHAP1DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let csvInputEHAP1DetailDocumentsDirectory = csvInputEHAP1DetailPath
@@ -2494,6 +2685,19 @@ extension EHATTSTestPart1Content {
             try writer.write(row: [stringFinalleftFinalGainsArray])
             try writer.write(row: [stringFinalStoredRightFinalGainsArray])
             try writer.write(row: [stringFinalStoredleftFinalGainsArray])
+    
+//Added Below
+            try writer.write(row: [stringFinalStoredTestTestGainDB])
+            try writer.write(row: [stringFinalStoredFirstGainDB])
+            try writer.write(row: [stringFinalStoredSecondGainDB])
+            try writer.write(row: [stringFinalStoredAverageGainDB])
+            try writer.write(row: [stringFinalrightFinalGainsDBArray])
+            try writer.write(row: [stringFinalleftFinalGainsDBArray])
+            try writer.write(row: [stringFinalStoredRightFinalGainsDBArray])
+            try writer.write(row: [stringFinalStoredleftFinalGainsDBArray])
+//Added Above
+            
+            
         } catch {
             print("CVSWriter Input EHA Part 1 Detailed Error or Error Finding File for Input Detailed CSV \(error)")
         }
@@ -2509,6 +2713,17 @@ extension EHATTSTestPart1Content {
         let stringFinalleftFinalGainsArray = leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        
+//Added Below
+        let stringFinalStoredFirstGainDB = eHAP1_finalStoredFirstGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredSecondGainDB = eHAP1_finalStoredSecondGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredAverageGainDB = eHAP1_finalStoredAverageGainDB.map { String($0) }.joined(separator: ",")
+        let stringFinalrightFinalGainsDBArray = eHAP1_rightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsDBArray = eHAP1_leftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsDBArray = eHAP1_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsDBArray = eHAP1_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+//Added Above
+        
          do {
              let csvEHAP1InputSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1InputSummaryDocumentsDirectory = csvEHAP1InputSummaryPath
@@ -2523,6 +2738,17 @@ extension EHATTSTestPart1Content {
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
+                          
+//Added Below
+             try writer.write(row: [stringFinalStoredFirstGainDB])
+             try writer.write(row: [stringFinalStoredSecondGainDB])
+             try writer.write(row: [stringFinalStoredAverageGainDB])
+             try writer.write(row: [stringFinalrightFinalGainsDBArray])
+             try writer.write(row: [stringFinalleftFinalGainsDBArray])
+             try writer.write(row: [stringFinalStoredRightFinalGainsDBArray])
+             try writer.write(row: [stringFinalStoredleftFinalGainsDBArray])
+//Added Above
+             
          } catch {
              print("CVSWriter Input EHA Part 1 Summary Data Error or Error Finding File for Input Summary CSV \(error)")
          }
@@ -2533,6 +2759,14 @@ extension EHATTSTestPart1Content {
         let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+        
+//Added Below
+        let stringFinalrightFinalGainsDBArray = "rightFinalGainsDBArray," + eHAP1_rightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsDBArray = "leftFinalGainsDBArray," + eHAP1_leftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsDBArray = "finalStoredRightFinalGainsDBArray," + eHAP1_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsDBArray = "finalStoredleftFinalGainsDBArray," + eHAP1_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+//Added Above
+        
          do {
              let csvEHAP1LRSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1LRSummaryDocumentsDirectory = csvEHAP1LRSummaryPath
@@ -2542,6 +2776,13 @@ extension EHATTSTestPart1Content {
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
+     
+//Added Below
+             try writer.write(row: [stringFinalrightFinalGainsDBArray])
+             try writer.write(row: [stringFinalleftFinalGainsDBArray])
+             try writer.write(row: [stringFinalStoredRightFinalGainsDBArray])
+             try writer.write(row: [stringFinalStoredleftFinalGainsDBArray])
+//Added Above
          } catch {
              print("CVSWriter Summary EHA Part 1 LR Summary Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -2550,6 +2791,12 @@ extension EHATTSTestPart1Content {
     func writeEHA1RightResultsToCSV() async {
         let stringFinalrightFinalGainsArray = "rightFinalGainsArray," + rightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = "finalStoredRightFinalGainsArray," + finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        
+//Added Below
+        let stringFinalrightFinalGainsDBArray = "rightFinalGainsDBArray," + eHAP1_rightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsDBArray = "finalStoredRightFinalGainsDBArray," + eHAP1_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+//Added Above
+
          do {
              let csvEHAP1RightSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1RightSummaryDocumentsDirectory = csvEHAP1RightSummaryPath
@@ -2557,6 +2804,12 @@ extension EHATTSTestPart1Content {
              let writer = try CSVWriter(fileURL: csvEHAP1RightSummaryFilePath, append: false)
              try writer.write(row: [stringFinalrightFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
+                          
+//Added Below
+             try writer.write(row: [stringFinalrightFinalGainsDBArray])
+             try writer.write(row: [stringFinalStoredRightFinalGainsDBArray])
+//Added Above
+             
          } catch {
              print("CVSWriter Summary EHA Part 1 Right Summary Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -2565,6 +2818,12 @@ extension EHATTSTestPart1Content {
     func writeEHA1LeftResultsToCSV() async {
         let stringFinalleftFinalGainsArray = "leftFinalGainsArray," + leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = "finalStoredleftFinalGainsArray," + finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+
+//Added Below
+        let stringFinalleftFinalGainsDBArray = "leftFinalGainsDBArray," + eHAP1_leftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsDBArray = "finalStoredleftFinalGainsDBArray," + eHAP1_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+//Added Above
+        
          do {
              let csvEHAP1LeftSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1LeftSummaryDocumentsDirectory = csvEHAP1LeftSummaryPath
@@ -2572,6 +2831,12 @@ extension EHATTSTestPart1Content {
              let writer = try CSVWriter(fileURL: csvEHAP1LeftSummaryFilePath, append: false)
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
+             
+//Added Below
+             try writer.write(row: [stringFinalleftFinalGainsDBArray])
+             try writer.write(row: [stringFinalStoredleftFinalGainsDBArray])
+//Added Above
+             
          } catch {
              print("CVSWriter Summary EHA Part 1 Left Summary Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -2582,6 +2847,14 @@ extension EHATTSTestPart1Content {
         let stringFinalleftFinalGainsArray = leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
+
+//Added Below
+        let stringFinalrightFinalGainsDBArray = eHAP1_rightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalleftFinalGainsDBArray = eHAP1_leftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsDBArray = eHAP1_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsDBArray = eHAP1_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+//Added Above
+        
          do {
              let csvEHAP1InputLRSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1InputLRSummaryDocumentsDirectory = csvEHAP1InputLRSummaryPath
@@ -2593,6 +2866,14 @@ extension EHATTSTestPart1Content {
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
 //                 print("CVS Summary EHA Part 1 LR Input Data Writer Success")
+     
+//Added Below
+             try writer.write(row: [stringFinalrightFinalGainsDBArray])
+             try writer.write(row: [stringFinalleftFinalGainsDBArray])
+             try writer.write(row: [stringFinalStoredRightFinalGainsDBArray])
+             try writer.write(row: [stringFinalStoredleftFinalGainsDBArray])
+//Added Above
+             
          } catch {
              print("CVSWriter Summary EHA Part 1 LR Input Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -2601,6 +2882,12 @@ extension EHATTSTestPart1Content {
     func writeEHA1InputRightResultsToCSV() async {
         let stringFinalrightFinalGainsArray = rightFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredRightFinalGainsArray = finalStoredRightFinalGainsArray.map { String($0) }.joined(separator: ",")
+        
+//Added Below
+        let stringFinalrightFinalGainsDBArray = eHAP1_rightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredRightFinalGainsDBArray = eHAP1_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+//Added Above
+        
          do {
              let csvEHAP1InputRightSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1InputRightSummaryDocumentsDirectory = csvEHAP1InputRightSummaryPath
@@ -2608,6 +2895,12 @@ extension EHATTSTestPart1Content {
              let writer = try CSVWriter(fileURL: csvEHAP1InputRightSummaryFilePath, append: false)
              try writer.write(row: [stringFinalrightFinalGainsArray])
              try writer.write(row: [stringFinalStoredRightFinalGainsArray])
+             
+//Added Below
+             try writer.write(row: [stringFinalrightFinalGainsDBArray])
+             try writer.write(row: [stringFinalStoredRightFinalGainsDBArray])
+//Added Above
+             
          } catch {
              print("CVSWriter Summary EHA Part 1 Right Input Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -2616,7 +2909,13 @@ extension EHATTSTestPart1Content {
     func writeEHA1InputLeftResultsToCSV() async {
         let stringFinalleftFinalGainsArray = leftFinalGainsArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsArray = finalStoredleftFinalGainsArray.map { String($0) }.joined(separator: ",")
-         do {
+
+//Added Below
+        let stringFinalleftFinalGainsDBArray = eHAP1_leftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+        let stringFinalStoredleftFinalGainsDBArray = eHAP1_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
+//Added Above
+        
+        do {
              let csvEHAP1InputLeftSummaryPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
              let csvEHAP1InputLeftSummaryDocumentsDirectory = csvEHAP1InputLeftSummaryPath
              let csvEHAP1InputLeftSummaryFilePath = csvEHAP1InputLeftSummaryDocumentsDirectory.appendingPathComponent(inputEHAP1LeftSummaryCSVName)
@@ -2624,6 +2923,12 @@ extension EHATTSTestPart1Content {
              let writer = try CSVWriter(fileURL: csvEHAP1InputLeftSummaryFilePath, append: false)
              try writer.write(row: [stringFinalleftFinalGainsArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsArray])
+            
+//Added Below
+            try writer.write(row: [stringFinalleftFinalGainsDBArray])
+            try writer.write(row: [stringFinalStoredleftFinalGainsDBArray])
+//Added Above
+            
          } catch {
              print("CVSWriter Summary EHA Part 1 Left Input Data Error or Error Finding File for Detailed CSV \(error)")
          }
@@ -2700,6 +3005,11 @@ extension EHATTSTestPart1Content {
 
 extension EHATTSTestPart1Content {
 //MARK: Extension for Gain Link File Checking
+    
+    func gainHeadphoneAssigment() async {
+        eHAP1_AirPodsProGen2MaxDBArray.append(contentsOf: gainReferenceModel.maxDBEHAP1ReferenceAirPodsProGen2LR)
+            
+    }
     
     func gainCurveAssignment() async {
         if gainEHAP1SettingArrayLink == 2.5 {
