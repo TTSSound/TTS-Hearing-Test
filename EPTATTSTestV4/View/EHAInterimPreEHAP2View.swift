@@ -84,6 +84,8 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
     
     @State var nowShowSubmission: Bool = false
     
+  
+    
     var body: some View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
@@ -247,12 +249,12 @@ extension EHAInterimPreEHAP2Content {
     }
     
     func recheckPreEHAP2SystemVolume() async {
-        if audioSessionModel.audioSession.outputVolume == 0.63 {
+        if audioSessionModel.audioSession.outputVolume == 1.0 {
             volumePreEHAP2Correct = 1
             preEHAP2LinkColorIndex = 1
             preEHAP2VolumeSettingIndex = 1
         }
-        if audioSessionModel.audioSession.outputVolume >= 0.60 && audioSessionModel.audioSession.outputVolume <= 0.655 {
+        if audioSessionModel.audioSession.outputVolume >= 0.98 && audioSessionModel.audioSession.outputVolume <= 1.0 {
             volumePreEHAP2Correct = 2
             preEHAP2LinkColorIndex = 2
             preEHAP2VolumeSettingIndex = 2
