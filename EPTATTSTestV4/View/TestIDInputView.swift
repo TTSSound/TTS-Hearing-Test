@@ -186,6 +186,12 @@ extension TestIDInputContent {
             comparedLastName = inputLastName
             comparedUserLastName.append(comparedLastName)
             finalComparedLastName.append(contentsOf: comparedUserLastName)
+// Changed Below
+        } else if inputLastName != inputBetaLastName && inputBetaLastName != "" {
+            comparedLastName = inputBetaLastName
+            comparedUserLastName.append(comparedLastName)
+            finalComparedLastName.append(contentsOf: comparedUserLastName)
+//Changed Above
         } else {
             comparedLastName = "ErrorLastName"
             comparedUserLastName.append(comparedLastName)
