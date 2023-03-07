@@ -226,12 +226,12 @@ extension EHAInterimPostEPTAContent {
     }
     
     func recheckEHASystemVolume() async {
-        if audioSessionModel.audioSession.outputVolume == 0.63 {
+        if audioSessionModel.audioSession.outputVolume == 1.0 {
             volumeEHACorrect = 1
             ehaLinkColorIndex = 1
             ehaVolumeSettingIndex = 1
         }
-        if audioSessionModel.audioSession.outputVolume >= 0.60 && audioSessionModel.audioSession.outputVolume <= 0.655 {
+        if audioSessionModel.audioSession.outputVolume >= 0.98 && audioSessionModel.audioSession.outputVolume <= 1.0 {
             volumeEHACorrect = 2
             ehaLinkColorIndex = 2
             ehaVolumeSettingIndex = 2

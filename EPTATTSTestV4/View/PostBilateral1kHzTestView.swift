@@ -96,6 +96,10 @@ struct PostBilateral1kHzTestContent<Link: View>: View {
     let inputBetaEHACSVName = "EHA.csv"
     let inputBetaEPTACSVName = "EPTA.csv"
     
+    
+    @State var betaInputOnekHz_averageLowestGainDBRightArray = Float()
+    @State var betaInputOnekHz_averageLowestGainDBLeftArray = Float()
+    
     var body: some View {
         ZStack{
             colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
@@ -352,6 +356,50 @@ extension PostBilateral1kHzTestContent {
             print("betaUserBetterEar: \(betaUserBetterEar)")
         } else {
             print("!!!Fatal error in betaUserIntraEarDeltaGain() Logic")
+        }
+    }
+    
+    
+    
+    
+    
+    
+    func betaUserItrnaEarDeltaGainDB() async {
+        print("betaInputOnekHz_averageLowestGainDBLeftArray: \(betaInputOnekHz_averageLowestGainDBLeftArray)")
+        print("betaInputOnekHz_averageLowestGainDBRightArra: \(betaInputOnekHz_averageLowestGainDBRightArray)")
+        
+        if betaInputOnekHz_averageLowestGainDBRightArray > betaInputOnekHz_averageLowestGainDBLeftArray {
+            betaUserTestedIntraEarDelta = betaInputOnekHz_averageLowestGainRightArray - betaInputOnekHz_averageLowestGainLeftArray
+            betaUserTestedReferenceGain = betaInputOnekHz_averageLowestGainLeftArray
+            betaUserBetterEar = -1.0
+            print("betaUserTestedReferenceGain : \(betaUserTestedReferenceGain )")
+            print("betaUserBetterEar: \(betaUserBetterEar)")
+        } else if betaInputOnekHz_averageLowestGainDBRightArray <= betaInputOnekHz_averageLowestGainDBLeftArray {
+            betaUserTestedIntraEarDelta = betaInputOnekHz_averageLowestGainLeftArray - betaInputOnekHz_averageLowestGainRightArray
+            betaUserTestedReferenceGain = betaInputOnekHz_averageLowestGainRightArray
+            betaUserBetterEar = 1.0
+            print("betaUserTestedReferenceGain : \(betaUserTestedReferenceGain )")
+            print("betaUserBetterEar: \(betaUserBetterEar)")
+        } else {
+            print("!!!Fatal error in betaUserIntraEarDeltaGain() Logic")
+        }
+    }
+    
+    func compareBetaUserPhonGainsDB() async {
+        if phonGain > (betaUserTestedReferenceGain - 6) {
+            betaUserVPhonDiff = phonGain - (betaUserTestedReferenceGain - 6)
+            phonIsGreater = true
+            print("phonGain: \(phonGain)")
+            print("betaUserTestedReferenceGain: \(betaUserTestedReferenceGain)")
+        } else if phonGain < (betaUserTestedReferenceGain-6) {
+            betaUserVPhonDiff = (betaUserTestedReferenceGain-6) - phonGain
+            phonIsGreater = false
+            print("phonGain: \(phonGain)")
+            print("betaUserTestedReferenceGain: \(betaUserTestedReferenceGain)")
+        } else {
+            print("Critical Error in compareBetaUserPhonGains")
+            print("phonGain: \(phonGain)")
+            print("betaUserTestedReferenceGain: \(betaUserTestedReferenceGain)")
         }
     }
     
@@ -633,10 +681,16 @@ extension PostBilateral1kHzTestContent {
             let fieldOnekHz_HoldingLowestRightGainArray: String = results[row:3, column: 0]
             let fieldOnekHz_averageLowestGainLeftArray: String = results[row:4, column: 0]
             let fieldOnekHz_HoldingLowestLeftGainArray: String = results[row:5, column: 0]
+            
+            let fieldOnekHz_averageLowestGainDBRightArray: String = results[row:6, column: 0]
+            let fieldOnekHz_averageLowestGainDBLeftArray: String = results[row:8, column: 0]
+            
             print("fieldOnekHz_averageLowestGainRightArray: \(fieldOnekHz_averageLowestGainRightArray)")
             print("fieldOnekHz_HoldingLowestRightGainArray: \(fieldOnekHz_HoldingLowestRightGainArray)")
             print("fieldOnekHz_averageLowestGainLeftArray: \(fieldOnekHz_averageLowestGainLeftArray)")
             print("fieldOnekHz_HoldingLowestLeftGainArray: \(fieldOnekHz_HoldingLowestLeftGainArray)")
+            print("fieldOnekHz_averageLowestGainDBRightArray: \(fieldOnekHz_averageLowestGainDBRightArray)")
+            print("fieldOnekHz_averageLowestGainDBLeftArray: \(fieldOnekHz_averageLowestGainDBLeftArray)")
             
             let inputOnekHz_averageLowestGainRightArry = Float(fieldOnekHz_averageLowestGainRightArray)
             betaInputOnekHz_averageLowestGainRightArray = inputOnekHz_averageLowestGainRightArry ?? -99.9
@@ -650,6 +704,13 @@ extension PostBilateral1kHzTestContent {
             let inputOnekHz_HoldingLowestLeftGainArry = Float(fieldOnekHz_HoldingLowestLeftGainArray)
             betaInputOnekHz_HoldingLowestLeftGainArray = inputOnekHz_HoldingLowestLeftGainArry ?? -99.9
             
+            let inputOnekHz_averageLowestGainDBRightArry = Float(fieldOnekHz_averageLowestGainDBRightArray)
+            betaInputOnekHz_averageLowestGainDBRightArray = inputOnekHz_averageLowestGainDBRightArry ?? -99.9
+            
+            let inputOnekHz_HoldingLowestLeftGainDBArry = Float(fieldOnekHz_averageLowestGainDBLeftArray)
+            betaInputOnekHz_averageLowestGainDBLeftArray = inputOnekHz_HoldingLowestLeftGainDBArry ?? -99.9
+            
+            
             print("inputOnekHz_averageGainRightArray1: \(betaInputOnekHz_averageGainRightArray1)")
             print("inputOnekHz_averageGainRightArray2: \(betaInputOnekHz_averageGainRightArray2)")
             print("inputOnekHz_averageGainRightArray3: \(betaInputOnekHz_averageGainRightArray3)")
@@ -662,6 +723,8 @@ extension PostBilateral1kHzTestContent {
             print("inputOnekHz_HoldingLowestRightGainArray: \(betaInputOnekHz_HoldingLowestRightGainArray)")
             print("inputOnekHz_averageLowestGainLeftArray: \(betaInputOnekHz_averageLowestGainLeftArray)")
             print("inputOnekHz_HoldingLowestLeftGainArray: \(betaInputOnekHz_HoldingLowestLeftGainArray)")
+            print("betaInputOnekHz_averageLowestGainDBRightArray: \(betaInputOnekHz_averageLowestGainDBRightArray)")
+            print("betaInputOnekHz_averageLowestGainDBLeftArray: \(betaInputOnekHz_averageLowestGainDBLeftArray)")
         } catch {
             print("Error in reading onekHZ results")
         }

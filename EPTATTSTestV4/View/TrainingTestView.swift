@@ -367,167 +367,167 @@ struct TrainingTestContent<Link: View>: View {
                                 .padding(10)
                                 .foregroundColor(.clear)
                         })
-                        if trainingfullTestCompleted == false {
-                            VStack(alignment: .leading, spacing: 10){
-                                Toggle(isOn: $showQoSThreads) {
-                                    Text("Change Qos Threads")
-                                        .foregroundColor(.blue)
-                                }
-                                .padding(.leading, 10)
-                                .padding(.trailing, 10)
-                                .padding(.bottom, 10)
-                                if showQoSThreads == true {
-                                    HStack{
-                                        Toggle("Background", isOn: $qosBackground)
-                                            .foregroundColor(.white)
-                                            .font(.caption)
-                                        Spacer()
-                                        Toggle("Default", isOn: $qosDefault)
-                                            .foregroundColor(.white)
-                                            .font(.caption)
-                                        Spacer()
-                                    }
-                                    .padding(.leading, 10)
-                                    .padding(.bottom, 10)
-                                    HStack{
-                                        Toggle("UserInteractive", isOn: $qosUserInteractive)
-                                            .foregroundColor(.white)
-                                            .font(.caption)
-                                        Spacer()
-                                        Toggle("UserInitiated", isOn: $qosUserInitiated)
-                                            .foregroundColor(.white)
-                                            .font(.caption)
-                                        Spacer()
-                                    }
-                                    .padding(.leading, 10)
-                                    .padding(.bottom, 10)
-                                }
-                            }
-                            .onChange(of: qosBackground) { backgroundValue in
-                                if backgroundValue == true {
-                                    qosBackground = true
-                                    qosDefault = false
-                                    qosUserInteractive = false
-                                    qosUserInitiated = false
-                                    qualityOfService = 1
-                                }
-                            }
-                            .onChange(of: qosDefault) { defaultValue in
-                                if defaultValue == true {
-                                    qosBackground = false
-                                    qosDefault = true
-                                    qosUserInteractive = false
-                                    qosUserInitiated = false
-                                    qualityOfService = 2
-                                }
-                            }
-                            .onChange(of: qosUserInteractive) { interactiveValue in
-                                if interactiveValue == true {
-                                    qosBackground = false
-                                    qosDefault = false
-                                    qosUserInteractive = true
-                                    qosUserInitiated = false
-                                    qualityOfService = 3
-                                }
-                            }
-                            .onChange(of: qosUserInitiated) { initiatedValue in
-                                if initiatedValue == true {
-                                    qosBackground = false
-                                    qosDefault = false
-                                    qosUserInteractive = false
-                                    qosUserInitiated = true
-                                    qualityOfService = 4
-                                }
-                            }
-                        }
-                        
-                        if trainingfullTestCompleted == false {
-                            VStack{
-                                Toggle(isOn: $changeSampleArray) {
-                                    Text("ChangeSampleType")
-                                        .foregroundColor(.blue)
-                                }
-                                .padding(.leading, 10)
-                                .padding(.trailing, 10)
-                                .padding(.bottom, 10)
-                                if changeSampleArray == true {
-                                    HStack{
-                                        Toggle("92/24\nStd", isOn: $highResStandard)
-                                            .foregroundColor(.white)
-                                            .font(.caption)
-                                        Spacer()
-                                        Toggle("92/24\nFaded", isOn: $highResFaded)
-                                            .foregroundColor(.white)
-                                            .font(.caption)
-                                        Spacer()
-                                        Toggle("48/16\nFaded", isOn: $cdFadedDithered)
-                                            .foregroundColor(.white)
-                                            .font(.caption)
-                                        Spacer()
-                                    }
-                                    .padding(.leading, 10)
-                                    .padding(.bottom, 10)
-                                }
-                            }
-                            .onChange(of: changeSampleArray) { change in
-                                if change == true {
-                                    sampleArraySet = false
-                                } else if change == false {
-                                    sampleArraySet = true
-                                }
-                            }
-                            .onChange(of: highResStandard) { highResValue in
-                                sampleArraySet = false
-                                if highResValue == true && sampleArraySet == false {
-                                    //remove array values
-                                    training_samples.removeAll()
-                                    //set other toggles to fales
-                                    highResFaded = false
-                                    cdFadedDithered = false
-                                    sampleArraySet = true
-                                    //append new highresstd values
-                                    training_samples.append(contentsOf: highResStdSamples)
-                                    print("training_samples: \(training_samples)")
-                                }
-
-                            }
-                            .onChange(of: highResFaded) { highResFadedValue in
-                                sampleArraySet = false
-                                if highResFadedValue == true && sampleArraySet == false {
-                                    //remove array values
-                                    training_samples.removeAll()
-                                    //set other toggles to fales
-                                    highResStandard = false
-                                    cdFadedDithered = false
-                                    sampleArraySet = true
-                                    //append new highresstd values
-                                    training_samples.append(contentsOf: highResFadedSamples)
-                                    print("training_samples: \(training_samples)")
-                                }
-                            }
-                            .onChange(of: cdFadedDithered) { cdFadedDitheredValue in
-                                sampleArraySet = false
-                                if cdFadedDitheredValue == true && sampleArraySet == false {
-                                    //remove array values
-                                    training_samples.removeAll()
-                                    //set other toggles to fales
-                                    highResStandard = false
-                                    highResFaded = false
-                                    sampleArraySet = true
-                                    //append new highresstd values
-                                    training_samples.append(contentsOf: cdFadedDitheredSamples)
-                                    print("training_samples: \(training_samples)")
-                                }
-                            }
-                        }
+//                        if trainingfullTestCompleted == false {
+//                            VStack(alignment: .leading, spacing: 10){
+//                                Toggle(isOn: $showQoSThreads) {
+//                                    Text("Change Qos Threads")
+//                                        .foregroundColor(.blue)
+//                                }
+//                                .padding(.leading, 10)
+//                                .padding(.trailing, 10)
+//                                .padding(.bottom, 10)
+//                                if showQoSThreads == true {
+//                                    HStack{
+//                                        Toggle("Background", isOn: $qosBackground)
+//                                            .foregroundColor(.white)
+//                                            .font(.caption)
+//                                        Spacer()
+//                                        Toggle("Default", isOn: $qosDefault)
+//                                            .foregroundColor(.white)
+//                                            .font(.caption)
+//                                        Spacer()
+//                                    }
+//                                    .padding(.leading, 10)
+//                                    .padding(.bottom, 10)
+//                                    HStack{
+//                                        Toggle("UserInteractive", isOn: $qosUserInteractive)
+//                                            .foregroundColor(.white)
+//                                            .font(.caption)
+//                                        Spacer()
+//                                        Toggle("UserInitiated", isOn: $qosUserInitiated)
+//                                            .foregroundColor(.white)
+//                                            .font(.caption)
+//                                        Spacer()
+//                                    }
+//                                    .padding(.leading, 10)
+//                                    .padding(.bottom, 10)
+//                                }
+//                            }
+//                            .onChange(of: qosBackground) { backgroundValue in
+//                                if backgroundValue == true {
+//                                    qosBackground = true
+//                                    qosDefault = false
+//                                    qosUserInteractive = false
+//                                    qosUserInitiated = false
+//                                    qualityOfService = 1
+//                                }
+//                            }
+//                            .onChange(of: qosDefault) { defaultValue in
+//                                if defaultValue == true {
+//                                    qosBackground = false
+//                                    qosDefault = true
+//                                    qosUserInteractive = false
+//                                    qosUserInitiated = false
+//                                    qualityOfService = 2
+//                                }
+//                            }
+//                            .onChange(of: qosUserInteractive) { interactiveValue in
+//                                if interactiveValue == true {
+//                                    qosBackground = false
+//                                    qosDefault = false
+//                                    qosUserInteractive = true
+//                                    qosUserInitiated = false
+//                                    qualityOfService = 3
+//                                }
+//                            }
+//                            .onChange(of: qosUserInitiated) { initiatedValue in
+//                                if initiatedValue == true {
+//                                    qosBackground = false
+//                                    qosDefault = false
+//                                    qosUserInteractive = false
+//                                    qosUserInitiated = true
+//                                    qualityOfService = 4
+//                                }
+//                            }
+//                        }
+//
+//                        if trainingfullTestCompleted == false {
+//                            VStack{
+//                                Toggle(isOn: $changeSampleArray) {
+//                                    Text("ChangeSampleType")
+//                                        .foregroundColor(.blue)
+//                                }
+//                                .padding(.leading, 10)
+//                                .padding(.trailing, 10)
+//                                .padding(.bottom, 10)
+//                                if changeSampleArray == true {
+//                                    HStack{
+//                                        Toggle("92/24\nStd", isOn: $highResStandard)
+//                                            .foregroundColor(.white)
+//                                            .font(.caption)
+//                                        Spacer()
+//                                        Toggle("92/24\nFaded", isOn: $highResFaded)
+//                                            .foregroundColor(.white)
+//                                            .font(.caption)
+//                                        Spacer()
+//                                        Toggle("48/16\nFaded", isOn: $cdFadedDithered)
+//                                            .foregroundColor(.white)
+//                                            .font(.caption)
+//                                        Spacer()
+//                                    }
+//                                    .padding(.leading, 10)
+//                                    .padding(.bottom, 10)
+//                                }
+//                            }
+//                            .onChange(of: changeSampleArray) { change in
+//                                if change == true {
+//                                    sampleArraySet = false
+//                                } else if change == false {
+//                                    sampleArraySet = true
+//                                }
+//                            }
+//                            .onChange(of: highResStandard) { highResValue in
+//                                sampleArraySet = false
+//                                if highResValue == true && sampleArraySet == false {
+//                                    //remove array values
+//                                    training_samples.removeAll()
+//                                    //set other toggles to fales
+//                                    highResFaded = false
+//                                    cdFadedDithered = false
+//                                    sampleArraySet = true
+//                                    //append new highresstd values
+//                                    training_samples.append(contentsOf: highResStdSamples)
+//                                    print("training_samples: \(training_samples)")
+//                                }
+//
+//                            }
+//                            .onChange(of: highResFaded) { highResFadedValue in
+//                                sampleArraySet = false
+//                                if highResFadedValue == true && sampleArraySet == false {
+//                                    //remove array values
+//                                    training_samples.removeAll()
+//                                    //set other toggles to fales
+//                                    highResStandard = false
+//                                    cdFadedDithered = false
+//                                    sampleArraySet = true
+//                                    //append new highresstd values
+//                                    training_samples.append(contentsOf: highResFadedSamples)
+//                                    print("training_samples: \(training_samples)")
+//                                }
+//                            }
+//                            .onChange(of: cdFadedDithered) { cdFadedDitheredValue in
+//                                sampleArraySet = false
+//                                if cdFadedDitheredValue == true && sampleArraySet == false {
+//                                    //remove array values
+//                                    training_samples.removeAll()
+//                                    //set other toggles to fales
+//                                    highResStandard = false
+//                                    highResFaded = false
+//                                    sampleArraySet = true
+//                                    //append new highresstd values
+//                                    training_samples.append(contentsOf: cdFadedDitheredSamples)
+//                                    print("training_samples: \(training_samples)")
+//                                }
+//                            }
+//                        }
                         
                         if trainingfullTestCompleted == false {
                             Spacer()
-                            Text("Next you will get a chance to experience what taking the test is like. You will hear a tone playing. Whenever you hear a tone playing, press the green button to indicate you have heard the tone.")
-                                .foregroundColor(.white)
-                                .font(.title)
-                                .padding()
-                            Spacer()
+//                            Text("Next you will get a chance to experience what taking the test is like. You will hear a tone playing. Whenever you hear a tone playing, press the green button to indicate you have heard the tone.")
+//                                .foregroundColor(.white)
+//                                .font(.title)
+//                                .padding()
+//                            Spacer()
                             HStack{
                                 Spacer()
                                 Text("Let's continue")
@@ -542,12 +542,12 @@ struct TrainingTestContent<Link: View>: View {
                                 Spacer()
                             }
                         } else if trainingfullTestCompleted == true {
-                            Spacer()
-                            Text("Hopefully, you now have an idea of what you will hear and how to respond.")
-                                .foregroundColor(.white)
-                                .font(.title)
-                                .padding()
-                            Spacer()
+//                            Spacer()
+//                            Text("Hopefully, you now have an idea of what you will hear and how to respond.")
+//                                .foregroundColor(.white)
+//                                .font(.title)
+//                                .padding()
+//                            Spacer()
                             Text("Let's proceed with the test.")
                                 .foregroundColor(.green)
                                 .font(.title)
