@@ -824,6 +824,7 @@ struct EHATTSTestPart1Content<Link: View>: View {
                                         //
                                         eHAP1_CurrentDB = eHAP1_StartingDB
                                         eHAP1_NewTargetDB = eHAP1_CurrentDB
+                                        eHAP1_testGainDB = eHAP1_CurrentDB
                                         envDataObjectModel_testGain = powf(10.0, ((eHAP1_StartingDB - eHAP1_AirPodsProGen2MaxDB)/20))
                                         //
                                         //
@@ -1429,6 +1430,7 @@ extension EHATTSTestPart1Content {
     
     func dBToGain(eHAP1_NewTargetDB: Float) async {
         envDataObjectModel_testGain = powf(10.0, ((eHAP1_NewTargetDB - eHAP1_AirPodsProGen2MaxDB)/20))
+        eHAP1_testGainDB = eHAP1_NewTargetDB
     }
     
     
@@ -1932,8 +1934,8 @@ extension EHATTSTestPart1Content {
             self.firstGain = envDataObjectModel_reversalGain[firstHeardResponseIndex-1]
             self.secondGain = envDataObjectModel_reversalGain[secondHeardResponseIndex-1]
             
-            eHAP1firstGainDB = eHAP1_reversalGainDB[firstHeardResponseIndex-1]
-            eHAP1secondGainDB = eHAP1_reversalGainDB[secondHeardResponseIndex-1]
+            self.eHAP1firstGainDB = eHAP1_reversalGainDB[firstHeardResponseIndex-1]
+            self.eHAP1secondGainDB = eHAP1_reversalGainDB[secondHeardResponseIndex-1]
             
             print("!!!Reversal Limit Hit, Prepare For Next Test Cycle!!!")
             
@@ -2264,12 +2266,14 @@ extension EHATTSTestPart1Content {
             startTooHigh = 0
             localSeriesNoResponses = Int()
 
+            firstGain = Float()
+            secondGain = Float()
 // Added Below
             eHAP1_reversalGainDB.removeAll()
             eHAP1_averageGainDB = Float()
             
-//            eHAP1firstGainDB = Float()    //Added these in, difference from EHAP1
-//            eHAP1secondGainDB = Float()   //Added these in, difference from EHAP1
+            eHAP1firstGainDB = Float()    //Added these in, difference from EHAP1
+            eHAP1secondGainDB = Float()   //Added these in, difference from EHAP1
             
             print("eHAP1_reversalGainDB: \(eHAP1_reversalGainDB)")
 // Added Above

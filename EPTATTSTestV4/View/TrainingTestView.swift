@@ -107,7 +107,7 @@ struct TrainingTestContent<Link: View>: View {
     @State private var highResFadedSamples: [String] = ["FSample0", "FSample1"]
     @State private var cdFadedDitheredSamples: [String] = ["FDSample0", "FDSample1"]
     @State var training_index: Int = 0
-    @State var training_testGain: Float = 0.2
+    @State var training_testGain: Float = 0.0015
     @State var training_heardArray: [Int] = [Int]()
     @State var training_indexForTest = [Int]()
     @State var training_testCount: [Int] = [Int]()
@@ -344,6 +344,14 @@ struct TrainingTestContent<Link: View>: View {
                 //append highresstd to array
                 training_samples.append(contentsOf: highResStdSamples)
                 sampleArraySet = true
+                //
+                //
+                //
+                trainingTestCompleted = true
+                //
+                //
+                //
+                
                 print("training_samples: \(training_samples)")
             })
             .fullScreenCover(isPresented: $trainingshowTestCompletionSheet, content: {
@@ -753,7 +761,7 @@ extension TrainingTestContent {
         traininglocalMarkNewTestCycle = 0
         traininglocalReversalEnd = 0
         training_index = training_index
-        training_testGain = 0.2       // Add code to reset starting test gain by linking to table of expected HL
+        training_testGain = 0.0015       // Add code to reset starting test gain by linking to table of expected HL
         trainingtestIsPlaying = false
         traininglocalPlaying = 0
         training_testCount.removeAll()
@@ -1011,7 +1019,7 @@ extension TrainingTestContent {
     }
     
     func trainingreversalOfOne() async {
-        let trainingrO1Direction = 0.01 * training_reversalDirection
+        let trainingrO1Direction = 0.001 * training_reversalDirection
         let trainingr01NewGain = training_testGain + trainingrO1Direction
         if trainingr01NewGain > 0.00001 && trainingr01NewGain < 1.0 {
             training_testGain = roundf(trainingr01NewGain * 100000) / 100000
@@ -1027,7 +1035,7 @@ extension TrainingTestContent {
     }
     
     func trainingreversalOfTwo() async {
-        let trainingrO2Direction = 0.02 * training_reversalDirection
+        let trainingrO2Direction = 0.002 * training_reversalDirection
         let trainingr02NewGain = training_testGain + trainingrO2Direction
         if trainingr02NewGain > 0.00001 && trainingr02NewGain < 1.0 {
             training_testGain = roundf(trainingr02NewGain * 100000) / 100000
@@ -1043,7 +1051,7 @@ extension TrainingTestContent {
     }
     
     func trainingreversalOfThree() async {
-        let trainingrO3Direction = 0.03 * training_reversalDirection
+        let trainingrO3Direction = 0.003 * training_reversalDirection
         let trainingr03NewGain = training_testGain + trainingrO3Direction
         if trainingr03NewGain > 0.00001 && trainingr03NewGain < 1.0 {
             training_testGain = roundf(trainingr03NewGain * 100000) / 100000
@@ -1059,7 +1067,7 @@ extension TrainingTestContent {
     }
     
     func trainingreversalOfFour() async {
-        let trainingrO4Direction = 0.04 * training_reversalDirection
+        let trainingrO4Direction = 0.004 * training_reversalDirection
         let trainingr04NewGain = training_testGain + trainingrO4Direction
         if trainingr04NewGain > 0.00001 && trainingr04NewGain < 1.0 {
             training_testGain = roundf(trainingr04NewGain * 100000) / 100000
@@ -1075,7 +1083,7 @@ extension TrainingTestContent {
     }
     
     func trainingreversalOfFive() async {
-        let trainingrO5Direction = 0.05 * training_reversalDirection
+        let trainingrO5Direction = 0.005 * training_reversalDirection
         let trainingr05NewGain = training_testGain + trainingrO5Direction
         if trainingr05NewGain > 0.00001 && trainingr05NewGain < 1.0 {
             training_testGain = roundf(trainingr05NewGain * 100000) / 100000
@@ -1091,7 +1099,7 @@ extension TrainingTestContent {
     }
     
     func trainingreversalOfTen() async {
-        let trainingr10Direction = 0.10 * training_reversalDirection
+        let trainingr10Direction = 0.007 * training_reversalDirection
         let trainingr10NewGain = training_testGain + trainingr10Direction
         if trainingr10NewGain > 0.00001 && trainingr10NewGain < 1.0 {
             training_testGain = roundf(trainingr10NewGain * 100000) / 100000
