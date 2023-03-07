@@ -767,7 +767,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                                     onekHzshowTestCompletionSheet.toggle()
                                     onekHz_CurrentDB = onekHz_StartingDB
                                     onekHz_NewTargetDB = onekHz_CurrentDB
-                                    onekHz_testTestGainDB = onekHz_CurrentDB
+                                    onekHz_testGainDB = onekHz_CurrentDB
                                     onekHz_testGain = powf(10.0, ((onekHz_StartingDB - onekHz_AirPodsProGen2MaxDB)/20))
 // Change Add Below
 //                                    Task(priority: .userInitiated) {
