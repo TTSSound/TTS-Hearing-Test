@@ -678,6 +678,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
     @State private var qosUserInteractive: Bool = false
     @State private var qosUserInitiated: Bool = false
     
+    @State private var showDataValues: Bool = false
     
     var body: some View {
         ZStack{
@@ -685,6 +686,16 @@ struct EHATTSTestPart2Content<Link: View>: View {
             VStack {
                 HStack{
                     VStack{
+            
+                            Toggle(isOn: $showDataValues) {
+                                Text("ShowDataValues")
+                                    .foregroundColor(.blue)
+                            }
+                            .padding(.top, 40)
+                            .padding(.leading, 10)
+                            .padding(.trailing, 10)
+                            .padding(.bottom,20)
+                        
                         if ehaP2fullTestCompleted == false {
                             HStack{
                                 Text("EHA Part 2 Test Cycle \(ehaP2TestingPhases)")
@@ -694,39 +705,41 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                     .foregroundColor(.white)
                             }
                             
-                            HStack{
-                                Spacer()
-                                Text("CurrentDB: \(ehaP2_CurrentDB)")
-                                Spacer()
-                                Text("NewTargetDB: \(ehaP2_NewTargetDB)")
-                                Spacer()
+                            if showDataValues == true {
+                                HStack{
+                                    Spacer()
+                                    Text("CurrentDB: \(ehaP2_CurrentDB)")
+                                    Spacer()
+                                    Text("NewTargetDB: \(ehaP2_NewTargetDB)")
+                                    Spacer()
+                                }
+                                .font(.caption)
+                                .foregroundColor(.white)
+                                .padding(.top, 5)
+                                .padding(.bottom, 5)
+                                
+                                HStack{
+                                    Spacer()
+                                    Text("testGainDB: \(ehaP2_testGainDB)")
+                                    Spacer()
+                                    Text("StepSizeDB: \(ehaP2_StepSizeDB)")
+                                    Spacer()
+                                }
+                                .font(.caption)
+                                .foregroundColor(.white)
+                                .padding(.top, 5)
+                                .padding(.bottom, 5)
+                                
+                                HStack{
+                                    Spacer()
+                                    Text("testGain: \(ehaP2_testGain)")
+                                    Spacer()
+                                }
+                                .font(.caption)
+                                .foregroundColor(.white)
+                                .padding(.top, 5)
+                                .padding(.bottom, 20)
                             }
-                            .font(.caption)
-                            .foregroundColor(.white)
-                            .padding(.top, 5)
-                            .padding(.bottom, 5)
-                            
-                            HStack{
-                                Spacer()
-                                Text("testGainDB: \(ehaP2_testGainDB)")
-                                Spacer()
-                                Text("StepSizeDB: \(ehaP2_StepSizeDB)")
-                                Spacer()
-                            }
-                            .font(.caption)
-                            .foregroundColor(.white)
-                            .padding(.top, 5)
-                            .padding(.bottom, 5)
-                            
-                            HStack{
-                                Spacer()
-                                Text("testGain: \(ehaP2_testGain)")
-                                Spacer()
-                            }
-                            .font(.caption)
-                            .foregroundColor(.white)
-                            .padding(.top, 5)
-                            .padding(.bottom, 20)
                             
                         } else if ehaP2fullTestCompleted == true {
                             NavigationLink("Test Phase Complete, Press To Continue", destination: PostEHATestView(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting))
@@ -1270,7 +1283,16 @@ struct EHATTSTestPart2Content<Link: View>: View {
                     await dBToGain(ehaP2_NewTargetDB: ehaP2_NewTargetDB)    // This will set _testGain
                     
                     gainEHAP2PhonIsSet = true
-                    highResStandard = true
+                    
+                    
+                    cdFadedDithered = true
+                    
+                    qosBackground = false
+                    qosDefault = false
+                    qosUserInteractive = true
+                    qosUserInitiated = false
+                    qualityOfService = 3
+//                    highResStandard = true
                     //append highresstd to array
                     ehaP2_dualSamples.append(contentsOf: cdFadedDitheredSamples)
                     ehaP2_monoSamples.append(contentsOf: cdFadedDitheredMonoSamples)

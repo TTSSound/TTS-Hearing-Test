@@ -384,18 +384,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     @State private var qosUserInteractive: Bool = false
     @State private var qosUserInitiated: Bool = false
     
-    
-// To Add To View
-//
-// onekHz_testGain
-// onekHz_testGainDB
-// onekHz_PriorDB
-// onekHz_CurrentDB
-// onekHz_StepSizeDB
-// onekHz_NewTargetDB
-//
-// onekHz_testGainDB
-// onekHz_reversalGainDB
+    @State private var showDataValues: Bool = false
     
     var body: some View {
         ZStack{
@@ -405,6 +394,16 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                 HStack{
                     if bilateral1kHzTestCompleted == false {
                         VStack{
+                            
+                            Toggle(isOn: $showDataValues) {
+                                Text("ShowDataValues")
+                                    .foregroundColor(.blue)
+                            }
+                            .padding(.top, 40)
+                            .padding(.leading, 10)
+                            .padding(.trailing, 10)
+                            .padding(.bottom,20)
+                            
                             HStack{
                                 Spacer()
                                 Text("Bilateral 1kHz Test")
@@ -416,39 +415,41 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                             .padding(.top, 20)
                             .padding(.bottom, 10)
                             
-                            HStack{
-                                Spacer()
-                                Text("CurrentDB: \(onekHz_CurrentDB)")
-                                Spacer()
-                                Text("NewTargetDB: \(onekHz_NewTargetDB)")
-                                Spacer()
+                            if showDataValues == true {
+                                HStack{
+                                    Spacer()
+                                    Text("CurrentDB: \(onekHz_CurrentDB)")
+                                    Spacer()
+                                    Text("NewTargetDB: \(onekHz_NewTargetDB)")
+                                    Spacer()
+                                }
+                                .font(.caption)
+                                .foregroundColor(.white)
+                                .padding(.top, 5)
+                                .padding(.bottom, 5)
+                                
+                                HStack{
+                                    Spacer()
+                                    Text("testGainDB: \(onekHz_testGainDB)")
+                                    Spacer()
+                                    Text("StepSizeDB: \(onekHz_StepSizeDB)")
+                                    Spacer()
+                                }
+                                .font(.caption)
+                                .foregroundColor(.white)
+                                .padding(.top, 5)
+                                .padding(.bottom, 5)
+                                
+                                HStack{
+                                    Spacer()
+                                    Text("testGain: \(onekHz_testGain)")
+                                    Spacer()
+                                }
+                                .font(.caption)
+                                .foregroundColor(.white)
+                                .padding(.top, 5)
+                                .padding(.bottom, 20)
                             }
-                            .font(.caption)
-                            .foregroundColor(.white)
-                            .padding(.top, 5)
-                            .padding(.bottom, 5)
-                            
-                            HStack{
-                                Spacer()
-                                Text("testGainDB: \(onekHz_testGainDB)")
-                                Spacer()
-                                Text("StepSizeDB: \(onekHz_StepSizeDB)")
-                                Spacer()
-                            }
-                            .font(.caption)
-                            .foregroundColor(.white)
-                            .padding(.top, 5)
-                            .padding(.bottom, 5)
-                            
-                            HStack{
-                                Spacer()
-                                Text("testGain: \(onekHz_testGain)")
-                                Spacer()
-                            }
-                            .font(.caption)
-                            .foregroundColor(.white)
-                            .padding(.top, 5)
-                            .padding(.bottom, 20)
                         }
                     } else if bilateral1kHzTestCompleted == true {
                         NavigationLink("Test Phase Complete. Continue.", destination: PostBilateral1kHzTestView(testing: testing, relatedLinkTesting: relatedLinkTesting))
@@ -832,7 +833,14 @@ struct Bilateral1kHzTestContent<Link: View>: View {
             Task{
                 await comparedLastNameCSVReader()
             }
-            highResStandard = true
+            
+            cdFadedDithered = true
+            qosBackground = false
+            qosDefault = false
+            qosUserInteractive = true
+            qosUserInitiated = false
+            qualityOfService = 3
+            
             //append highresstd to array
             onekHz_samples.append(contentsOf: highResStdSamples)
             sampleArraySet = true

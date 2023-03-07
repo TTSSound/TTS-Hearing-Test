@@ -18,7 +18,7 @@ struct NavigationView: View {
     @StateObject var colorModel = ColorModel()
     @State var selectedTab: Int = 0
     
-    @State var firstTestingTabEnabled: Bool = false
+    @State var firstTestingTabEnabled: Bool = true
     @State var firstTestingTabValueArray = [nil, EPTATTSTestV4.Testing(id: 8.0, name: "Beta Testing Home", related: [])]
     @State var firstTestingTabValue = EPTATTSTestV4.Testing(id: 0.0, name: "", related: [])
     
@@ -89,7 +89,7 @@ struct NavigationView: View {
                         }
                     }
                     .padding(.bottom, 20)
-                    Text("1. Setup Tab\n2. 1st Testing Tab\n3. 2nd Testing Tab\n4. Results Tab")
+                    Text("1. IGNORE the Setup Tab\n2. Start With 1st Testing Tab\n3. Then Access 2nd Testing Tab\n4. IGNORE Results Tab")
                         .foregroundColor(.green)
                         .padding(.leading)
                         .padding(.bottom, 20)
@@ -158,7 +158,7 @@ struct NavigationView: View {
                             Text("Enable Results")
                         }
                         .frame(width: 200, height: 50, alignment: .center)
-                        .background(colorModel.tiffanyBlue)
+                        .background(Color.red)
                         .foregroundColor(.white)
                         .cornerRadius(24)
                         .onChange(of: closingTabEnabled) { newValue in
@@ -256,9 +256,13 @@ struct NavigationView: View {
             }
             .tabItem {
                 Image(systemName: "arrowshape.zigzag.right.fill")
-                    .accentColor(.blue)
-                Text("1. Setup")
-                    .foregroundColor(.blue)
+                    .foregroundColor(.red)
+                    .background(Color.red)
+//                    .accentColor(.blue)
+                Text("Ignore")
+                    .foregroundColor(.red)
+                    .background(Color.red)
+//                    .foregroundColor(.blue)
             }
             .tag(1)
             
@@ -305,7 +309,7 @@ struct NavigationView: View {
             .tabItem {
                 Image(systemName: "ear.fill")
                     .accentColor(colorModel.tiffanyBlue)
-                Text("2. 1st Testing")
+                Text("1. 1st Testing")
                     .foregroundColor(colorModel.proceedColor)
                     .background(colorModel.proceedColor)
                     .font(.caption)
@@ -338,7 +342,7 @@ struct NavigationView: View {
             .tabItem {
                 Image(systemName: "ear.and.waveform")
                     .accentColor(colorModel.tiffanyBlue)
-                Text("3. 2nd Testing")
+                Text("2. 2nd Testing")
                     .foregroundColor(colorModel.proceedColor)
                     .background(colorModel.proceedColor)
                     .font(.caption)
@@ -373,7 +377,7 @@ struct NavigationView: View {
                 Image(systemName: "list.bullet.clipboard.fill")
                     .foregroundColor(.blue)
                     .background(Color.blue)
-                Text("4. Results")
+                Text("Ignore")
                     .foregroundColor(.blue)
                     .background(Color.blue)
             }
