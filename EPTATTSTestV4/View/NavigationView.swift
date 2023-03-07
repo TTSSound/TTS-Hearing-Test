@@ -278,21 +278,21 @@ struct NavigationView: View {
                                 .foregroundColor(.white)
                                 .cornerRadius(24)
                                 .hoverEffect()
-//                                .navigationDestination(for: Testing.self) { testing in
-//                                    BetaTestingLandingView(testing: testing, relatedLinkTesting: linkTesting)
-//                                }
-                            Spacer()
-                            NavigationLink("Test Phase 1", value: EPTATTSTestV4.Testing(id: 12.0, name: "EPTA EHAP1 Test", related: []))
-                                .font(.title)
-                                .padding()
-                                .frame(width: 300, height: 100, alignment: .center)
-                                .background(colorModel.tiffanyBlue)
-                                .foregroundColor(.white)
-                                .cornerRadius(24)
-                                .hoverEffect()
                                 .navigationDestination(for: Testing.self) { testing in
-                                    EHATTSTestPart1View(testing: testing, relatedLinkTesting: linkTesting)
+                                    BetaTestingLandingView(testing: testing, relatedLinkTesting: linkTesting)
                                 }
+//                            Spacer()
+//                            NavigationLink("Test Phase 1", value: EPTATTSTestV4.Testing(id: 12.0, name: "EPTA EHAP1 Test", related: []))
+//                                .font(.title)
+//                                .padding()
+//                                .frame(width: 300, height: 100, alignment: .center)
+//                                .background(colorModel.tiffanyBlue)
+//                                .foregroundColor(.white)
+//                                .cornerRadius(24)
+//                                .hoverEffect()
+//                                .navigationDestination(for: Testing.self) { testing in
+//                                    EHATTSTestPart1View(testing: testing, relatedLinkTesting: linkTesting)
+//                                }
                             Spacer()
                         }
                     } else {

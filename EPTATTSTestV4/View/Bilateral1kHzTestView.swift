@@ -767,6 +767,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                                     onekHzshowTestCompletionSheet.toggle()
                                     onekHz_CurrentDB = onekHz_StartingDB
                                     onekHz_NewTargetDB = onekHz_CurrentDB
+                                    onekHz_testTestGainDB = onekHz_CurrentDB
                                     onekHz_testGain = powf(10.0, ((onekHz_StartingDB - onekHz_AirPodsProGen2MaxDB)/20))
 // Change Add Below
 //                                    Task(priority: .userInitiated) {
@@ -1046,6 +1047,7 @@ extension Bilateral1kHzTestContent {
 
 //Added
         onekHz_averageGainDB = Float()
+        onekHz_testGainDB = onekHz_StartingDB
 //        Task(priority: .userInitiated) {
 //            onekHz_CurrentDB = onekHz_StartingDB
 //            onekHz_NewTargetDB = onekHz_StartingDB
@@ -1246,6 +1248,7 @@ extension Bilateral1kHzTestContent {
     
     func dBToGain(onekHz_NewTargetDB: Float) async {
         onekHz_testGain = powf(10.0, ((onekHz_NewTargetDB - onekHz_AirPodsProGen2MaxDB)/20))
+        onekHz_testGainDB = onekHz_NewTargetDB
     }
     
     
@@ -2010,6 +2013,7 @@ extension Bilateral1kHzTestContent {
             onekHz_StepSizeDB = 0.0
             onekHz_CurrentDB = onekHz_StartingDB
             onekHz_NewTargetDB = onekHz_StartingDB
+//            onekHz_testGainDB = onekHz_StartingDB
 //            onekHz_testGain = 0.025
             await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)
 // Changed Above
