@@ -506,6 +506,8 @@ struct EHATTSTestPart1Content<Link: View>: View {
                                     Spacer()
                                     Text("testGain: \(envDataObjectModel_testGain)")
                                     Spacer()
+                                    Text("Sample: \(activeFrequency)")
+                                    Spacer()
                                 }
                                 .font(.caption)
                                 .foregroundColor(.white)

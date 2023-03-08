@@ -734,6 +734,8 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                     Spacer()
                                     Text("testGain: \(ehaP2_testGain)")
                                     Spacer()
+                                    Text("Sample: \(ehaP2activeFrequency)")
+                                    Spacer()
                                 }
                                 .font(.caption)
                                 .foregroundColor(.white)
