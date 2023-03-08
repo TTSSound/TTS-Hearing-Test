@@ -4416,13 +4416,13 @@ extension EHATTSTestPart2Content {
                         await writeEHAP2LeftResultsToCSV()
                         await writeEHAP2InputRightLeftResultsToCSV()
                         
-                        
                         await ehaP2getehaP2Data()
                         await ehaP2saveEHA1ToJSON()
-                        await ehaP2printConcatenatedArrays()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, qos: .userInteractive) {
-                                isOkayToUpload = true
-                        }
+                        await uploadEHAP2Results()
+//                        await ehaP2printConcatenatedArrays()
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, qos: .userInteractive) {
+//                                isOkayToUpload = true
+//                        }
 //                    }
                 }
             }
@@ -4430,7 +4430,7 @@ extension EHATTSTestPart2Content {
     }
     
     func uploadEHAP2Results() async {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, qos: .background) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.0, qos: .background) {
             uploadFile(fileName: fileehaP2Name)
             uploadFile(fileName: summaryehaP2CSVName)
             uploadFile(fileName: detailedehaP2CSVName)
@@ -4442,6 +4442,7 @@ extension EHATTSTestPart2Content {
             uploadFile(fileName: inputEHAP2LRSummaryCSVName)
             uploadFile(fileName: inputEHAP2RightSummaryCSVName)
             uploadFile(fileName: inputEHAP2LeftSummaryCSVName)
+            print("%%% Upload Results")
         }
     }
 }
