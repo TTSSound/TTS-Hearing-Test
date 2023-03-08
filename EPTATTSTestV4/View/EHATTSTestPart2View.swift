@@ -2427,7 +2427,7 @@ extension EHATTSTestPart2Content {
     
     
     func ehaP2AssignLRAverageSampleGains() async {
-        if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2localPan == 1.0 && ehaP2MonoTest == false {
+        if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2localPan == 1.0 { //}&& ehaP2MonoTest == false {
             //go through each assignment based on index
             if ehaP2_index == 0 {
                 ehaP2RightFinalGainSample17 = ehaP2_averageGain
@@ -2741,7 +2741,7 @@ extension EHATTSTestPart2Content {
                 print("### eHAP2_ehaP2rightFinalGainsDBArray: \(ehaP2rightFinalGainsDBArray)")
                 fatalError("In ehaP2Right side assignLRAverageSampleGains")
             }
-        } else if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2localPan == -1.0 && ehaP2MonoTest == false {
+        } else if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 && ehaP2localPan < 0 { //} ehaP2MonoTest == false {
             //Left Side. Go Through Each Assignment based on index for sample
             if ehaP2_index == 9 {
                 ehaP2LeftFinalGainSample17 = ehaP2_averageGain
@@ -4396,11 +4396,12 @@ extension EHATTSTestPart2Content {
         if ehaP2localMarkNewTestCycle == 1 && ehaP2localReversalEnd == 1 {
             DispatchQueue.global(qos: .userInitiated).async {
                 Task(priority: .userInitiated) {
-                    if await ehaP2endTestSeriesValue == false {
-                        await writeEHAP2DetailedResultsToCSV()
-                        await writeEHAP2InputRightResultsToCSV()
-                        await writeEHAP2InputLeftResultsToCSV()
-                    } else if await ehaP2endTestSeriesValue == true {
+//                    if await ehaP2endTestSeriesValue == false {
+//                        await writeEHAP2DetailedResultsToCSV()
+//                        await writeEHAP2InputRightResultsToCSV()
+//                        await writeEHAP2InputLeftResultsToCSV()
+//                        await ehaP2printConcatenatedArrays()
+//                    } else if await ehaP2endTestSeriesValue == true {
                         
                         // Hold these until end of test cycle
                         await writeEHAP2DetailedResultsToCSV()
@@ -4418,10 +4419,11 @@ extension EHATTSTestPart2Content {
                         
                         await ehaP2getehaP2Data()
                         await ehaP2saveEHA1ToJSON()
+                        await ehaP2printConcatenatedArrays()
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, qos: .userInteractive) {
                                 isOkayToUpload = true
                         }
-                    }
+//                    }
                 }
             }
         }
