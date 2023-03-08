@@ -152,7 +152,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
 //
 //
 // Added Manual AirPods Pro Gen 2 Values for Calibration
-    @State var onekHz_StartingDB: Float = 6.0
+    @State var onekHz_StartingDB: Float = 21.0
     @State var onekHz_AirPodsProGen2MaxDB: Float = 111.74468    //Make this a freq dependent array in other views linked to index
     @State var onekHz_PriorDB: Float = Float()
     @State var onekHz_CurrentDB: Float = Float()
@@ -1639,6 +1639,42 @@ extension Bilateral1kHzTestContent {
     }
 
     
+    func onekHzreversalOfFifteen() async {
+        onekHz_StepSizeDB = 15.0
+        onekHz_PriorDB = onekHz_CurrentDB
+        let onekHzr10Direction = onekHz_StepSizeDB * onekHz_reversalDirection
+        onekHz_NewTargetDB = onekHz_CurrentDB + onekHzr10Direction
+        //  let onekHzr01NewGain = onekHz_testGain + onekHzrO1Direction
+        if onekHz_NewTargetDB > 0.00001 && onekHz_NewTargetDB < onekHz_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(onekHz_NewTargetDB: onekHz_NewTargetDB)  //This sets onekHz_testGain
+            onekHz_testGainDB = onekHz_NewTargetDB
+            onekHz_CurrentDB = onekHz_NewTargetDB
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(onekHz_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+        } else if onekHz_NewTargetDB <= 0.0 {
+            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 1.0
+            onekHz_CurrentDB = 1.0
+            onekHz_NewTargetDB = 1.0
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(onekHz_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+            print("!!!Fatal Zero Gain Catch")
+        } else if onekHz_NewTargetDB >= onekHz_AirPodsProGen2MaxDB {
+            onekHz_testGain = 1.0
+            onekHz_testGainDB = onekHz_AirPodsProGen2MaxDB
+            onekHz_CurrentDB = onekHz_AirPodsProGen2MaxDB
+            onekHz_NewTargetDB = onekHz_AirPodsProGen2MaxDB
+            print("onekHz_testGainDB \(onekHz_testGainDB)")
+            print("testGain: \(onekHz_testGain)")
+            print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
+            print("!!!Fatal 1.0 Gain Catch")
+        } else {
+            print("!!!Fatal Error in reversalOfOne Logic")
+        }
+    }
+    
     
     func onekHzreversalAction() async {
         if onekHzlocalReversalHeardLast == 1 {
@@ -1717,7 +1753,7 @@ extension Bilateral1kHzTestContent {
         //        print(" Start onekHzstartTooHighCheck()")
         if onekHzstartTooHigh == 0 && onekHzfirstHeardIsTrue == true && onekHzsecondHeardIsTrue == true {
             onekHzstartTooHigh = 1
-            await onekHzreversalOfTen()
+            await onekHzreversalOfFifteen()
             await onekHzresetAfterTooHigh()
             print("Too High Found")
         } else {

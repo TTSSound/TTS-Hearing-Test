@@ -2195,6 +2195,40 @@ extension EHATTSTestPart2Content {
     }
     
     
+    func ehaP2reversalOfFifteen() async {
+        ehaP2_StepSizeDB = 15.0
+        let r10Direction = ehaP2_StepSizeDB * ehaP2_reversalDirection
+        ehaP2_NewTargetDB = ehaP2_CurrentDB + r10Direction
+        if ehaP2_NewTargetDB > 0.00001 && ehaP2_NewTargetDB < ehaP2_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(ehaP2_NewTargetDB: ehaP2_NewTargetDB)  //This sets ehaP2_testGain
+            ehaP2_testGainDB = ehaP2_NewTargetDB
+            ehaP2_CurrentDB = ehaP2_NewTargetDB
+            print("ehaP2_testGainDB \(ehaP2_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("ehaP2_NewTargetDB \(ehaP2_NewTargetDB)")
+        } else if ehaP2_NewTargetDB <= 0.0 {
+            await dBToGain(ehaP2_NewTargetDB: 1.0)  //This sets ehaP2_testGain
+            ehaP2_testGainDB = 1.0
+            ehaP2_CurrentDB = 1.0
+            ehaP2_NewTargetDB = 1.0
+            print("ehaP2_testGainDB \(ehaP2_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("ehaP2_NewTargetDB \(ehaP2_NewTargetDB)")
+            print("!!!Fatal Zero Gain Catch")
+        } else if ehaP2_NewTargetDB >= ehaP2_AirPodsProGen2MaxDB {
+            ehaP2_testGain = 1.0
+            ehaP2_testGainDB = ehaP2_AirPodsProGen2MaxDB
+            ehaP2_CurrentDB = ehaP2_AirPodsProGen2MaxDB
+            ehaP2_NewTargetDB = ehaP2_AirPodsProGen2MaxDB
+            print("ehaP2_testGainDB \(ehaP2_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("ehaP2_NewTargetDB \(ehaP2_NewTargetDB)")
+            print("!!!Fatal 1.0 Gain Catch")
+        } else {
+            print("!!!Fatal Error in reversalOfOne Logic")
+        }
+    }
+    
     
     
     func ehaP2reversalAction() async {
@@ -2208,50 +2242,27 @@ extension EHATTSTestPart2Content {
     }
     
     func ehaP2reversalComplexAction() async {
-//        print("!! In reversalComplexAction")
-//        print("ehaP2localSeriesNoResponses: \(ehaP2localSeriesNoResponses)")
         if ehaP2idxReversalHeardCount <= 1 && ehaP2idxHA <= 1 {
-//            print("!!!In first if section for reversal Action")
             await ehaP2reversalAction()
         }  else if ehaP2idxReversalHeardCount == 2 {
-//            print("!!!In first else if section")
             if ehaP2idxReversalHeardCount == 2 && ehaP2secondHeardIsTrue == true {
-//                print("!!! In first sub if of else if check too high")
                 await ehaP2startTooHighCheck()
-                //            } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false {
-                //                print("!!! In first sub else if heard count == 2. reversal action")
-                //                await ehaP2reversalAction()
-                
-                // Changes HERE From ehaP2
-                // !!!!
             } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false && ehaP2localSeriesNoResponses < 2 {
-//                print("!!! In first sub else if heard count == 2. reversal action")
                 await ehaP2reversalAction()
             } else if ehaP2idxReversalHeardCount == 2  && ehaP2secondHeardIsTrue == false && ehaP2localSeriesNoResponses == 2 {
-//                print("!!!in second sub else if heard count ==2 local series no response == 2 reversal of four")
                 await ehaP2reversalOfFour()
-                // !!! Changes Above from ehaP2
-                
-                
             } else {
                 print("In reversal section == 2")
                 print("Failed reversal section startTooHigh")
                 print("!!Fatal Error in reversalHeard and Heard Array Counts")
             }
         } else if ehaP2idxReversalHeardCount >= 3 {
-//            print("reversal section >= 3")
             if ehaP2secondHeardResponseIndex - ehaP2firstHeardResponseIndex == 1 {
-//                print("reversal section >= 3")
-//                print("In first if section sHRI - fHRI == 1")
-//                print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
             } else if ehaP2localSeriesNoResponses >= 3 {
-//                print("!!! In first else if localSeriesNoResponse >= 3")
                 await ehaP2reversalOfTen()
             } else if ehaP2localSeriesNoResponses == 2 {
-//                print("!!! In second else if localSeriesNoResponse == 2")
                 await ehaP2reversalOfFour()
             } else {
-//                print("!!!In else section reversal action")
                 await ehaP2reversalAction()
             }
         } else {
@@ -2265,8 +2276,6 @@ extension EHATTSTestPart2Content {
     
     func ehaP2check2PositiveSeriesReversals() async {
         if ehaP2_reversalHeard[ehaP2idxHA-2] == 1 && ehaP2_reversalHeard[ehaP2idxHA-1] == 1 {
-//            print("reversal - check2PositiveSeriesReversals")
-//            print("Two Positive Series Reversals Registered, End Test Cycle & Log Final Cycle Results")
         }
     }
     
@@ -2281,7 +2290,7 @@ extension EHATTSTestPart2Content {
     func ehaP2startTooHighCheck() async {
         if ehaP2startTooHigh == 0 && ehaP2firstHeardIsTrue == true && ehaP2secondHeardIsTrue == true {
             ehaP2startTooHigh = 1
-            await ehaP2reversalOfTen()
+            await ehaP2reversalOfFifteen()
             await ehaP2resetAfterTooHigh()
             print("Too High Found")
         } else {
