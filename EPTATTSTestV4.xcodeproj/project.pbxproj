@@ -536,6 +536,8 @@
 		7CCB2B2C28D4C5CD00056C49 /* DONOTChangeReferenceEHAP2TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DONOTChangeReferenceEHAP2TestView.swift; sourceTree = "<group>"; };
 		7CD23A7028AE056000AEBB02 /* JSONandCoreDataFuncsNotes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = JSONandCoreDataFuncsNotes.txt; sourceTree = "<group>"; };
 		7CDB3E1228A20DB300CB4DB1 /* EPTATTSTESTV4List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPTATTSTESTV4List.swift; sourceTree = "<group>"; };
+		7CE6C91029BA87B600EBFB05 /* DONOTCHANGEEHATTSTestPart2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DONOTCHANGEEHATTSTestPart2View.swift; sourceTree = "<group>"; };
+		7CE6C91129BA880C00EBFB05 /* DONOtChangeGainReferenceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DONOtChangeGainReferenceModel.swift; sourceTree = "<group>"; };
 		7CECF1EB28C9859900B5A99E /* TrainingTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingTestView.swift; sourceTree = "<group>"; };
 		7CF329F429B64D2500BB3228 /* FDSample23.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FDSample23.wav; sourceTree = "<group>"; };
 		7CF329F529B64D2600BB3228 /* FDSample35.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FDSample35.wav; sourceTree = "<group>"; };
@@ -1143,6 +1145,15 @@
 			path = Notes;
 			sourceTree = "<group>";
 		};
+		7CE6C90F29BA879000EBFB05 /* DONOTChangeV3 */ = {
+			isa = PBXGroup;
+			children = (
+				7CE6C91029BA87B600EBFB05 /* DONOTCHANGEEHATTSTestPart2View.swift */,
+				7CE6C91129BA880C00EBFB05 /* DONOtChangeGainReferenceModel.swift */,
+			);
+			path = DONOTChangeV3;
+			sourceTree = "<group>";
+		};
 		7CF0DD9C28DEB2E60002718C /* ArchiveAndInactive */ = {
 			isa = PBXGroup;
 			children = (
@@ -1162,6 +1173,7 @@
 		7CF0DD9D28DF88FD0002718C /* DONOTChangeReferences */ = {
 			isa = PBXGroup;
 			children = (
+				7CE6C90F29BA879000EBFB05 /* DONOTChangeV3 */,
 				7C18BB2228E0F76C00068DBB /* DONOTChangeV2 */,
 				7C18BB2128E0F75400068DBB /* DONOTChangeV1 */,
 			);
