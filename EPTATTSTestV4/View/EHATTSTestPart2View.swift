@@ -2242,6 +2242,40 @@ extension EHATTSTestPart2Content {
         }
     }
     
+    func ehaP2reversalOfEight() async {
+        ehaP2_StepSizeDB = 8.0
+        let rO5Direction = ehaP2_StepSizeDB * ehaP2_reversalDirection
+        ehaP2_NewTargetDB = ehaP2_CurrentDB + rO5Direction
+        if ehaP2_NewTargetDB > 0.00001 && ehaP2_NewTargetDB < ehaP2_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(ehaP2_NewTargetDB: ehaP2_NewTargetDB)  //This sets ehaP2_testGain
+            ehaP2_testGainDB = ehaP2_NewTargetDB
+            ehaP2_CurrentDB = ehaP2_NewTargetDB
+            print("ehaP2_testGainDB \(ehaP2_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("ehaP2_NewTargetDB \(ehaP2_NewTargetDB)")
+        } else if ehaP2_NewTargetDB <= 0.0 {
+            await dBToGain(ehaP2_NewTargetDB: 1.0)  //This sets ehaP2_testGain
+            ehaP2_testGainDB = 1.0
+            ehaP2_CurrentDB = 1.0
+            ehaP2_NewTargetDB = 1.0
+            print("ehaP2_testGainDB \(ehaP2_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("ehaP2_NewTargetDB \(ehaP2_NewTargetDB)")
+            print("!!!Fatal Zero Gain Catch")
+        } else if ehaP2_NewTargetDB >= ehaP2_AirPodsProGen2MaxDB {
+            ehaP2_testGain = 1.0
+            ehaP2_testGainDB = ehaP2_AirPodsProGen2MaxDB
+            ehaP2_CurrentDB = ehaP2_AirPodsProGen2MaxDB
+            ehaP2_NewTargetDB = ehaP2_AirPodsProGen2MaxDB
+            print("ehaP2_testGainDB \(ehaP2_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("ehaP2_NewTargetDB \(ehaP2_NewTargetDB)")
+            print("!!!Fatal 1.0 Gain Catch")
+        } else {
+            print("!!!Fatal Error in reversalOfOne Logic")
+        }
+    }
+    
     func ehaP2reversalOfTen() async {
         ehaP2_StepSizeDB = 10.0
         let r10Direction = ehaP2_StepSizeDB * ehaP2_reversalDirection
@@ -2276,6 +2310,40 @@ extension EHATTSTestPart2Content {
         }
     }
     
+    
+    func ehaP2reversalOfTwelve() async {
+        ehaP2_StepSizeDB = 12.0
+        let r10Direction = ehaP2_StepSizeDB * ehaP2_reversalDirection
+        ehaP2_NewTargetDB = ehaP2_CurrentDB + r10Direction
+        if ehaP2_NewTargetDB > 0.00001 && ehaP2_NewTargetDB < ehaP2_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(ehaP2_NewTargetDB: ehaP2_NewTargetDB)  //This sets ehaP2_testGain
+            ehaP2_testGainDB = ehaP2_NewTargetDB
+            ehaP2_CurrentDB = ehaP2_NewTargetDB
+            print("ehaP2_testGainDB \(ehaP2_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("ehaP2_NewTargetDB \(ehaP2_NewTargetDB)")
+        } else if ehaP2_NewTargetDB <= 0.0 {
+            await dBToGain(ehaP2_NewTargetDB: 1.0)  //This sets ehaP2_testGain
+            ehaP2_testGainDB = 1.0
+            ehaP2_CurrentDB = 1.0
+            ehaP2_NewTargetDB = 1.0
+            print("ehaP2_testGainDB \(ehaP2_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("ehaP2_NewTargetDB \(ehaP2_NewTargetDB)")
+            print("!!!Fatal Zero Gain Catch")
+        } else if ehaP2_NewTargetDB >= ehaP2_AirPodsProGen2MaxDB {
+            ehaP2_testGain = 1.0
+            ehaP2_testGainDB = ehaP2_AirPodsProGen2MaxDB
+            ehaP2_CurrentDB = ehaP2_AirPodsProGen2MaxDB
+            ehaP2_NewTargetDB = ehaP2_AirPodsProGen2MaxDB
+            print("ehaP2_testGainDB \(ehaP2_testGainDB)")
+            print("testGain: \(ehaP2_testGain)")
+            print("ehaP2_NewTargetDB \(ehaP2_NewTargetDB)")
+            print("!!!Fatal 1.0 Gain Catch")
+        } else {
+            print("!!!Fatal Error in reversalOfOne Logic")
+        }
+    }
     
     func ehaP2reversalOfFifteen() async {
         ehaP2_StepSizeDB = 15.0
@@ -2341,7 +2409,8 @@ extension EHATTSTestPart2Content {
         } else if ehaP2idxReversalHeardCount >= 3 {
             if ehaP2secondHeardResponseIndex - ehaP2firstHeardResponseIndex == 1 {
             } else if ehaP2localSeriesNoResponses >= 3 {
-                await ehaP2reversalOfTen()
+//                await ehaP2reversalOfTen()
+                await ehaP2reversalOfEight()
             } else if ehaP2localSeriesNoResponses == 2 {
                 await ehaP2reversalOfFour()
             } else {
@@ -2372,7 +2441,7 @@ extension EHATTSTestPart2Content {
     func ehaP2startTooHighCheck() async {
         if ehaP2startTooHigh == 0 && ehaP2firstHeardIsTrue == true && ehaP2secondHeardIsTrue == true {
             ehaP2startTooHigh = 1
-            await ehaP2reversalOfFifteen()
+            await ehaP2reversalOfTwelve()
             await ehaP2resetAfterTooHigh()
             print("Too High Found")
         } else {
