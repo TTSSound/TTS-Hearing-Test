@@ -115,64 +115,138 @@ struct EHATTSTestPart2Content<Link: View>: View {
     @State var ehaP2_dualSamples: [String] = [String]()
     
     
-    @State private var highResStdSamples: [String] = ["Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
-                                                      "Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
-                                                      "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34",
-                                                      "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34",
-                                                      "Sample35", "Sample36", "Sample37", "Sample38", "Sample39", "Sample40", "Sample41", "Sample42", "Sample43",
-                                                      "Sample35", "Sample36", "Sample37", "Sample38", "Sample39", "Sample40", "Sample41", "Sample42", "Sample43",
-                                                      "Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52",
-                                                      "Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52",
-                                                      "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59",
-                                                      "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59", "PreSilence"]
+//    @State private var highResStdSamples: [String] = ["Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
+//                                                      "Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
+//                                                      "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34",
+//                                                      "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34",
+//                                                      "Sample35", "Sample36", "Sample37", "Sample38", "Sample39", "Sample40", "Sample41", "Sample42", "Sample43",
+//                                                      "Sample35", "Sample36", "Sample37", "Sample38", "Sample39", "Sample40", "Sample41", "Sample42", "Sample43",
+//                                                      "Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52",
+//                                                      "Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52",
+//                                                      "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59",
+//                                                      "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59", "PreSilence"]
+//
+//
+//    @State private var highResFadedSamples: [String] = ["FSample17", "FSample18", "FSample19", "FSample20", "FSample21", "FSample22", "FSample23", "FSample24", "FSample25",
+//                                                        "FSample17", "FSample18", "FSample19", "FSample20", "FSample21", "FSample22", "FSample23", "FSample24", "FSample25",
+//                                                        "FSample26", "FSample27", "FSample28", "FSample29", "FSample30", "FSample31", "FSample32", "FSample33", "FSample34",
+//                                                        "FSample26", "FSample27", "FSample28", "FSample29", "FSample30", "FSample31", "FSample32", "FSample33", "FSample34",
+//                                                        "FSample35", "FSample36", "FSample37", "FSample38", "FSample39", "FSample40", "FSample41", "FSample42", "FSample43",
+//                                                        "FSample35", "FSample36", "FSample37", "FSample38", "FSample39", "FSample40", "FSample41", "FSample42", "FSample43",
+//                                                        "FSample44", "FSample45", "FSample46", "FSample47", "FSample48", "FSample49", "FSample50", "FSample51", "FSample52",
+//                                                        "FSample44", "FSample45", "FSample46", "FSample47", "FSample48", "FSample49", "FSample50", "FSample51", "FSample52",
+//                                                        "FSample53", "FSample54", "FSample55", "FSample56", "FSample57", "FSample58", "FSample59",
+//                                                        "FSample53", "FSample54", "FSample55", "FSample56", "FSample57", "FSample58", "FSample59", "PreSilence"]
+//
+//
+//    @State private var cdFadedDitheredSamples: [String] = ["FDSample17", "FDSample18", "FDSample19", "FDSample20", "FDSample21", "FDSample22", "FDSample23", "FDSample24", "FDSample25",
+//                                                           "FDSample17", "FDSample18", "FDSample19", "FDSample20", "FDSample21", "FDSample22", "FDSample23", "FDSample24", "FDSample25",
+//                                                           "FDSample26", "FDSample27", "FDSample28", "FDSample29", "FDSample30", "FDSample31", "FDSample32", "FDSample33", "FDSample34",
+//                                                           "FDSample26", "FDSample27", "FDSample28", "FDSample29", "FDSample30", "FDSample31", "FDSample32", "FDSample33", "FDSample34",
+//                                                           "FDSample35", "FDSample36", "FDSample37", "FDSample38", "FDSample39", "FDSample40", "FDSample41", "FDSample42", "FDSample43",
+//                                                           "FDSample35", "FDSample36", "FDSample37", "FDSample38", "FDSample39", "FDSample40", "FDSample41", "FDSample42", "FDSample43",
+//                                                           "FDSample44", "FDSample45", "FDSample46", "FDSample47", "FDSample48", "FDSample49", "FDSample50", "FDSample51", "FDSample52",
+//                                                           "FDSample44", "FDSample45", "FDSample46", "FDSample47", "FDSample48", "FDSample49", "FDSample50", "FDSample51", "FDSample52",
+//                                                           "FDSample53", "FDSample54", "FDSample55", "FDSample56", "FDSample57", "FDSample58", "FDSample59",
+//                                                           "FDSample53", "FDSample54", "FDSample55", "FDSample56", "FDSample57", "FDSample58", "FDSample59", "PreSilence"]
+//
+//    @State private var highResStdMonoSamples: [String] = ["Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
+//                                                          "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34",
+//                                                          "Sample35", "Sample36", "Sample37", "Sample38", "Sample39", "Sample40", "Sample41", "Sample42", "Sample43",
+//                                                          "Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52",
+//                                                          "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59", "PreSilence"]
+//
+//
+//    @State private var highResFadedMonoSamples: [String] = ["FSample17", "FSample18", "FSample19", "FSample20", "FSample21", "FSample22", "FSample23", "FSample24", "FSample25",
+//                                                            "FSample26", "FSample27", "FSample28", "FSample29", "FSample30", "FSample31", "FSample32", "FSample33", "FSample34",
+//                                                            "FSample35", "FSample36", "FSample37", "FSample38", "FSample39", "FSample40", "FSample41", "FSample42", "FSample43",
+//                                                            "FSample44", "FSample45", "FSample46", "FSample47", "FSample48", "FSample49", "FSample50", "FSample51", "FSample52",
+//                                                            "FSample53", "FSample54", "FSample55", "FSample56", "FSample57", "FSample58", "FFSample59", "PreSilence"]
+//
+//
+//    @State private var cdFadedDitheredMonoSamples: [String] = ["FDSample17", "FDSample18", "FDSample19", "FDSample20", "FDSample21", "FDSample22", "FDSample23", "FDSample24", "FDSample25",
+//                                                               "FDSample26", "FDSample27", "FDSample28", "FDSample29", "FDSample30", "FDSample31", "FDSample32", "FDSample33", "FDSample34",
+//                                                               "FDSample35", "FDSample36", "FDSample37", "FDSample38", "FDSample39", "FDSample40", "FDSample41", "FDSample42", "FDSample43",
+//                                                               "FDSample44", "FDSample45", "FDSample46", "FDSample47", "FDSample48", "FDSample49", "FDSample50", "FDSample51", "FDSample52",
+//                                                               "FDSample53", "FDSample54", "FDSample55", "FDSample56", "FDSample57", "FDSample58", "FDSample59", "PreSilence"]
+//
+//    @State var ehaP2panArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+//                                         -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
+//                                         1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+//                                         -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
+//                                         1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+//                                         -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
+//                                         1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+//                                         -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
+//                                         1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+//                                         -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+//
+//    @State var ehaP2panBilateralArray: [Float] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+//                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+//                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+//                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+//                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+//
+//    @State var ehaP2panRightArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+//                                              1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+//                                              1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+//                                              1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+//                                              1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+//
+//    @State var ehaP2panLeftArray: [Float] = [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
+//                                              -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
+//                                              -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
+//                                              -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
+//                                              -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+//
+//    @State var ehaP2_eptaSamplesCountArray = [8, 8, 8, 8, 8, 8, 8, 8, 8,
+//                                              17, 17, 17, 17, 17, 17, 17, 17, 17,
+//                                              26, 26, 26, 26, 26, 26, 26, 26, 26,
+//                                              35, 35, 35, 35, 35, 35, 35, 35, 35,
+//                                              44, 44, 44, 44, 44, 44, 44, 44, 44,
+//                                              53, 53, 53, 53, 53, 53, 53, 53, 53,
+//                                              62, 62, 62, 62, 62, 62, 62, 62, 62,
+//                                              71, 71, 71, 71, 71, 71, 71, 71, 71,
+//                                              78, 78, 78, 78, 78, 78, 78,
+//                                              85, 85, 85, 85, 85, 85, 85]
     
     
-    @State private var highResFadedSamples: [String] = ["FSample17", "FSample18", "FSample19", "FSample20", "FSample21", "FSample22", "FSample23", "FSample24", "FSample25",
-                                                        "FSample17", "FSample18", "FSample19", "FSample20", "FSample21", "FSample22", "FSample23", "FSample24", "FSample25",
-                                                        "FSample26", "FSample27", "FSample28", "FSample29", "FSample30", "FSample31", "FSample32", "FSample33", "FSample34",
-                                                        "FSample26", "FSample27", "FSample28", "FSample29", "FSample30", "FSample31", "FSample32", "FSample33", "FSample34",
-                                                        "FSample35", "FSample36", "FSample37", "FSample38", "FSample39", "FSample40", "FSample41", "FSample42", "FSample43",
-                                                        "FSample35", "FSample36", "FSample37", "FSample38", "FSample39", "FSample40", "FSample41", "FSample42", "FSample43",
-                                                        "FSample44", "FSample45", "FSample46", "FSample47", "FSample48", "FSample49", "FSample50", "FSample51", "FSample52",
-                                                        "FSample44", "FSample45", "FSample46", "FSample47", "FSample48", "FSample49", "FSample50", "FSample51", "FSample52",
-                                                        "FSample53", "FSample54", "FSample55", "FSample56", "FSample57", "FSample58", "FSample59",
-                                                        "FSample53", "FSample54", "FSample55", "FSample56", "FSample57", "FSample58", "FSample59", "PreSilence"]
+    @State private var highResStdSamples: [String] = ["Sample17", "Sample19", "Sample21", "Sample23", "Sample26", "Sample28", "Sample29", "Sample31", "Sample36",
+                                                      "Sample17", "Sample19", "Sample21", "Sample23", "Sample26", "Sample28", "Sample29", "Sample31", "Sample36",
+                                                      "Sample41", "Sample42", "Sample44", "Sample45", "Sample46", "Sample49", "Sample51", "Sample52", "Sample54",
+                                                      "Sample41", "Sample42", "Sample44", "Sample45", "Sample46", "Sample49", "Sample51", "Sample52", "Sample54",
+                                                      "Sample56", "Sample58", "Sample59",
+                                                      "Sample56", "Sample58", "Sample59", "PreSilence"]
     
     
-    @State private var cdFadedDitheredSamples: [String] = ["FDSample17", "FDSample18", "FDSample19", "FDSample20", "FDSample21", "FDSample22", "FDSample23", "FDSample24", "FDSample25",
-                                                           "FDSample17", "FDSample18", "FDSample19", "FDSample20", "FDSample21", "FDSample22", "FDSample23", "FDSample24", "FDSample25",
-                                                           "FDSample26", "FDSample27", "FDSample28", "FDSample29", "FDSample30", "FDSample31", "FDSample32", "FDSample33", "FDSample34",
-                                                           "FDSample26", "FDSample27", "FDSample28", "FDSample29", "FDSample30", "FDSample31", "FDSample32", "FDSample33", "FDSample34",
-                                                           "FDSample35", "FDSample36", "FDSample37", "FDSample38", "FDSample39", "FDSample40", "FDSample41", "FDSample42", "FDSample43",
-                                                           "FDSample35", "FDSample36", "FDSample37", "FDSample38", "FDSample39", "FDSample40", "FDSample41", "FDSample42", "FDSample43",
-                                                           "FDSample44", "FDSample45", "FDSample46", "FDSample47", "FDSample48", "FDSample49", "FDSample50", "FDSample51", "FDSample52",
-                                                           "FDSample44", "FDSample45", "FDSample46", "FDSample47", "FDSample48", "FDSample49", "FDSample50", "FDSample51", "FDSample52",
-                                                           "FDSample53", "FDSample54", "FDSample55", "FDSample56", "FDSample57", "FDSample58", "FDSample59",
-                                                           "FDSample53", "FDSample54", "FDSample55", "FDSample56", "FDSample57", "FDSample58", "FDSample59", "PreSilence"]
+    @State private var highResFadedSamples: [String] = ["FSample17", "FSample19", "FSample21", "FSample23", "FSample26", "FSample28", "FSample29", "FSample31", "FSample36",
+                                                        "FSample17", "FSample19", "FSample21", "FSample23", "FSample26", "FSample28", "FSample29", "FSample31", "FSample36",
+                                                        "FSample41", "FSample42", "FSample44", "FSample45", "FSample46", "FSample49", "FSample51", "FSample52", "FSample54",
+                                                        "FSample41", "FSample42", "FSample44", "FSample45", "FSample46", "FSample49", "FSample51", "FSample52", "FSample54",
+                                                        "FSample56", "FSample58", "FSample59",
+                                                        "FSample56", "FSample58", "FSample59", "PreSilence"]
+    
+    
+    @State private var cdFadedDitheredSamples: [String] = ["FDSample17", "FDSample19", "FDSample21", "FDSample23", "FDSample26", "FDSample28", "FDSample29", "FDSample31", "FDSample36",
+                                                           "FDSample17", "FDSample19", "FDSample21", "FDSample23", "FDSample26", "FDSample28", "FDSample29", "FDSample31", "FDSample36",
+                                                           "FDSample41", "FDSample42", "FDSample44", "FDSample45", "FDSample46", "FDSample49", "FDSample51", "FDSample52", "FDSample54",
+                                                           "FDSample41", "FDSample42", "FDSample44", "FDSample45", "FDSample46", "FDSample49", "FDSample51", "FDSample52", "FDSample54",
+                                                           "FDSample56", "FDSample58", "FDSample59",
+                                                           "FDSample56", "FDSample58", "FDSample59", "PreSilence"]
+    
     
     
     
     @State var ehaP2_monoSamples: [String] = [String]()
     
-    @State private var highResStdMonoSamples: [String] = ["Sample17", "Sample18", "Sample19", "Sample20", "Sample21", "Sample22", "Sample23", "Sample24", "Sample25",
-                                                          "Sample26", "Sample27", "Sample28", "Sample29", "Sample30", "Sample31", "Sample32", "Sample33", "Sample34",
-                                                          "Sample35", "Sample36", "Sample37", "Sample38", "Sample39", "Sample40", "Sample41", "Sample42", "Sample43",
-                                                          "Sample44", "Sample45", "Sample46", "Sample47", "Sample48", "Sample49", "Sample50", "Sample51", "Sample52",
-                                                          "Sample53", "Sample54", "Sample55", "Sample56", "Sample57", "Sample58", "Sample59", "PreSilence"]
+    @State private var highResStdMonoSamples: [String] = ["Sample17", "Sample19", "Sample21", "Sample23", "Sample26", "Sample28", "Sample29", "Sample31", "Sample36", "Sample41", "Sample42", "Sample44", "Sample45", "Sample46", "Sample49", "Sample51", "Sample52", "Sample54", "Sample56", "Sample58", "Sample59"]
     
     
-    @State private var highResFadedMonoSamples: [String] = ["FSample17", "FSample18", "FSample19", "FSample20", "FSample21", "FSample22", "FSample23", "FSample24", "FSample25",
-                                                            "FSample26", "FSample27", "FSample28", "FSample29", "FSample30", "FSample31", "FSample32", "FSample33", "FSample34",
-                                                            "FSample35", "FSample36", "FSample37", "FSample38", "FSample39", "FSample40", "FSample41", "FSample42", "FSample43",
-                                                            "FSample44", "FSample45", "FSample46", "FSample47", "FSample48", "FSample49", "FSample50", "FSample51", "FSample52",
-                                                            "FSample53", "FSample54", "FSample55", "FSample56", "FSample57", "FSample58", "FFSample59", "PreSilence"]
+    @State private var highResFadedMonoSamples: [String] = ["FSample17", "FSample19", "FSample21", "FSample23", "FSample26", "FSample28", "FSample29", "FSample31", "FSample36", "FSample41", "FSample42", "FSample44", "FSample45", "FSample46", "FSample49", "FSample51", "FSample52", "FSample54", "FSample56", "FSample58", "FSample59"]
     
     
-    @State private var cdFadedDitheredMonoSamples: [String] = ["FDSample17", "FDSample18", "FDSample19", "FDSample20", "FDSample21", "FDSample22", "FDSample23", "FDSample24", "FDSample25",
-                                                               "FDSample26", "FDSample27", "FDSample28", "FDSample29", "FDSample30", "FDSample31", "FDSample32", "FDSample33", "FDSample34",
-                                                               "FDSample35", "FDSample36", "FDSample37", "FDSample38", "FDSample39", "FDSample40", "FDSample41", "FDSample42", "FDSample43",
-                                                               "FDSample44", "FDSample45", "FDSample46", "FDSample47", "FDSample48", "FDSample49", "FDSample50", "FDSample51", "FDSample52",
-                                                               "FDSample53", "FDSample54", "FDSample55", "FDSample56", "FDSample57", "FDSample58", "FDSample59", "PreSilence"]
+    @State private var cdFadedDitheredMonoSamples: [String] = ["FDSample17", "FDSample19", "FDSample21", "FDSample23", "FDSample26", "FDSample28", "FDSample29", "FDSample31", "FDSample36", "FDSample41", "FDSample42", "FDSample44", "FDSample45", "FDSample46", "FDSample49", "FDSample51", "FDSample52", "FDSample54", "FDSample56", "FDSample58", "FDSample59"]
+    
     
     
     
@@ -180,35 +254,28 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                          -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
                                          1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
                                          -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
-                                         1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                                         -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
-                                         1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                                         -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
-                                         1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                                         -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+                                         1.0, 1.0, 1.0,
+                                         -1.0, -1.0, -1.0, -1.0]
+                                         
     
     @State var ehaP2panBilateralArray: [Float] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                                                   0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+                                                  0.0, 0.0, 0.0, 0.0]
     
     @State var ehaP2panRightArray: [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
                                               1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                                              1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                                              1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                                              1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+                                              1.0, 1.0, 1.0, 1.0]
+                                            
     
     @State var ehaP2panLeftArray: [Float] = [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
                                               -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
-                                              -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
-                                              -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
-                                              -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+                                              -1.0, -1.0, -1.0, -1.0]
+                                              
     
     
     @State var ehaP2totalCount = Int()
-    @State var ehaP2MonoTotalCount = 43
-    @State var ehaP2DualTotalCount = 86
+    @State var ehaP2MonoTotalCount = 22         //43
+    @State var ehaP2DualTotalCount = 43         //86
     
     @State var ehaP2localPan: Float = Float()
     @State var ehaP2localPanHoldingArray: [Float] = [Float]()
@@ -353,12 +420,12 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                               17, 17, 17, 17, 17, 17, 17, 17, 17,
                                               26, 26, 26, 26, 26, 26, 26, 26, 26,
                                               35, 35, 35, 35, 35, 35, 35, 35, 35,
-                                              44, 44, 44, 44, 44, 44, 44, 44, 44,
-                                              53, 53, 53, 53, 53, 53, 53, 53, 53,
-                                              62, 62, 62, 62, 62, 62, 62, 62, 62,
-                                              71, 71, 71, 71, 71, 71, 71, 71, 71,
-                                              78, 78, 78, 78, 78, 78, 78,
-                                              85, 85, 85, 85, 85, 85, 85]
+                                              42, 42, 42]
+                                              
+                                              
+                                              
+                                              
+                                              
     @State var ehaP2_eptaSamplesCountArrayIdx = 0  //[0, 1, 2, 3]
     
     @State var ehaP2_finalStoredIndex: [Int] = [Int]()
@@ -395,22 +462,35 @@ struct EHATTSTestPart2Content<Link: View>: View {
     
     @State var ehaP2fullTestCompleted: Bool = false
     @State var ehaP2fullTestCompletedHoldingArray: [Bool] = [Bool]()
+//    @State var ehaP2fullTestCompletedLR: [Bool] = [false, false, false, false, false, false, false, false, false,
+//                                                   false, false, false, false, false, false, false, false, false,
+//                                                   false, false, false, false, false, false, false, false, false,
+//                                                   false, false, false, false, false, false, false, false, false,
+//                                                   false, false, false, false, false, false, false, false, false,
+//                                                   false, false, false, false, false, false, false, false, false,
+//                                                   false, false, false, false, false, false, false, false, false,
+//                                                   false, false, false, false, false, false, false, false, false,
+//                                                   false, false, false, false, false, false, false,
+//                                                   false, false, false, false, false, false, false, true]
+//
+//    @State var ehaP2fullTestCompletedMono: [Bool] = [false, false, false, false, false, false, false, false, false,
+//                                                     false, false, false, false, false, false, false, false, false,
+//                                                     false, false, false, false, false, false, false, false, false,
+//                                                     false, false, false, false, false, false, false, false, false,
+//                                                     false, false, false, false, false, false, false, true]
+    
     @State var ehaP2fullTestCompletedLR: [Bool] = [false, false, false, false, false, false, false, false, false,
                                                    false, false, false, false, false, false, false, false, false,
                                                    false, false, false, false, false, false, false, false, false,
                                                    false, false, false, false, false, false, false, false, false,
-                                                   false, false, false, false, false, false, false, false, false,
-                                                   false, false, false, false, false, false, false, false, false,
-                                                   false, false, false, false, false, false, false, false, false,
-                                                   false, false, false, false, false, false, false, false, false,
-                                                   false, false, false, false, false, false, false,
-                                                   false, false, false, false, false, false, false, true]
+                                                   false, false, false,
+                                                   false, false, false, true]
     
     @State var ehaP2fullTestCompletedMono: [Bool] = [false, false, false, false, false, false, false, false, false,
                                                      false, false, false, false, false, false, false, false, false,
-                                                     false, false, false, false, false, false, false, false, false,
-                                                     false, false, false, false, false, false, false, false, false,
-                                                     false, false, false, false, false, false, false, true]
+                                                     false, false, false, true]
+                                                     
+                                                     
     
     
     
