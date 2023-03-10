@@ -2206,7 +2206,7 @@ extension EHATTSTestPart2Content {
             print("ehaP2_testGainDB \(ehaP2_testGainDB)")
             print("testGain: \(ehaP2_testGain)")
             print("ehaP2_NewTargetDB \(ehaP2_NewTargetDB)")
-        } else if ehaP2_NewTargetDB <= 3.0  //0.0 {
+        } else if ehaP2_NewTargetDB <= 3.0 { //0.0 {
             await dBToGain(ehaP2_NewTargetDB: 3.0)  //This sets ehaP2_testGain
             ehaP2_testGainDB = 3.0
             ehaP2_CurrentDB = 3.0
