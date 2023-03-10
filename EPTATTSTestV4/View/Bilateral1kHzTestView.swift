@@ -1428,11 +1428,11 @@ extension Bilateral1kHzTestContent {
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
-        } else if onekHz_NewTargetDB <= 0.0 {
-            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
-            onekHz_testGainDB = 1.0
-            onekHz_CurrentDB = 1.0
-            onekHz_NewTargetDB = 1.0
+        } else if onekHz_NewTargetDB <= 3.0 {   //0.0 {
+            await dBToGain(onekHz_NewTargetDB: 3.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 3.0
+            onekHz_CurrentDB = 3.0
+            onekHz_NewTargetDB = 3.0
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
@@ -1465,11 +1465,11 @@ extension Bilateral1kHzTestContent {
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
-        } else if onekHz_NewTargetDB <= 0.0 {
-            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
-            onekHz_testGainDB = 1.0
-            onekHz_CurrentDB = 1.0
-            onekHz_NewTargetDB = 1.0
+        } else if onekHz_NewTargetDB <= 3.0 {   //0.0 {
+            await dBToGain(onekHz_NewTargetDB: 3.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 3.0
+            onekHz_CurrentDB = 3.0
+            onekHz_NewTargetDB = 3.0
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
@@ -1502,11 +1502,11 @@ extension Bilateral1kHzTestContent {
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
-        } else if onekHz_NewTargetDB <= 0.0 {
-            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
-            onekHz_testGainDB = 1.0
-            onekHz_CurrentDB = 1.0
-            onekHz_NewTargetDB = 1.0
+        } else if onekHz_NewTargetDB <= 3.0 {   //0.0 {
+            await dBToGain(onekHz_NewTargetDB: 3.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 3.0
+            onekHz_CurrentDB = 3.0
+            onekHz_NewTargetDB = 3.0
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
@@ -1540,11 +1540,11 @@ extension Bilateral1kHzTestContent {
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
-        } else if onekHz_NewTargetDB <= 0.0 {
-            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
-            onekHz_testGainDB = 1.0
-            onekHz_CurrentDB = 1.0
-            onekHz_NewTargetDB = 1.0
+        } else if onekHz_NewTargetDB <= 3.0 {   //0.0 {
+            await dBToGain(onekHz_NewTargetDB: 3.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 3.0
+            onekHz_CurrentDB = 3.0
+            onekHz_NewTargetDB = 3.0
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
@@ -1578,11 +1578,11 @@ extension Bilateral1kHzTestContent {
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
-        } else if onekHz_NewTargetDB <= 0.0 {
-            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
-            onekHz_testGainDB = 1.0
-            onekHz_CurrentDB = 1.0
-            onekHz_NewTargetDB = 1.0
+        } else if onekHz_NewTargetDB <= 3.0 {   //0.0 {
+            await dBToGain(onekHz_NewTargetDB: 3.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 3.0
+            onekHz_CurrentDB = 3.0
+            onekHz_NewTargetDB = 3.0
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
@@ -1615,11 +1615,11 @@ extension Bilateral1kHzTestContent {
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
-        } else if onekHz_NewTargetDB <= 0.0 {
-            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
-            onekHz_testGainDB = 1.0
-            onekHz_CurrentDB = 1.0
-            onekHz_NewTargetDB = 1.0
+        } else if onekHz_NewTargetDB <= 3.0 {   //} 0.0 {
+            await dBToGain(onekHz_NewTargetDB: 3.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 3.0
+            onekHz_CurrentDB = 3.0
+            onekHz_NewTargetDB = 3.0
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
@@ -1651,11 +1651,11 @@ extension Bilateral1kHzTestContent {
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
-        } else if onekHz_NewTargetDB <= 0.0 {
-            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
-            onekHz_testGainDB = 1.0
-            onekHz_CurrentDB = 1.0
-            onekHz_NewTargetDB = 1.0
+        } else if onekHz_NewTargetDB <= 3.0 {   //0.0 {
+            await dBToGain(onekHz_NewTargetDB: 3.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 3.0
+            onekHz_CurrentDB = 3.0
+            onekHz_NewTargetDB = 3.0
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
@@ -1687,11 +1687,11 @@ extension Bilateral1kHzTestContent {
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
-        } else if onekHz_NewTargetDB <= 0.0 {
-            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
-            onekHz_testGainDB = 1.0
-            onekHz_CurrentDB = 1.0
-            onekHz_NewTargetDB = 1.0
+        } else if onekHz_NewTargetDB <= 3.0 {   //} 0.0 {
+            await dBToGain(onekHz_NewTargetDB: 3.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 3.0
+            onekHz_CurrentDB = 3.0
+            onekHz_NewTargetDB = 3.0
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
@@ -1724,11 +1724,11 @@ extension Bilateral1kHzTestContent {
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")
-        } else if onekHz_NewTargetDB <= 0.0 {
-            await dBToGain(onekHz_NewTargetDB: 1.0)  //This sets onekHz_testGain
-            onekHz_testGainDB = 1.0
-            onekHz_CurrentDB = 1.0
-            onekHz_NewTargetDB = 1.0
+        } else if onekHz_NewTargetDB <= 3.0 {   //0.0 {
+            await dBToGain(onekHz_NewTargetDB: 3.0)  //This sets onekHz_testGain
+            onekHz_testGainDB = 3.0
+            onekHz_CurrentDB = 3.0
+            onekHz_NewTargetDB = 3.0
             print("onekHz_testGainDB \(onekHz_testGainDB)")
             print("testGain: \(onekHz_testGain)")
             print("onekHz_NewTargetDB \(onekHz_NewTargetDB)")

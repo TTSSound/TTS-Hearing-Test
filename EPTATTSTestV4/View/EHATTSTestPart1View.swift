@@ -116,6 +116,16 @@ struct EHATTSTestPart1Content<Link: View>: View {
     
     //    @State var envDataObjectModel_samples: [String] = ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16", "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
     
+//
+//    ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8",
+//        0           1           2           3       4           5           6           7
+//     "Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8",
+//        8           9           10          11      12          13          14      15
+//     "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16",
+//        16          17          18          19          20          21          22          23
+//     "Sample9", "Sample10", "Sample11", "Sample12", "Sample13", "Sample14", "Sample15", "Sample16"]
+//        24          25          26          27          28          29          30          31
+    
     @State var envDataObjectModel_samples: [String] = [String]()
     
     @State private var highResStdSamples: [String] =  ["Sample1", "Sample2", "Sample3", "Sample4", "Sample5", "Sample6", "Sample7", "Sample8",
@@ -1620,11 +1630,11 @@ extension EHATTSTestPart1Content {
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
-        } else if eHAP1_NewTargetDB <= 0.0 {
-            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
-            eHAP1_testGainDB = 1.0
-            eHAP1_CurrentDB = 1.0
-            eHAP1_NewTargetDB = 1.0
+        } else if eHAP1_NewTargetDB <= 3.0 {    //0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 3.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 3.0
+            eHAP1_CurrentDB = 3.0
+            eHAP1_NewTargetDB = 3.0
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
@@ -1654,11 +1664,11 @@ extension EHATTSTestPart1Content {
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
-        } else if eHAP1_NewTargetDB <= 0.0 {
-            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
-            eHAP1_testGainDB = 1.0
-            eHAP1_CurrentDB = 1.0
-            eHAP1_NewTargetDB = 1.0
+        } else if eHAP1_NewTargetDB <= 3.0 {    //} 0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 3.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 3.0
+            eHAP1_CurrentDB = 3.0
+            eHAP1_NewTargetDB = 3.0
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
@@ -1688,11 +1698,11 @@ extension EHATTSTestPart1Content {
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
-        } else if eHAP1_NewTargetDB <= 0.0 {
-            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
-            eHAP1_testGainDB = 1.0
-            eHAP1_CurrentDB = 1.0
-            eHAP1_NewTargetDB = 1.0
+        } else if eHAP1_NewTargetDB <= 3.0 {    //0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 3.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 3.0
+            eHAP1_CurrentDB = 3.0
+            eHAP1_NewTargetDB = 3.0
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
@@ -1722,11 +1732,11 @@ extension EHATTSTestPart1Content {
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
-        } else if eHAP1_NewTargetDB <= 0.0 {
-            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
-            eHAP1_testGainDB = 1.0
-            eHAP1_CurrentDB = 1.0
-            eHAP1_NewTargetDB = 1.0
+        } else if eHAP1_NewTargetDB <= 3.0 {    //0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 3.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 3.0
+            eHAP1_CurrentDB = 3.0
+            eHAP1_NewTargetDB = 3.0
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
@@ -1756,11 +1766,11 @@ extension EHATTSTestPart1Content {
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
-        } else if eHAP1_NewTargetDB <= 0.0 {
-            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
-            eHAP1_testGainDB = 1.0
-            eHAP1_CurrentDB = 1.0
-            eHAP1_NewTargetDB = 1.0
+        } else if eHAP1_NewTargetDB <= 3.0 {    //0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 3.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 3.0
+            eHAP1_CurrentDB = 3.0
+            eHAP1_NewTargetDB = 3.0
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
@@ -1791,11 +1801,11 @@ extension EHATTSTestPart1Content {
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
-        } else if eHAP1_NewTargetDB <= 0.0 {
-            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
-            eHAP1_testGainDB = 1.0
-            eHAP1_CurrentDB = 1.0
-            eHAP1_NewTargetDB = 1.0
+        } else if eHAP1_NewTargetDB <= 3.0 {    //0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 3.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 3.0
+            eHAP1_CurrentDB = 3.0
+            eHAP1_NewTargetDB = 3.0
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
@@ -1824,11 +1834,11 @@ extension EHATTSTestPart1Content {
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
-        } else if eHAP1_NewTargetDB <= 0.0 {
-            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
-            eHAP1_testGainDB = 1.0
-            eHAP1_CurrentDB = 1.0
-            eHAP1_NewTargetDB = 1.0
+        } else if eHAP1_NewTargetDB <= 3.0 {    //0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 3.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 3.0
+            eHAP1_CurrentDB = 3.0
+            eHAP1_NewTargetDB = 3.0
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
@@ -1859,11 +1869,11 @@ extension EHATTSTestPart1Content {
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
-        } else if eHAP1_NewTargetDB <= 0.0 {
-            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
-            eHAP1_testGainDB = 1.0
-            eHAP1_CurrentDB = 1.0
-            eHAP1_NewTargetDB = 1.0
+        } else if eHAP1_NewTargetDB <= 3.0 {    //0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 3.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 3.0
+            eHAP1_CurrentDB = 3.0
+            eHAP1_NewTargetDB = 3.0
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
@@ -1893,11 +1903,11 @@ extension EHATTSTestPart1Content {
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
-        } else if eHAP1_NewTargetDB <= 0.0 {
-            await dBToGain(eHAP1_NewTargetDB: 1.0)  //This sets eHAP1_testGain
-            eHAP1_testGainDB = 1.0
-            eHAP1_CurrentDB = 1.0
-            eHAP1_NewTargetDB = 1.0
+        } else if eHAP1_NewTargetDB <= 3.0 {    //0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 3.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 3.0
+            eHAP1_CurrentDB = 3.0
+            eHAP1_NewTargetDB = 3.0
             print("eHAP1_testGainDB \(eHAP1_testGainDB)")
             print("testGain: \(envDataObjectModel_testGain)")
             print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
