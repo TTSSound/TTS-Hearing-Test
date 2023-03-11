@@ -1926,6 +1926,40 @@ extension EHATTSTestPart1Content {
         }
     }
     
+    func reversalOfTwentyTwo() async {
+        eHAP1_StepSizeDB = 22.0
+        let r10Direction = eHAP1_StepSizeDB * envDataObjectModel_reversalDirection
+        eHAP1_NewTargetDB = eHAP1_CurrentDB + r10Direction
+        if eHAP1_NewTargetDB > 0.00001 && eHAP1_NewTargetDB < eHAP1_AirPodsProGen2MaxDB-0.1 {
+            await dBToGain(eHAP1_NewTargetDB: eHAP1_NewTargetDB)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = eHAP1_NewTargetDB
+            eHAP1_CurrentDB = eHAP1_NewTargetDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
+        } else if eHAP1_NewTargetDB <= 3.0 {    //0.0 {
+            await dBToGain(eHAP1_NewTargetDB: 3.0)  //This sets eHAP1_testGain
+            eHAP1_testGainDB = 3.0
+            eHAP1_CurrentDB = 3.0
+            eHAP1_NewTargetDB = 3.0
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
+            print("!!!Fatal Zero Gain Catch")
+        } else if eHAP1_NewTargetDB >= eHAP1_AirPodsProGen2MaxDB {
+            envDataObjectModel_testGain = 1.0
+            eHAP1_testGainDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_CurrentDB = eHAP1_AirPodsProGen2MaxDB
+            eHAP1_NewTargetDB = eHAP1_AirPodsProGen2MaxDB
+            print("eHAP1_testGainDB \(eHAP1_testGainDB)")
+            print("testGain: \(envDataObjectModel_testGain)")
+            print("eHAP1_NewTargetDB \(eHAP1_NewTargetDB)")
+            print("!!!Fatal 1.0 Gain Catch")
+        } else {
+            print("!!!Fatal Error in reversalOfOne Logic")
+        }
+    }
+    
     func reversalAction() async {
         if localReversalHeardLast == 1 {
             await reversalOfFive()
@@ -2005,7 +2039,7 @@ extension EHATTSTestPart1Content {
     func startTooHighCheck() async {
         if startTooHigh == 0 && firstHeardIsTrue == true && secondHeardIsTrue == true {
             startTooHigh = 1
-            await reversalOfTwelve()
+            await reversalOfTwentyTwo()
             await resetAfterTooHigh()
             //            print("Too High Found")
         } else {
