@@ -1826,7 +1826,7 @@ extension Bilateral1kHzTestContent {
         //        print(" Start onekHzstartTooHighCheck()")
         if onekHzstartTooHigh == 0 && onekHzfirstHeardIsTrue == true && onekHzsecondHeardIsTrue == true {
             onekHzstartTooHigh = 1
-            await onekHzreversalOfTwelve()
+            await onekHzreversalOfFifteen()
             await onekHzresetAfterTooHigh()
             print("Too High Found")
         } else {
