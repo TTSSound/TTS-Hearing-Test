@@ -99,40 +99,44 @@ struct BetaTestingLandingContent<Link: View>: View {
     
     var body: some View {
         ZStack{
-            colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+            Image("Background1 1").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+            //colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack{
                 Text("Select Sex and Age")
                     .foregroundColor(.white)
                     .font(.title)
-                    .padding(.top, 40)
+                    .padding(.top, 20)
                 HStack{
                     Spacer()
                     Toggle("Female", isOn: $betaFemale)
-                        .foregroundColor(.green)
+                        .foregroundColor(colorModel.sunriseBrightYellow)
                     Spacer()
                     Toggle("Male", isOn: $betaMale)
-                        .foregroundColor(.green)
+                        .foregroundColor(colorModel.sunriseBrightYellow)
                     Spacer()
                 }
-                .padding(.top, 20)
+                .padding(.top, 10)
                 HStack{
                     Toggle("<= 27", isOn: $age0)
                     Toggle("28-39", isOn: $age1)
                     Toggle("40-49", isOn: $age2)
                 }
-                .foregroundColor(.green)
+                .foregroundColor(colorModel.sunriseBrightYellow)
+                .font(.caption)
                 .padding(.top,20)
                 HStack{
                     Toggle("50-59", isOn: $age3)
                     Toggle("60-69", isOn: $age4)
                     Toggle("70-79", isOn: $age5)
                 }
-                .foregroundColor(.green)
+                .foregroundColor(colorModel.sunriseBrightYellow)
+                .font(.caption)
                 .padding(.top, 20)
                 HStack{
                     Toggle("80-89", isOn: $age6)
                 }
-                .foregroundColor(.green)
+                .foregroundColor(colorModel.sunriseBrightYellow)
+                .font(.caption)
                 .padding(.top, 20)
                 HStack{
                     Spacer()
@@ -142,8 +146,8 @@ struct BetaTestingLandingContent<Link: View>: View {
                     Spacer()
                 }
                 .padding(.top, 20)
-                Toggle("SELECT ME: Full EHA Selected", isOn: $betaEHA)
-                    .foregroundColor(.green)
+                Toggle("SELECT ME: Full Test", isOn: $betaEHA)
+                    .foregroundColor(colorModel.sunriseBrightYellow)
                     .padding(.top, 10)
                     .padding(.leading)
                     .padding(.trailing)
@@ -172,7 +176,7 @@ struct BetaTestingLandingContent<Link: View>: View {
                         }
                         .frame(width: 300, height: 50, alignment: .center)
                         .foregroundColor(.white)
-                        .background(Color.blue)
+                        .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                         .cornerRadius(24)
                     }
                     .padding(.top, 20)
@@ -191,7 +195,8 @@ struct BetaTestingLandingContent<Link: View>: View {
                         }
                         .frame(width: 300, height: 50, alignment: .center)
                         .foregroundColor(.white)
-                        .background(Color.green)
+                        .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
+                        .foregroundColor(.white)
                         .cornerRadius(24)
                     }
                     .padding(.top, 20)
@@ -199,9 +204,12 @@ struct BetaTestingLandingContent<Link: View>: View {
                 }
                 //End Vstack
             }
+            .padding(.leading, 30)
+            .padding(.trailing, 30)
             .fullScreenCover(isPresented: $showBetaNameScreen) {
                 ZStack{
-                colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all)
+                    Image("Background1 1").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+                    //colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all)
                     VStack(alignment: .leading) {
                         Text("This Is A Shortcut For App Testing Use To Surpass the Main Setup Process, While Still Entering The Key Demographic Variables Needed For The Actual Test")
                             .font(.title3)
@@ -216,7 +224,7 @@ struct BetaTestingLandingContent<Link: View>: View {
                         HStack{
                             Spacer()
                             Text("Last Name")
-                                .foregroundColor(.white)
+                                .foregroundColor(colorModel.sunriseBrightYellow)
                             Spacer()
                             TextField("Last Name", text: $inputLastName)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -228,15 +236,17 @@ struct BetaTestingLandingContent<Link: View>: View {
                         
                         Text(" Use The Tester Profile Info Below To Login.")
                             .font(.title3)
-                            .foregroundColor(.white)
+                            .foregroundColor(colorModel.sunriseBrightYellow)
                             .padding(.top, 10)
                             .padding(.bottom, 2)
                         Text("Tester@TrueToSourceSound.com")
+                            .font(.title3)
                             .foregroundColor(.blue)
                             .padding(.leading)
                             .padding(.top, 2)
                             .padding(.bottom, 2)
                         Text("password")
+                            .font(.title3)
                             .foregroundColor(.blue)
                             .padding(.leading)
                             .padding(.top, 2)
@@ -245,7 +255,7 @@ struct BetaTestingLandingContent<Link: View>: View {
                         HStack{
                             Spacer()
                             Text("Email  ")
-                                .foregroundColor(.white)
+                                .foregroundColor(colorModel.sunriseBrightYellow)
                             Spacer()
                             TextField("Enter_Email@Here.com", text: $email)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -258,7 +268,7 @@ struct BetaTestingLandingContent<Link: View>: View {
                         HStack{
                             Spacer()
                             Text("Password")
-                                .foregroundColor(.white)
+                                .foregroundColor(colorModel.sunriseBrightYellow)
                             Spacer()
                             TextField("Enter Your Password", text: $password)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -285,7 +295,8 @@ struct BetaTestingLandingContent<Link: View>: View {
                                 }
                                 .frame(width: 300, height: 50, alignment: .center)
                                 .foregroundColor(.white)
-                                .background(Color.blue)
+                                .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
+                                .foregroundColor(.white)
                                 .cornerRadius(24)
                                 Spacer()
                             }
@@ -307,7 +318,7 @@ struct BetaTestingLandingContent<Link: View>: View {
                                         }
                                         .frame(width: 300, height: 50, alignment: .center)
                                         .foregroundColor(.black)
-                                        .background(Color.yellow)
+                                        .background(colorModel.sunriseBrightYellow)
                                         .cornerRadius(24)
                                     }
                                     Spacer()
@@ -329,7 +340,8 @@ struct BetaTestingLandingContent<Link: View>: View {
                                             Spacer()
                                         }
                                         .frame(width: 300, height: 50, alignment: .center)
-                                        .background(Color.green)
+                                        .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
+                                        .foregroundColor(.white)
                                         .foregroundColor(.white)
                                         .cornerRadius(24)
                                     }
@@ -346,6 +358,8 @@ struct BetaTestingLandingContent<Link: View>: View {
                                 .padding(.bottom, 20)
                         }
                     }
+                    .padding(.leading, 30)
+                    .padding(.trailing, 30)
 //                    .padding(.bottom, 20)
                 }
             }

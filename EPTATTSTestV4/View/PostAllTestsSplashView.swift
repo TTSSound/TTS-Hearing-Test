@@ -89,7 +89,8 @@ struct PostAllTestsSplashContent<Link: View>: View {
     
     var body: some View {
         ZStack{
-            colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+            Image("Background1 1").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+            //colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack{
                 Spacer()
                 Text("Post All Test Splash View To Direct To The Correct Results Screen or To EHA Interim Test Screen")
@@ -130,7 +131,7 @@ struct PostAllTestsSplashContent<Link: View>: View {
                     }
                     .frame(width: 300, height: 50, alignment: .center)
                     .foregroundColor(.white)
-                    .background(Color.green)
+                    .background(Color.purple)
                     .cornerRadius(24)
                 }
                 Spacer()

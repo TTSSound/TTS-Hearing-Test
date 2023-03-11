@@ -1,60 +1,24 @@
 //
+//  DONOTChangeColorModel.swift
+//  EPTATTSTestV4
+//
+//  Created by Jeffrey Jaskunas on 3/11/23.
+//
+//
+//import Foundation
+
+//
 //  ColorModel.swift
 //  EPTATTSTestV4
 //
 //  Created by Jeffrey Jaskunas on 8/25/22.
 //
 
+/*
 import Foundation
 import SwiftUI
 
 class ColorModel: ObservableObject {
-    
-    //#150F3B
-    @Published var petrolColor: Color = Color(red: 0.082352941176471, green: 0.058823529411765, blue: 0.231372549019608)
-        //(red: 21, green: 15, blue: 59)
-    
-    //5553A4
-    @Published var sunrisePurple: Color = Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961)
-        //(red: 85, green: 83, blue: 164) // oppacity off = 30%, on = 100%
-    
-    //#F15C22
-    @Published var sunriseOrange: Color = Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)
-        //(red: 241, green: 92, blue: 34) // oppacity off = 30%, on = 100%
-    
-    // #FFD111
-    @Published var sunriseBrightYellow: Color = Color(red: 1.0, green: 0.819607843137255, blue: 0.066666666666667)
-        //(red: 255, green: 209, blue: 17)
-    
-    // #ED1D6B
-    @Published var sunriseBrightPink: Color = Color(red: 0.929411764705882, green: 0.113725490196078, blue: 0.475555555555556)
-        //(red: 237, green: 29, blue: 107)
-    
-    //#44087D
-    @Published var purpleBrightColor: Color = Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)
-        // divide by 255 (red: 68, green: 11, blue: 215)
-    
-    //#217189
-    @Published var purpleBrightColor2: Color = Color(red: 0.152941176470588, green: 0.090196078431373, blue: 0.537254901960784)    //(red: 39, green: 23, blue: 137)
-    
-    @Published var darkSunriseGradient: LinearGradient = LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4))
-    
-    @Published var brightSunriseGradient: LinearGradient = LinearGradient(colors: [Color(red: 1.0, green: 0.819607843137255, blue: 0.066666666666667), Color(red: 0.929411764705882, green: 0.113725490196078, blue: 0.475555555555556)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4))
-    
-/*
- 
-    Dark Sunsire Gradient
-        .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
-        .foregroundColor(.white)
-    
-     Petrol Gradient
-        .background(LinearGradient(colors: [Color(red: 0.082352941176471, green: 0.058823529411765, blue: 0.231372549019608), Color(red: 0.152941176470588, green: 0.090196078431373, blue: 0.537254901960784)], startPoint: UnitPoint(x: 0.7, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
-    
-     Purple Gradient
-        .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
-
-*/
-    
     
     @Published var neonGreen: Color = Color(red: 0.19215686274509805, green: 0.9294117647058824, blue: 0.19215686274509805)
     @Published var darkNeonGreen: Color = Color(red: 0.16470588235294117, green: 0.7137254901960784, blue: 0.4823529411764706)
@@ -139,3 +103,4 @@ class ColorModel: ObservableObject {
     @Published var colorBackgroundTopTiffanyBlue = RadialGradient(gradient: Gradient(colors: [Color(red: 0.06666666666666667, green: 0.6549019607843137, blue: 0.7333333333333333), Color.black]), center: .top, startRadius: -10, endRadius: 300)
     @Published var colorBackgroundReverseTopTiffanyBlue = RadialGradient(gradient: Gradient(colors: [Color.black, Color(red: 0.06666666666666667, green: 0.6549019607843137, blue: 0.7333333333333333)]), center: .top, startRadius: -10, endRadius: 300)
 }
+*/

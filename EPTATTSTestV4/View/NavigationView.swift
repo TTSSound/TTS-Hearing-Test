@@ -55,8 +55,13 @@ struct NavigationView: View {
         //        }
 
         TabView(selection: $selectedTab) {
-            ZStack{
-                colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+            ZStack {
+                Image("Background1 1").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+                //.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)//.ignoresSafeArea(.all, edges: .top)
+                
+            
+//            ZStack{
+//                colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
                 VStack(alignment: .leading) {
                     Spacer()
                     HStack{
@@ -65,8 +70,8 @@ struct NavigationView: View {
                             showEarSimulator = true
                         } label: {
                             Image(systemName: "waveform.and.magnifyingglass")
-                                .foregroundColor(colorModel.tiffanyBlue)
-                                .opacity(0.85)
+                                .foregroundColor(colorModel.sunrisePurple)
+                                .opacity(0.65)
                                 .font(.title3)
                                 .padding(.trailing, 20)
                         }
@@ -90,7 +95,7 @@ struct NavigationView: View {
                     }
                     .padding(.bottom, 20)
                     Text("1. IGNORE the Setup Tab\n2. Start With 1st Testing Tab\n3. Then Access 2nd Testing Tab\n4. IGNORE Results Tab")
-                        .foregroundColor(.green)
+                        .foregroundColor(colorModel.sunriseOrange)
                         .padding(.leading)
                         .padding(.bottom, 20)
                     Text("2nd, 3rd, & 4th tab disabled as default, enable them as prior tab is completed")
@@ -107,7 +112,7 @@ struct NavigationView: View {
                             Text("Enable 1st Testing")
                         }
                         .frame(width: 200, height: 50, alignment: .center)
-                        .background(colorModel.tiffanyBlue)
+                        .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                         .foregroundColor(.white)
                         .cornerRadius(24)
                         .onChange(of: firstTestingTabEnabled) { newValue in
@@ -133,7 +138,7 @@ struct NavigationView: View {
                             Text("Enable 2nd Testing")
                         }
                         .frame(width: 200, height: 50, alignment: .center)
-                        .background(colorModel.tiffanyBlue)
+                        .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                         .foregroundColor(.white)
                         .cornerRadius(24)
                         .onChange(of: secondTestingTabEnabled) { newValue in
@@ -158,8 +163,8 @@ struct NavigationView: View {
                             Text("Enable Results")
                         }
                         .frame(width: 200, height: 50, alignment: .center)
-                        .background(Color.red)
-                        .foregroundColor(.white)
+                        .background(LinearGradient(colors: [Color(red: 0.082352941176471, green: 0.058823529411765, blue: 0.231372549019608), Color(red: 0.152941176470588, green: 0.090196078431373, blue: 0.537254901960784)], startPoint: UnitPoint(x: 0.7, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
+                        .foregroundColor(colorModel.purpleBrightColor)
                         .cornerRadius(24)
                         .onChange(of: closingTabEnabled) { newValue in
                             closingTabValue = closingTabValueArray[1] ?? EPTATTSTestV4.Closing(id: 15.0, name: "Results Landing View", related: [])
@@ -181,7 +186,8 @@ struct NavigationView: View {
             .fullScreenCover(isPresented: $showEarSimulator, content: {
                 NavigationStack(path: $navigationModel.earSimulatorPath) {
                     ZStack{
-                        colorModel.colorBackgroundBottomLimeGreen.ignoresSafeArea(.all)
+                        Image("Background1 1").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+                        // colorModel.colorBackgroundBottomLimeGreen.ignoresSafeArea(.all)
                         VStack(alignment: .leading, spacing: 20) {
                             Button {
                                 showEarSimulator.toggle()
@@ -199,7 +205,7 @@ struct NavigationView: View {
                                     .font(.title)
                                     .padding()
                                     .frame(width: 300, height: 100, alignment: .center)
-                                    .background(colorModel.limeGreen)
+                                    .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                                     .foregroundColor(.white)
                                     .cornerRadius(24)
                                     .hoverEffect()
@@ -210,6 +216,8 @@ struct NavigationView: View {
                             }
                             Spacer()
                         }
+                        .padding(.leading, 30)
+                        .padding(.trailing, 30)
                     }
                 }
             })
@@ -228,7 +236,8 @@ struct NavigationView: View {
             
             NavigationStack(path: $navigationModel.setupPath) {
                 ZStack{
-                    colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+                    Image("Background1 1").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+                    //colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
                     VStack{
                         Spacer()
                         HStack{
@@ -243,7 +252,7 @@ struct NavigationView: View {
                             .font(.title)
                             .padding()
                             .frame(width: 300, height: 100, alignment: .center)
-                            .background(colorModel.tiffanyBlue)
+                            .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                             .foregroundColor(.white)
                             .cornerRadius(24)
                             .hoverEffect()
@@ -252,6 +261,8 @@ struct NavigationView: View {
                             }
                         Spacer()
                     }
+                    .padding(.leading, 30)
+                    .padding(.trailing, 30)
                 }
             }
             .tabItem {
@@ -269,7 +280,8 @@ struct NavigationView: View {
             
             NavigationStack(path: $navigationModel.testingPath) {
                 ZStack{
-                    colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+                    Image("Background1 1").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+                    //colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
 //                    NavigationLink("Let's Begin Testing!", value: EPTATTSTestV4.Testing(id: 8.0, name: "Beta Testing Home", related: []))
                     if firstTestingTabEnabled == true {
                         VStack{
@@ -278,7 +290,7 @@ struct NavigationView: View {
                                 .font(.title)
                                 .padding()
                                 .frame(width: 300, height: 100, alignment: .center)
-                                .background(colorModel.tiffanyBlue)
+                                .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                                 .foregroundColor(.white)
                                 .cornerRadius(24)
                                 .hoverEffect()
@@ -286,19 +298,21 @@ struct NavigationView: View {
                                     BetaTestingLandingView(testing: testing, relatedLinkTesting: linkTesting)
                                 }
 //                            Spacer()
-//                            NavigationLink("Bilateral 1kHz Test", value: EPTATTSTestV4.Testing(id: 11.2, name: "1kHz Test", related: []))
+//                            NavigationLink("EPTA EHA Part 1 Test", value: EPTATTSTestV4.Testing(id: 12.0, name: "EPTA EHAP1 Test", related: []))
 //                                .font(.title)
 //                                .padding()
 //                                .frame(width: 300, height: 100, alignment: .center)
-//                                .background(colorModel.tiffanyBlue)
+//                                .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
 //                                .foregroundColor(.white)
 //                                .cornerRadius(24)
 //                                .hoverEffect()
 //                                .navigationDestination(for: Testing.self) { testing in
-//                                    Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)
+//                                    EHATTSTestPart1View(testing: testing, relatedLinkTesting: linkTesting)
 //                                }
                             Spacer()
                         }
+                        .padding(.leading, 30)
+                        .padding(.trailing, 30)
                     } else {
                         Text("Please complete the setup tab first")
                             .foregroundColor(.red)
@@ -319,24 +333,30 @@ struct NavigationView: View {
             
             NavigationStack(path: $navigationModel.ehaTestingPath) {
                 ZStack{
-                    colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+                    Image("Background1 1").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+                    //colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
                     if secondTestingTabEnabled == true {
-                        NavigationLink("Let's Begin The Full EHA Test!", value: EPTATTSTestV4.EHATesting(id: 14.1, name: "EHA Interim Pre Part 2 Test", related: []))
-                            .font(.title)
-                            .padding()
-                            .frame(width: 300, height: 100, alignment: .center)
-                            .background(colorModel.tiffanyBlue)
-                            .foregroundColor(.white)
-                            .cornerRadius(24)
-                            .hoverEffect()
-                            .navigationDestination(for: EHATesting.self) { ehaTesting in
-                                EHAInterimPreEHAP2View(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
-                            }
+                        VStack{
+                            NavigationLink("Let's Begin The Full EHA Test!", value: EPTATTSTestV4.EHATesting(id: 14.1, name: "EHA Interim Pre Part 2 Test", related: []))
+                                .font(.title)
+                                .padding()
+                                .frame(width: 300, height: 100, alignment: .center)
+                                .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
+                                .hoverEffect()
+                                .navigationDestination(for: EHATesting.self) { ehaTesting in
+                                    EHAInterimPreEHAP2View(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
+                                }
+                        }
+                        .padding(.leading, 30)
+                        .padding(.trailing, 30)
                     } else {
                         Text("Please complete the Setup Tab & the First Test Tab before trying the second test phase")
                             .foregroundColor(.red)
                             .font(.title)
                     }
+                        
                 }
             }
             .tabItem {
@@ -352,20 +372,25 @@ struct NavigationView: View {
             
             NavigationStack(path: $navigationModel.closingPath) {
                 ZStack{
-                    colorModel.colorBackgroundBottomDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+                    Image("Background1 1").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+                    //colorModel.colorBackgroundBottomDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
 //                    NavigationLink("Let's Go View Your Results!", value: EPTATTSTestV4.Closing(id: 15.0, name: "Results Landing View", related: []))
                     if closingTabEnabled == true {
-                        NavigationLink("Let's Go View Your Results!", value: EPTATTSTestV4.Closing(id: 15.0, name: "Results Landing View", related: []))
-                            .font(.title)
-                            .padding()
-                            .frame(width: 300, height: 100, alignment: .center)
-                            .background(colorModel.tiffanyBlue)
-                            .foregroundColor(.white)
-                            .cornerRadius(24)
-                            .hoverEffect()
-                            .navigationDestination(for: Closing.self) { closing in
-                                ResultsLandingView(closing: closing, relatedLinkClosing: linkClosing)
-                            }
+                        VStack{
+                            NavigationLink("Let's Go View Your Results!", value: EPTATTSTestV4.Closing(id: 15.0, name: "Results Landing View", related: []))
+                                .font(.title)
+                                .padding()
+                                .frame(width: 300, height: 100, alignment: .center)
+                                .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
+                                .hoverEffect()
+                                .navigationDestination(for: Closing.self) { closing in
+                                    ResultsLandingView(closing: closing, relatedLinkClosing: linkClosing)
+                                }
+                        }
+                        .padding(.leading, 30)
+                        .padding(.trailing, 30)
                     } else {
                         Text("Please complete the Setup Tab & the First Test Tab & the Second Test Tab before reviewing results")
                         .foregroundColor(.red)

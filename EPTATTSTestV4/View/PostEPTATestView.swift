@@ -34,7 +34,8 @@ struct PostEPTATestContent<Link: View>: View {
     
     var body: some View {
         ZStack{
-            colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+            Image("Background1 1").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+            //colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack{
                 Spacer()
                 Text("View for Completion of EPTA Test")

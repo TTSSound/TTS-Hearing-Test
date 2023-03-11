@@ -469,7 +469,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
     @State var ehaP2playingString: [String] = ["", "Start or Restart Test", "Great Job, You've Completed This Test Segment"]
     @State var ehaP2playingStringColor: [Color] = [Color.clear, Color.yellow, Color.green]
     
-    @State var ehaP2playingAlternateStringColor: [Color] = [Color.clear, Color(red: 0.06666666666666667, green: 0.6549019607843137, blue: 0.7333333333333333), Color.white, Color.green]
+    @State var ehaP2playingAlternateStringColor: [Color] = [Color.clear, Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color.white, Color.green]
     
     @State var ehaP2playingStringColorIndex = 0
     @State var ehaP2playingStringColorIndex2 = 0
@@ -780,7 +780,8 @@ struct EHATTSTestPart2Content<Link: View>: View {
     
     var body: some View {
         ZStack{
-            colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
+            Image("TestingBackground").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+            //colorModel.colorBackgroundTopDarkNeonGreen.ignoresSafeArea(.all, edges: .top)
             VStack {
                 HStack{
                     VStack{
@@ -845,7 +846,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                             NavigationLink("Test Phase Complete, Press To Continue", destination: PostEHATestView(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting))
                                 .padding()
                                 .frame(width: 300, height: 50, alignment: .center)
-                                .background(.green)
+                                .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                                 .foregroundColor(.white)
                                 .cornerRadius(24)
                         }
@@ -900,7 +901,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                             .fontWeight(.bold)
                             .padding()
                             .frame(width: 300, height: 50, alignment: .center)
-                            .background(colorModel.tiffanyBlue)
+                            .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                             .foregroundColor(.white)
                             .cornerRadius(24)
                     }
@@ -945,7 +946,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                             .fontWeight(.semibold)
                             .padding()
                             .frame(width: 200, height: 50, alignment: .center)
-                            .background(Color .yellow)
+                            .background(colorModel.sunriseBrightYellow)
                             .foregroundColor(.black)
                             .cornerRadius(24)
                         
@@ -982,8 +983,8 @@ struct EHATTSTestPart2Content<Link: View>: View {
                         .fontWeight(.semibold)
                         .padding()
                         .frame(width: 300, height: 100, alignment: .center)
-                        .background(Color .green)
-                        .foregroundColor(.black)
+                        .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
+                        .foregroundColor(.white)
                         .cornerRadius(24)
                 }
                 .padding(.top, 20)
@@ -991,7 +992,8 @@ struct EHATTSTestPart2Content<Link: View>: View {
             }
             .fullScreenCover(isPresented: $ehaP2showTestCompletionSheet, content: {
                 ZStack{
-                    colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all)//, edges: .top)
+                    Image("Background1 1").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+                    //colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all)//, edges: .top)
                     VStack(alignment: .leading) {
                         Button(action: {
                             if ehaP2fullTestCompleted == true {
@@ -1257,7 +1259,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                     .font(.title3)
                                     .padding(.bottom, 10)
                             }
-                            .frame(width: nil, height: 220, alignment: .leading)
+                            .frame(width: nil, height: 340, alignment: .leading)
                             .padding()
                             .cornerRadius(24)
                             Spacer()
@@ -1266,7 +1268,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                 Text("Let's Continue To Start The Test!")
                                     .frame(width: 300, height: 50, alignment: .center)
                                     .foregroundColor(.white)
-                                    .background(Color.green)
+                                    .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                                     .cornerRadius(24)
                                     .onTapGesture {
                                         ehaP2TestingPhases += 1
@@ -1322,7 +1324,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                         .fontWeight(.bold)
                                         .padding()
                                         .frame(width: 200, height: 50, alignment: .center)
-                                        .background(colorModel.tiffanyBlue)
+                                        .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                                         .foregroundColor(.white)
                                         .cornerRadius(300)
                                 })
@@ -1345,7 +1347,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                         .fontWeight(.semibold)
                                         .padding()
                                         .frame(width: 200, height: 50, alignment: .center)
-                                        .background(Color .green)
+                                        .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                                         .foregroundColor(.white)
                                         .cornerRadius(300)
                                 }
@@ -1356,6 +1358,8 @@ struct EHATTSTestPart2Content<Link: View>: View {
                         }
                         Spacer()
                     }
+                    .padding(.leading, 30)
+                    .padding(.trailing, 30)
                 }
             })
         }

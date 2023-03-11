@@ -54,52 +54,57 @@ struct TestIDInputContent<Link: View>: View {
     
     var body: some View {
         ZStack{
-            colorModel.colorBackgroundTopTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+            Image("Background1 1").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+            //colorModel.colorBackgroundTopTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack{
                 Spacer()
-                Text("Enter Your Test ID Key")
-                    .foregroundColor(.white)
-                    .font(.title2)
-                    .padding(.leading)
-                    .padding(.top)
-                
-                HStack{
-                    Text("Test Key")
-                        .foregroundColor(.white)
-                    TextField("SKIP THIS FILED!!!!", text: $testIDKey)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .foregroundColor(.blue)
-                        .padding(.trailing)
-                    Spacer()
-                }
-                .padding(.leading)
-                ScrollView {
-                    Text(" Require input of Test ID/Tolken to....Have a Purchase Token Input of EHA and EPTA purchased tests Another set of tolkens/IDs indicating it is trial free simple audiogram test Identify the test for later uses with a unique ID that is not directly associated to the user or can be easily parsed from the user\n\nThis is a security measure")
-                }
-                .foregroundColor(.white)
-                .frame(width: 300, height: 200, alignment: .center)
-                
-                //!!!!!!!NEED TO DETERMINE HOW TO AUTHORIZE TOLKENS"
-                
-                Text("NEED TO DETERMINE HOW TO AUTHORIZE TOLKENS")
-                    .foregroundColor(.pink)
-                Spacer()
-                
-                Spacer()
+//                Text("Enter Your Test ID Key")
+//                    .foregroundColor(.white)
+//                    .font(.title2)
+//                    .padding(.leading)
+//                    .padding(.top)
+//
+//                HStack{
+//                    Text("Test Key")
+//                        .foregroundColor(.white)
+//                    TextField("SKIP THIS FILED!!!!", text: $testIDKey)
+//                        .textFieldStyle(RoundedBorderTextFieldStyle())
+//                        .autocapitalization(.none)
+//                        .disableAutocorrection(true)
+//                        .foregroundColor(.blue)
+//                        .padding(.trailing)
+//                    Spacer()
+//                }
+//                .padding(.leading)
+//                ScrollView {
+//                    Text(" Require input of Test ID/Tolken to....Have a Purchase Token Input of EHA and EPTA purchased tests Another set of tolkens/IDs indicating it is trial free simple audiogram test Identify the test for later uses with a unique ID that is not directly associated to the user or can be easily parsed from the user\n\nThis is a security measure")
+//                }
+//                .foregroundColor(.white)
+//                .frame(width: 300, height: 200, alignment: .center)
+//
+//                //!!!!!!!NEED TO DETERMINE HOW TO AUTHORIZE TOLKENS"
+//
+//                Text("NEED TO DETERMINE HOW TO AUTHORIZE TOLKENS")
+//                    .foregroundColor(.pink)
+//                Spacer()
+//
+//                Spacer()
                 NavigationLink {
-                    UserWrittenHearingAssessmentView(testing: testing, relatedLinkTesting: linkTesting)
+                    Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)
+//                    UserWrittenHearingAssessmentView(testing: testing, relatedLinkTesting: linkTesting)
                 } label: {
                     Text("Continue To Start Test")
                         .padding()
                         .frame(width: 300, height: 50, alignment: .center)
                         .foregroundColor(.white)
-                        .background(Color.green)
+                        .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                         .cornerRadius(24)
                 }
                 Spacer()
             }
+//            .padding(.bottom, 40)
+            .padding(.leading, 30)
+            .padding(.trailing, 30)
         }
         .onAppear {
             Task {

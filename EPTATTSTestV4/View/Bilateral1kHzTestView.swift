@@ -340,7 +340,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     @State var onekHzplayingString: [String] = ["", "Restart Test", "Great Job, You've\nCompleted This Test Segment"]
     @State var onekHzplayingStringColor: [Color] = [Color.clear, Color.yellow, Color.green]
     
-    @State var onekHzplayingAlternateStringColor: [Color] = [Color.clear, Color(red: 0.06666666666666667, green: 0.6549019607843137, blue: 0.7333333333333333), Color.white, Color.green]
+    @State var onekHzplayingAlternateStringColor: [Color] = [Color.clear, Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color.white, Color.green]
     
     @State var onekHzplayingStringColorIndex = 0
     @State var onekHzuserPausedTest: Bool = false
@@ -397,7 +397,8 @@ struct Bilateral1kHzTestContent<Link: View>: View {
     
     var body: some View {
         ZStack{
-            colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+            Image("TestingBackground").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+            //colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack {
                 Spacer()
                 HStack{
@@ -464,7 +465,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                         NavigationLink("Test Phase Complete. Continue.", destination: PostBilateral1kHzTestView(testing: testing, relatedLinkTesting: relatedLinkTesting))
                             .padding()
                             .frame(width: 200, height: 50, alignment: .center)
-                            .background(.green)
+                            .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                             .foregroundColor(.white)
                             .cornerRadius(24)
                             .padding(.top, 40)
@@ -496,7 +497,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                             .fontWeight(.bold)
                             .padding()
                             .frame(width: 200, height: 50, alignment: .center)
-                            .background(colorModel.tiffanyBlue)
+                            .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                             .foregroundColor(.white)
                             .cornerRadius(24)
                     }
@@ -540,7 +541,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                             .fontWeight(.semibold)
                             .padding()
                             .frame(width: 200, height: 50, alignment: .center)
-                            .background(Color .yellow)
+                            .background(colorModel.sunriseBrightYellow)
                             .foregroundColor(.black)
                             .cornerRadius(24)
                     }
@@ -579,21 +580,24 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                         .fontWeight(.semibold)
                         .padding()
                         .frame(width: 300, height: 100, alignment: .center)
-                        .background(Color .green)
-                        .foregroundColor(.black)
+                        .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
+                        .foregroundColor(.white)
                         .cornerRadius(24)
                 }
                 .padding(.top, 20)
                 .padding(.bottom, 80)
                 Spacer()
             }
+            .padding(.leading, 30)
+            .padding(.trailing, 30)
             .onAppear {
                 onekHzshowTestCompletionSheet = true
                 audioSessionModel.cancelAudioSession()
             }
             .fullScreenCover(isPresented: $onekHzshowTestCompletionSheet, content: {
                 ZStack{
-                    colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all)
+                    Image("Background1 1").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+                    //colorModel.colorBackgroundDarkNeonGreen.ignoresSafeArea(.all)
                     VStack(alignment: .leading) {
                         
                         Button(action: {
@@ -765,7 +769,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                                 .padding()
                             Spacer()
                             Text("Let's proceed with the test.")
-                                .foregroundColor(.green)
+                                .foregroundColor(colorModel.sunriseBrightYellow)
                                 .font(.title)
                                 .padding()
                                 .padding(.bottom, 20)
@@ -792,7 +796,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                                         .fontWeight(.semibold)
                                         .padding()
                                         .frame(width: 300, height: 50, alignment: .center)
-                                        .background(Color .green)
+                                        .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                                         .foregroundColor(.white)
                                         .cornerRadius(24)
                                 }
@@ -805,7 +809,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                                 .padding()
                             Spacer()
                             Text("Let's proceed with the test.")
-                                .foregroundColor(.green)
+                                .foregroundColor(.purple)
                                 .font(.title)
                                 .padding()
                                 .padding(.bottom, 20)
@@ -820,7 +824,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                                         .fontWeight(.semibold)
                                         .padding()
                                         .frame(width: 300, height: 50, alignment: .center)
-                                        .background(Color .green)
+                                        .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                                         .foregroundColor(.white)
                                         .cornerRadius(24)
                                 }
@@ -835,6 +839,8 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                         }
                         Spacer()
                     }
+                    .padding(.leading, 30)
+                    .padding(.trailing, 30)
                 }
             })
         }

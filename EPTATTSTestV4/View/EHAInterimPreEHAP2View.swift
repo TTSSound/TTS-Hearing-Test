@@ -88,7 +88,8 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
     
     var body: some View {
         ZStack{
-            colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
+            Image("Background1 1").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea(.all, edges: .top)
+            //colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack(alignment: .leading) {
                 Text("View for EHA test takers before they start EHA Part 2. The extended phase of the hearing assessment is next.")
                     .foregroundColor(.white)
@@ -110,7 +111,7 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
                             .padding()
                             .frame(width: 300, height: 50, alignment: .center)
                             .font(.caption)
-                            .background(.green)
+                            .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                             .foregroundColor(.white)
                             .cornerRadius(300)
                     }
@@ -183,7 +184,7 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
                                 Spacer()
                             }
                             .frame(width: 300, height: 50, alignment: .center)
-                            .background(.blue)
+                            .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                             .foregroundColor(.white)
                             .cornerRadius(24)
                         }
@@ -205,7 +206,7 @@ struct EHAInterimPreEHAP2Content<Link: View>: View {
                                 Spacer()
                             }
                             .frame(width: 300, height: 50, alignment: .center)
-                            .background(Color.green)
+                            .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.945098039215686, green: 0.36078431372549, blue: 0.133333333333333)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
                             .foregroundColor(.white)
                             .cornerRadius(24)
                         }
