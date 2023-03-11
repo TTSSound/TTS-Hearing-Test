@@ -14,8 +14,8 @@
             filePath = "EPTATTSTestV4/View/EHATTSTestPart2View.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2214"
-            endingLineNumber = "2214"
+            startingLineNumber = "2220"
+            endingLineNumber = "2220"
             landmarkName = "ehaP2reversalOfTen()"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,9 +30,25 @@
             filePath = "EPTATTSTestV4/View/EHATTSTestPart2View.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2205"
-            endingLineNumber = "2205"
+            startingLineNumber = "2211"
+            endingLineNumber = "2211"
             landmarkName = "ehaP2reversalOfTen()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "85F1CA5F-D10B-422F-91FD-A59DD6C5FC52"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EPTATTSTestV4/View/EHATTSTestPart1View.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "2458"
+            endingLineNumber = "2458"
+            landmarkName = "eHAP1StartingNextDBCheck()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -282,21 +282,21 @@ struct NavigationView: View {
                                 .foregroundColor(.white)
                                 .cornerRadius(24)
                                 .hoverEffect()
-//                                .navigationDestination(for: Testing.self) { testing in
-//                                    BetaTestingLandingView(testing: testing, relatedLinkTesting: linkTesting)
-//                                }
-                            Spacer()
-                            NavigationLink("Bilateral 1kHz Test", value: EPTATTSTestV4.Testing(id: 11.2, name: "1kHz Test", related: []))
-                                .font(.title)
-                                .padding()
-                                .frame(width: 300, height: 100, alignment: .center)
-                                .background(colorModel.tiffanyBlue)
-                                .foregroundColor(.white)
-                                .cornerRadius(24)
-                                .hoverEffect()
                                 .navigationDestination(for: Testing.self) { testing in
-                                    Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)
+                                    BetaTestingLandingView(testing: testing, relatedLinkTesting: linkTesting)
                                 }
+//                            Spacer()
+//                            NavigationLink("Bilateral 1kHz Test", value: EPTATTSTestV4.Testing(id: 11.2, name: "1kHz Test", related: []))
+//                                .font(.title)
+//                                .padding()
+//                                .frame(width: 300, height: 100, alignment: .center)
+//                                .background(colorModel.tiffanyBlue)
+//                                .foregroundColor(.white)
+//                                .cornerRadius(24)
+//                                .hoverEffect()
+//                                .navigationDestination(for: Testing.self) { testing in
+//                                    Bilateral1kHzTestView(testing: testing, relatedLinkTesting: linkTesting)
+//                                }
                             Spacer()
                         }
                     } else {
