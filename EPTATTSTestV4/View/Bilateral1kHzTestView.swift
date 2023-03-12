@@ -1772,8 +1772,8 @@ extension Bilateral1kHzTestContent {
         }
     }
     
-    func onekHzreversalOfTwentyThree() async {
-        onekHz_StepSizeDB = 23.0
+    func onekHzreversalOfTwentyFour() async {
+        onekHz_StepSizeDB = 24.0
         onekHz_PriorDB = onekHz_CurrentDB
         let onekHzr10Direction = onekHz_StepSizeDB * onekHz_reversalDirection
         onekHz_NewTargetDB = onekHz_CurrentDB + onekHzr10Direction
@@ -1887,7 +1887,7 @@ extension Bilateral1kHzTestContent {
         //        print(" Start onekHzstartTooHighCheck()")
         if onekHzstartTooHigh == 0 && onekHzfirstHeardIsTrue == true && onekHzsecondHeardIsTrue == true {
             onekHzstartTooHigh = 1
-            await onekHzreversalOfTwentyThree()
+            await onekHzreversalOfTwentyFour()
             await onekHzresetAfterTooHigh()
             print("Too High Found")
         } else {

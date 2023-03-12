@@ -1937,8 +1937,8 @@ extension EHATTSTestPart1Content {
         }
     }
     
-    func reversalOfTwentyThree() async {
-        eHAP1_StepSizeDB = 23.0
+    func reversalOfTwentyFour() async {
+        eHAP1_StepSizeDB = 24.0
         let r10Direction = eHAP1_StepSizeDB * envDataObjectModel_reversalDirection
         eHAP1_NewTargetDB = eHAP1_CurrentDB + r10Direction
         if eHAP1_NewTargetDB > 0.00001 && eHAP1_NewTargetDB < eHAP1_AirPodsProGen2MaxDB-0.1 {
@@ -2050,7 +2050,7 @@ extension EHATTSTestPart1Content {
     func startTooHighCheck() async {
         if startTooHigh == 0 && firstHeardIsTrue == true && secondHeardIsTrue == true {
             startTooHigh = 1
-            await reversalOfTwentyThree()
+            await reversalOfTwentyFour()
             await resetAfterTooHigh()
             //            print("Too High Found")
         } else {
