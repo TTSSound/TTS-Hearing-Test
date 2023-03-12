@@ -317,6 +317,8 @@ struct NavigationView: View {
                         Text("Please complete the setup tab first")
                             .foregroundColor(.red)
                             .font(.title)
+                            .padding(.leading, 30)
+                            .padding(.trailing, 30)
                     }
                 }
             }
@@ -355,6 +357,8 @@ struct NavigationView: View {
                         Text("Please complete the Setup Tab & the First Test Tab before trying the second test phase")
                             .foregroundColor(.red)
                             .font(.title)
+                            .padding(.leading, 30)
+                            .padding(.trailing, 30)
                     }
                         
                 }
@@ -395,6 +399,8 @@ struct NavigationView: View {
                         Text("Please complete the Setup Tab & the First Test Tab & the Second Test Tab before reviewing results")
                         .foregroundColor(.red)
                         .font(.title)
+                        .padding(.leading, 30)
+                        .padding(.trailing, 30)
                     }
                 }
             }

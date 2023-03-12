@@ -409,7 +409,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                                 Text("ShowDataValues")
                                     .foregroundColor(.blue)
                             }
-                            .padding(.top, 40)
+//                            .padding(.top, 40)
                             .padding(.leading, 10)
                             .padding(.trailing, 10)
                             .padding(.bottom,20)
@@ -585,7 +585,7 @@ struct Bilateral1kHzTestContent<Link: View>: View {
                         .cornerRadius(24)
                 }
                 .padding(.top, 20)
-                .padding(.bottom, 80)
+                .padding(.bottom, 40)
                 Spacer()
             }
             .padding(.leading, 30)

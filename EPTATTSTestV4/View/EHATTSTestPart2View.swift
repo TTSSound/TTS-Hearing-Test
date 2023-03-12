@@ -790,7 +790,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                                 Text("ShowDataValues")
                                     .foregroundColor(.blue)
                             }
-                            .padding(.top, 40)
+//                            .padding(.top, 10)
                             .padding(.leading, 10)
                             .padding(.trailing, 10)
                             .padding(.bottom,20)
@@ -855,7 +855,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                 .navigationDestination(isPresented: $ehaP2fullTestCompleted) {
                     PostEHATestView(ehaTesting: ehaTesting, relatedLinkEHATesting: linkEHATesting)
                 }
-                .padding(.top, 20)
+                .padding(.top, 5)
                 .padding(.bottom, 10)
                 
 
@@ -988,7 +988,7 @@ struct EHATTSTestPart2Content<Link: View>: View {
                         .cornerRadius(24)
                 }
                 .padding(.top, 20)
-                .padding(.bottom, 80)
+                .padding(.bottom, 40)
             }
             .fullScreenCover(isPresented: $ehaP2showTestCompletionSheet, content: {
                 ZStack{

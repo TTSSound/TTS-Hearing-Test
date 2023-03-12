@@ -136,6 +136,8 @@ struct PostAllTestsSplashContent<Link: View>: View {
                 }
                 Spacer()
             }
+            .padding(.leading, 30)
+            .padding(.trailing,30)
             .onAppear {
                 Task{
                     audioSessionModel.setAudioSession()
