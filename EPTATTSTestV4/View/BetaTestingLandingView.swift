@@ -239,7 +239,7 @@ struct BetaTestingLandingContent<Link: View>: View {
                             .foregroundColor(colorModel.sunriseBrightYellow)
                             .padding(.top, 10)
                             .padding(.bottom, 2)
-                        Text("Tester@TrueToSourceSound.com")
+                        Text("Tester@TrueToSource.audio")   //Tester@TrueToSourceSound.com")
                             .font(.title3)
                             .foregroundColor(.blue)
                             .padding(.leading)
