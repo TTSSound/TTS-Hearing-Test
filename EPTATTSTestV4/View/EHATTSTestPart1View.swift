@@ -1937,8 +1937,8 @@ extension EHATTSTestPart1Content {
         }
     }
     
-    func reversalOfTwentyTwo() async {
-        eHAP1_StepSizeDB = 22.0
+    func reversalOfTwentyThree() async {
+        eHAP1_StepSizeDB = 23.0
         let r10Direction = eHAP1_StepSizeDB * envDataObjectModel_reversalDirection
         eHAP1_NewTargetDB = eHAP1_CurrentDB + r10Direction
         if eHAP1_NewTargetDB > 0.00001 && eHAP1_NewTargetDB < eHAP1_AirPodsProGen2MaxDB-0.1 {
@@ -2050,7 +2050,7 @@ extension EHATTSTestPart1Content {
     func startTooHighCheck() async {
         if startTooHigh == 0 && firstHeardIsTrue == true && secondHeardIsTrue == true {
             startTooHigh = 1
-            await reversalOfTwentyTwo()
+            await reversalOfTwentyThree()
             await resetAfterTooHigh()
             //            print("Too High Found")
         } else {
@@ -2607,8 +2607,8 @@ extension EHATTSTestPart1Content {
             eHAP1_finalStoredRightFinalGainsDBArray.append(contentsOf: eHAP1_rightFinalGainsDBArray)
             eHAP1_finalStoredleftFinalGainsDBArray.append(contentsOf: eHAP1_leftFinalGainsDBArray)
             
-            eHAP1_finalStoredGainSettingArray.append(contentsOf:[1000000.0] + eHAP1_finalStoredGainSettingArray)
-            eHAP1_finalStoredMaxDBArray.append(contentsOf: [1000000.0] + eHAP1_finalStoredMaxDBArray)
+//            eHAP1_finalStoredGainSettingArray.append(contentsOf:[1000000.0] + eHAP1_finalStoredGainSettingArray)
+//            eHAP1_finalStoredMaxDBArray.append(contentsOf: [1000000.0] + eHAP1_finalStoredMaxDBArray)
 //Added Above
             
         }
@@ -2756,8 +2756,8 @@ extension EHATTSTestPart1Content {
         let stringFinalStoredRightFinalGainsDBArray = "finalStoredRightFinalGainsDBArray," + eHAP1_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsDBArray = "finalStoredleftFinalGainsDBArray," + eHAP1_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
         
-        let stringFinalStoredGainsSettingArray = "finalStoredGainsSettingArray," + eHAP1_finalStoredGainSettingArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredMaxDBArray = "finalStoredMaxDBArray," + eHAP1_finalStoredMaxDBArray.map { String($0) }.joined(separator: ",")
+//        let stringFinalStoredGainsSettingArray = "finalStoredGainsSettingArray," + eHAP1_finalStoredGainSettingArray.map { String($0) }.joined(separator: ",")
+//        let stringFinalStoredMaxDBArray = "finalStoredMaxDBArray," + eHAP1_finalStoredMaxDBArray.map { String($0) }.joined(separator: ",")
 //Added Above
         do {
             let csvEHAP1DetailPath = try FileManager.default.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -2790,8 +2790,8 @@ extension EHATTSTestPart1Content {
             try writer.write(row: [stringFinalStoredRightFinalGainsDBArray])
             try writer.write(row: [stringFinalStoredleftFinalGainsDBArray])
             
-            try writer.write(row: [stringFinalStoredGainsSettingArray])
-            try writer.write(row: [stringFinalStoredMaxDBArray])
+//            try writer.write(row: [stringFinalStoredGainsSettingArray])
+//            try writer.write(row: [stringFinalStoredMaxDBArray])
 //Added Above
             
         } catch {
@@ -2819,8 +2819,8 @@ extension EHATTSTestPart1Content {
         let stringFinalStoredRightFinalGainsDBArray = "finalStoredRightFinalGainsDBArray," + eHAP1_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsDBArray = "finalStoredleftFinalGainsDBArray," + eHAP1_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
         
-        let stringFinalStoredGainsSettingArray = "finalStoredGainsSettingArray," + eHAP1_finalStoredGainSettingArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredMaxDBArray = "finalStoredMaxDBArray," + eHAP1_finalStoredMaxDBArray.map { String($0) }.joined(separator: ",")
+//        let stringFinalStoredGainsSettingArray = "finalStoredGainsSettingArray," + eHAP1_finalStoredGainSettingArray.map { String($0) }.joined(separator: ",")
+//        let stringFinalStoredMaxDBArray = "finalStoredMaxDBArray," + eHAP1_finalStoredMaxDBArray.map { String($0) }.joined(separator: ",")
         
 //Added Above
         
@@ -2848,8 +2848,8 @@ extension EHATTSTestPart1Content {
              try writer.write(row: [stringFinalStoredRightFinalGainsDBArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsDBArray])
              
-             try writer.write(row: [stringFinalStoredGainsSettingArray])
-             try writer.write(row: [stringFinalStoredMaxDBArray])
+//             try writer.write(row: [stringFinalStoredGainsSettingArray])
+//             try writer.write(row: [stringFinalStoredMaxDBArray])
 //Added Above
      
          } catch {
@@ -2886,8 +2886,8 @@ extension EHATTSTestPart1Content {
         let stringFinalStoredRightFinalGainsDBArray = eHAP1_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsDBArray = eHAP1_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
         
-        let stringFinalStoredGainsSettingArray = eHAP1_finalStoredGainSettingArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredMaxDBArray = eHAP1_finalStoredMaxDBArray.map { String($0) }.joined(separator: ",")
+//        let stringFinalStoredGainsSettingArray = eHAP1_finalStoredGainSettingArray.map { String($0) }.joined(separator: ",")
+//        let stringFinalStoredMaxDBArray = eHAP1_finalStoredMaxDBArray.map { String($0) }.joined(separator: ",")
 //Added Above
         
         do {
@@ -2921,8 +2921,8 @@ extension EHATTSTestPart1Content {
             try writer.write(row: [stringFinalStoredRightFinalGainsDBArray])
             try writer.write(row: [stringFinalStoredleftFinalGainsDBArray])
             
-            try writer.write(row: [stringFinalStoredGainsSettingArray])
-            try writer.write(row: [stringFinalStoredMaxDBArray])
+//            try writer.write(row: [stringFinalStoredGainsSettingArray])
+//            try writer.write(row: [stringFinalStoredMaxDBArray])
 //Added Above
             
             
@@ -2951,8 +2951,8 @@ extension EHATTSTestPart1Content {
         let stringFinalStoredRightFinalGainsDBArray = eHAP1_finalStoredRightFinalGainsDBArray.map { String($0) }.joined(separator: ",")
         let stringFinalStoredleftFinalGainsDBArray = eHAP1_finalStoredleftFinalGainsDBArray.map { String($0) }.joined(separator: ",")
         
-        let stringFinalStoredGainsSettingArray = eHAP1_finalStoredGainSettingArray.map { String($0) }.joined(separator: ",")
-        let stringFinalStoredMaxDBArray = eHAP1_finalStoredMaxDBArray.map { String($0) }.joined(separator: ",")
+//        let stringFinalStoredGainsSettingArray = eHAP1_finalStoredGainSettingArray.map { String($0) }.joined(separator: ",")
+//        let stringFinalStoredMaxDBArray = eHAP1_finalStoredMaxDBArray.map { String($0) }.joined(separator: ",")
 //Added Above
         
          do {
@@ -2979,8 +2979,8 @@ extension EHATTSTestPart1Content {
              try writer.write(row: [stringFinalStoredRightFinalGainsDBArray])
              try writer.write(row: [stringFinalStoredleftFinalGainsDBArray])
              
-             try writer.write(row: [stringFinalStoredGainsSettingArray])
-             try writer.write(row: [stringFinalStoredMaxDBArray])
+//             try writer.write(row: [stringFinalStoredGainsSettingArray])
+//             try writer.write(row: [stringFinalStoredMaxDBArray])
 //Added Above
              
          } catch {

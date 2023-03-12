@@ -294,21 +294,21 @@ struct NavigationView: View {
                                 .foregroundColor(.white)
                                 .cornerRadius(24)
                                 .hoverEffect()
-                                .navigationDestination(for: Testing.self) { testing in
-                                    BetaTestingLandingView(testing: testing, relatedLinkTesting: linkTesting)
-                                }
-//                            Spacer()
-//                            NavigationLink("EPTA EHA Part 1 Test", value: EPTATTSTestV4.Testing(id: 12.0, name: "EPTA EHAP1 Test", related: []))
-//                                .font(.title)
-//                                .padding()
-//                                .frame(width: 300, height: 100, alignment: .center)
-//                                .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
-//                                .foregroundColor(.white)
-//                                .cornerRadius(24)
-//                                .hoverEffect()
 //                                .navigationDestination(for: Testing.self) { testing in
-//                                    EHATTSTestPart1View(testing: testing, relatedLinkTesting: linkTesting)
+//                                    BetaTestingLandingView(testing: testing, relatedLinkTesting: linkTesting)
 //                                }
+                            Spacer()
+                            NavigationLink("EPTA EHA Part 1 Test", value: EPTATTSTestV4.Testing(id: 12.0, name: "EPTA EHAP1 Test", related: []))
+                                .font(.title)
+                                .padding()
+                                .frame(width: 300, height: 100, alignment: .center)
+                                .background(LinearGradient(colors: [Color(red: 0.333333333333333, green: 0.325490196078431, blue: 0.643137254901961), Color(red: 0.266666666666667, green: 0.043137254901961, blue: 0.843137254901961)], startPoint: UnitPoint(x: 0.3, y: 0.3), endPoint: UnitPoint(x: 0.9, y: 0.4)))
+                                .foregroundColor(.white)
+                                .cornerRadius(24)
+                                .hoverEffect()
+                                .navigationDestination(for: Testing.self) { testing in
+                                    EHATTSTestPart1View(testing: testing, relatedLinkTesting: linkTesting)
+                                }
                             Spacer()
                         }
                         .padding(.leading, 30)

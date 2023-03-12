@@ -1772,8 +1772,8 @@ extension Bilateral1kHzTestContent {
         }
     }
     
-    func onekHzreversalOfTwentyTwo() async {
-        onekHz_StepSizeDB = 22.0
+    func onekHzreversalOfTwentyThree() async {
+        onekHz_StepSizeDB = 23.0
         onekHz_PriorDB = onekHz_CurrentDB
         let onekHzr10Direction = onekHz_StepSizeDB * onekHz_reversalDirection
         onekHz_NewTargetDB = onekHz_CurrentDB + onekHzr10Direction
@@ -1887,7 +1887,7 @@ extension Bilateral1kHzTestContent {
         //        print(" Start onekHzstartTooHighCheck()")
         if onekHzstartTooHigh == 0 && onekHzfirstHeardIsTrue == true && onekHzsecondHeardIsTrue == true {
             onekHzstartTooHigh = 1
-            await onekHzreversalOfTwentyTwo()
+            await onekHzreversalOfTwentyThree()
             await onekHzresetAfterTooHigh()
             print("Too High Found")
         } else {
@@ -2296,8 +2296,8 @@ extension Bilateral1kHzTestContent {
             final_onekHz_HoldingLowestRightGainDBArray.append(contentsOf: [1000000.0] + onekHz_HoldingLowestRightGainDBArray)
             final_onekHz_averageLowestGainDBLeftArray.append(contentsOf: [1000000.0] + onekHz_averageLowestGainDBLeftArray)
             final_onekHz_HoldingLowestLeftGainDBArray.append(contentsOf: [10000000] + onekHz_HoldingLowestLeftGainDBArray)
-            final_onekHz_HoldingStartingDB.append(contentsOf: [1000000.0] + [onekHz_StartingDB])
-            final_onekHz_HoldingMaxDB.append(contentsOf: [1000000.0] + [onekHz_AirPodsProGen2MaxDBArray[0]])
+//            final_onekHz_HoldingStartingDB.append(contentsOf: [1000000.0] + [onekHz_StartingDB])
+//            final_onekHz_HoldingMaxDB.append(contentsOf: [1000000.0] + [onekHz_AirPodsProGen2MaxDBArray[0]])
             
 // Added Above
             
@@ -2412,8 +2412,8 @@ extension Bilateral1kHzTestContent {
         let onekHzstringFinalHoldingLowestRightGainArray = "HoldingLowestRightGainArray," + onekHz_HoldingLowestRightGainArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalAverageLowestGainLeftArray = "averageLowestGainLeftArray," + onekHz_averageLowestGainLeftArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalHoldingLowestLeftGainArray = "HoldingLowestLeftGainArray," + onekHz_HoldingLowestLeftGainArray.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalHoldingStartingDB = "HoldingStartingDB," + final_onekHz_HoldingStartingDB.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalHoldingMaxDB = "HoldingMaxDB, " + final_onekHz_HoldingMaxDB.map { String($0) }.joined(separator: ",")
+//        let onekHzstringFinalHoldingStartingDB = "HoldingStartingDB," + final_onekHz_HoldingStartingDB.map { String($0) }.joined(separator: ",")
+//        let onekHzstringFinalHoldingMaxDB = "HoldingMaxDB, " + final_onekHz_HoldingMaxDB.map { String($0) }.joined(separator: ",")
         
 // ADDED Below
         let onekHzstringFinalOnekHzfirstGainDB = "firstGainDB," + [onekHzfirstGainDB].map { String($0) }.joined(separator: ",")
@@ -2464,8 +2464,8 @@ extension Bilateral1kHzTestContent {
             try writer.write(row: [onekHzstringFinalAverageLowestGainLeftArrayDB])
             try writer.write(row: [onekHzstringFinalHoldingLowestLeftGainArrayDB])
             
-            try writer.write(row: [onekHzstringFinalHoldingStartingDB])
-            try writer.write(row: [onekHzstringFinalHoldingMaxDB])
+//            try writer.write(row: [onekHzstringFinalHoldingStartingDB])
+//            try writer.write(row: [onekHzstringFinalHoldingMaxDB])
 // Added Above
             
             
@@ -2619,8 +2619,8 @@ extension Bilateral1kHzTestContent {
         let onekHzstringFinalHoldingLowestRightGainDBArray = onekHz_HoldingLowestRightGainDBArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalAverageLowestGainDBLeftArray = onekHz_averageLowestGainDBLeftArray.map { String($0) }.joined(separator: ",")
         let onekHzstringFinalHoldingLowestLeftGainDBArray = onekHz_HoldingLowestLeftGainDBArray.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalHoldingStartingDB = final_onekHz_HoldingStartingDB.map { String($0) }.joined(separator: ",")
-        let onekHzstringFinalHoldingMaxDB = final_onekHz_HoldingMaxDB.map { String($0) }.joined(separator: ",")
+//        let onekHzstringFinalHoldingStartingDB = final_onekHz_HoldingStartingDB.map { String($0) }.joined(separator: ",")
+//        let onekHzstringFinalHoldingMaxDB = final_onekHz_HoldingMaxDB.map { String($0) }.joined(separator: ",")
         
         
 // Added Above
@@ -2649,8 +2649,8 @@ extension Bilateral1kHzTestContent {
             try writer.write(row: [onekHzstringFinalAverageLowestGainDBLeftArray])
             try writer.write(row: [onekHzstringFinalHoldingLowestLeftGainDBArray])
             
-            try writer.write(row: [onekHzstringFinalHoldingStartingDB])
-            try writer.write(row: [onekHzstringFinalHoldingMaxDB])
+//            try writer.write(row: [onekHzstringFinalHoldingStartingDB])
+//            try writer.write(row: [onekHzstringFinalHoldingMaxDB])
 // Added Above
             
         } catch {

@@ -38,14 +38,19 @@ struct PostEPTATestContent<Link: View>: View {
             //colorModel.colorBackgroundTiffanyBlue.ignoresSafeArea(.all, edges: .top)
             VStack{
                 Spacer()
-                Text("View for Completion of EPTA Test")
+                Text("View for Completion of Test Phase #1")
                     .foregroundColor(.white)
-                Spacer()
+                    .padding(.bottom, 20)
                 Text("Great Work!")
                     .foregroundColor(.white)
+                    .font(.title3)
                 Spacer()
-                Text("Return Home To Navigate To Your Results")
+                Text("Return Home to Navigate To The Second Phase of The Test. Enable the Toggle Button for It and Access it By the Tab Menu.")
                     .foregroundColor(.white)
+                    .font(.title2)
+                Spacer()
+                Text("Make sure to unmount and remount your earbuds before starting the 2nd test phase!")
+                    .foregroundColor(colorModel.sunriseBrightYellow)
                     .font(.title)
                 Spacer()
                 //                NavigationLink {
@@ -56,6 +61,8 @@ struct PostEPTATestContent<Link: View>: View {
                 //                }
                 //                Spacer()
             }
+            .padding(.leading, 30)
+            .padding(.trailing, 30)
         }
         //        .onAppear {
         //            Task(priority: .userInitiated, operation: {
@@ -94,7 +101,7 @@ extension PostEPTATestContent {
 //    static var previews: some View {
 //        PostEPTATestView(testing: nil, relatedLinkTesting: linkTesting)
 //    }
-//    
+//
 //    static func linkTesting(testing: Testing) -> some View {
 //        EmptyView()
 //    }

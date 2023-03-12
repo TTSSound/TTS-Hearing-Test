@@ -82,7 +82,7 @@ struct PostEHATestContent<Link: View>: View {
                     .foregroundColor(.white)
                 Spacer()
                 
-                Text("Return Home to Navigate To Results")
+                Text("Return Home")
                     .font(.title)
                     .foregroundColor(.red)
                     .padding(.bottom, 40)
